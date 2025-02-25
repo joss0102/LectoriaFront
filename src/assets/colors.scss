@@ -1,0 +1,45 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// Colores modo noche
+$main-noche: #707070;
+$header-noche: #1a1a1a;
+$secondary-noche: #494949;
+    $ModoNoche: (
+    "main-noche": $main-noche,
+    "header-noche": $header-noche,
+    "secondary-noche": $secondary-noche
+    );
+
+// Colores modo día
+$main-dia: #D8D6CB;
+$header-dia: #B4AFA6;
+$secondary-dia: #A19B8E;
+    $ModoDia: (
+    "main-dia": $main-dia,
+    "header-dia": $header-dia,
+    "secondary-dia": $secondary-dia
+    );
+
+// Colores generales
+$boton: #FF8800;
+$danger-noche: #dc3545;
+$warning-noche: #ffc107;
+$dark-noche: #212529;
+$light-noche: #f8f9fa;
+    $generales: (
+    "boton": $boton,
+    "danger": $danger-noche,
+    "warning": $warning-noche,
+    "dark": $dark-noche,
+    "light": $light-noche
+    );
+
+// Fusionar los mapas en `$theme-colors`
+$theme-colors: map-merge($theme-colors, $ModoNoche);
+$theme-colors: map-merge($theme-colors, $ModoDia);
+$theme-colors: map-merge($theme-colors, $generales);
+
+// Importar Bootstrap después de definir los colores
+@import "bootstrap/scss/bootstrap";

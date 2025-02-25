@@ -1,10 +1,10 @@
+@import '../../../../assets/colors.scss';
 .nav-horizontal {
-    width: 100vw;  // Hace que el contenedor ocupe toda la pantalla
+    width: 100vw;
     display: flex;
-    flex-wrap: wrap;  // Permite que los elementos se ajusten si es necesario
     padding: 10px;
     align-items: center;
-    justify-content: space-between;  // Para distribuir los elementos correctamente
+    justify-content: space-between;
     box-sizing: border-box;
 
     .menu {
@@ -17,20 +17,37 @@
 
     .links {
         display: flex;
-        gap: 20px;  // Separar los enlaces
+        gap: 20px;
+    
         a {
             cursor: pointer;
             text-decoration: none;
             color: white;
+            position: relative;
+            padding-bottom: 5px;
+    
+            &.active::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 2px;
+                background-color: $boton;
+            }
         }
     }
+    
 
     .buscador {
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-grow: 1; // Permite que el buscador ocupe más espacio sin colapsar otros elementos
+        max-width: 40%; // Limita el ancho del buscador para que no ocupe demasiado
+
         input {
-            width: 100%;  // El input ocupará el espacio disponible
+            width: 100%;
             border: none;
             padding: 8px;
             border-radius: 5px 0px 0px 5px;
@@ -38,7 +55,7 @@
         button {
             border-radius: 0px 5px 5px 0px;
             border: none;
-            padding: 5px 15px 5px 15px;
+            padding: 5px 15px;
             i {
                 font-size: 20px;
                 color: black;
@@ -54,9 +71,9 @@
     }
 
     .imagen {
-        gap: 20px;  // Reduce el espacio entre los elementos
         display: flex;
-        justify-content: flex-end;  // Alinea los elementos al final
+        gap: 20px;
+        justify-content: flex-end;
         align-items: center;
         img {
             width: 80px;

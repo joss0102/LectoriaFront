@@ -1,21 +1,21 @@
-<div class="nav-horizontal bg-header-noche text-white row">
-    <div class="menu col-1">
+<div class="nav-horizontal bg-header-noche text-white">
+    <div class="menu">
         <i class="bi bi-list"></i>
     </div>
-    <div class="links col-2 d-flex justify-content-start align-items-center">
-        <a href="">Inicio</a>
-        <a href="">Biblioteca</a>
+    <div class="links">
+        <a [class.active]="activeRoute === 'inicio'" routerLink="/inicio">Inicio</a>
+        <a [class.active]="activeRoute === 'biblioteca'" routerLink="/biblioteca">Biblioteca</a>
     </div>
-    <div class="col-4 buscador d-flex justify-content-center align-items-center">
+    <div class="buscador">
         <input type="text" placeholder="Buscar..." aria-label="Buscar">
         <button class="bg-boton" type="button">
             <i class="bi bi-search bg-boton text-black"></i>
         </button>
+        <div class="campana">
+            <i class="bi bi-bell text-white"></i>
+        </div>
     </div>
-    <div class="campana col-1 d-flex justify-content-center align-items-center">
-        <i class="bi bi-bell text-white"></i>
-    </div>
-    <div class="col-2 imagen d-flex justify-content-end align-items-center">
+    <div class="imagen">
         <div>Modo noche</div>
         <img src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen">
     </div>

@@ -4,14 +4,16 @@ Este proyecto consiste en el desarrollo de una página web interactiva para la g
 Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, proporcionando datos visuales sobre la cantidad de libros leídos por meses o años, tendencias de géneros, hábitos de lectura y otras métricas relevantes. La interfaz será intuitiva y fácil de utilizar para actualizar y eliminar las lecturas. 
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
-## Distribucion de carpetas
+## Distribucion de carpetas y trabajo
 🟢🔴
 ```
+- Funcionalidades
+  - Modo noche/dia (noche default)
 ︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
 📁 LectoriaFront
 │-- 📁 public                         # Carpeta de contenido multimedia
 │    │-- 📁 logos                     # Carpeta de logos
-│    │    │-- 📖 logo_pagina.png      # Logo principal de la pagina
+│    │    ⤷-- 📖 logo_pagina.png      # Logo principal de la pagina
 │    │
 │    ⤷-- 📁 Libros                            # Contiene todos los libros
 │         ⤷-- 📁 nombre_libro 🟢Jose          # Nombre de los libros que existen
@@ -40,10 +42,9 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │   │    │    │-- 📁 Buscador libros
 │    │   │    │    │    ⤷-- 🗃️ buscador-libros.component🔴    # Componente base de buscador libors
 │    │   │    │    ⤷-- 📁 Buscador Autores
-│    │   │    │          ⤷-- 🗃️ buscador-autores.component🔴  # Componente base de buscador autores
+│    │   │    │         ⤷-- 🗃️ buscador-autores.component🔴  # Componente base de buscador autores
 │    │   │    │-- 📁 Header 
-│    │   │    │    │-- 🗃️ header.component🔴 
-│    │   │    │    │-- 🗃️ nav-horizontal.component🔴 Jose     #header horizontal
+│    │   │    │    │-- 🗃️ nav-horizontal.component🟡 Jose     #header horizontal
 │    │   │    │    ⤷-- 🗃️ nav-vertical.component🔴 David      #header vertical
 │    │   │    │-- 📁 inicio                
 │    │   │    │    │-- 🗃️ inicio.component🔴 Jose                 # Componente base de inicio
@@ -63,9 +64,9 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │   │    ⤷-- 📁 interfaces             # Interfaces para definición de estructuras de datos para tipado y validación.
 │    │   │         ⤷-- 🗄️ interface.ts🟡
 │    │   │
-│    │   ⤷-- 📁 page-not-found                          # Página por defecto cuando no se encuentra url   
-│    │        ⤷-- 🗃️ page-not-found.component🔴           # Componente base de pagina no encontrada
-│    │-- 📁 assets                      # Recursos estaticos
+│    │   ⤷-- 📁 page-not-found                                # Página por defecto cuando no se encuentra url   
+│    │        ⤷-- 🗃️ page-not-found.component🟢Jose           # Componente base de pagina no encontrada
+│    │-- 📁 assets                          # Recursos estaticos
 │    │    │-- 📁 fonts                      # Fuentes de escritura
 │    │    │-- 📄 animations.scss🔴          # Animaciones predeterminadas
 │    │    │-- 📄 colors.scss🟢Jose          # Colores predeterminados

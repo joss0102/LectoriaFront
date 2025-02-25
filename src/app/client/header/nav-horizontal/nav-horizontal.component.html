@@ -3,8 +3,9 @@
         <i class="bi bi-list"></i>
     </div>
     <div class="links">
-        <a [class.active]="activeRoute === 'inicio'" routerLink="/inicio">Inicio</a>
-        <a [class.active]="activeRoute === 'biblioteca'" routerLink="/biblioteca">Biblioteca</a>
+        <a [class.active]="activeSection === 'inicio'" (click)="setActiveSection('inicio')">Inicio</a>
+        <a [class.active]="activeSection === 'biblioteca'" (click)="setActiveSection('biblioteca')">Biblioteca</a>
+        <!--<a [class.active]="activeSection === 'ajustes'" (click)="setActiveSection('ajustes')">ajustes</a> --> <!-- Click para activar la funcion -->
     </div>
     <div class="buscador">
         <input type="text" placeholder="Buscar..." aria-label="Buscar">
@@ -19,4 +20,43 @@
         <div>Modo noche</div>
         <img src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen">
     </div>
+</div>
+
+<!-- Contenido dinámico -->
+<div class="contenido">
+    <div *ngIf="activeSection === 'inicio'">
+        <app-inicio></app-inicio>
+    </div>
+     <div *ngIf="activeSection === 'biblioteca'">
+        <app-biblioteca></app-biblioteca>
+    </div>
+    <!-- Contenido dinamico para nav vertical
+    <div *ngIf="activeSection === 'calificaciones'">
+        <app-calificaciones></app-calificaciones>
+    </div>
+    <div *ngIf="activeSection === 'estadisticas'">
+        <app-estadisticas></app-estadisticas>
+    </div>
+    <div *ngIf="activeSection === 'buscador-autores'">
+        <app-buscador-autores></app-buscador-autores>
+    </div>
+    <div *ngIf="activeSection === 'buscador-libros'">
+        <app-buscador-libros></app-buscador-libros>
+    </div>
+    <div *ngIf="activeSection === 'inicio-sesion'">
+        <app-inicio-sesion></app-inicio-sesion>
+    </div>
+    <div *ngIf="activeSection === 'registro'">
+        <app-registro></app-registro>
+    </div>
+    <div *ngIf="activeSection === 'inicio'">
+        <app-inicio></app-inicio>
+    </div>
+    <div *ngIf="activeSection === 'lectura-actual'">
+        <app-lectura-actual></app-lectura-actual>
+    </div>
+    <div *ngIf="activeSection === 'pendientes'">
+        <app-pendientes></app-pendientes>
+    </div>
+    -->
 </div>

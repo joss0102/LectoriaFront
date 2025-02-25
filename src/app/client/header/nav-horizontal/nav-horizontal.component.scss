@@ -6,7 +6,6 @@
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
-
     .menu {
         cursor: pointer;
         i {
@@ -14,11 +13,9 @@
             font-size: 30px;
         }
     }
-
     .links {
         display: flex;
         gap: 20px;
-    
         a {
             cursor: pointer;
             text-decoration: none;
@@ -37,15 +34,12 @@
             }
         }
     }
-    
-
     .buscador {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-grow: 1; // Permite que el buscador ocupe más espacio sin colapsar otros elementos
         max-width: 40%; // Limita el ancho del buscador para que no ocupe demasiado
-
         input {
             width: 100%;
             border: none;
@@ -62,17 +56,16 @@
             }
         }
     }
-
     .campana {
+        padding-left: 20px;
         cursor: pointer;
         i {
             font-size: 20px;
         }
     }
-
     .imagen {
         display: flex;
-        gap: 20px;
+        gap: 60px;
         justify-content: flex-end;
         align-items: center;
         img {

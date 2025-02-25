@@ -1,6 +1,91 @@
-# LectoriaFront
+# Proyecto Lectoria
+Este proyecto consiste en el desarrollo de una página web interactiva para la gestión y seguimiento de lecturas. La plataforma permite a los usuarios registrar los libros que han leído, gestionar sus lecturas en curso y planificar futuras lecturas mediante una lista de deseos. Además, los usuarios pueden agregar información detallada como fechas de inicio y finalización, imágenes de las portadas, puntuaciones, etc.
 
-## Trabajo en equipo (subir y actualizar código)
+Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, proporcionando datos visuales sobre la cantidad de libros leídos por meses o años, tendencias de géneros, hábitos de lectura y otras métricas relevantes. La interfaz será intuitiva y fácil de utilizar para actualizar y eliminar las lecturas. 
+
+El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
+## Distribucion de carpetas
+🟢🔴
+```
+︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
+📁 LectoriaFront
+│-- 📁 public                         # Carpeta de contenido multimedia
+│    │-- 📁 logos                     # Carpeta de logos
+│    │    │-- 📖 logo_pagina.png      # Logo principal de la pagina
+│    │
+│    ⤷-- 📁 Libros                            # Contiene todos los libros
+│         ⤷-- 📁 nombre_libro 🟢Jose          # Nombre de los libros que existen
+│             │-- 📁 covers🟢 Jose            # Imagen de las portadas de los libros
+│             ⤷-- 📁 fondos🔴 Jose            # Imagen de fondo para home
+│-- 📁 src                              # Código fuente
+│    │-- 📁 app                         # Módulos principales de Angular
+│    │   │-- 📁 Admin                   # Carpeta para componentes de admin (si da tiempo)
+│    │   │-- 📁 Client                  # Carpeta para componentes de cliente
+│    │   │    │-- 📁 Layout             # Estructura o diseño general
+│    │   │    │-- 📁 Header 
+│    │   │    │    │-- 🗃️ header.component🔴 
+│    │   │    │    │-- 🗃️ nav-horizontal.component🔴 Jose
+│    │   │    │    ⤷-- 🗃️ nav-vertical.component🔴 David
+│    │   │    │-- 📁 home                
+│    │   │    │    │-- 🗃️ inicio.component🔴 Jose                 # Componente base de inicio
+│    │   │    │    │-- 🗃️ Carrusel.component🔴 Jose               # Carrusel de portadas de libro
+│    │   │    │    ⤷-- 🗃️ Imagenes-saga.component🔴 Jose          # Imagenes de la saga correspondiente al libro
+│    │   │    │-- 📁 Biblioteca      
+│    │   │    │    ⤷-- 🗃️ Biblioteca.component🔴 David              # Componente base de biblioteca
+│    │   │    │-- 📁 Lectura actual   
+│    │   │    │    ⤷-- 🗃️ lectura-actual.component🔴          # Componente base de lectura actual
+│    │   │    │-- 📁 Estadisticas           
+│    │   │    │    ⤷-- 📁 graficos                                    # Carpeta que contiene los componentes de los graficos
+│    │   │    │         │-- 🗃️ graphics.component🔴                     # Componente donde se pintan los graficos
+│    │   │    │         ⤷-- 📁 cajas                                  # Diferentes cajas para graficos
+│    │   │    │              ⤷-- 🗃️  graphics-caja-uno.component🔴      # Componentes de graficos
+│    │   │    │
+│    │   │    │-- 📁 Calificaciones   
+│    │   │    │    ⤷-- 🗃️ calificaciones.component🔴          # Componente base de calificaciones
+│    │   │    │-- 📁 Pendientes   
+│    │   │    │    ⤷-- 🗃️ pendientes.component🔴              # Componente base de pendientes
+│    │   │    │-- 📁 Ajustes      
+│    │   │    │    ⤷-- 🗃️ ajustes.component🔴                 # Componente base de ajustes
+│    │   │    ⤷-- 📁 Features                               # Carpeta de componentes secundarios
+│    │   │         │-- 📁 Inicio sesion
+│    │   │         │    ⤷-- 🗃️ inicio-sesion.component🔴      # Componente base de inicio de seion
+│    │   │         │-- 📁 Registro
+│    │   │         │    ⤷-- 🗃️ registro.component🔴           # Componente base de registro
+│    │   │         │-- 📁 Buscador libros
+│    │   │         │    ⤷-- 🗃️ buscador-libros.component🔴    # Componente base de buscador libors
+│    │   │         ⤷-- 📁 Buscador Autores
+│    │   │              ⤷-- 🗃️ buscador-autores.component🔴   # Componente base de buscador autores
+│    │   │
+│    │   │-- 📁 core                        # Recursos compartidos entre módulos
+│    │   │    │-- 📁 services               # Servicios para consumo de API y lógica de negocio
+│    │   │    │    ⤷-- 🗄️ service.ts🟡
+│    │   │    │-- 📁 models                 # Modelos de organización y agrupación de componentes, directivas y servicios en Angular.
+│    │   │    │    ⤷-- 🗄️ model.ts🟡
+│    │   │    ⤷-- 📁 interfaces             # Interfaces para definición de estructuras de datos para tipado y validación.
+│    │   │         ⤷-- 🗄️ interface.ts🟡
+│    │   │
+│    │   ⤷-- 📁 page-not-found                          # Página por defecto cuando no se encuentra url   
+│    │        ⤷-- 🗃️ page-not-found.component🔴           # Componente base de pagina no encontrada
+│    │-- 📁 assets                      # Recursos estaticos
+│    │    │-- 📁 fonts                  # Fuentes de escritura
+│    │    │-- 📄 animations.scss🔴        # Animaciones predeterminadas
+│    │    │-- 📄 colors.scss🔴            # Colores predeterminados
+│    │    ⤷-- 📄 fonts.scss🔴             # Fuentes de escritura
+│    ⤷-- 📄 app.module.ts 
+│-- 📁 environments                     
+│-- 📁 tests                            
+│-- 📁 docs                             
+│-- 📁 e2e                              
+│-- 📄 angular.json                     
+│-- 📄 package.json                     
+│-- 📄 tsconfig.json                    
+│-- 📄 .gitignore                       
+│-- 📄 README.md                        
+⤷-- 📄 LICENSE
+︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
+```
+
+### Trabajo en equipo (subir y actualizar código)
 
 - Cada vez que hagan cambios, deben hacer lo siguiente:
 

@@ -77,16 +77,16 @@ All Autores -
   - **Estadisticas**: `Página donde se muestran diferentes graficos con estadisticas de lectura`
     - Libros leidos en total, en fisico y electronico. Botones de mas datos. Diferentes graficos
   - **Calificaciones**: `Página principal con información general y navegación hacia otras secciones.`
-    - `0`
+    -
   - **Pendientes**: `Página principal con información general y navegación hacia otras secciones.`
-    - `0`
+    -
   - **Ajustes**: `Página principal con información general y navegación hacia otras secciones.`
-    - `0`
+    -
 
 - **Paginas aparte**
   - **Inicio de sesion y registro**: `Página principal con información general y navegación hacia otras secciones.`
-    - `0`
+    -
   - **Buscador libros**: `Página que muestra todos los datos del libro`
-    - `0`
+    -
   - **Buscador Autores**: `Página principal con información general y navegación hacia otras secciones.`
-    - `0`
+    -

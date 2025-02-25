@@ -26,7 +26,7 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │   │    │    │-- 🗃️ header.component🔴 
 │    │   │    │    │-- 🗃️ nav-horizontal.component🔴 Jose
 │    │   │    │    ⤷-- 🗃️ nav-vertical.component🔴 David
-│    │   │    │-- 📁 home                
+│    │   │    │-- 📁 inicio                
 │    │   │    │    │-- 🗃️ inicio.component🔴 Jose                 # Componente base de inicio
 │    │   │    │    │-- 🗃️ Carrusel.component🔴 Jose               # Carrusel de portadas de libro
 │    │   │    │    ⤷-- 🗃️ Imagenes-saga.component🔴 Jose          # Imagenes de la saga correspondiente al libro

@@ -21,40 +21,39 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │-- 📁 app                         # Módulos principales de Angular
 │    │   │-- 📁 Admin                   # Carpeta para componentes de admin (si da tiempo)
 │    │   │-- 📁 Client                  # Carpeta para componentes de cliente
-│    │   │    │-- 📁 Layout             # Estructura o diseño general
+│    │   │    │-- 📁 Ajustes      
+│    │   │    │    ⤷-- 🗃️ ajustes.component🔴                 # Componente base de ajustes
+│    │   │    │-- 📁 Biblioteca      
+│    │   │    │    ⤷-- 🗃️ Biblioteca.component🔴 David        # Componente base de biblioteca
+│    │   │    │-- 📁 Calificaciones   
+│    │   │    │    ⤷-- 🗃️ calificaciones.component🔴          # Componente base de calificaciones
+│    │   │    │-- 📁 Estadisticas           
+│    │   │    │    ⤷-- 📁 graficos                                        # Carpeta que contiene los componentes de los graficos
+│    │   │    │         │-- 🗃️ graphics.component🔴                       # Componente donde se pintan los graficos
+│    │   │    │         ⤷-- 📁 cajas                                      # Diferentes cajas para graficos
+│    │   │    │              ⤷-- 🗃️  graphics-caja-uno.component🔴        # Componentes de graficos
+│    │   │    │-- 📁 Features                                 # Carpeta de componentes secundarios
+│    │   │    │    │-- 📁 Inicio sesion
+│    │   │    │    │    ⤷-- 🗃️ inicio-sesion.component🔴      # Componente base de inicio de seion
+│    │   │    │    │-- 📁 Registro
+│    │   │    │    │    ⤷-- 🗃️ registro.component🔴           # Componente base de registro
+│    │   │    │    │-- 📁 Buscador libros
+│    │   │    │    │    ⤷-- 🗃️ buscador-libros.component🔴    # Componente base de buscador libors
+│    │   │    │    ⤷-- 📁 Buscador Autores
+│    │   │    │          ⤷-- 🗃️ buscador-autores.component🔴  # Componente base de buscador autores
 │    │   │    │-- 📁 Header 
 │    │   │    │    │-- 🗃️ header.component🔴 
-│    │   │    │    │-- 🗃️ nav-horizontal.component🔴 Jose
-│    │   │    │    ⤷-- 🗃️ nav-vertical.component🔴 David
+│    │   │    │    │-- 🗃️ nav-horizontal.component🔴 Jose     #header horizontal
+│    │   │    │    ⤷-- 🗃️ nav-vertical.component🔴 David      #header vertical
 │    │   │    │-- 📁 inicio                
 │    │   │    │    │-- 🗃️ inicio.component🔴 Jose                 # Componente base de inicio
 │    │   │    │    │-- 🗃️ Carrusel.component🔴 Jose               # Carrusel de portadas de libro
 │    │   │    │    ⤷-- 🗃️ Imagenes-saga.component🔴 Jose          # Imagenes de la saga correspondiente al libro
-│    │   │    │-- 📁 Biblioteca      
-│    │   │    │    ⤷-- 🗃️ Biblioteca.component🔴 David              # Componente base de biblioteca
+│    │   │    │-- 📁 Layout             # Estructura o diseño general
 │    │   │    │-- 📁 Lectura actual   
 │    │   │    │    ⤷-- 🗃️ lectura-actual.component🔴          # Componente base de lectura actual
-│    │   │    │-- 📁 Estadisticas           
-│    │   │    │    ⤷-- 📁 graficos                                    # Carpeta que contiene los componentes de los graficos
-│    │   │    │         │-- 🗃️ graphics.component🔴                     # Componente donde se pintan los graficos
-│    │   │    │         ⤷-- 📁 cajas                                  # Diferentes cajas para graficos
-│    │   │    │              ⤷-- 🗃️  graphics-caja-uno.component🔴      # Componentes de graficos
-│    │   │    │
-│    │   │    │-- 📁 Calificaciones   
-│    │   │    │    ⤷-- 🗃️ calificaciones.component🔴          # Componente base de calificaciones
-│    │   │    │-- 📁 Pendientes   
-│    │   │    │    ⤷-- 🗃️ pendientes.component🔴              # Componente base de pendientes
-│    │   │    │-- 📁 Ajustes      
-│    │   │    │    ⤷-- 🗃️ ajustes.component🔴                 # Componente base de ajustes
-│    │   │    ⤷-- 📁 Features                               # Carpeta de componentes secundarios
-│    │   │         │-- 📁 Inicio sesion
-│    │   │         │    ⤷-- 🗃️ inicio-sesion.component🔴      # Componente base de inicio de seion
-│    │   │         │-- 📁 Registro
-│    │   │         │    ⤷-- 🗃️ registro.component🔴           # Componente base de registro
-│    │   │         │-- 📁 Buscador libros
-│    │   │         │    ⤷-- 🗃️ buscador-libros.component🔴    # Componente base de buscador libors
-│    │   │         ⤷-- 📁 Buscador Autores
-│    │   │              ⤷-- 🗃️ buscador-autores.component🔴   # Componente base de buscador autores
+│    │   │    ⤷-- 📁 Pendientes   
+│    │   │         ⤷-- 🗃️ pendientes.component🔴              # Componente base de pendientes
 │    │   │
 │    │   │-- 📁 core                        # Recursos compartidos entre módulos
 │    │   │    │-- 📁 services               # Servicios para consumo de API y lógica de negocio
@@ -67,10 +66,10 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │   ⤷-- 📁 page-not-found                          # Página por defecto cuando no se encuentra url   
 │    │        ⤷-- 🗃️ page-not-found.component🔴           # Componente base de pagina no encontrada
 │    │-- 📁 assets                      # Recursos estaticos
-│    │    │-- 📁 fonts                  # Fuentes de escritura
-│    │    │-- 📄 animations.scss🔴        # Animaciones predeterminadas
-│    │    │-- 📄 colors.scss🔴            # Colores predeterminados
-│    │    ⤷-- 📄 fonts.scss🔴             # Fuentes de escritura
+│    │    │-- 📁 fonts                      # Fuentes de escritura
+│    │    │-- 📄 animations.scss🔴          # Animaciones predeterminadas
+│    │    │-- 📄 colors.scss🟢Jose          # Colores predeterminados
+│    │    ⤷-- 📄 fonts.scss🔴               # Fuentes de escritura
 │    ⤷-- 📄 app.module.ts 
 │-- 📁 environments                     
 │-- 📁 tests                            
@@ -102,45 +101,6 @@ git add .
 git commit -m "Descripción del cambio"
 git push origin main
 ```
-
-### Distribución
-
-```
- Layout{
-
-    Header Horizontal - Jose
-    Header lateral - David
-    <app-root></app-root>
-
-}
-Home - Jose{
-
-    Datos libros
-    Fotos saga
-    Carrusel covers
-
-}
-Biblioteca David{
-
-    Ultimos libros leidos
-    Recien añadidos
-    Autores mas leidos
-
-}
-
-```
-
-### Pendiente
-
-Lectura actual -
-Estadisticas -
-Calificaciones -
-Pendientes -
-Ajustes -
-Buscador Libro -
-Buscador Autor -
-All Libros -
-All Autores -
 
 #### 🏗️ Apartados de la Página Web
 

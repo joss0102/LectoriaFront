@@ -1,3 +1,40 @@
-.inicio{
-    height:100%;
+@import '../../../../assets/colors.scss';
+
+section {
+    height: 100%; // Ocupa toda la pantalla
+    background-color: $main-noche;
+    display: grid;
+    grid-template-areas:
+        "datos imagen1"
+        "imagen2 carrusel";
+    grid-template-columns: 0.8fr 1fr; // Dos columnas iguales para la primera fila
+    grid-template-rows: 1fr 1fr; // Ambas filas con la misma altura
+    gap: 10px; // Espaciado entre los elementos
+    padding: 20px;
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .datos {
+        grid-area: datos;
+    }
+
+    .imagen1 {
+        grid-area: imagen1;
+    }
+
+    .imagen2 {
+        grid-area: imagen2;
+        width: 90%; // Un poco más pequeño en ancho
+    }
+
+    .carrusel {
+        grid-area: carrusel;
+        width: 100%; // Un poco más grande en ancho
+    }
 }

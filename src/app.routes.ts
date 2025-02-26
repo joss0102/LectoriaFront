@@ -10,7 +10,7 @@ import { AjustesComponent } from './app/client/ajustes/ajustes.component';
 import { CalificacionesComponent } from './app/client/calificaciones/calificaciones.component';
 import { BuscadorAutoresComponent } from './app/client/features/buscador-autores/buscador-autores.component';
 import { BuscadorLibrosComponent } from './app/client/features/buscador-libros/buscador-libros.component';
-import { RegistroComponent } from './app/client/features/registro/registro.component';
+import { RegistroComponent } from './app/client/features/registro/registro/registro.component';
 import { LecturaActualComponent } from './app/client/lectura-actual/lectura-actual.component';
 import { PendientesComponent } from './app/client/pendientes/pendientes.component';
 

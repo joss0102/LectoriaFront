@@ -4,11 +4,19 @@ Este proyecto consiste en el desarrollo de una página web interactiva para la g
 Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, proporcionando datos visuales sobre la cantidad de libros leídos por meses o años, tendencias de géneros, hábitos de lectura y otras métricas relevantes. La interfaz será intuitiva y fácil de utilizar para actualizar y eliminar las lecturas. 
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
-## Distribucion de carpetas y trabajo
+
+# Funcionalidades y trabajo pendientes
+  ### Trabajo pendiente o a revisar
+    - David revisa los archivos nav-horizontal. el HTML el SCSS y el TS
+      - Ahi encuentras la logica para los links
+      - Lo unico que habria que cambiar es algo del SCSS, ya que se ilumina todo el icono, no la parte de abajo de la palabra
+  ### Funcionalidades
+  - [x] Creacion carpetas
+  - [x] Creacion componentes base
+  - [ ] Modo dia/noche (default noche)
+# Distribucion de carpetas y trabajo
 🟢🔴
 ```
-- Funcionalidades
-  - Modo noche/dia (noche default)
 ︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
 📁 LectoriaFront
 │-- 📁 public                         # Carpeta de contenido multimedia
@@ -85,7 +93,7 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 ︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
 ```
 
-### Trabajo en equipo (subir y actualizar código)
+# Trabajo en equipo (subir y actualizar código)
 
 - Cada vez que hagan cambios, deben hacer lo siguiente:
 
@@ -103,7 +111,7 @@ git commit -m "Descripción del cambio"
 git push origin main
 ```
 
-#### 🏗️ Apartados de la Página Web
+# 🏗️ Apartados de la Página Web
 
 - **Componentes generales**
 
@@ -125,8 +133,3 @@ git push origin main
   - **Calificaciones**: `Página principal con información general y navegación hacia otras secciones.`
   - **Pendientes**: `Página principal con información general y navegación hacia otras secciones.`
   - **Ajustes**: `Página principal con información general y navegación hacia otras secciones.`
-
-- **Paginas aparte**
-  - **Inicio de sesion y registro**: `Página principal con información general y navegación hacia otras secciones.`
-  - **Buscador libros**: `Página que muestra todos los datos del libro`
-  - **Buscador Autores**: `Página principal con información general y navegación hacia otras secciones.`

@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 
-import { InicioComponent } from '../../inicio/inicio.component';
-import { BibliotecaComponent } from '../../biblioteca/biblioteca.component';
+import { InicioComponent } from '../../inicio/inicio/inicio.component';
 
+import { BibliotecaComponent } from '../../biblioteca/biblioteca/biblioteca.component';
 
-import { AjustesComponent } from '../../ajustes/ajustes.component';
-import { CalificacionesComponent } from '../../calificaciones/calificaciones.component';
-import { EstadisticasComponent } from '../../estadisticas/estadisticas.component';
-import { BuscadorAutoresComponent } from '../../features/buscador-autores/buscador-autores.component';
-import { BuscadorLibrosComponent } from '../../features/buscador-libros/buscador-libros.component';
-import { InicioSesionComponent } from '../../features/inicio-sesion/inicio-sesion.component';
-import { RegistroComponent } from '../../features/registro/registro.component';
+import { AjustesComponent } from '../../ajustes/ajustes/ajustes.component';
+import { CalificacionesComponent } from '../../calificaciones/calificaciones/calificaciones.component';
+import { EstadisticasComponent } from '../../estadisticas/estadisticas/estadisticas.component';
+import { BuscadorAutoresComponent } from '../../features/buscador-autores/buscador-autores/buscador-autores.component';
+import { BuscadorLibrosComponent } from '../../features/buscador-libros/buscador-libros/buscador-libros.component';
+import { InicioSesionComponent } from '../../features/inicio-sesion/inicio-sesion/inicio-sesion.component';
+import { RegistroComponent } from '../../features/registro/registro/registro.component';
 
-import { LecturaActualComponent } from '../../lectura-actual/lectura-actual.component';
-import { PendientesComponent } from '../../pendientes/pendientes.component';
+import { LecturaActualComponent } from '../../lectura-actual/lectura-actual/lectura-actual.component';
+import { PendientesComponent } from '../../pendientes//pendientes/pendientes.component';
 
-import { NgClass, NgIf } from '@angular/common';
+import {  NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-nav-horizontal',
@@ -24,7 +24,8 @@ import { NgClass, NgIf } from '@angular/common';
     NgIf,
     InicioComponent,
     BibliotecaComponent,
-    NgClass,
+
+    /*
     AjustesComponent,
     CalificacionesComponent,
     EstadisticasComponent,
@@ -34,6 +35,7 @@ import { NgClass, NgIf } from '@angular/common';
     RegistroComponent,
     LecturaActualComponent,
     PendientesComponent
+    */
   ],
   templateUrl: './nav-horizontal.component.html',
   styleUrl: './nav-horizontal.component.scss'

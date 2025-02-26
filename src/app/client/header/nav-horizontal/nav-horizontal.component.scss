@@ -11,19 +11,24 @@
         i {
             color: white;
             font-size: 30px;
+        &:hover {
+            color: $boton;
         }
+        }
+        
     }
-    // Aqui habria que cambiar la forma, ya no seria una linea en nav-vertical, sino el color del icono
     .links {
         display: flex;
         gap: 20px;
         a {
             cursor: pointer;
             text-decoration: none;
-            color: white;
+            color: white;  // Color por defecto
             position: relative;
             padding-bottom: 5px;
-    
+            &:hover {
+                color: $boton;  // Cambia el color del enlace al pasar el ratón
+            }
             &.active::after {
                 content: "";
                 position: absolute;
@@ -39,8 +44,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-grow: 1; // Permite que el buscador ocupe más espacio sin colapsar otros elementos
-        max-width: 40%; // Limita el ancho del buscador para que no ocupe demasiado
+        flex-grow: 1;
+        max-width: 40%;
         input {
             width: 100%;
             border: none;
@@ -51,10 +56,10 @@
             border-radius: 0px 5px 5px 0px;
             border: none;
             padding: 5px 15px;
-            i {
-                font-size: 20px;
-                color: black;
-            }
+        i {
+            font-size: 20px;
+            color: black;
+        }
         }
     }
     .campana {
@@ -62,6 +67,9 @@
         cursor: pointer;
         i {
             font-size: 20px;
+            &:hover {
+                color: $boton;
+            }
         }
     }
     .imagen {
@@ -71,6 +79,6 @@
         align-items: center;
         img {
             width: 80px;
+            }
         }
-    }
 }

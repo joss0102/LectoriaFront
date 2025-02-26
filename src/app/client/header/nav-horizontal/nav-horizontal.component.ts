@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 import { InicioComponent } from '../../inicio/inicio/inicio.component';
-
+import {  NgIf } from '@angular/common';
+import { DividerTimerComponent } from "../divider-timer/divider-timer.component";
 import { BibliotecaComponent } from '../../biblioteca/biblioteca/biblioteca.component';
-
+// Imports david
 import { AjustesComponent } from '../../ajustes/ajustes/ajustes.component';
 import { CalificacionesComponent } from '../../calificaciones/calificaciones/calificaciones.component';
 import { EstadisticasComponent } from '../../estadisticas/estadisticas/estadisticas.component';
@@ -11,11 +12,9 @@ import { BuscadorAutoresComponent } from '../../features/buscador-autores/buscad
 import { BuscadorLibrosComponent } from '../../features/buscador-libros/buscador-libros/buscador-libros.component';
 import { InicioSesionComponent } from '../../features/inicio-sesion/inicio-sesion/inicio-sesion.component';
 import { RegistroComponent } from '../../features/registro/registro/registro.component';
-
 import { LecturaActualComponent } from '../../lectura-actual/lectura-actual/lectura-actual.component';
 import { PendientesComponent } from '../../pendientes//pendientes/pendientes.component';
 
-import {  NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-nav-horizontal',
@@ -24,19 +23,9 @@ import {  NgIf } from '@angular/common';
     NgIf,
     InicioComponent,
     BibliotecaComponent,
-
-    /*
-    AjustesComponent,
-    CalificacionesComponent,
-    EstadisticasComponent,
-    BuscadorAutoresComponent,
-    BuscadorLibrosComponent,
-    InicioSesionComponent,
-    RegistroComponent,
-    LecturaActualComponent,
-    PendientesComponent
-    */
-  ],
+    DividerTimerComponent
+    //importar los componentes
+],
   templateUrl: './nav-horizontal.component.html',
   styleUrl: './nav-horizontal.component.scss'
 })

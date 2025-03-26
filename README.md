@@ -19,20 +19,23 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 - [x] Creacion carpetas
 - [x] Creacion componentes base
 - [ ] Modo dia/noche (default noche)
+- [ ] Subir pdf y leerlo
+  - [ ] Buscar en api el libro y enseñar los datos
 # Cronograma
-### **Fase 1**
 
-  31 MAR - 6 ABR
+## **Fase 1**
+
+  ### **31 MAR - 6 ABR**
   - Investigación de PDF
   - Creación e inserción en base de datos
   - Diseño frontend (1):
     - Header
     - Home
-    - Biblioteca
+    - Biblioteca 
     - Pendientes
     - Buscadores
   
-  7 abr - 13 abr
+  ### **7 abr - 13 abr**
   - Diseño frontend (2):
     - Lectura actual
     - Graficos
@@ -43,15 +46,15 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
       - CRUD básico
       - Pruebas en POSTMAN
    
-  14 abr - 20 abr
+  ### **14 abr - 20 abr**
   - Conectando backend con frontend
   - Pintando datos (1):
     - Inicio
       - Configurando img por saga
      
-### **Fase 2**
+## **Fase 2**
 
-  21 abr - 27 abr
+  ### **21 abr - 27 abr**
   - Pintando datos (2):
     - Biblioteca
     - Libros pendientes
@@ -61,14 +64,14 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
     - Registrarse
     - Pruebas de añadir o eliminar datos desde front
 
-  28 abr - 4 may
+  ### **28 abr - 4 may**
   - Pintando datos (3)
     - Lectura actual
     - Ajustes de usuarios
     - Gráficos
   - Implementación de PDF
 
-  5 may - 11 may
+  ### **5 may - 11 may**
   - Pintando datos (4):
     - Buscador de libros
     - Imagen svg
@@ -78,28 +81,28 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
     - Ver gráficos
   - Investigando chat IA (por decidir)
 
-### **Fase 3**
+## **Fase 3**
 
-  12 may - 18 may
+  ### **12 may - 18 may**
   - Implementación chat IA (si el caso)
   - Responsive
     - Movil
     - Tablets
     - Pantallas
 
-  19 may - 25 may
+  ### **19 may - 25 may**
   - Pruebas con el chat IA
   - Modo noche
   - Memoria en sucio
 
-  26 may - 1 jun
+  ### **26 may - 1 jun**
   - Tareas pendientes o aplazadas
   - Memoria en limpio con su debida revisión de ortografía y estructura.
 
 
-### **Fase 4**
+## **Fase 4**
 
-  2 jun - 15 jun
+  ### **2 jun - 15 jun**
   - Proyecto terminado
   - Buscar posibles bugs y errores
   - Revisiones de código.

@@ -34,13 +34,13 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
       - Buscadores
   
   7 abr - 13 abr
-    - Diseño frontend (2):
-      - Lectura actual
-      - Graficos
-      - Calificaciones
-      - Ajustes
-    - decisión sobre el lenguaje con el que trabajar.
-      - Base de datos con backend
+  - Diseño frontend (2):
+    - Lectura actual
+    - Graficos
+    - Calificaciones
+    - Ajustes
+  - decisión sobre el lenguaje con el que trabajar.
+    - Base de datos con backend
       - CRUD básico
       - Pruebas en POSTMAN
    

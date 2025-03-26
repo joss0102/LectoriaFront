@@ -1,21 +1,31 @@
 # Proyecto Lectoria
+
+- Probando ramas
+
 Este proyecto consiste en el desarrollo de una página web interactiva para la gestión y seguimiento de lecturas. La plataforma permite a los usuarios registrar los libros que han leído, gestionar sus lecturas en curso y planificar futuras lecturas mediante una lista de deseos. Además, los usuarios pueden agregar información detallada como fechas de inicio y finalización, imágenes de las portadas, puntuaciones, etc.
 
-Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, proporcionando datos visuales sobre la cantidad de libros leídos por meses o años, tendencias de géneros, hábitos de lectura y otras métricas relevantes. La interfaz será intuitiva y fácil de utilizar para actualizar y eliminar las lecturas. 
+Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, proporcionando datos visuales sobre la cantidad de libros leídos por meses o años, tendencias de géneros, hábitos de lectura y otras métricas relevantes. La interfaz será intuitiva y fácil de utilizar para actualizar y eliminar las lecturas.
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
 
 # Funcionalidades y trabajo pendientes
-  ### Trabajo pendiente o a revisar
+
+### Trabajo pendiente o a revisar
+
     - David revisa los archivos nav-horizontal. el HTML el SCSS y el TS
       - Ahi encuentras la logica para los links
       - Lo unico que habria que cambiar es algo del SCSS, ya que se ilumina todo el icono, no la parte de abajo de la palabra
-  ### Funcionalidades
-  - [x] Creacion carpetas
-  - [x] Creacion componentes base
-  - [ ] Modo dia/noche (default noche)
+
+### Funcionalidades
+
+- [x] Creacion carpetas
+- [x] Creacion componentes base
+- [ ] Modo dia/noche (default noche)
+
 # Distribucion de carpetas y trabajo
+
 🟢🔴
+
 ```
 ︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
 📁 LectoriaFront
@@ -31,13 +41,13 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │-- 📁 app                         # Módulos principales de Angular
 │    │   │-- 📁 Admin                   # Carpeta para componentes de admin (si da tiempo)
 │    │   │-- 📁 Client                  # Carpeta para componentes de cliente
-│    │   │    │-- 📁 Ajustes      
+│    │   │    │-- 📁 Ajustes
 │    │   │    │    ⤷-- 🗃️ ajustes.component🔴                 # Componente base de ajustes
-│    │   │    │-- 📁 Biblioteca      
+│    │   │    │-- 📁 Biblioteca
 │    │   │    │    ⤷-- 🗃️ Biblioteca.component🔴 David        # Componente base de biblioteca
-│    │   │    │-- 📁 Calificaciones   
+│    │   │    │-- 📁 Calificaciones
 │    │   │    │    ⤷-- 🗃️ calificaciones.component🔴          # Componente base de calificaciones
-│    │   │    │-- 📁 Estadisticas           
+│    │   │    │-- 📁 Estadisticas
 │    │   │    │    ⤷-- 📁 graficos                                        # Carpeta que contiene los componentes de los graficos
 │    │   │    │         │-- 🗃️ graphics.component🔴                       # Componente donde se pintan los graficos
 │    │   │    │         ⤷-- 📁 cajas                                      # Diferentes cajas para graficos
@@ -51,17 +61,17 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │   │    │    │    ⤷-- 🗃️ buscador-libros.component🔴    # Componente base de buscador libors
 │    │   │    │    ⤷-- 📁 Buscador Autores
 │    │   │    │         ⤷-- 🗃️ buscador-autores.component🔴  # Componente base de buscador autores
-│    │   │    │-- 📁 Header 
+│    │   │    │-- 📁 Header
 │    │   │    │    │-- 🗃️ nav-horizontal.component🟡 Jose     #header horizontal
 │    │   │    │    ⤷-- 🗃️ nav-vertical.component🔴 David      #header vertical
-│    │   │    │-- 📁 inicio                
+│    │   │    │-- 📁 inicio
 │    │   │    │    │-- 🗃️ inicio.component🔴 Jose                 # Componente base de inicio
 │    │   │    │    │-- 🗃️ Carrusel.component🔴 Jose               # Carrusel de portadas de libro
 │    │   │    │    ⤷-- 🗃️ Imagenes-saga.component🔴 Jose          # Imagenes de la saga correspondiente al libro
 │    │   │    │-- 📁 Layout             # Estructura o diseño general
-│    │   │    │-- 📁 Lectura actual   
+│    │   │    │-- 📁 Lectura actual
 │    │   │    │    ⤷-- 🗃️ lectura-actual.component🔴          # Componente base de lectura actual
-│    │   │    ⤷-- 📁 Pendientes   
+│    │   │    ⤷-- 📁 Pendientes
 │    │   │         ⤷-- 🗃️ pendientes.component🔴              # Componente base de pendientes
 │    │   │
 │    │   │-- 📁 core                        # Recursos compartidos entre módulos
@@ -72,23 +82,23 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │    │   │    ⤷-- 📁 interfaces             # Interfaces para definición de estructuras de datos para tipado y validación.
 │    │   │         ⤷-- 🗄️ interface.ts🟡
 │    │   │
-│    │   ⤷-- 📁 page-not-found                                # Página por defecto cuando no se encuentra url   
+│    │   ⤷-- 📁 page-not-found                                # Página por defecto cuando no se encuentra url
 │    │        ⤷-- 🗃️ page-not-found.component🟢Jose           # Componente base de pagina no encontrada
 │    │-- 📁 assets                          # Recursos estaticos
 │    │    │-- 📁 fonts                      # Fuentes de escritura
 │    │    │-- 📄 animations.scss🔴          # Animaciones predeterminadas
 │    │    │-- 📄 colors.scss🟢Jose          # Colores predeterminados
 │    │    ⤷-- 📄 fonts.scss🔴               # Fuentes de escritura
-│    ⤷-- 📄 app.module.ts 
-│-- 📁 environments                     
-│-- 📁 tests                            
-│-- 📁 docs                             
-│-- 📁 e2e                              
-│-- 📄 angular.json                     
-│-- 📄 package.json                     
-│-- 📄 tsconfig.json                    
-│-- 📄 .gitignore                       
-│-- 📄 README.md                        
+│    ⤷-- 📄 app.module.ts
+│-- 📁 environments
+│-- 📁 tests
+│-- 📁 docs
+│-- 📁 e2e
+│-- 📄 angular.json
+│-- 📄 package.json
+│-- 📄 tsconfig.json
+│-- 📄 .gitignore
+│-- 📄 README.md
 ⤷-- 📄 LICENSE
 ︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
 ```

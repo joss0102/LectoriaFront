@@ -20,8 +20,7 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 - [x] Creacion componentes base
 - [ ] Modo dia/noche (default noche)
 # Cronograma
-**Fase 1**
-
+### **Fase 1**
 
   31 MAR - 6 ABR
   - Investigación de PDF
@@ -50,7 +49,8 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
     - Inicio
       - Configurando img por saga
      
-**Fase 2**
+### **Fase 2**
+
   21 abr - 27 abr
   - Pintando datos (2):
     - Biblioteca
@@ -78,7 +78,8 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
     - Ver gráficos
   - Investigando chat IA (por decidir)
 
-**Fase 3**
+### **Fase 3**
+
   12 may - 18 may
   - Implementación chat IA (si el caso)
   - Responsive
@@ -96,6 +97,13 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
   - Memoria en limpio con su debida revisión de ortografía y estructura.
 
 
+### **Fase 4**
+
+  2 jun - 15 jun
+  - Proyecto terminado
+  - Buscar posibles bugs y errores
+  - Revisiones de código.
+  - Dividir y practicar la presentación
 
 
 # Distribucion de carpetas y trabajo

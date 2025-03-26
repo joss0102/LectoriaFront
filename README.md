@@ -24,14 +24,14 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 
 
   31 MAR - 6 ABR
-    - Investigación de PDF
-    - Creación e inserción en base de datos
-    - Diseño frontend (1):
-      - Header
-      - Home
-      - Biblioteca
-      - Pendientes
-      - Buscadores
+  - Investigación de PDF
+  - Creación e inserción en base de datos
+  - Diseño frontend (1):
+    - Header
+    - Home
+    - Biblioteca
+    - Pendientes
+    - Buscadores
   
   7 abr - 13 abr
   - Diseño frontend (2):
@@ -52,48 +52,48 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
      
 **Fase 2**
   21 abr - 27 abr
-    - Pintando datos (2):
-      - Biblioteca
-      - Libros pendientes
-    - Gestión de usuarios(back):
-      - Token
-      - Iniciar sesión
-      - Registrarse
-      - Pruebas de añadir o eliminar datos desde front
+  - Pintando datos (2):
+    - Biblioteca
+    - Libros pendientes
+  - Gestión de usuarios(back):
+    - Token
+    - Iniciar sesión
+    - Registrarse
+    - Pruebas de añadir o eliminar datos desde front
 
   28 abr - 4 may
-    - Pintando datos (3)
-      - Lectura actual
-      - Ajustes de usuarios
-      - Gráficos
-    - Implementación de PDF
+  - Pintando datos (3)
+    - Lectura actual
+    - Ajustes de usuarios
+    - Gráficos
+  - Implementación de PDF
 
   5 may - 11 may
-    - Pintando datos (4):
-      - Buscador de libros
-      - Imagen svg
-      - Buscador autores
-      - Calificaciones
-    - Sección administrador
-      - Ver gráficos
-    - Investigando chat IA (por decidir)
+  - Pintando datos (4):
+    - Buscador de libros
+    - Imagen svg
+    - Buscador autores
+    - Calificaciones
+  - Sección administrador
+    - Ver gráficos
+  - Investigando chat IA (por decidir)
 
 **Fase 3**
   12 may - 18 may
-    - Implementación chat IA (si el caso)
-    - Responsive
-      - Movil
-      - Tablets
-      - Pantallas
+  - Implementación chat IA (si el caso)
+  - Responsive
+    - Movil
+    - Tablets
+    - Pantallas
 
   19 may - 25 may
-    - Pruebas con el chat IA
-    - Modo noche
-    - Memoria en sucio
+  - Pruebas con el chat IA
+  - Modo noche
+  - Memoria en sucio
 
   26 may - 1 jun
-    - Tareas pendientes o aplazadas
-    - Memoria en limpio con su debida revisión de ortografía y estructura.
+  - Tareas pendientes o aplazadas
+  - Memoria en limpio con su debida revisión de ortografía y estructura.
 
 
 

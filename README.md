@@ -6,6 +6,33 @@ Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, propor
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
 
+# Trabajo en equipo (subir y actualizar código)
+
+- Pasos para mergear, orden:
+
+```git
+1️⃣ RamaDavid / RamaJose → 2️⃣ mergeDavid-Jose → 3️⃣ main
+```
+- 1️⃣ Subir los cambios de tu rama RamaDavid / ramaJose ,comitear y pushear a tu rama. ( no hace falta utilizar comandos , se puede utilizar la UI de VSCODE )
+```git
+git add .
+git commit -m "Descripción del cambio"
+git push origin RamaDavid/Jose
+```
+
+- 2️⃣ Crear un Pull Request para fusionar RamaDavid / RamaJose en mergeDavid-Jose:
+  - New Pull Request en Pull Request de GitHub
+  - En el desplegable "base", selecciona la rama mergeDavid-Jose (la rama donde se va a hacer la fusión).
+  - En el desplegable "compare", selecciona la rama RamaDavid o RamaJose.
+  - GitHub mostrará los cambios que se van a fusionar. Verifica que los cambios son correctos.
+  - Si todo está correcto, haz clic en "Create Pull Request".
+  - Resolver conflictos (si los hay) y eliminar <<<<<<< HEAD apartir de ====== son la rama tuya eliminar las marcas de conflictos y quedarnos con el codigo que queramos.
+  - Una vez que se resuelvan los conflictos , puedes hacer clic en el botón "Merge pull request".
+ 
+- 3️⃣ Fusionar mergeDavid-Jose a main
+    - New PR de main <---- mergeDavid-Jose
+    - Repetir los mismos pasos y aprobar el PR y mergear.
+
 # Funcionalidades y trabajo pendientes
 
 ### Trabajo pendiente o a revisar
@@ -102,24 +129,6 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 │-- 📄 README.md
 ⤷-- 📄 LICENSE
 ︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿︵‿
-```
-
-# Trabajo en equipo (subir y actualizar código)
-
-- Cada vez que hagan cambios, deben hacer lo siguiente:
-
-- Actualizar el código antes de trabajar (para evitar conflictos):
-
-```git
-git pull origin main
-```
-
-- Hacer cambios en el código y subirlos:
-
-```
-git add .
-git commit -m "Descripción del cambio"
-git push origin main
 ```
 
 # 🏗️ Apartados de la Página Web

@@ -2,9 +2,12 @@ nav {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: white;
   a {
     padding: 20px;
+    color: white;
+  }
+  a:hover {
+    background-color: orange;
   }
 }
 
@@ -15,8 +18,12 @@ nav {
     flex-wrap: wrap;
     height: auto;
     margin-top: 10px;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     a {
-      padding: 8px;
+      padding: 5px;
     }
   }
 }

@@ -1,0 +1,22 @@
+nav {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: white;
+  a {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    height: auto;
+    margin-top: 10px;
+    a {
+      padding: 8px;
+    }
+  }
+}

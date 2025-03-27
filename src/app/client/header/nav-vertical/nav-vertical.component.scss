@@ -1,0 +1,58 @@
+nav {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+nav a {
+  padding: 20px;
+  color: white;
+  display: flex;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+nav a p {
+  margin-left: 10px;
+  text-align: center;
+}
+
+nav a:hover {
+  background-color: orange;
+}
+
+nav a.solo-icono p {
+  display: none;
+}
+
+nav a.solo-icono i {
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  nav a {
+    padding: 5px;
+  }
+
+  nav a.solo-icono p {
+    display: none;
+  }
+
+  nav a.solo-icono i {
+    display: block;
+    margin: 0 auto;
+  }
+}

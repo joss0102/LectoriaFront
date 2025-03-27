@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DividerTimerComponent } from '../divider-timer/divider-timer.component';
 import { RouterModule } from '@angular/router';
+import { VerticalServiceService } from '../../../services/navVertical/vertical-service.service';
 
 @Component({
   selector: 'app-nav-horizontal',
@@ -12,13 +13,17 @@ import { RouterModule } from '@angular/router';
 export class NavHorizontalComponent {
   modoNoche: boolean = false;
 
-  constructor() {}
+  constructor(private soloIconos: VerticalServiceService) {}
 
   ngOnInit() {
     // Cargar el estado del modo noche desde localStorage
     const savedTheme = localStorage.getItem('modoNoche');
     this.modoNoche = savedTheme === 'true';
     this.aplicarModoNoche();
+  }
+
+  cambiarIconos() {
+    this.soloIconos.cambiarSoloIconos();
   }
 
   toggleModoNoche() {

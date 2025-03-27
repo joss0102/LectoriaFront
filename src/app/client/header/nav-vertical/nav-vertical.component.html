@@ -1,21 +1,22 @@
+<!-- nav.component.html -->
 <nav class="bg-header-noche">
-  <a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
     <i class="bi bi-person-circle fs-5"></i>
-    <p class="fs-5">Perfil</p></a
-  >
-  <a>
-    <i class="bi bi-book fs-5"></i>
-    <p class="fs-5">Lectura Actual</p>
+    <p class="fs-5">Perfil</p>
   </a>
-  <a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-book fs-5"></i>
+    <p class="fs-5">Libro Actual</p>
+  </a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
     <i class="bi bi-graph-up-arrow fs-5"></i>
     <p class="fs-5">Estadisticas</p>
   </a>
-  <a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
     <i class="bi bi-bookmark-heart-fill fs-5"></i>
     <p class="fs-5">Pendientes</p>
   </a>
-  <a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
     <i class="bi bi-gear-fill fs-5"></i>
     <p class="fs-5">Configuracion</p>
   </a>

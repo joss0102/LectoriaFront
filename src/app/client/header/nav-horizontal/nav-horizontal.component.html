@@ -1,64 +1,28 @@
 <div class="nav-horizontal bg-header-noche text-white">
-    <div class="menu">
-        <i class="bi bi-list"></i>
+  <div class="menu">
+    <i class="bi bi-list"></i>
+  </div>
+  <div class="links">
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Inicio</a
+    >
+    <a routerLink="/biblioteca" routerLinkActive="active">Biblioteca</a>
+  </div>
+  <div class="buscador">
+    <input type="text" placeholder="Buscar..." aria-label="Buscar" />
+    <button class="bg-boton" type="button">
+      <i class="bi bi-search bg-boton text-black"></i>
+    </button>
+    <div class="campana">
+      <i class="bi bi-bell"></i>
     </div>
-    <div class="links">
-        <a [class.active]="activeSection === 'inicio'" (click)="setActiveSection('inicio')">Inicio</a>
-        <a [class.active]="activeSection === 'biblioteca'" (click)="setActiveSection('biblioteca')">Biblioteca</a>
-
-        <!--<a [class.active]="activeSection === 'ajustes'" (click)="setActiveSection('ajustes')">ajustes</a> --> <!-- Click para activar la funcion -->
-        
-    </div>
-    <div class="buscador">
-        <input type="text" placeholder="Buscar..." aria-label="Buscar">
-        <button class="bg-boton" type="button">
-            <i class="bi bi-search bg-boton text-black"></i>
-        </button>
-        <div class="campana">
-            <i class="bi bi-bell"></i>
-        </div>
-    </div>
-    <div class="imagen">
-        <div>Modo noche</div>
-        <img src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen">
-    </div>
+  </div>
+  <div class="imagen">
+    <div>Modo noche</div>
+    <img src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
+  </div>
 </div>
 <app-divider-timer></app-divider-timer>
-<!-- Contenido dinámico -->
-<div class="contenido">
-    <div *ngIf="activeSection === 'inicio'">
-        <app-inicio></app-inicio>
-    </div>
-     <div *ngIf="activeSection === 'biblioteca'">
-        <app-biblioteca></app-biblioteca>
-    </div>
-    <!-- Contenido dinamico para nav vertical
-    <div *ngIf="activeSection === 'calificaciones'">
-        <app-calificaciones></app-calificaciones>
-    </div>
-    <div *ngIf="activeSection === 'estadisticas'">
-        <app-estadisticas></app-estadisticas>
-    </div>
-    <div *ngIf="activeSection === 'buscador-autores'">
-        <app-buscador-autores></app-buscador-autores>
-    </div>
-    <div *ngIf="activeSection === 'buscador-libros'">
-        <app-buscador-libros></app-buscador-libros>
-    </div>
-    <div *ngIf="activeSection === 'inicio-sesion'">
-        <app-inicio-sesion></app-inicio-sesion>
-    </div>
-    <div *ngIf="activeSection === 'registro'">
-        <app-registro></app-registro>
-    </div>
-    <div *ngIf="activeSection === 'inicio'">
-        <app-inicio></app-inicio>
-    </div>
-    <div *ngIf="activeSection === 'lectura-actual'">
-        <app-lectura-actual></app-lectura-actual>
-    </div>
-    <div *ngIf="activeSection === 'pendientes'">
-        <app-pendientes></app-pendientes>
-    </div>
-    -->
-</div>

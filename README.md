@@ -72,9 +72,10 @@ git push origin RamaDavid/Jose
   - Una vez que se resuelvan los conflictos , puedes hacer clic en el botón "Merge pull request".
 
 - 3️⃣ Fusionar mergeDavid-Jose a main
+
   - New PR de main <---- mergeDavid-Jose
   - Repetir los mismos pasos y aprobar el PR y mergear.
- 
+
 - Para actualizar la rama main a tu rama:
 
 ```git

@@ -3,32 +3,35 @@
 
 
 .parent {
+    margin: 20px;
     background-color: $main-noche;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(8, 1fr);
     gap: 8px;
-    height: 820px;
+    height: 83vh;
+
     .datos {
-        background-color: rgb(85, 96, 69);
+        // background-color: rgb(85, 96, 69);
         grid-column: span 3 / span 3;
         grid-row: span 4 / span 4;
     }
-    
+
     .imagen1 {
-        background-color: rgb(69, 84, 96);
+        display: flex;
+        justify-content: center;
+        align-items: center;
         grid-column: span 3 / span 3;
         grid-row: span 4 / span 4;
         grid-column-start: 4;
     }
-    
+
     .imagen2 {
-        background-color: rgb(96, 82, 69);
         grid-column: span 2 / span 2;
         grid-row: span 4 / span 4;
         grid-row-start: 5;
     }
-    
+
     .carrusel {
         background-color: rgb(77, 69, 96);
         grid-column: span 4 / span 4;

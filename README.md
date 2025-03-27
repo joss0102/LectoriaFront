@@ -6,6 +6,14 @@ Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, propor
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
 
+# Trabajo pendientes
+
+### Trabajo pendiente o a revisar
+
+    - David revisa los archivos nav-horizontal. el HTML el SCSS y el TS
+      - Ahi encuentras la logica para los links
+      - Lo unico que habria que cambiar es algo del SCSS, ya que se ilumina todo el icono, no la parte de abajo de la palabra
+
 ### Funcionalidades
 
 - [x] Creacion carpetas
@@ -66,10 +74,4 @@ git push origin RamaDavid/Jose
     - New PR de main <---- mergeDavid-Jose
     - Repetir los mismos pasos y aprobar el PR y mergear.
 
-# Funcionalidades y trabajo pendientes
 
-### Trabajo pendiente o a revisar
-
-    - David revisa los archivos nav-horizontal. el HTML el SCSS y el TS
-      - Ahi encuentras la logica para los links
-      - Lo unico que habria que cambiar es algo del SCSS, ya que se ilumina todo el icono, no la parte de abajo de la palabra

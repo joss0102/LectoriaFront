@@ -1,8 +1,10 @@
 <!-- nav.component.html -->
 <nav class="bg-header-noche">
   <a [ngClass]="{ 'solo-icono': soloIcono }">
-    <i class="bi bi-person-circle fs-5"></i>
-    <p class="fs-5">Perfil</p>
+    <i class="bi bi-person-circle display-2"></i>
+    <div class="d-flex align-items-center">
+      <p class="fs-5">Perfil</p>
+    </div>
   </a>
   <a [ngClass]="{ 'solo-icono': soloIcono }">
     <i class="bi bi-book fs-5"></i>
@@ -16,8 +18,12 @@
     <i class="bi bi-bookmark-heart-fill fs-5"></i>
     <p class="fs-5">Pendientes</p>
   </a>
-  <a [ngClass]="{ 'solo-icono': soloIcono }">
+  <a [ngClass]="{ 'solo-icono': soloIcono }" class="mb-md-5">
     <i class="bi bi-gear-fill fs-5"></i>
-    <p class="fs-5">Configuracion</p>
+    <p class="fs-5">Configuración</p>
+  </a>
+  <a class="my-md -5" [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-box-arrow-right fs-5"></i>
+    <p class="fs-5">Cerrar Sesión</p>
   </a>
 </nav>

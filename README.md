@@ -10,7 +10,7 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 
 ### Trabajo pendiente o a revisar
 
-- Nav Vertical problema.
+- Ninguno , seguir el cronograma.
 
 ### Funcionalidades
 
@@ -24,9 +24,9 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 
 - **Componentes generales**
 
-  - **Nav superior**: `Nav con elementos generales`
+  - ✅ **Nav superior**: `Nav con elementos generales`
     - Menu desplegable, inicio, biblioteca, buscador, notificaciones, modo noche/dia y logo
-  - **Nav Izquierdo**: `Nav con elemtnos mas concretos`
+  - ✅ **Nav Izquierdo**: `Nav con elementos mas concretos`
     - Logo usuario, nombre usuario, lectura actual, estadisticas, calificaciones, pendientes y ajustes
 
 - **Paginas generales con link**

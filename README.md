@@ -74,4 +74,3 @@ git push origin RamaDavid/Jose
     - New PR de main <---- mergeDavid-Jose
     - Repetir los mismos pasos y aprobar el PR y mergear.
 
-

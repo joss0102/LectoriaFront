@@ -28,6 +28,7 @@
         color: $boton; // Cambia el color del enlace al pasar el ratón
       }
       &.active::after {
+        // linea naranja debajo el enlance activo
         content: "";
         position: absolute;
         left: 0;

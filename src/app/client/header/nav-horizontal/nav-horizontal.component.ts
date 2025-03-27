@@ -1,36 +1,15 @@
 import { Component } from '@angular/core';
-
-import { InicioComponent } from '../../inicio/inicio/inicio.component';
-import {  NgIf } from '@angular/common';
-import { DividerTimerComponent } from "../divider-timer/divider-timer.component";
-import { BibliotecaComponent } from '../../biblioteca/biblioteca/biblioteca.component';
-// Imports david
-import { AjustesComponent } from '../../ajustes/ajustes/ajustes.component';
-import { CalificacionesComponent } from '../../calificaciones/calificaciones/calificaciones.component';
-import { EstadisticasComponent } from '../../estadisticas/estadisticas/estadisticas.component';
-import { BuscadorAutoresComponent } from '../../features/buscador-autores/buscador-autores/buscador-autores.component';
-import { BuscadorLibrosComponent } from '../../features/buscador-libros/buscador-libros/buscador-libros.component';
-import { InicioSesionComponent } from '../../features/inicio-sesion/inicio-sesion/inicio-sesion.component';
-import { RegistroComponent } from '../../features/registro/registro/registro.component';
-import { LecturaActualComponent } from '../../lectura-actual/lectura-actual/lectura-actual.component';
-import { PendientesComponent } from '../../pendientes//pendientes/pendientes.component';
-
+import { DividerTimerComponent } from '../divider-timer/divider-timer.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-nav-horizontal',
   standalone: true,
-  imports: [
-    NgIf,
-    InicioComponent,
-    BibliotecaComponent,
-    DividerTimerComponent
-    //importar los componentes
-],
+  imports: [DividerTimerComponent, RouterModule],
   templateUrl: './nav-horizontal.component.html',
-  styleUrl: './nav-horizontal.component.scss'
+  styleUrl: './nav-horizontal.component.scss',
 })
 export class NavHorizontalComponent {
-  activeSection: string = 'inicio';
   modoNoche: boolean = false;
 
   constructor() {}
@@ -40,10 +19,6 @@ export class NavHorizontalComponent {
     const savedTheme = localStorage.getItem('modoNoche');
     this.modoNoche = savedTheme === 'true';
     this.aplicarModoNoche();
-  }
-
-  setActiveSection(section: string) {
-    this.activeSection = section;
   }
 
   toggleModoNoche() {

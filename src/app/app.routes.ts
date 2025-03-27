@@ -7,6 +7,7 @@ import { InicioComponent } from './client/inicio/inicio/inicio.component';
 import { BibliotecaComponent } from './client/biblioteca/biblioteca/biblioteca.component';
 
 export const routes: Routes = [
+  // User
   {
     path: '',
     component: LayoutComponent,

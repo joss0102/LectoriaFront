@@ -1,3 +1,28 @@
-<div class="nav-vertical bg-header-noche">
-    <p class="text-white">nav-vertical</p>
-</div>
+<nav class="bg-header-noche">
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-person-circle display-2"></i>
+    <div class="d-flex align-items-center">
+      <p class="fs-5">Perfil</p>
+    </div>
+  </a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-book fs-5"></i>
+    <p class="fs-5">Libro Actual</p>
+  </a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-graph-up-arrow fs-5"></i>
+    <p class="fs-5">Estadisticas</p>
+  </a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-bookmark-heart-fill fs-5"></i>
+    <p class="fs-5">Pendientes</p>
+  </a>
+  <a [ngClass]="{ 'solo-icono': soloIcono }" class="mb-md-5">
+    <i class="bi bi-gear-fill fs-5"></i>
+    <p class="fs-5">Configuración</p>
+  </a>
+  <a class="my-md -5" [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-box-arrow-right fs-5"></i>
+    <p class="fs-5">Cerrar Sesión</p>
+  </a>
+</nav>

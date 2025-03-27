@@ -74,3 +74,10 @@ git push origin RamaDavid/Jose
 - 3️⃣ Fusionar mergeDavid-Jose a main
   - New PR de main <---- mergeDavid-Jose
   - Repetir los mismos pasos y aprobar el PR y mergear.
+ 
+- Para actualizar la rama main a tu rama:
+
+```git
+git fetch origin
+git merge origin/main
+```

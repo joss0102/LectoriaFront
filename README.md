@@ -10,9 +10,7 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 
 ### Trabajo pendiente o a revisar
 
-    - David revisa los archivos nav-horizontal. el HTML el SCSS y el TS
-      - Ahi encuentras la logica para los links
-      - Lo unico que habria que cambiar es algo del SCSS, ya que se ilumina todo el icono, no la parte de abajo de la palabra
+- Nav Vertical problema.
 
 ### Funcionalidades
 

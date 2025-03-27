@@ -1,5 +1,9 @@
 # Proyecto Lectoria
+
   prueba david
+
+ 
+
 Este proyecto consiste en el desarrollo de una página web interactiva para la gestión y seguimiento de lecturas. La plataforma permite a los usuarios registrar los libros que han leído, gestionar sus lecturas en curso y planificar futuras lecturas mediante una lista de deseos. Además, los usuarios pueden agregar información detallada como fechas de inicio y finalización, imágenes de las portadas, puntuaciones, etc.
 
 Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, proporcionando datos visuales sobre la cantidad de libros leídos por meses o años, tendencias de géneros, hábitos de lectura y otras métricas relevantes. La interfaz será intuitiva y fácil de utilizar para actualizar y eliminar las lecturas.
@@ -19,6 +23,95 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 - [x] Creacion carpetas
 - [x] Creacion componentes base
 - [ ] Modo dia/noche (default noche)
+
+- [ ] Subir pdf y leerlo
+  - [ ] Buscar en api el libro y enseñar los datos
+# Cronograma
+
+## **Fase 1**
+
+  ### **31 MAR - 6 ABR**
+  - Investigación de PDF
+  - Creación e inserción en base de datos
+  - Diseño frontend (1):
+    - Header
+    - Home
+    - Biblioteca 
+    - Pendientes
+    - Buscadores
+  
+  ### **7 abr - 13 abr**
+  - Diseño frontend (2):
+    - Lectura actual
+    - Graficos
+    - Calificaciones
+    - Ajustes
+  - decisión sobre el lenguaje con el que trabajar.
+    - Base de datos con backend
+      - CRUD básico
+      - Pruebas en POSTMAN
+   
+  ### **14 abr - 20 abr**
+  - Conectando backend con frontend
+  - Pintando datos (1):
+    - Inicio
+      - Configurando img por saga
+     
+## **Fase 2**
+
+  ### **21 abr - 27 abr**
+  - Pintando datos (2):
+    - Biblioteca
+    - Libros pendientes
+  - Gestión de usuarios(back):
+    - Token
+    - Iniciar sesión
+    - Registrarse
+    - Pruebas de añadir o eliminar datos desde front
+
+  ### **28 abr - 4 may**
+  - Pintando datos (3)
+    - Lectura actual
+    - Ajustes de usuarios
+    - Gráficos
+  - Implementación de PDF
+
+  ### **5 may - 11 may**
+  - Pintando datos (4):
+    - Buscador de libros
+    - Imagen svg
+    - Buscador autores
+    - Calificaciones
+  - Sección administrador
+    - Ver gráficos
+  - Investigando chat IA (por decidir)
+
+## **Fase 3**
+
+  ### **12 may - 18 may**
+  - Implementación chat IA (si el caso)
+  - Responsive
+    - Movil
+    - Tablets
+    - Pantallas
+
+  ### **19 may - 25 may**
+  - Pruebas con el chat IA
+  - Modo noche
+  - Memoria en sucio
+
+  ### **26 may - 1 jun**
+  - Tareas pendientes o aplazadas
+  - Memoria en limpio con su debida revisión de ortografía y estructura.
+
+
+## **Fase 4**
+
+  ### **2 jun - 15 jun**
+  - Proyecto terminado
+  - Buscar posibles bugs y errores
+  - Revisiones de código.
+  - Dividir y practicar la presentación
 
 # Distribucion de carpetas y trabajo
 

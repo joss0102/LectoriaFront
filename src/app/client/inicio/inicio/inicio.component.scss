@@ -3,16 +3,15 @@
 
 
 .parent {
-    margin: 20px;
+    padding: 20px;
     background-color: $main-noche;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(8, 1fr);
     gap: 8px;
-    height: 83vh;
+    height: 92vh;
 
     .datos {
-        // background-color: rgb(85, 96, 69);
         grid-column: span 3 / span 3;
         grid-row: span 4 / span 4;
     }
@@ -33,7 +32,9 @@
     }
 
     .carrusel {
-        background-color: rgb(77, 69, 96);
+        color: white;
+        border-radius: 40px;
+        background-color: rgb(128, 128, 128);
         grid-column: span 4 / span 4;
         grid-row: span 4 / span 4;
         grid-column-start: 3;

@@ -1,34 +1,43 @@
 @import "../../../../assets/colors.scss";
+
 .nav-horizontal {
   display: flex;
   padding: 10px;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
+
   .menu {
     cursor: pointer;
+
     i {
       color: white;
       font-size: 30px;
+      transition: color 0.3s ease;
+
       &:hover {
         color: $boton;
       }
     }
   }
+
   .links {
     display: flex;
     gap: 20px;
+
     a {
       cursor: pointer;
       text-decoration: none;
-      color: white; // Color por defecto
+      color: white;
       position: relative;
       padding-bottom: 5px;
+      transition: color 0.3s ease;
+
       &:hover {
-        color: $boton; // Cambia el color del enlace al pasar el ratón
+        color: $boton;
       }
+
       &.active::after {
-        // linea naranja debajo el enlance activo
         content: "";
         position: absolute;
         left: 0;
@@ -39,43 +48,53 @@
       }
     }
   }
+
   .buscador {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
     max-width: 40%;
+
     input {
       width: 100%;
       border: none;
       padding: 8px;
       border-radius: 5px 0px 0px 5px;
     }
+
     button {
       border-radius: 0px 5px 5px 0px;
       border: none;
       padding: 5px 15px;
+
       i {
         font-size: 20px;
         color: black;
       }
     }
   }
+
   .campana {
     padding-left: 20px;
     cursor: pointer;
+
     i {
       font-size: 20px;
+      transition: color 0.3s ease;
+
       &:hover {
         color: $boton;
       }
     }
   }
+
   .imagen {
     display: flex;
     gap: 60px;
     justify-content: flex-end;
     align-items: center;
+
     img {
       width: 80px;
     }

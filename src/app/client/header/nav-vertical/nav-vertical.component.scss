@@ -1,33 +1,50 @@
+@import "../../../../assets/colors.scss";
+
 nav {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-}
+  height: 92vh;
 
-nav a {
-  padding: 20px;
-  color: white;
-  display: flex;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
+  a {
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: flex; // Hacemos que el contenedor del enlace sea un flexbox
+    align-items: center;
 
-nav a p {
-  margin-left: 10px;
-  text-align: center;
-}
+    p {
+      margin: 10px 10px 10px 10px;
+      padding-right: 10px;
+    }
 
-nav a:hover {
-  background-color: orange;
-}
+    &.solo-icono {
+      p {
+        display: none;
+      }
 
-nav a.solo-icono p {
-  display: none;
-}
+      i {
+        display: block;
+        margin: 0 auto;
+      }
+    }
 
-nav a.solo-icono i {
-  display: block;
-  margin: 0 auto;
+    &:hover {
+      color: $boton;
+
+    }
+
+    &.active {
+      color: $boton;
+
+      i {
+        color: $boton;
+      }
+    }
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -41,18 +58,9 @@ nav a.solo-icono i {
     align-items: center;
     justify-content: center;
     gap: 7px;
-  }
 
-  nav a {
-    padding: 5px;
-  }
-
-  nav a.solo-icono p {
-    display: none;
-  }
-
-  nav a.solo-icono i {
-    display: block;
-    margin: 0 auto;
+    a {
+      padding: 5px;
+    }
   }
 }

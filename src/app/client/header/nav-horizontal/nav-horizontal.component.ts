@@ -13,10 +13,9 @@ import { VerticalServiceService } from '../../../services/navVertical/vertical-s
 export class NavHorizontalComponent {
   modoNoche: boolean = false;
 
-  constructor(private soloIconos: VerticalServiceService) {}
+  constructor(private soloIconos: VerticalServiceService) { }
 
   ngOnInit() {
-    // Cargar el estado del modo noche desde localStorage
     const savedTheme = localStorage.getItem('modoNoche');
     this.modoNoche = savedTheme === 'true';
     this.aplicarModoNoche();

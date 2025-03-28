@@ -1,14 +1,9 @@
-<div class="nav-horizontal bg-header-noche text-white">
+<nav class="nav-horizontal bg-header-noche text-white">
   <div class="menu" (click)="cambiarIconos()">
     <i class="bi bi-list"></i>
   </div>
   <div class="links">
-    <a
-      routerLink="/"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Inicio</a
-    >
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
     <a routerLink="/biblioteca" routerLinkActive="active">Biblioteca</a>
   </div>
   <div class="buscador">
@@ -21,8 +16,8 @@
     </div>
   </div>
   <div class="imagen">
-    <div>Modo noche</div>
+    <div> Modo noche</div>
     <img src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
   </div>
-</div>
+</nav>
 <app-divider-timer></app-divider-timer>

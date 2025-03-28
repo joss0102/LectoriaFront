@@ -1,32 +1,37 @@
 <nav class="bg-header-noche">
-  <a [ngClass]="{ 'solo-icono': soloIcono }">
+  <a [ngClass]="{ 'solo-icono': soloIcono }" class="d-flex flex-column align-items-center py-0">
     <i class="bi bi-person-circle display-2"></i>
-    <div class="d-flex align-items-center">
-      <p class="fs-5">Perfil</p>
-    </div>
+    <p class="fs-5 mb-0 fw-bold text-white">Nombre</p>
+    <p class="fs-6 mb-0 text-white">Apellido</p>
   </a>
-  <a [ngClass]="{ 'solo-icono': soloIcono }">
-    <i class="bi bi-book fs-5"></i>
-    <p class="fs-5">Libro Actual</p>
+
+  <a [ngClass]=" { 'solo-icono' : soloIcono }" routerLink="/lectura-actual" routerLinkActive="active">
+    <i class="bi bi-book fs-4"></i>
+    <p class="fs-6">Libro actual</p>
   </a>
-  <a [ngClass]="{ 'solo-icono': soloIcono }">
-    <i class="bi bi-graph-up-arrow fs-5"></i>
-    <p class="fs-5">Estadisticas</p>
+
+  <a [ngClass]="{ 'solo-icono': soloIcono }" routerLink="/estadisticas" routerLinkActive="active">
+    <i class="bi bi-graph-up-arrow fs-4"></i>
+    <p class="fs-6">Estadísticas</p>
   </a>
-  <a [ngClass]="{ 'solo-icono': soloIcono }">
-    <i class="bi bi-trophy fs-5"></i>
-    <p class="fs-5">Calificaciones</p>
+
+  <a [ngClass]="{ 'solo-icono': soloIcono }" routerLink="/calificaciones" routerLinkActive="active">
+    <i class="bi bi-trophy fs-4"></i>
+    <p class="fs-6">Calificaciones</p>
   </a>
-  <a [ngClass]="{ 'solo-icono': soloIcono }">
-    <i class="bi bi-bookmark-heart fs-5"></i>
-    <p class="fs-5">Pendientes</p>
+
+  <a [ngClass]="{ 'solo-icono': soloIcono }" routerLink="/pendientes" routerLinkActive="active">
+    <i class="bi bi-bookmark-heart fs-4"></i>
+    <p class="fs-6">Pendientes</p>
   </a>
-  <a [ngClass]="{ 'solo-icono': soloIcono }" class="mb-md-5">
-    <i class="bi bi-gear fs-5"></i>
-    <p class="fs-5">Configuración</p>
+
+  <a [ngClass]="{ 'solo-icono': soloIcono }" routerLink="/ajustes" routerLinkActive="active" class="mb-md-5">
+    <i class="bi bi-gear fs-4"></i>
+    <p class="fs-6">Ajustes</p>
   </a>
-  <a class="my-md -5" [ngClass]="{ 'solo-icono': soloIcono }">
-    <i class="bi bi-box-arrow-right fs-5"></i>
-    <p class="fs-5">Cerrar Sesión</p>
+
+  <a class="my-md" [ngClass]="{ 'solo-icono': soloIcono }">
+    <i class="bi bi-box-arrow-right fs-4"></i>
+    <p class="fs-6">Cerrar Sesión</p>
   </a>
 </nav>

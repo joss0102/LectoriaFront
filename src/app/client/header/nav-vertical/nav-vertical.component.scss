@@ -12,8 +12,16 @@ nav {
     align-items: center;
     text-decoration: none;
     transition: color 0.3s ease;
-    display: flex; // Hacemos que el contenedor del enlace sea un flexbox
-    align-items: center;
+    position: relative;
+
+    &:hover {
+      color: $boton;
+    }
+
+    /* Cuando el enlace tiene la clase 'active' del router */
+    &.active {
+      color: $boton;
+    }
 
     p {
       margin: 10px 10px 10px 10px;
@@ -30,21 +38,7 @@ nav {
         margin: 0 auto;
       }
     }
-
-    &:hover {
-      color: $boton;
-
-    }
-
-    &.active {
-      color: $boton;
-
-      i {
-        color: $boton;
-      }
-    }
   }
-
 }
 
 @media (max-width: 768px) {

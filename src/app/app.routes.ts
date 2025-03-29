@@ -1,15 +1,16 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './client/layout/layout.component';
-
-import { InicioSesionComponent } from './client/features/inicio-sesion/inicio-sesion/inicio-sesion.component';
+import { HomeComponent } from './client/home/home/home.component';
+import { LoginComponent } from './client/features/login/login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { InicioComponent } from './client/inicio/inicio/inicio.component';
-import { BibliotecaComponent } from './client/biblioteca/biblioteca/biblioteca.component';
-import { LecturaActualComponent } from './client/lectura-actual/lectura-actual/lectura-actual.component';
-import { EstadisticasComponent } from './client/estadisticas/estadisticas/estadisticas.component';
-import { CalificacionesComponent } from './client/calificaciones/calificaciones/calificaciones.component';
-import { PendientesComponent } from './client/pendientes/pendientes/pendientes.component';
-import { AjustesComponent } from './client/ajustes/ajustes/ajustes.component';
+
+import { LibraryComponent } from './client/library/library/library.component';
+import { CurrentBookComponent } from './client/current-book/current-book/current-book.component';
+import { StatisticsComponent } from './client/statistics/statistics/statistics.component';
+import { QualificationsComponent } from './client/qualifications/qualifications/qualifications.component';
+import { WishlistComponent } from './client/wishlist/wishlist/wishlist.component';
+
+import { SettingsComponent } from './client/settings/settings/settings.component';
 
 export const routes: Routes = [
   // User
@@ -18,14 +19,14 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       // -> www.ejemplo.com
-      { path: '', component: InicioComponent },
-      { path: 'biblioteca', component: BibliotecaComponent },
-      { path: 'inicioSesion', component: InicioSesionComponent },
-      { path: 'lectura-actual', component: LecturaActualComponent },
-      { path: 'estadisticas', component: EstadisticasComponent },
-      { path: 'calificaciones', component: CalificacionesComponent },
-      { path: 'pendientes', component: PendientesComponent },
-      { path: 'ajustes', component: AjustesComponent },
+      { path: '', component: HomeComponent },
+      { path: 'library', component: LibraryComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'current-book', component: CurrentBookComponent },
+      { path: 'statistics', component: StatisticsComponent },
+      { path: 'qualifications', component: QualificationsComponent },
+      { path: 'wishlist', component: WishlistComponent },
+      { path: 'settings', component: SettingsComponent },
     ],
   },
   { path: '**', component: PageNotFoundComponent },

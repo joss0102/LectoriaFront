@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { VerticalServiceService } from '../../../services/navVertical/vertical-service.service';
+import { NavVerticalService } from '../../../core/services/NavVerticalService/NavVertical.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class NavVerticalComponent {
   soloIcono: boolean = true;
-  constructor(private soloIconos: VerticalServiceService) {
+  constructor(private soloIconos: NavVerticalService) {
     this.soloIconos.soloIconos$.subscribe((value) => {
       this.soloIcono = value;
     });

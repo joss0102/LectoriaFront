@@ -1,7 +1,73 @@
-<div class="container h-25 bg-warning mt-5">
-  Primer div carrusel falta ver como implementar.
-  <h3>Ultimos Libros Leidos:</h3>
+<div
+  id="bookCarousel"
+  class="carousel divCarousel slide container shadow rounded mt-5"
+  data-bs-ride="carousel"
+>
+  <div class="carousel-inner">
+    <!-- Primer libro -->
+    <div class="carousel-item active text-center">
+      <h3 class="text-white">Casa de Cielo y Aliento</h3>
+      <img
+        src="/libros/Ciudad medialuna/covers/Casa de cielo y aliento.png"
+        class="d-block mx-auto"
+        width="100"
+        alt="Libro 1"
+      />
+      <p class="text-white">
+        Páginas: 420 <br />
+        Inicio: 12/04/2024 | Fin: 22/04/2024
+      </p>
+    </div>
+
+    <!-- Segundo libro -->
+    <div class="carousel-item text-center">
+      <h3 class="text-white">Otro Libro</h3>
+      <img
+        src="/libros/Ciudad medialuna/covers/Casa de cielo y aliento.png"
+        class="d-block mx-auto"
+        width="100"
+        alt="Libro 2"
+      />
+      <p class="text-white">
+        Páginas: 420 <br />
+        Inicio: 12/04/2024 | Fin: 22/04/2024
+      </p>
+    </div>
+
+    <!-- Tercer libro -->
+    <div class="carousel-item text-center">
+      <h3 class="text-white">Tercer Libro</h3>
+      <img
+        src="/libros/Twisted/covers/Twisted games.png"
+        class="d-block mx-auto"
+        width="92"
+        alt="Libro 3"
+      />
+      <p class="text-white">
+        Páginas: 420 <br />
+        Inicio: 12/04/2024 | Fin: 22/04/2024
+      </p>
+    </div>
+  </div>
+  <!-- Controles del carrusel -->
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#bookCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#bookCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  </button>
 </div>
+<!-- Recien añadios -->
 <div
   class="container h-50 mt-5 d-flex flex-column flex-xl-row align-items-center"
 >
@@ -13,7 +79,7 @@
       <article class="text-white">
         <img
           src="/libros/Ciudad medialuna/covers/Casa de cielo y aliento.png"
-          width="160"
+          width="140"
           alt=""
         />
         <h5>Nombre del libro</h5>
@@ -22,7 +88,7 @@
       <article class="text-white">
         <img
           src="/libros/Ciudad medialuna/covers/Casa de cielo y aliento.png"
-          width="160"
+          width="140"
           alt=""
         />
         <h5>Nombre del libro</h5>
@@ -31,7 +97,7 @@
       <article class="text-white">
         <img
           src="/libros/Ciudad medialuna/covers/Casa de cielo y aliento.png"
-          width="160"
+          width="140"
           alt=""
         />
         <h5>Nombre del libro</h5>
@@ -40,7 +106,7 @@
       <article class="text-white">
         <img
           src="/libros/Ciudad medialuna/covers/Casa de cielo y aliento.png"
-          width="160"
+          width="140"
           alt=""
         />
         <h5>Nombre del libro</h5>

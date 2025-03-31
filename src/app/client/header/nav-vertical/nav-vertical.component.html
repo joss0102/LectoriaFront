@@ -1,37 +1,63 @@
 <nav class="bg-header-night">
-  <a [ngClass]="{ 'only-icon': onlyIcon }" class="d-flex flex-column align-items-center py-0" routerLinkActive="/user"
-    routerLink="/user" [routerLinkActiveOptions]="{ exact: true }">
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    class="d-flex flex-column align-items-center py-0"
+    routerLinkActive="/user"
+    routerLink="/user"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <i class="bi bi-person-circle display-2"></i>
     <p class="fs-5 mb-0 fw-bold">Nombre</p>
     <p class="fs-6 mb-0">Apellido</p>
   </a>
 
-  <a [ngClass]="{ 'only-icon': onlyIcon }" routerLink="/current-book" routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    routerLink="/current-book"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <i class="bi bi-book fs-4"></i>
     <p class="fs-6">Libro actual</p>
   </a>
 
-  <a [ngClass]="{ 'only-icon': onlyIcon }" routerLink="/statistics" routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    routerLink="/statistics"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <i class="bi bi-graph-up-arrow fs-4"></i>
     <p class="fs-6">Estadísticas</p>
   </a>
 
-  <a [ngClass]="{ 'only-icon': onlyIcon }" routerLink="/qualifications" routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    routerLink="/qualifications"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <i class="bi bi-trophy fs-4"></i>
     <p class="fs-6">Calificaciones</p>
   </a>
 
-  <a [ngClass]="{ 'only-icon': onlyIcon }" routerLink="/wishlist" routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    routerLink="/wishlist"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <i class="bi bi-bookmark-heart fs-4"></i>
     <p class="fs-6">Pendientes</p>
   </a>
 
-  <a [ngClass]="{ 'only-icon': onlyIcon }" routerLink="/settings" routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }" class="mb-md-5">
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    routerLink="/settings"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="mb-xl-5"
+  >
     <i class="bi bi-gear fs-4"></i>
     <p class="fs-6">Ajustes</p>
   </a>

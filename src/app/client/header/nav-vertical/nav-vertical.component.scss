@@ -26,7 +26,7 @@ nav {
     }
 
     p {
-      margin: 10px 10px 10px 10px;
+      margin: 10px;
       padding-right: 10px;
     }
 
@@ -43,7 +43,7 @@ nav {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1199px) {
   nav {
     flex-direction: row;
     width: 100%;

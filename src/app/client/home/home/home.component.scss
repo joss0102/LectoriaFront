@@ -1,43 +1,41 @@
-@import '../../../../assets/colors.scss';
-
-
+@import "../../../../assets/colors.scss";
 
 .parent {
-    padding: 20px;
-    background-color: $main-night;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    gap: 8px;
-    height: 92vh;
+  padding: 20px;
+  background-color: $main-night;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 8px;
+  height: 100vh;
 
-    .datos {
-        grid-column: span 3 / span 3;
-        grid-row: span 4 / span 4;
-    }
+  .datos {
+    grid-column: span 3 / span 3;
+    grid-row: span 4 / span 4;
+  }
 
-    .imagen1 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        grid-column: span 3 / span 3;
-        grid-row: span 4 / span 4;
-        grid-column-start: 4;
-    }
+  .imagen1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: span 3 / span 3;
+    grid-row: span 4 / span 4;
+    grid-column-start: 4;
+  }
 
-    .imagen2 {
-        grid-column: span 2 / span 2;
-        grid-row: span 4 / span 4;
-        grid-row-start: 5;
-    }
+  .imagen2 {
+    grid-column: span 2 / span 2;
+    grid-row: span 4 / span 4;
+    grid-row-start: 5;
+  }
 
-    .carrusel {
-        color: white;
-        border-radius: 40px;
-        background-color: rgb(128, 128, 128);
-        grid-column: span 4 / span 4;
-        grid-row: span 4 / span 4;
-        grid-column-start: 3;
-        grid-row-start: 5;
-    }
+  .carrusel {
+    color: white;
+    border-radius: 40px;
+    background-color: rgb(128, 128, 128);
+    grid-column: span 4 / span 4;
+    grid-row: span 4 / span 4;
+    grid-column-start: 3;
+    grid-row-start: 5;
+  }
 }

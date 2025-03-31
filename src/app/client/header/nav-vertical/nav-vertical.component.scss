@@ -15,13 +15,13 @@ nav {
     position: relative;
 
     &:hover {
-      color: $boton;
+      color: $btn;
       background-color: rgb(206, 206, 206, 0.1);
     }
 
     /* Cuando el enlace tiene la clase 'active' del router */
     &.active {
-      color: $boton;
+      color: $btn;
       background-color: rgb(206, 206, 206, 0.1);
     }
 

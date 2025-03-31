@@ -9,7 +9,7 @@ import { CurrentBookComponent } from './client/current-book/current-book/current
 import { StadisticsComponent } from './client/stadistics/stadistics/stadistics.component';
 import { QualificationsComponent } from './client/qualifications/qualifications/qualifications.component';
 import { WishlistComponent } from './client/wishlist/wishlist/wishlist.component';
-
+import { UserComponent } from './client/user/user/user.component';
 import { SettingsComponent } from './client/settings/settings/settings.component';
 
 export const routes: Routes = [
@@ -27,6 +27,7 @@ export const routes: Routes = [
       { path: 'qualifications', component: QualificationsComponent },
       { path: 'wishlist', component: WishlistComponent },
       { path: 'settings', component: SettingsComponent },
+      { path: 'user', component: UserComponent },
     ],
   },
   { path: '**', component: PageNotFoundComponent },

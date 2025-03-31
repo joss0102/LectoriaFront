@@ -11,4 +11,4 @@ import { CarruselComponent } from '../carrusel/carrusel.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {}
+export class HomeComponent { }

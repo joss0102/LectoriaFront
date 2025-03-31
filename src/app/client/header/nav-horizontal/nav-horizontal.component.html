@@ -1,20 +1,15 @@
-<nav class="nav-horizontal bg-header-noche text-white">
+<nav class="nav-horizontal bg-header-night text-white">
   <div class="menu d-md-flex d-none" (click)="toggleNav()">
     <i class="bi bi-list"></i>
   </div>
   <div class="links">
-    <a
-      routerLink="/"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Inicio</a
-    >
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
     <a routerLink="/library" routerLinkActive="active">Biblioteca</a>
   </div>
   <div class="buscador d-md-flex d-none">
     <input type="text" placeholder="Buscar..." aria-label="Buscar" />
-    <button class="bg-boton" type="button">
-      <i class="bi bi-search bg-boton text-black"></i>
+    <button class="bg-btn" type="button">
+      <i class="bi bi-search text-black"></i>
     </button>
     <div class="campana">
       <i class="bi bi-bell"></i>

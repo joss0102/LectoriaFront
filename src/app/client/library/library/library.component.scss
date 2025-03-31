@@ -1,0 +1,14 @@
+@import "../../../../assets/colors.scss";
+
+@media screen and (max-width: 1199px) {
+  .authors {
+    width: 50% !important;
+  }
+}
+.divCarousel {
+  margin-bottom: 65px;
+  background-color: $secondary-night;
+}
+button {
+  color: $btn;
+}

@@ -13,14 +13,14 @@ import { NavVerticalService } from '../../../core/services/NavVerticalService/Na
 export class NavHorizontalComponent {
   modoNoche: boolean = false;
 
-  constructor(private soloIconos: NavVerticalService) {}
+  constructor(private navService: NavVerticalService) {}
 
   ngOnInit() {
     const savedTheme = localStorage.getItem('modoNoche');
     this.modoNoche = savedTheme === 'true';
   }
 
-  cambiarIconos() {
-    this.soloIconos.cambiarSoloIconos();
+  toggleNav() {
+    this.navService.toggleIcons();
   }
 }

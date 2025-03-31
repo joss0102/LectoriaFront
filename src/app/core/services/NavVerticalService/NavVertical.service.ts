@@ -5,11 +5,11 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class NavVerticalService {
-  private soloIconos = new BehaviorSubject<boolean>(true);
-  soloIconos$ = this.soloIconos.asObservable();
+  private onlyIcon = new BehaviorSubject<boolean>(true);
+  onlyIcon$ = this.onlyIcon.asObservable();
 
-  cambiarSoloIconos() {
-    this.soloIconos.next(!this.soloIconos.value);
+  toggleIcons() {
+    this.onlyIcon.next(!this.onlyIcon.value);
   }
   constructor() {}
 }

@@ -11,10 +11,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './nav-vertical.component.scss',
 })
 export class NavVerticalComponent {
-  soloIcono: boolean = true;
-  constructor(private soloIconos: NavVerticalService) {
-    this.soloIconos.soloIconos$.subscribe((value) => {
-      this.soloIcono = value;
+  onlyIcon: boolean = true;
+  constructor(private verticalService: NavVerticalService) {
+    this.verticalService.onlyIcon$.subscribe((value) => {
+      this.onlyIcon = value;
     });
   }
 }

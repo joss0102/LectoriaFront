@@ -6,7 +6,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
 import { LibraryComponent } from './client/library/library/library.component';
 import { CurrentBookComponent } from './client/current-book/current-book/current-book.component';
-import { StatisticsComponent } from './client/statistics/statistics/statistics.component';
+import { StadisticsComponent } from './client/stadistics/stadistics/stadistics.component';
 import { QualificationsComponent } from './client/qualifications/qualifications/qualifications.component';
 import { WishlistComponent } from './client/wishlist/wishlist/wishlist.component';
 
@@ -23,7 +23,7 @@ export const routes: Routes = [
       { path: 'library', component: LibraryComponent },
       { path: 'login', component: LoginComponent },
       { path: 'current-book', component: CurrentBookComponent },
-      { path: 'statistics', component: StatisticsComponent },
+      { path: 'statistics', component: StadisticsComponent },
       { path: 'qualifications', component: QualificationsComponent },
       { path: 'wishlist', component: WishlistComponent },
       { path: 'settings', component: SettingsComponent },

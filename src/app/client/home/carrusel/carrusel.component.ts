@@ -42,17 +42,17 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Trono de Cristal",
-      titulo: "Corona de Medianoche",
+      saga: "Ciudad medialuna",
+      titulo: "Casa de llama y sombra",
       sinopsis: "Celaena Sardothien ha ganado el torneo real y se ha convertido en la campeona del rey, pero su lealtad no pertenece al trono. Mientras realiza misiones para el monarca, descubre una conspiración que amenaza el reino entero. Celaena debe elegir entre su libertad y luchar por un futuro mejor para el reino.",
-      imagen: "/libros/Trono de cristal/covers/Corona de medianoche.png"
+      imagen: "/libros/Ciudad medialuna/covers/Casa de llama y sombra.png"
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Trono de Cristal",
-      titulo: "Heredera de Fuego",
+      saga: "Caraval",
+      titulo: "Caraval",
       sinopsis: "Celaena Sardothien ha aceptado su identidad como Aelin Galathynius, reina de Terrasen. Viaja a Wendlyn para encontrar respuestas y entrenar con Rowan, un guerrero fae inmortal. Mientras tanto, fuerzas oscuras se están reuniendo para amenazar todo lo que ama, y ella debe aprender a controlar sus poderes para proteger su reino.",
-      imagen: "/libros/Trono de cristal/covers/Heredera de fuego.png"
+      imagen: "/libros/Caraval/covers/Caraval.png"
     },
     {
       autor: "Sarah J. Maas",

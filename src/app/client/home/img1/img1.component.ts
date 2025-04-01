@@ -1,14 +1,17 @@
-import { Component, OnInit, OnDestroy, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BookService, Book } from '../../../core/services/book/book.service';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import Vibrant from 'node-vibrant'; // Importación correcta
+
+import { BookService, Book } from '../../../core/services/book/book.service';
+import { ColorPrimaryService } from '../../../core/services/ColorPrimary/color-primary.service';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-img1',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgClass],
   templateUrl: './img1.component.html',
-  styleUrl: './img1.component.scss',
+  styleUrls: ['./img1.component.scss'],
 })
 export class Img1Component implements OnInit, OnDestroy {
   backgroundImageUrl: string = '/libros/Trono de cristal/fondos/fondo1.jpg'; // Default image
@@ -17,19 +20,13 @@ export class Img1Component implements OnInit, OnDestroy {
 
   constructor(
     private bookService: BookService,
-    private el: ElementRef,
-    private cdr: ChangeDetectorRef
-  ) {
-    console.log('Img1Component: Constructor ejecutado');
-  }
+    private cdr: ChangeDetectorRef,
+    private colorService: ColorPrimaryService // Servicio para enviar el color
+  ) { }
 
   ngOnInit(): void {
-    console.log('Img1Component: ngOnInit iniciado');
-
     // Subscribe to book updates from the service
     this.subscription = this.bookService.bookActual$.subscribe(book => {
-      console.log('Libro recibido en Img1Component:', book);
-
       if (book) {
         // Primero, reinicia la animación desactivándola
         this.animationActive = false;
@@ -52,7 +49,6 @@ export class Img1Component implements OnInit, OnDestroy {
     setTimeout(() => {
       const currentBook = this.bookService.getBookActual();
       if (currentBook) {
-        console.log('Libro encontrado en el servicio para Img1Component:', currentBook);
         this.updateBackgroundImage(currentBook);
       }
     }, 100);
@@ -66,17 +62,30 @@ export class Img1Component implements OnInit, OnDestroy {
     if (folderPathMatch && folderPathMatch[1]) {
       const folderName = folderPathMatch[1];
       this.backgroundImageUrl = `/libros/${folderName}/fondos/fondo1.jpg`;
-      console.log('Nueva URL de imagen de fondo:', this.backgroundImageUrl);
+      this.extractPrimaryColor(); // Extraemos el color primario
     } else {
       // Fallback to default if we can't extract the path
-      console.warn('No se pudo extraer la ruta de la carpeta desde:', imagePath);
       this.backgroundImageUrl = '/libros/Trono de cristal/fondos/fondo1.jpg';
     }
   }
 
+  // Método para extraer el color primario
+  extractPrimaryColor(): void {
+    Vibrant.from(this.backgroundImageUrl)
+      .getPalette()
+      .then(palette => {
+        const primary = palette.Vibrant || palette.Muted;
+        const primaryColor = primary ? primary.getHex() : '#000000'; // Establece el color primario
+        this.colorService.updatePrimaryColor(primaryColor); // Enviamos el color al servicio
+      })
+      .catch(error => {
+        console.error('Error al extraer el color primario:', error);
+      });
+  }
+
   ngOnDestroy(): void {
-    console.log('Img1Component: Destruyendo componente, limpiando suscripción');
-    // Clean up subscription when component is destroyed
     this.subscription.unsubscribe();
   }
+
+
 }

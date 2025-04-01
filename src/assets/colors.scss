@@ -26,6 +26,7 @@ $DayMode: (
 
 // Colores generales
 $btn: #FF8800;
+$btn-hover: #b96300;
 $danger-night: #dc3545;
 $warning-night: #ffc107;
 $dark-night: #212529;
@@ -35,7 +36,8 @@ $general: (
     "danger": $danger-night,
     "warning": $warning-night,
     "dark": $dark-night,
-    "light": $light-night
+    "light": $light-night,
+    "btn-hover": $btn-hover
 );
 
 // Fusionar los mapas en `$theme-colors`

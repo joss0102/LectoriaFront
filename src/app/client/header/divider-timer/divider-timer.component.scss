@@ -1,5 +1,14 @@
 .divide-timer {
+  position: absolute;
   background-color: var(--color-btn);
+  height: 5px;
+  width: 100%;
+  z-index: 10;
+}
+
+.divide-timer2 {
+  position: absolute;
+  background-color: #ffba75;
   height: 5px;
   width: 100%;
 }

@@ -1,14 +1,68 @@
 @import "../../../../assets/colors.scss";
 
-@media screen and (max-width: 1199px) {
-  .authors {
-    width: 50% !important;
+.library-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+
+  gap: 8px;
+  height: 92vh;
+  margin: 10px;
+
+
+  .carousel {
+    grid-column: span 6 / span 6;
+    grid-row: span 4 / span 4;
+
   }
-}
-.divCarousel {
-  margin-bottom: 65px;
-  background-color: $secondary-night;
-}
-button {
-  color: $btn;
+
+  .data-book {
+    grid-column: span 4 / span 4;
+    grid-row: span 6 / span 5;
+    grid-column-start: 1;
+
+    grid-row-start: 5;
+  }
+
+  .data-author {
+    grid-column: span 1 / span 2;
+    grid-row: span 4 / span 5;
+    grid-column-start: 5;
+
+    grid-row-start: 5;
+
+
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+
+    .carousel {
+      grid-column: span 2;
+      grid-row: span 3;
+    }
+
+    .data-book {
+      grid-column: span 2;
+      grid-row: span 3;
+    }
+
+    .data-author {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .carousel,
+    .data-book,
+    .data-author {
+      width: 100%;
+    }
+  }
 }

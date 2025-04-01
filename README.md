@@ -42,7 +42,16 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
   - **Calificaciones**: `Página principal con información general y navegación hacia otras secciones.`
   - **Pendientes**: `Página principal con información general y navegación hacia otras secciones.`
   - **Ajustes**: `Página principal con información general y navegación hacia otras secciones.`
+# Dependencias
+- Dependencia de slider
+```bash
+npm install swiper
 
+```
+- Aunque no deberia dar error, si lo da, probamos con instalar los tipos de swiper
+```bash
+npm install --save-dev @types/swiper
+```
 # Trabajo en equipo (subir y actualizar código)
 
 - Pasos para mergear, orden:

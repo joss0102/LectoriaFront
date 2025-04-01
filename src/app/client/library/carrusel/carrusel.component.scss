@@ -1,0 +1,224 @@
+@import "../../../../assets/colors.scss";
+
+.slider-container {
+    width: 58%;
+    padding: 1.5rem 0;
+    position: relative;
+    max-width: 1200px; // Limita el ancho máximo
+    margin: 0 auto; // Centra el contenedor
+}
+
+.slider-wrapper {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding: 0 3.5rem;
+
+    @media (max-width: 768px) {
+        padding: 0 3rem;
+    }
+}
+
+.card-list {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
+
+    @media (max-width: 768px) {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 3rem;
+        gap: 1rem;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+.book-card-wrapper {
+
+
+    @media (min-width: 992px) {
+        flex: 0 0 300px; // Un poco más grande en pantallas grandes
+    }
+
+    @media (max-width: 768px) {
+        flex: 0 0 75vw;
+        scroll-snap-align: center;
+    }
+}
+
+.book-card {
+    height: 300px; // Altura más reducida
+    display: flex;
+    flex-direction: column;
+    background: white;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        height: 380px;
+    }
+}
+
+.book-cover-container {
+    height: 60%; // Ajuste de proporciones
+}
+
+.book-details {
+    height: 40%;
+    padding: 1.25rem;
+}
+
+.book-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+
+    @media (min-width: 992px) {
+        font-size: 1.3rem;
+    }
+}
+
+.swiper-slide-button {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.25rem;
+
+    @media (max-width: 768px) {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+// Resto de estilos permanecen iguales...
+
+
+
+
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+
+    .book-card:hover & {
+        transform: scale(1.03);
+    }
+}
+
+
+
+.author {
+    font-size: 0.9rem;
+    letter-spacing: 0.1rem;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+
+
+.book-meta {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+
+    .pages {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .reading-dates {
+        font-size: 0.85rem;
+        color: #777;
+    }
+}
+
+.action-button {
+    background: transparent;
+    border: 1px solid #333;
+    color: #333;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: center;
+    margin-top: auto;
+    border-radius: 2rem;
+
+    &:hover {
+        background: #333;
+        color: white;
+    }
+}
+
+.swiper-slide-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #333;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+
+    &:hover {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.1);
+        background: white;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #333;
+        outline-offset: 2px;
+    }
+
+    @media (max-width: 768px) {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.3rem;
+    }
+
+    @media (max-width: 576px) {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.1rem;
+    }
+}
+
+.swiper-button-prev {
+    left: 0;
+}
+
+.swiper-button-next {
+    right: 0;
+}
+
+
+@media (max-width: 480px) {
+    .swiper-slide-button {
+        display: none;
+    }
+}

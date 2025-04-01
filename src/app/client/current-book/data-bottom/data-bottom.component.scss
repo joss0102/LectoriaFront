@@ -1,0 +1,48 @@
+.parent {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 8px;
+    background-color: rgb(181, 255, 255);
+    height: 100%;
+}
+
+.Fechas {
+    grid-column: span 2;
+    grid-row: span 2;
+    background-color: rgb(255, 214, 181);
+}
+
+.Sinopsis {
+    grid-column: span 6 / span 6;
+    grid-row: span 3 / span 3;
+    grid-column-start: 1;
+    grid-row-start: 3;
+    background-color: rgb(220, 255, 181);
+}
+
+.Generos {
+    grid-column: span 4 / span 4;
+    grid-column-start: 6;
+    grid-row-start: 1;
+    background-color: rgb(181, 255, 233);
+}
+
+.Grafico {
+    grid-column: span 3 / span 3;
+    grid-row: span 3 / span 3;
+    grid-column-start: 8;
+    grid-row-start: 3;
+    background-color: rgb(232, 181, 255);
+}
+
+.Cover {
+    grid-column: span 3 / span 3;
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 1;
+    background-color: rgb(255, 181, 181);
+    position: relative;
+    top: -360px;
+    height: 500px;
+}

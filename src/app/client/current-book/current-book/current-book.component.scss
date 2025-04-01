@@ -1,0 +1,72 @@
+@import "../../../../assets/colors.scss";
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 8px;
+    height: 93vh;
+
+    margin: 10px;
+
+    .data-bottom {
+        grid-column: span 10 / span 10;
+        grid-row: span 5 / span 5;
+        grid-column-start: 2;
+        grid-row-start: 6;
+        background-color: ($tertiary-night);
+    }
+
+    .data-top {
+        grid-column: span 5 / span 5;
+        grid-row: span 4 / span 4;
+        grid-column-start: 7;
+        grid-row-start: 2;
+        background-color: rgb(196, 196, 196);
+    }
+
+    .title {
+        grid-column: span 3 / span 3;
+        grid-column-start: 1;
+        grid-row-start: 1;
+        margin-left: 50px;
+    }
+
+    .buttons {
+        grid-row: span 2 / span 2;
+        grid-column-start: 2;
+        grid-row-start: 3;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: (($btn));
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+        }
+
+    }
+}

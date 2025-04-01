@@ -6,10 +6,12 @@
 $main-night: #707070;
 $header-night: #1a1a1a;
 $secondary-night: #494949;
+$tertiary-night: #b1b1b1;
 $NightMode: (
     "main-night": $main-night,
     "header-night": $header-night,
-    "secondary-night": $secondary-night
+    "secondary-night": $secondary-night,
+    "tertiary-night": $tertiary-night
 );
 
 // Colores modo día

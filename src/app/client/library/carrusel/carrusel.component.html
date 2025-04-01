@@ -3,19 +3,21 @@
         <div class="card-list" #cardList>
             <div *ngFor="let book of books" class="book-card-wrapper">
                 <div class="book-card">
-                    <div class="book-cover-container">
-                        <img [src]="book.image" [alt]="book.title" class="book-cover" loading="lazy">
-                    </div>
-                    <div class="book-details">
-                        <div class="author">{{book.author}}</div>
-                        <h2 class="book-title">{{ book.title }}</h2>
-                        <div class="book-meta">
-                            <div class="pages">{{ book.pages }} páginas</div>
-                            <div class="reading-dates">
-                                {{ formatDate(book.startDate) }} - {{ formatDate(book.endDate) }}
-                            </div>
+                    <div class="book-card-content">
+                        <div class="book-cover-container">
+                            <img [src]="book.image" [alt]="book.title" class="book-cover" loading="lazy">
                         </div>
-                        <button class="action-button">Saber más</button>
+                        <div class="book-details">
+                            <div class="author">{{book.author}}</div>
+                            <h2 class="book-title">{{ book.title }}</h2>
+                            <div class="book-meta">
+                                <div class="pages">{{ book.pages }} páginas</div>
+                                <div class="reading-dates">
+                                    {{ formatDate(book.startDate) }} - {{ formatDate(book.endDate) }}
+                                </div>
+                            </div>
+                            <button class="action-button">Saber más</button>
+                        </div>
                     </div>
                 </div>
             </div>

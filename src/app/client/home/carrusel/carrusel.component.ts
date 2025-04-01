@@ -38,7 +38,7 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
       saga: "Trono de Cristal",
       titulo: "Trono de Cristal",
       sinopsis: "Tras cumplir una condena de un año de trabajos forzados en las minas de sal de Endovier por sus crímenes, Celaena Sardothien, una asesina de 18 años de edad, es llevada ante el príncipe heredero. El príncipe Dorian le ofrece su libertad con una condición: ella debe actuar como su defensora en un torneo para encontrar un nuevo asesino real.",
-      imagen: "/libros/Trono de cristal/covers/Trono de cristal.png"
+      imagen: "/libros/Trono de cristal/covers/Trono de cristal.png",
     },
     {
       autor: "Sarah J. Maas",

@@ -19,15 +19,15 @@ export class DataComponent implements OnInit, OnDestroy {
     private bookService: BookService,
     private cdr: ChangeDetectorRef
   ) {
-    console.log('DataComponent: Constructor ejecutado');
+
   }
 
   ngOnInit(): void {
-    console.log('DataComponent: ngOnInit iniciado');
+
 
     // Suscribirse al observable del servicio para recibir actualizaciones
     this.subscription = this.bookService.bookActual$.subscribe(book => {
-      console.log('Libro recibido en DataComponent:', book);
+
 
       if (book) {
         // Implementar animación de fade-out/fade-in sin animations API
@@ -38,7 +38,6 @@ export class DataComponent implements OnInit, OnDestroy {
           this.book = book; // Actualizar el libro
           this.showData = true; // Mostrar nuevamente
           this.cdr.detectChanges();
-          console.log("Libro actualizado y listo para ser mostrado");
         }, 300);
       } else {
         console.log("El libro recibido es null");
@@ -49,7 +48,7 @@ export class DataComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const currentBook = this.bookService.getBookActual();
       if (currentBook) {
-        console.log('Libro encontrado en el servicio:', currentBook);
+
         this.book = currentBook;
         this.showData = true;
         this.cdr.detectChanges();

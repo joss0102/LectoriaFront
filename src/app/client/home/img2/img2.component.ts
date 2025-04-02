@@ -20,15 +20,15 @@ export class Img2Component implements OnInit, OnDestroy {
     private el: ElementRef,
     private cdr: ChangeDetectorRef
   ) {
-    console.log('Img2Component: Constructor ejecutado');
+
   }
 
   ngOnInit(): void {
-    console.log('Img2Component: ngOnInit iniciado');
+
 
     // Subscribe to book updates from the service
     this.subscription = this.bookService.bookActual$.subscribe(book => {
-      console.log('Libro recibido en Img2Component:', book);
+
 
       if (book) {
         // Primero, reinicia la animación desactivándola
@@ -52,7 +52,7 @@ export class Img2Component implements OnInit, OnDestroy {
     setTimeout(() => {
       const currentBook = this.bookService.getBookActual();
       if (currentBook) {
-        console.log('Libro encontrado en el servicio para Img2Component:', currentBook);
+
         this.updateBackgroundImage(currentBook);
       }
     }, 100);
@@ -66,7 +66,7 @@ export class Img2Component implements OnInit, OnDestroy {
     if (folderPathMatch && folderPathMatch[1]) {
       const folderName = folderPathMatch[1];
       this.backgroundImageUrl = `/libros/${folderName}/fondos/fondo2.jpg`;
-      console.log('Nueva URL de imagen de fondo 2:', this.backgroundImageUrl);
+
     } else {
       // Fallback to default if we can't extract the path
       console.warn('No se pudo extraer la ruta de la carpeta desde:', imagePath);
@@ -75,7 +75,7 @@ export class Img2Component implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('Img2Component: Destruyendo componente, limpiando suscripción');
+
     // Clean up subscription when component is destroyed
     this.subscription.unsubscribe();
   }

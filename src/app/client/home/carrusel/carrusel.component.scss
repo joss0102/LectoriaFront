@@ -1,40 +1,5 @@
 @import "../../../../assets/colors.scss";
 
-.d-flex {
-    display: flex;
-    align-items: center;
-}
-
-.arrows {
-    position: absolute;
-    top: 60%;
-    left: 25%;
-    display: flex;
-    gap: 10px;
-    margin-right: 15px;
-
-    button {
-        background-color: $btn;
-        color: white;
-        border: none;
-        border-radius: 50px;
-        padding: 10px 15px;
-        font-size: 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-
-        &:hover {
-            background-color: $btn-hover;
-            color: black;
-            transform: scale(1.15);
-        }
-
-        &:active {
-            transform: scale(0.95);
-        }
-    }
-}
-
 .carousel {
     width: 1000px;
     height: 450px;
@@ -45,62 +10,128 @@
         display: flex;
         align-items: center;
         transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        transform: translateX(0);
     }
 
     .item {
-        padding: 10px;
-        transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+        padding-top: 10px;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         display: inline-block;
-        opacity: 1;
 
-        p {
-            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+        transform-origin: center;
+
+        &:hover {
+
+
+            img {
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+                filter: brightness(1.1);
+            }
         }
 
         img {
             height: 300px;
             border-radius: 10px;
             object-fit: cover;
-            transition: transform 0.6s ease-in-out, filter 0.6s ease-in-out;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
     }
 
     .item.first {
-        p {
-            font-size: larger;
-            transform: scale(1.25);
-            margin-bottom: 40px;
-            margin-bottom: 30px;
-        }
+        z-index: 5;
 
         img {
-            margin-right: 20px;
-            margin-left: 20px;
-            transform: scale(1.20);
+            margin-top: 40px;
+            margin-right: 40px;
+            margin-left: 40px;
+            transform: scale(1.20) translateY(-10px);
 
         }
     }
 
-    .item:nth-child(5) {
-        opacity: 0.4;
+    // Entrada de items
+    .item.first+.item {
+        transform: translateX(-5%) scale(0.95);
+    }
+
+    .item.first+.item+.item {
+        transform: translateX(-10%) scale(0.9);
+    }
+
+    .item.first+.item+.item+.item {
+        transform: translateX(-15%) scale(0.85);
+    }
+
+    .item.first+.item+.item+.item+.item {
+        transform: translateX(-20%) scale(0.85);
+    }
+
+    .item.first+.item+.item+.item+.item+.item {
+        transform: translateX(-20%) scale(0.85);
+    }
+
+    .item.first+.item+.item+.item+.item+.item+.item {
+        transform: translateX(-20%) scale(0.85);
+    }
+
+    .item:nth-child(5),
+    .item:nth-child(6),
+    .item:nth-child(7) {
+        opacity: 0.5;
+
     }
 }
 
-.divide-timer {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 100%;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 3px;
-    overflow: hidden;
 
-    div {
+
+.carousel:hover .timerBar div {
+    animation-play-state: paused;
+}
+
+@keyframes timerAnimation {
+    0% {
         width: 100%;
-        height: 100%;
-        background: $btn;
-        transition: width 10s linear;
+    }
+
+    100% {
+        width: 0%;
+    }
+}
+
+.arrows {
+    position: absolute;
+    top: 60%;
+    left: 25%;
+    display: flex;
+    gap: 15px;
+    margin-right: 15px;
+    z-index: 100;
+
+    button {
+        background-color: $btn;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 12px 18px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+        &:hover {
+            background-color: $btn-hover;
+            color: black;
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        &:active {
+            transform: scale(0.95) translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
     }
 }

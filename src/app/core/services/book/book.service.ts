@@ -21,12 +21,12 @@ export class BookService {
   public bookActual$: Observable<Book | null> = this.bookActualSubject.asObservable();
 
   constructor() {
-    console.log('BookService: Inicializado');
+
   }
 
   // Método para actualizar el book actual
   actualizarBookActual(book: Book): void {
-    console.log('BookService: Actualizando libro actual:', book);
+
     this.bookActualSubject.next(book);
   }
 

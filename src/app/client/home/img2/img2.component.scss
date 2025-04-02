@@ -6,7 +6,7 @@
     }
 
     100% {
-        opacity: 1;
+
         transform: scale(1);
     }
 }
@@ -20,8 +20,12 @@ section {
         background-color: rgb(173, 173, 173);
         border-radius: 50px;
         width: 450px;
+        min-width: 450px;
+        max-width: 450px;
+        min-height: 370px;
+        max-height: 370px;
+        opacity: 0.4;
 
-        // La animación se aplica mediante una clase condicional
         &.animate-fade {
             animation: fadeIn 1s ease-in-out;
         }

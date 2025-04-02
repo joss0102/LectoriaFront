@@ -1,59 +1,106 @@
+@import "../../../../assets/colors.scss";
+
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.arrows {
+    position: absolute;
+    top: 60%;
+    left: 25%;
+    display: flex;
+    gap: 10px;
+    margin-right: 15px;
+
+    button {
+        background-color: $btn;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 15px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+
+        &:hover {
+            background-color: $btn-hover;
+            color: black;
+            transform: scale(1.15);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+}
+
 .carousel {
-    width: 920px;
-    height: 400px;
+    width: 1000px;
+    height: 450px;
     overflow: hidden;
     position: relative;
-    border-radius: 10px;
 
     .list {
         display: flex;
         align-items: center;
-        height: 100%;
-        transition: transform 0.5s ease-in-out;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         transform: translateX(0);
     }
 
     .item {
         padding: 10px;
-        transition: transform 0.5s ease-in-out;
+        transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
         display: inline-block;
+        opacity: 1;
+
+        p {
+            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+        }
 
         img {
             height: 300px;
             border-radius: 10px;
             object-fit: cover;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.6s ease-in-out, filter 0.6s ease-in-out;
         }
     }
 
-    .item.first img {
-        margin-right: 10px;
-        margin-left: 20px;
-        transform: scale(1.2);
+    .item.first {
+        p {
+            font-size: larger;
+            transform: scale(1.25);
+            margin-bottom: 40px;
+            margin-bottom: 30px;
+        }
+
+        img {
+            margin-right: 20px;
+            margin-left: 20px;
+            transform: scale(1.20);
+
+        }
+    }
+
+    .item:nth-child(5) {
+        opacity: 0.4;
     }
 }
 
-
-.arrows {
+.divide-timer {
     position: absolute;
-    top: 50%;
+    bottom: 10px;
+    left: 10px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    overflow: hidden;
 
-    button {
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: none;
-        padding: 10px;
-        font-size: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: black;
-        }
+    div {
+        width: 100%;
+        height: 100%;
+        background: $btn;
+        transition: width 10s linear;
     }
 }

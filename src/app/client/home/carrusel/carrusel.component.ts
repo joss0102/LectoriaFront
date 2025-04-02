@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit, ViewChi
 import { CommonModule } from '@angular/common';
 import { BookService, Book } from '../../../core/services/book/book.service';
 
-
 @Component({
   selector: 'app-carrusel',
   standalone: true,
@@ -56,24 +55,24 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Trono de Cristal",
-      titulo: "Reina de Sombras",
+      saga: "De sangre y cenizas",
+      titulo: "De sangre y cenizas",
       sinopsis: "Aelin Galathynius ha regresado a Adarlan para reclamar su trono y vengar a su pueblo. Pero antes, debe reunir antiguos aliados y formar nuevas alianzas para enfrentar al rey oscuro que amenaza su tierra natal. En el proceso, descubre secretos que podrían cambiar el curso de la guerra.",
-      imagen: "/libros/Trono de cristal/covers/Reina de sombras.png"
+      imagen: "/libros/De sangre y cenizas/covers/De sangre y cenizas.png"
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Trono de Cristal",
-      titulo: "Torre del Alba",
+      saga: "El principe cautivo",
+      titulo: "El principe cautivo",
       sinopsis: "El reino está al borde de la guerra, y Aelin ha sido capturada por la reina de las hadas. Sus amigos están dispersos, cada uno enfrentando sus propias batallas. La única esperanza para su liberación es forjar alianzas improbables y descubrir la clave para derrotar a un enemigo ancestral antes de que sea demasiado tarde.",
-      imagen: "/libros/Trono de cristal/covers/Torre del alba.png"
+      imagen: "/libros/El principe cautivo/covers/El principe cautivo.png"
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Trono de Cristal",
-      titulo: "Imperio de Tormentas",
+      saga: "Empireo",
+      titulo: "Alas de onix",
       sinopsis: "Aelin y sus compañeros luchan contra el tiempo mientras el mundo se precipita hacia la oscuridad. Con los Valg amenazando con conquistarlo todo, la única esperanza es encontrar y utilizar una antigua llave que podría salvar a los reinos o condenarlos. Las lealtades serán probadas y se formarán nuevos lazos en esta penúltima entrega.",
-      imagen: "/libros/Trono de cristal/covers/Imperio de tormentas.png"
+      imagen: "/libros/Empireo/covers/Alas de onix.png"
     },
     {
       autor: "Sarah J. Maas",
@@ -84,38 +83,40 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Una Corte de Rosas y Espinas",
-      titulo: "Una Corte de Rosas y Espinas",
+      saga: "Hunting Adeline",
+      titulo: "Nunca te dejare",
       sinopsis: "Feyre, una cazadora de 19 años, mata a un lobo en el bosque y una bestia exige retribución. Arrastrada a una tierra mágica, descubre que su captor no es un animal sino Tamlin, un inmortal que una vez gobernó el mundo feérico. Mientras vive en su estado, sus sentimientos por él se transforman de hostilidad a pasión. Pero una antigua sombra crece sobre las tierras feéricas, y Feyre debe encontrar la manera de detenerla.",
-      imagen: "/libros/Acotar/covers/Una corte de rosas y espinas.png"
+      imagen: "/libros/Hunting Adeline/covers/Nunca te dejare.png"
     },
     {
       autor: "Sarah J. Maas",
       saga: "Una Corte de Rosas y Espinas",
-      titulo: "Una Corte de Niebla y Furia",
+      titulo: "Una Corte de Rosas y Espinas",
       sinopsis: "Feyre ha sobrevivido a Bajo la Montaña, pero a un costo terrible. Aunque ahora tiene poderes de alto fae, su corazón permanece humano, y no puede olvidar las atrocidades que tuvo que cometer para salvar al pueblo de Tamlin. Tampoco puede olvidar el pacto que hizo con Rhysand, el Alto Lord de la Corte Nocturna, quien ahora la reclama como parte del trato.",
       imagen: "/libros/Acotar/covers/Una corte de niebla y furia.png"
     },
+
+
     {
       autor: "Sarah J. Maas",
-      saga: "Una Corte de Rosas y Espinas",
-      titulo: "Una Corte de Hielo y Estrellas",
+      saga: "La Caida Lunar",
+      titulo: "Hasta que caiga la luna",
       sinopsis: "Una novela corta que sigue a Feyre y Rhysand mientras navegan por los desafíos posteriores a la guerra. Juntos enfrentan el proceso de reconstrucción y ayudan a sanar las heridas del conflicto, mientras también tratan de encontrar momentos de paz en un mundo que aún está cicatrizando.",
-      imagen: "/libros/Acotar/covers/Una corte de hielo y estrellas.png"
+      imagen: "/libros/La Caida Lunar/covers/Hasta que caiga la luna.png"
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Una Corte de Rosas y Espinas",
-      titulo: "Una Corte de Llamas Plateadas",
+      saga: "Los habitantes del aire",
+      titulo: "El rey malvado",
       sinopsis: "La historia sigue las consecuencias de la guerra contra Hybern. Nesta Archeron lucha con la pérdida y su transformación forzada en inmortal. A regañadientes, acepta entrenarse con Cassian en la Casa del Viento, donde debe enfrentar sus demonios internos mientras una nueva amenaza surge en el horizonte.",
-      imagen: "/libros/Acotar/covers/Una corte de llamas plateadas.png"
+      imagen: "/libros/Los habitantes del aire/covers/El rey malvado.png"
     },
     {
       autor: "Sarah J. Maas",
-      saga: "Una Corte de Rosas y Espinas",
-      titulo: "Una Corte de Alas y Ruina",
+      saga: "Powerless",
+      titulo: "Powerless",
       sinopsis: "Feyre ha regresado a la Corte de Primavera, decidida a reunir información sobre los planes de Tamlin y del rey invasor que amenaza con destruir Prythian. Pero para hacerlo, debe jugar un juego mortal de engaño. Un solo error podría condenar no solo a Feyre, sino a todo su mundo.",
-      imagen: "/libros/Acotar/covers/Una corte de alas y ruina.png"
+      imagen: "/libros/Powerless/covers/Powerless.png"
     },
     {
       autor: "Jay Kristoff",
@@ -126,10 +127,10 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     {
       autor: "Jay Kristoff",
-      saga: "El Imperio del Vampiro",
-      titulo: "El Imperio de los Condenados",
+      saga: "Dioses y monstruos",
+      titulo: "El libro de azrael",
       sinopsis: "Gabriel de León continúa su relato desde la prisión, narrando su búsqueda del Grial de Sangre. Mientras el ejército de la Reina Oscura se mueve inexorablemente hacia el último bastión de la humanidad, Gabriel y sus compañeros se adentran en territorios cada vez más peligrosos, enfrentándose a horrores inimaginables y sacrificios imposibles.",
-      imagen: "/libros/El imperio del vampiro/covers/El imperio de los condenados.png"
+      imagen: "/libros/Dioses y monstruos/covers/El libro de azrael.png"
     },
     {
       autor: "Arancha Abad",
@@ -143,14 +144,11 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private bookService: BookService,
     private cdr: ChangeDetectorRef
-  ) {
-  }
+  ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-
     setTimeout(() => {
       this.initializeCarousel();
     }, 100);
@@ -302,10 +300,7 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
         void this.SliderDom!.offsetWidth;
         this.SliderDom!.style.transition = 'transform 0.5s ease-in-out';
 
-
         this.updateFirstItem();
-
-
         this.isTransitioning = false;
       }, 500);
 
@@ -328,7 +323,6 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
       // Después de la animación
       setTimeout(() => {
         this.updateFirstItem();
-
         this.isTransitioning = false;
       }, 500);
     }

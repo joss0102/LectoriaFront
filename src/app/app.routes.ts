@@ -11,6 +11,8 @@ import { QualificationsComponent } from './client/qualifications/qualifications/
 import { WishlistComponent } from './client/wishlist/wishlist/wishlist.component';
 import { UserComponent } from './client/user/user/user.component';
 import { SettingsComponent } from './client/settings/settings/settings.component';
+import { SearchBookComponent } from './client/features/search/search-book/search-book.component';
+import { SearchAuthorComponent } from './client/features/search/search-author/search-author.component';
 
 export const routes: Routes = [
   // User
@@ -28,6 +30,8 @@ export const routes: Routes = [
       { path: 'wishlist', component: WishlistComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'user', component: UserComponent },
+      { path: 'searchAuthor', component: SearchAuthorComponent },
+      { path: 'searchBook', component: SearchBookComponent },
     ],
   },
   { path: '**', component: PageNotFoundComponent },

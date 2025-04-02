@@ -20,7 +20,15 @@
     <i class="bi bi-book fs-4"></i>
     <p class="fs-6">Libro actual</p>
   </a>
-
+  <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    routerLink="/searchAuthor"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <i class="bi bi-search fs-4"></i>
+    <p class="fs-6">Buscador</p>
+  </a>
   <a
     [ngClass]="{ 'only-icon': onlyIcon }"
     routerLink="/statistics"

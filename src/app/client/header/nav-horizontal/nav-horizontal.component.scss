@@ -7,7 +7,6 @@
   justify-content: space-between;
   box-sizing: border-box;
 
-
   .menu {
     cursor: pointer;
 
@@ -24,6 +23,9 @@
 
   .links {
     display: flex;
+    margin-left: 90px;
+    align-items: center;
+    justify-content: center;
     gap: 20px;
 
     a {
@@ -49,50 +51,14 @@
       }
     }
   }
-
-  .buscador {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    max-width: 40%;
-
-    input {
-      width: 100%;
-      border: none;
-      padding: 8px;
-      border-radius: 5px 0px 0px 5px;
-    }
-
-    button {
-      border-radius: 0px 5px 5px 0px;
-      border: none;
-      padding: 5px 15px;
-
-      i {
-        font-size: 20px;
-        color: black;
-      }
+  @media screen and (max-width: 1199px) {
+    .links {
+      margin-left: 5px;
     }
   }
-
-  .campana {
-    padding-left: 20px;
-    cursor: pointer;
-
-    i {
-      font-size: 20px;
-      transition: color 0.3s ease;
-
-      &:hover {
-        color: $btn;
-      }
-    }
-  }
-
   .imagen {
     display: flex;
-    gap: 60px;
+    gap: 10px;
     justify-content: flex-end;
     align-items: center;
 

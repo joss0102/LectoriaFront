@@ -1,1 +1,15 @@
-<p>carrusel works!</p>
+<div class="arrows">
+
+    <button id="prev" #prevButton><i class="bi bi-caret-left-fill"></i></button>
+    <button id="next" #nextButton><i class="bi bi-caret-right-fill"></i></button>
+</div>
+
+<div class="carousel">
+    <div class="list" #sliderContainer>
+        <div class="item d-flex flex-column align-items-center justify-content-center"
+            *ngFor="let book of books; let i = index" [attr.data-book-index]="i">
+            <img [src]="book.imagen" [alt]="book.titulo">
+        </div>
+    </div>
+
+</div>

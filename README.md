@@ -43,7 +43,8 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
   - **Pendientes**: `Página principal con información general y navegación hacia otras secciones.`
   - **Ajustes**: `Página principal con información general y navegación hacia otras secciones.`
 # Dependencias
-- Dependencia de slider
+- Dependencia de slider 
+> **Advertencia**: Esta libreria esta en desuso actualmente
 ```bash
 npm install swiper
 
@@ -51,6 +52,12 @@ npm install swiper
 - Aunque no deberia dar error, si lo da, probamos con instalar los tipos de swiper
 ```bash
 npm install --save-dev @types/swiper
+```
+- Libreria de node-vibrant. Esta libreria nos sirve para sacar colores predominantes de una imagen
+```bash
+npm install node-vibrant@3
+
+
 ```
 # Trabajo en equipo (subir y actualizar código)
 

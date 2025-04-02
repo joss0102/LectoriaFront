@@ -1,19 +1,11 @@
 <section>
-    <div class="d-flex flex-column">
-        <h6 class="autor">Autor</h6>
-        <h6 class="saga">Saga (Si tiene)</h6>
-        <h1 class="titulo">Título del libro</h1>
+    <div class="d-flex flex-column datos-libro" *ngIf="book" [class.fade-in]="showData" [class.fade-out]="!showData">
+        <h6 class="autor">{{ book.autor }}</h6>
+        <h6 class="saga">{{ book.saga }}</h6>
+        <h1 class="titulo">{{ book.titulo }}</h1>
         <div class="datos-sinopsis">
             <p class="sinopsis">Sinopsis</p>
-            <p class="texto-sinopsis">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et quasi unde totam
-                cumque
-                assumenda eos iste
-                ipsa quas! Laborum omnis tempora itaque voluptatum sequi modi quas pariatur vitae reiciendis porro!
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam cupiditate reprehenderit commodi
-                quibusdam dignissimos consequuntur consectetur dicta fugiat dolore minima nesciunt atque labore nostrum
-                laudantium nisi nobis, ullam temporibus quis. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Quaerat, quod nostrum! Et quisquam, temporibus eum sint asperiores quae. Et provident voluptatibus
-                voluptas aut ullam recusandae blanditiis id consequuntur officia reprehenderit!</p>
+            <p class="texto-sinopsis">{{ book.sinopsis }}</p>
         </div>
         <button class="boton btn btn-btn fw-bold">Saber más</button>
     </div>

@@ -1,0 +1,133 @@
+#bookCarousel {
+  position: relative;
+  padding: 0 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+#bookCarousel .carousel-control-prev,
+#bookCarousel .carousel-control-next {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+#bookCarousel .carousel-control-prev {
+  left: 0;
+}
+
+#bookCarousel .carousel-control-next {
+  right: 0;
+}
+
+#bookCarousel .carousel-control-prev:hover,
+#bookCarousel .carousel-control-next:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Estilos para altura uniforme */
+#bookCarousel .carousel-inner {
+  min-height: 300px;
+}
+
+#bookCarousel .carousel-item {
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+#bookCarousel .carousel-item > div {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+#bookCarousel .slide-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#bookCarousel .text-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+#bookCarousel .book-cover {
+  max-height: 220px;
+  width: auto;
+  object-fit: contain;
+  transition: max-height 0.3s ease-in-out;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 920px) {
+  #bookCarousel .carousel-item {
+    height: auto;
+    min-height: 380px;
+  }
+
+  #bookCarousel .carousel-inner {
+    min-height: auto;
+  }
+
+  #bookCarousel .book-cover {
+    max-height: 180px;
+    margin-top: 15px;
+  }
+
+  #bookCarousel .text-content p {
+    max-height: 100px;
+  }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  #bookCarousel {
+    padding: 0 30px;
+  }
+
+  #bookCarousel .carousel-control-prev,
+  #bookCarousel .carousel-control-next {
+    width: 30px;
+    height: 30px;
+  }
+
+  #bookCarousel .carousel-inner {
+    min-height: 450px;
+  }
+
+  #bookCarousel .slide-content {
+    padding-bottom: 20px;
+  }
+
+  #bookCarousel .book-cover {
+    max-height: 180px;
+    margin-top: 15px;
+  }
+
+  #bookCarousel .text-content p {
+    max-height: 100px;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 600px) {
+  button {
+    margin-top: 20px;
+  }
+  #bookCarousel .carousel-inner {
+    min-height: 500px;
+  }
+
+  #bookCarousel .text-content p {
+    max-height: 160px;
+  }
+}

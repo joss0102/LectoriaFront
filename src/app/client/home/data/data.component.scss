@@ -22,4 +22,17 @@ section {
     .boton {
         width: 120px;
     }
+
+    // Añade estas clases para controlar las animaciones
+    .fade-in {
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    // Resto de tus estilos...
 }

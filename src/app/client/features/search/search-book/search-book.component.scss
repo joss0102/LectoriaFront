@@ -1,6 +1,9 @@
 @import "../../../../../assets/colors.scss";
-button {
-  background-color: $btn !important;
+.button-staditistics {
+  background-color: $btn;
+}
+.button-staditistics:hover {
+  background-color: orange;
 }
 
 @media (max-width: 991px) {

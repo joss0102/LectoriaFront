@@ -1,0 +1,10 @@
+@import "../../../../../assets/colors.scss";
+button {
+  background-color: $btn !important;
+}
+
+@media (max-width: 991px) {
+  .book-container {
+    max-width: 250px !important;
+  }
+}

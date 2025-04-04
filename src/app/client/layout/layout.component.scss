@@ -6,5 +6,9 @@
 
 .layout {
   height: 100vh;
-  overflow: hidden;
+}
+@media screen and (min-width: 1199px) {
+  .layout {
+    overflow: hidden !important;
+  }
 }

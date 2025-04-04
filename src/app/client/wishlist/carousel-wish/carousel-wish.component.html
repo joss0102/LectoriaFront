@@ -1,86 +1,29 @@
 <div id="bookCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
   <div class="carousel-inner">
-    <!-- Primer Slide -->
-    <div class="carousel-item active">
-      <div
-        class="position-relative text-white"
-        style="
-          background: url('libros/Trono de cristal/fondos/fondo2.jpg')
-            center/cover;
-          border-radius: 15px;
-          height: 100%;
-        "
-      >
-        <div class="slide-content p-3 p-md-4">
-          <div class="row h-100 g-3">
-            <div class="col-md-7 d-flex flex-column">
-              <div class="text-content">
-                <div class="mb-2 mb-md-3">
-                  <span class="badge bg-info text-dark mx-1"
-                    >Trono de Cristal</span
-                  >
-                  <span class="badge bg-primary mx-1">Fantasía</span>
-                  <span class="badge bg-danger mx-1">Romance</span>
-                </div>
-                <h2 class="fw-bold mb-2 mb-md-3">Trono de Cristal</h2>
-                <p class="mb-3 mb-md-4 fw-light">
-                  En un reino donde la magia ha sido prohibida, una joven
-                  asesina es liberada de su prisión para competir contra los
-                  guerreros más letales del reino. Lo que comienza como una
-                  lucha por la libertad se convierte en una batalla por el
-                  destino de todo el mundo, mientras fuerzas oscuras conspiran
-                  en las sombras.
-                </p>
-              </div>
-              <div class="d-flex gap-2 mt-auto">
-                <button class="btn bg-btn fw-bold text-dark">Saber más</button>
-                <button class="btn btn-dark">...</button>
-              </div>
-            </div>
-            <div
-              class="col-md-5 d-flex align-items-center justify-content-center"
-            >
-              <img
-                src="/libros/El principe cautivo/covers/El juego del principe.png"
-                class="book-cover rounded shadow-lg"
-                alt="Portada del libro"
-              />
-            </div>
-          </div>
+    <div
+      *ngFor="let book of books; let i = index"
+      class="carousel-item"
+      [class.active]="i === currentIndex"
+    >
+      <div>
+        <div>
+          <img src="{{ book.backgroundImage }}" alt="" class="background-img" />
         </div>
-      </div>
-    </div>
-
-    <!-- Segundo Slide -->
-    <div class="carousel-item">
-      <div
-        class="position-relative text-white"
-        style="
-          background: url('libros/Trono de cristal/fondos/fondo1.jpg')
-            center/cover;
-          border-radius: 15px;
-          height: 100%;
-        "
-      >
-        <div class="slide-content p-3 p-md-4">
+        <div class="slide-content p-3 p-md-4 text-white">
           <div class="row h-100 g-3">
             <div class="col-md-7 d-flex flex-column">
               <div class="text-content">
                 <div class="mb-2 mb-md-3">
-                  <span class="badge bg-info text-dark mx-1"
-                    >Mi Alma es Tuya</span
+                  <ng-container
+                    *ngFor="let genre of book.genres; let j = index"
                   >
-                  <span class="badge bg-primary mx-1">Romance</span>
-                  <span class="badge bg-success mx-1">Drama</span>
+                    <span class="badge {{ book.genresColors[j] }} mx-1">{{
+                      genre
+                    }}</span>
+                  </ng-container>
                 </div>
-                <h2 class="fw-bold mb-2 mb-md-3">Mi Alma es Tuya</h2>
-                <p class="mb-3 mb-md-4">
-                  Una historia de amor prohibido entre una humana y un ángel
-                  caído. Cuando el destino los une, descubren que su conexión va
-                  más allá de lo terrenal, desatando una guerra entre el cielo y
-                  el infierno. ¿Podrá su amor sobrevivir cuando todo el universo
-                  conspira en su contra?
-                </p>
+                <h2 class="fw-bold mb-2 mb-md-3">{{ book.title }}</h2>
+                <p class="mb-3 mb-md-4 fw-light">{{ book.description }}</p>
               </div>
               <div class="d-flex gap-2 mt-auto">
                 <button class="btn bg-btn fw-bold text-dark">Saber más</button>
@@ -91,9 +34,9 @@
               class="col-md-5 d-flex align-items-center justify-content-center"
             >
               <img
-                src="/libros/Alma/covers/Mi alma es tuya.png"
+                [src]="book.coverImage"
                 class="book-cover rounded shadow-lg"
-                alt="Portada del libro"
+                alt="{{ book.title }}"
               />
             </div>
           </div>
@@ -102,21 +45,11 @@
     </div>
   </div>
 
-  <button
-    class="carousel-control-prev"
-    type="button"
-    data-bs-target="#bookCarousel"
-    data-bs-slide="prev"
-  >
+  <button class="carousel-control-prev" type="button" (click)="prevSlide()">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Anterior</span>
   </button>
-  <button
-    class="carousel-control-next"
-    type="button"
-    data-bs-target="#bookCarousel"
-    data-bs-slide="next"
-  >
+  <button class="carousel-control-next" type="button" (click)="nextSlide()">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Siguiente</span>
   </button>

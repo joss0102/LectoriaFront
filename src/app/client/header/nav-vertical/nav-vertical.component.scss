@@ -42,3 +42,40 @@ nav {
     }
   }
 }
+
+.search-menu {
+  position: absolute;
+  left: 77px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  top: 64px;
+  flex-direction: column;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.search-container {
+  max-width: 270px;
+  height: 92vh;
+  background-color: $header-night;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.search-results li {
+  padding: 8px;
+  border-bottom: 1px solid $header-night;
+  border-radius: 10px;
+  color: white;
+}
+
+.search-results li:hover {
+  background-color: $secondary-night;
+}

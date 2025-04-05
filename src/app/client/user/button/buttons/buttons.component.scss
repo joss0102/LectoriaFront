@@ -1,0 +1,110 @@
+.section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+  
+  /* Cambiar a columna en pantallas de menos de 992px */
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .settings,
+  .books,
+  .preferences {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    cursor: pointer;
+    height: 200px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: rgb(150, 150, 150);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición solo para transform y box-shadow */
+    transform-origin: center; /* El punto desde donde se escalará */
+    position: relative; /* Necesario para el efecto de escala */
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3);
+      z-index: 1; /* Para que el elemento escalado aparezca por encima de los demás */
+    }
+    
+    /* Este es el truco: crea un contenedor interno que contrarresta la escala */
+    .icon-container,
+    .content {
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover .icon-container,
+    &:hover .content {
+      transform: scale(0.952); /* 1/1.05 ≈ 0.952 - contrarresta exactamente la escala del padre */
+    }
+    
+    /* Ajustes para tablets */
+    @media (max-width: 991px) {
+      width: 100%;
+      height: 150px; /* Altura reducida en tablets */
+      margin-bottom: 15px;
+    }
+    
+    /* Ajustes para móviles */
+    @media (max-width: 576px) {
+      height: auto;
+      min-height: 120px;
+      padding: 15px;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-width: 40px;
+      margin-right: 15px;
+      
+      i {
+        font-size: 24px;
+        
+        /* Ajustar tamaño del icono en pantallas pequeñas */
+        @media (max-width: 576px) {
+          font-size: 20px;
+        }
+      }
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      
+      .title {
+        margin: 0;
+        font-size: 1.75rem; /* Equivalente a fs-3 */
+        font-weight: 500;
+        
+        /* Ajustar tamaño del título en tablets */
+        @media (max-width: 991px) {
+          font-size: 1.5rem;
+        }
+        
+        /* Ajustar tamaño del título en móviles */
+        @media (max-width: 576px) {
+          font-size: 1.25rem;
+        }
+      }
+      
+      .description {
+        margin: 0;
+        font-size: 0.875rem; /* Equivalente a fs-6 */
+        
+        /* Ajustar tamaño de la descripción en móviles */
+        @media (max-width: 576px) {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}

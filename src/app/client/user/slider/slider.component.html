@@ -1,0 +1,12 @@
+<div class="slider-container">
+    <!-- Fondo con imagen -->
+    <div class="slider-background" [ngStyle]="{'background-image': 'url(' + currentImage + ')'}">
+      <!-- Contenedor del contenido -->
+      <div class="slider-content-wrapper">
+        <h1 class="title">Hola de nuevo, {{ userName }}</h1>
+        <p class="date">Hoy es {{ currentDate | date:'longDate' }}</p>
+        <p class="books">Tienes {{ booksCount }} libros en tu librería, ¿qué quieres leer hoy?</p>
+        <p class="recommendation">Te recomendamos <strong>{{ recommendedBook }}</strong> para leer hoy</p>
+      </div>
+    </div>
+  </div>

@@ -35,6 +35,11 @@
     <!-- Menu del buscador -->
     <div *ngIf="searchMenuVisible" class="search-menu">
       <div class="search-container">
+        <i
+          class="bi bi-x fs-3 text-danger"
+          (click)="toggleSearchMenu()"
+          style="cursor: pointer; margin-left: 180px"
+        ></i>
         <input
           type="text"
           placeholder="Buscar..."
@@ -42,12 +47,20 @@
           class="form-control"
         />
         <hr class="text-white" />
-
         <ul class="search-results">
           <p class="text-white">
-            Recientes <span class="text-btn ms-5">Borrar todo</span>
+            Recientes <span class="text-btn ms-5 fw-bold">Borrar todo</span>
           </p>
-          <li *ngFor="let result of searchResults">{{ result }}</li>
+          <li *ngFor="let result of searchResults">
+            <img
+              width="50"
+              height="50"
+              class="rounded-circle me-3"
+              src="https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U="
+              alt=""
+            />
+            {{ result }}
+          </li>
         </ul>
       </div>
     </div>

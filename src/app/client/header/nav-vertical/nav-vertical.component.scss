@@ -45,8 +45,7 @@ nav {
 
 .search-menu {
   position: absolute;
-  left: 110px;
-  width: 400px;
+  left: 77px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -57,8 +56,8 @@ nav {
 }
 
 .search-container {
-  max-width: 400px;
-  height: 93vh;
+  max-width: 270px;
+  height: 92vh;
   background-color: $header-night;
   padding: 20px;
   margin-top: 10px;

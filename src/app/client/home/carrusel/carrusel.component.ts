@@ -29,7 +29,7 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
   currentIndex: number = 0;
   itemsToShow: number = 5;
   itemWidth: number = 0;
-  timerDuration: number = 10099999999900; // 10 segundos
+  timerDuration: number = 10000; // 10000 = 10 segundos
   autoSlideInterval: any;
   timerInterval: any;
   currentTime: number = 0;

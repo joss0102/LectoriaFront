@@ -1,39 +1,45 @@
-<h3 class="slider-title text-white mt-4 ms-md-4">
-    Ultimos
-    libros leídos
-</h3>
-<div class="slider-container">
-
-    <div class="slider-wrapper" #swiperContainer>
-
-        <div class="card-list" #cardList>
-
-            <div *ngFor="let book of books" class="book-card-wrapper">
-                <div class="book-card">
-                    <div class="book-card-content">
-                        <div class="book-cover-container">
-                            <img [src]="book.image" [alt]="book.title" class="book-cover" loading="lazy">
-                        </div>
-                        <div class="book-details">
-                            <div class="author">{{book.author}}</div>
-                            <h2 class="book-title">{{ book.title }}</h2>
-                            <div class="book-meta">
-                                <div class="pages">{{ book.pages }} páginas</div>
-                                <div class="reading-dates">
-                                    {{ formatDate(book.startDate) }} - {{ formatDate(book.endDate) }}
-                                </div>
-                            </div>
-                            <button class="action-button">Saber más</button>
-                        </div>
-                    </div>
-                </div>
+<!-- HTML: carrusel.component.html -->
+<h3 class="slider-title">Últimos libros leídos</h3>
+<div class="book-slider">
+  <div class="slider-viewport">
+    <div #sliderTrack class="slider-track">
+      <div *ngFor="let book of displayBooks; let i = index" class="book-card">
+        <div class="book-inner">
+          <div class="book-cover">
+            <img [src]="book.image" [alt]="book.title" loading="lazy" />
+          </div>
+          <div class="book-info">
+            <p class="book-author">{{ book.author }}</p>
+            <h4 class="book-title">{{ book.title }}</h4>
+            <div class="book-meta">
+              <span class="book-pages">{{ book.pages }} páginas</span>
+              <span class="book-dates"
+                >{{ formatDate(book.startDate) }} -
+                {{ formatDate(book.endDate) }}</span
+              >
             </div>
+            <button class="book-action">Saber más</button>
+          </div>
         </div>
-        <button class="swiper-slide-button swiper-button-prev" (click)="prevSlide()" aria-label="Previous">
-            ‹
-        </button>
-        <button class="swiper-slide-button swiper-button-next" (click)="nextSlide()" aria-label="Next">
-            ›
-        </button>
+      </div>
     </div>
+  </div>
+
+  <div class="slider-controls">
+    <button
+      class="control-btn prev"
+      (click)="prevSlide()"
+      aria-label="Anterior"
+    >
+      <i class="bi bi-caret-left-fill"></i>
+    </button>
+
+    <button
+      class="control-btn next"
+      (click)="nextSlide()"
+      aria-label="Siguiente"
+    >
+      <i class="bi bi-caret-right-fill"></i>
+    </button>
+  </div>
 </div>

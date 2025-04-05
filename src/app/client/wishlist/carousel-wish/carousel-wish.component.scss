@@ -1,9 +1,10 @@
+//@import "../../../../assets/colors.scss";
+
 #bookCarousel {
   position: relative;
   padding: 0 40px;
   max-width: 1300px;
   margin: 0 auto;
-
   .carousel-control-prev,
   .carousel-control-next {
     width: 40px;

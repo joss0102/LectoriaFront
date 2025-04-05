@@ -1,214 +1,298 @@
 @import "../../../../assets/colors.scss";
-
-.slider-container {
-    width: calc(100% + 3rem);
-    padding: 1.5rem 0;
-    max-width: 1500px;
-    margin: 0 auto;
-
-    @media (max-width: 768px) {
-        padding: 1rem 0;
-        max-width: 100%;
-    }
-
-    .slider-wrapper {
-        overflow: hidden;
-        width: 100%;
-        padding: 0 3.5rem;
-
-        @media (max-width: 768px) {
-            padding: 0 2rem;
-        }
-
-        .slider-title {
-            margin-left: 0;
-        }
-
-        .card-list {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
-            will-change: transform;
-            transition: transform 0.3s ease-out;
-
-            @media (max-width: 768px) {
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                scroll-padding: 0 2rem;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .book-card-wrapper {
-                flex: 0 0 auto;
-
-                @media (min-width: 992px) {
-                    flex: 0 0 calc(100% / 2.5);
-                }
-
-                @media (max-width: 768px) {
-                    flex: 0 0 80vw;
-                    scroll-snap-align: center;
-                }
-
-                .book-card {
-                    width: 100%;
-                    max-width: 520px;
-                    height: auto;
-                    position: relative;
-                    padding: 1.5rem;
-                    overflow: hidden;
-
-                    .book-card-content {
-                        background-color: #a0a0a0;
-                        height: auto;
-                        width: 100%;
-                        position: relative;
-                        padding-bottom: 10px;
-                        transition: all 0.3s ease;
-
-                        &:hover {
-                            transform: translateY(-0.25rem);
-                            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-                        }
-                    }
-
-                    .book-cover-container {
-                        width: 130px;
-                        height: 200px;
-                        position: absolute;
-                        left: 1rem;
-                        top: -20px;
-
-                        .book-cover {
-                            width: 100%;
-                            object-fit: cover;
-                            border-radius: 0.3rem;
-                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                            transition: transform 0.5s ease;
-
-                            .book-card:hover & {
-                                transform: scale(1.03);
-                            }
-                        }
-                    }
-
-                    .book-details {
-                        margin-left: 160px;
-                        flex-grow: 1;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        padding: 0.5rem 1rem;
-
-                        .author {
-                            font-size: 0.9rem;
-                            letter-spacing: 0.1rem;
-                            color: #666;
-                            text-transform: uppercase;
-                            margin-bottom: 0.5rem;
-                        }
-
-                        .book-title {
-                            font-size: 1.2rem;
-                            font-weight: bold;
-                            margin-bottom: 0.75rem;
-                            color: #333;
-
-                            @media (min-width: 992px) {
-                                font-size: 1.3rem;
-                            }
-                        }
-
-                        .book-meta {
-                            font-size: 0.9rem;
-                            color: #555;
-                            margin-bottom: 1rem;
-
-                            .pages {
-                                font-weight: 500;
-                                margin-bottom: 0.5rem;
-                            }
-
-                            .reading-dates {
-                                font-size: 0.85rem;
-                                color: #777;
-                            }
-                        }
-
-                        .action-button {
-                            background: transparent;
-                            border: 1px solid #333;
-                            color: #333;
-                            padding: 0.6rem 1.2rem;
-                            font-size: 0.85rem;
-                            text-transform: uppercase;
-                            letter-spacing: 0.1rem;
-                            cursor: pointer;
-                            transition: all 0.3s ease;
-                            align-self: start;
-                            border-radius: 2rem;
-
-                            &:hover {
-                                background: #333;
-                                color: white;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        .swiper-slide-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3rem;
-            height: 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: #333;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 10;
-            opacity: 0.9;
-            transition: all 0.3s ease;
-            border: none;
-            outline: none;
-            box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
-
-            &:hover {
-                opacity: 1;
-                transform: translateY(-50%) scale(1.1);
-                background: white;
-            }
-
-            &:focus-visible {
-                outline: 2px solid #333;
-                outline-offset: 2px;
-            }
-
-            @media (max-width: 576px) {
-                width: 2.5rem;
-                height: 2.5rem;
-                font-size: 1.1rem;
-            }
-        }
-
-        .swiper-button-prev {
-            left: 0;
-        }
-
-        .swiper-button-next {
-            right: 0;
-        }
-    }
+.slider-title {
+  color: white;
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+  font-weight: 600;
 }
 
-@media (max-width: 480px) {
-    .swiper-slide-button {
-        display: none;
+.book-slider {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  position: relative;
+
+  .slider-viewport {
+    overflow: hidden;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .slider-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  .book-card {
+    flex: 0 0 33.333%; /* Exactamente 3 tarjetas por fila en desktop */
+    padding: 1rem;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s);
+    opacity: 0;
+    position: relative;
+    max-height: 400px;
+
+    @for $i from 0 through 5 {
+      &:nth-child(#{$i + 1}) {
+        --index: #{$i};
+      }
     }
+
+    @media (max-width: 992px) {
+      flex: 0 0 50%; /* 2 tarjetas por fila en tablets */
+    }
+
+    @media (max-width: 768px) {
+      flex: 0 0 100%; /* 1 tarjeta por fila en móviles */
+    }
+  }
+
+  .book-inner {
+    background: linear-gradient(135deg, #b2b2b2, #7f7f7f);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: 280px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: visible; /* Permite que elementos sobresalgan */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 40px; /* Espacio para la portada que sobresale */
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+
+      .book-cover {
+        img {
+          transform: scale(1.05) rotate(-2deg);
+        }
+      }
+
+      .book-action {
+        background-color: #333;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+
+  .book-cover {
+    position: absolute;
+    left: 20px;
+    top: -40px; /* Sobresale por arriba */
+    width: 130px;
+    height: 200px;
+    perspective: 1000px;
+    z-index: 10; /* Por encima de otros elementos */
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.4rem;
+      box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  }
+
+  .book-info {
+    margin-left: 160px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .book-author {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #464646;
+    margin-bottom: 0.5rem;
+  }
+
+  .book-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2f2f2f;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .book-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+
+    .book-pages {
+      color: #464646;
+      font-weight: 500;
+    }
+
+    .book-dates {
+      color: #464646;
+    }
+  }
+
+  .book-action {
+    align-self: flex-start;
+    background-color: transparent;
+    border: 2px solid #333;
+    border-radius: 2rem;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 0.7rem 1.5rem;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.3);
+    }
+  }
+
+  .slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .control-btn {
+    color: white;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: ($btn);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    span {
+      line-height: 1;
+      position: relative;
+      top: -2px;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive para tablets */
+  @media (max-width: 992px) {
+    .slider-controls {
+      margin-top: 1.5rem;
+    }
+
+    .book-inner {
+      height: auto;
+      min-height: 240px;
+    }
+  }
+
+  /* Responsive para móviles */
+  @media (max-width: 768px) {
+    .slider-controls {
+      margin-top: 1.5rem;
+    }
+
+    .book-inner {
+      height: auto;
+      min-height: 220px;
+      padding: 1.5rem 1.2rem 1.2rem;
+      margin-top: 60px;
+    }
+
+    .book-cover {
+      position: absolute;
+      left: 50%;
+      top: -60px;
+      width: 100px;
+      height: 150px;
+      transform: translateX(-50%);
+      margin: 0;
+    }
+
+    .book-info {
+      margin-left: 0;
+      margin-top: 70px;
+      text-align: center;
+    }
+
+    .book-action {
+      align-self: center;
+      margin-top: 0.5rem;
+    }
+
+    .book-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  /* Ajustes adicionales para móviles pequeños */
+  @media (max-width: 480px) {
+    .book-card {
+      padding: 0.75rem;
+    }
+
+    .book-inner {
+      margin-top: 50px;
+    }
+
+    .book-cover {
+      width: 90px;
+      height: 135px;
+      top: -50px;
+    }
+
+    .book-info {
+      margin-top: 60px;
+    }
+
+    .control-btn {
+      width: 2.8rem;
+      height: 2.8rem;
+      font-size: 1.7rem;
+    }
+
+    .book-author {
+      font-size: 0.8rem;
+    }
+
+    .book-meta {
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .book-action {
+      font-size: 0.75rem;
+      padding: 0.5rem 1.2rem;
+    }
+  }
 }

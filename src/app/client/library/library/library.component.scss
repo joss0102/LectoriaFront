@@ -9,11 +9,9 @@
   height: 92vh;
   margin: 10px;
 
-
   .carousel {
     grid-column: span 6 / span 6;
     grid-row: span 4 / span 4;
-
   }
 
   .data-book {
@@ -30,8 +28,6 @@
     grid-column-start: 5;
 
     grid-row-start: 5;
-
-
   }
 
   @media (max-width: 1024px) {
@@ -51,18 +47,6 @@
     .data-author {
       grid-column: span 2;
       grid-row: span 2;
-    }
-  }
-
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .carousel,
-    .data-book,
-    .data-author {
-      width: 100%;
     }
   }
 }

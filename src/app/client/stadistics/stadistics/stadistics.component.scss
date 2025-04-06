@@ -58,6 +58,7 @@
 
 @media (max-width: 900px) {
   .parent {
+    margin: 10px;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }

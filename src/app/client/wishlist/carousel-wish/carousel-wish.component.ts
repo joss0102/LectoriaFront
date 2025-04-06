@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Book {
@@ -17,7 +17,7 @@ interface Book {
   templateUrl: './carousel-wish.component.html',
   styleUrl: './carousel-wish.component.scss',
 })
-export class CarouselWishComponent {
+export class CarouselWishComponent implements OnInit {
   books: Book[] = [
     {
       genres: ['Trono de Cristal', 'Romance', 'Fantasía'],
@@ -39,6 +39,11 @@ export class CarouselWishComponent {
       backgroundImage: '/libros/Alma/fondos/fondo1.jpg',
     },
   ];
+  ngOnInit(): void {
+    setInterval(() => {
+      this.nextSlide();
+    }, 10000); // Cambiar cada 10 segundos
+  }
 
   currentIndex = 0;
 

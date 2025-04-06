@@ -54,13 +54,19 @@ nav {
   z-index: 999;
   transition: all 0.3s ease;
 }
+.search-results img {
+  width: 70px;
+  height: 65px;
+  border-radius: 50%;
+}
 
 .search-container {
   max-width: 270px;
-  height: 92vh;
+  height: 93vh;
   background-color: $header-night;
   padding: 20px;
   margin-top: 10px;
+  border-left: 1px solid $secondary-night;
 }
 
 .search-results {

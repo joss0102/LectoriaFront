@@ -57,10 +57,11 @@ nav {
 
 .search-container {
   max-width: 270px;
-  height: 92vh;
+  height: 93vh;
   background-color: $header-night;
   padding: 20px;
   margin-top: 10px;
+  border-left: 1px solid $secondary-night;
 }
 
 .search-results {

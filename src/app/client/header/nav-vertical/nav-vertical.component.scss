@@ -54,6 +54,11 @@ nav {
   z-index: 999;
   transition: all 0.3s ease;
 }
+.search-results img {
+  width: 70px; /* Asegura que no exceda el tamaño máximo */
+  height: 65px; /* Mantiene la imagen dentro del contenedor */
+  border-radius: 50%;
+}
 
 .search-container {
   max-width: 270px;

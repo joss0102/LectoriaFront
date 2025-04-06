@@ -1,87 +1,243 @@
 @import "../../../../assets/colors.scss";
 
+// Contendor principal de la navegación
 nav {
   display: flex;
   flex-direction: column;
   height: 94vh;
+  width: 75px;
+  transition: width 0.3s ease, transform 0.3s ease;
+  position: relative;
 
+
+  // Cuando se muestra el texto
+  &:not(.only-icon) {
+    width: 220px;
+  }
+  
+  .nav-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
   a {
-    padding: 20px;
+    cursor: pointer;
+    padding: 15px;
     color: white;
     display: flex;
     align-items: center;
     text-decoration: none;
-    transition: color 0.3s ease;
-    position: relative;
-
+    transition: color 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
+    
     &:hover {
       color: $btn;
-      background-color: rgb(206, 206, 206, 0.1);
+      background-color: rgba(206, 206, 206, 0.1);
     }
-
-    /* Cuando el enlace tiene la clase 'active' del router */
+    
     &.active {
       color: $btn;
-      background-color: rgb(206, 206, 206, 0.1);
+      background-color: rgba(206, 206, 206, 0.1);
     }
-
-    p {
+    
+    .link {
+      width: 140px;
       margin: 10px;
-      padding-right: 10px;
     }
-
+    
+    // Cuando aparece texto
+    &:not(.only-icon) {
+      padding: 20px;
+      .bi {
+        font-size: 1.5rem !important;
+      }
+      p{
+        font-size: 20px;
+      }
+      .bi-person-circle {
+        font-size: 3rem !important;
+      }
+    }
+    //Cuando es solo icono
     &.only-icon {
       p {
         display: none;
       }
-
       i {
         display: block;
         margin: 0 auto;
+        font-size: 1.5rem;
+      }
+
+      .bi-person-circle {
+        font-size: 3rem !important;
       }
     }
   }
 }
 
-.search-menu {
-  position: absolute;
-  left: 77px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  top: 64px;
-  flex-direction: column;
-  z-index: 999;
-  transition: all 0.3s ease;
-}
-.search-results img {
-  width: 70px;
-  height: 65px;
-  border-radius: 50%;
+// Menú de búsqueda - ahora controlado principalmente desde TypeScript
+.search-menu-wrapper {
+  position: fixed;
+  top: 0;
+  // El left lo establecemos dinámicamente desde el componente
+  height: 100vh;
+  width: 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  z-index: -1;
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+              left 0.3s ease,
+              opacity 0.3s ease,
+              visibility 0.3s ease,
+              z-index 0s linear 0.3s;
+  margin-top: 74px;
+  
+  &.search-visible {
+    width: 320px;
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                left 0.3s ease,
+                opacity 0.3s ease,
+                visibility 0s,
+                z-index 0s;
+  }
+  
+  .search-container {
+    width: 320px;
+    height: 93vh;
+    background-color: $header-night;
+    padding: 20px;
+    border-left: 1px solid $secondary-night;
+    display: flex;
+    flex-direction: column;
+   
+    .search-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    
+    }
+    
+    .recent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      small {
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+        
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+    
+    .search-results {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      overflow-y: auto;
+      flex: 1;
+      z-index: 100;
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      
+      li {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        margin-bottom: 6px;
+        border-radius: 8px;
+        color: white;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+        
+        &:hover {
+          background-color: $secondary-night;
+          transform: translateX(4px);
+        }
+      }
+    }
+  }
 }
 
-.search-container {
-  max-width: 270px;
-  height: 93vh;
-  background-color: $header-night;
-  padding: 20px;
-  margin-top: 10px;
-  border-left: 1px solid $secondary-night;
+// Estilos responsive
+@media screen and (max-width: 767px) {
+  body {
+    &.mobile-menu-open {
+      overflow: hidden; // Prevenir scroll cuando el menú está abierto
+    }
+  }
+  
+  nav {
+    position: fixed;
+    left: -75px; // Oculto por defecto
+    top: 0;
+    height: 100vh;
+    z-index: 1050;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+    
+    &.menu-visible {
+      left: 0; // Visible cuando se activa
+    }
+    
+    &:not(.only-icon) {
+      left: -220px; // Oculto por defecto con texto
+      
+      &.menu-visible {
+        left: 0; // Visible cuando se activa
+      }
+    }
+  }
+  
+  .search-menu-wrapper {
+    margin-top: 0; // Sin margen en mobile
+    top: 0;
+    
+    // Cuando es visible, ocupa toda la pantalla
+    &.search-visible {
+      left: 0 !important;
+      width: 100% !important;
+      height: 100vh;
+      z-index: 1060;
+    }
+    
+    .search-container {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
 }
 
-.search-results {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
+// Clase utilitaria
+.cursor-pointer {
+  cursor: pointer;
 }
 
-.search-results li {
-  padding: 8px;
-  border-bottom: 1px solid $header-night;
-  border-radius: 10px;
-  color: white;
-}
-
-.search-results li:hover {
-  background-color: $secondary-night;
+// Overlay para móvil
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  
+  @media screen and (max-width: 767px) {
+    &.active {
+      display: block;
+    }
+  }
 }

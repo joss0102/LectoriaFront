@@ -47,17 +47,17 @@
 
     .datos {
       position: absolute;
-      top: 0;
-      padding-top: 150px;
+      top: 7rem;
+
       width: 60%;
-      z-index: 10 !important;
+
     }
 
     .imagen1 {
       position: absolute;
-      top: 0;
+      top: 7rem;
       opacity: 0.3;
-      padding-top: 150px;
+
     }
 
     .imagen2 {
@@ -72,7 +72,6 @@
 @media screen and (max-width: 900px) {
   .parent {
     .datos {
-      z-index: 10 !important;
       width: 70%;
     }
 
@@ -95,7 +94,7 @@
     height: 93vh;
 
     .datos {
-      z-index: 10 !important;
+
     }
 
     .imagen1 {

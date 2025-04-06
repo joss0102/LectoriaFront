@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService, Book } from '../../../core/services/book/book.service';
+import { BookService } from '../../../core/services/book/book.service';
 import { Subscription } from 'rxjs';
+import { Book } from '../../../core/models/book-model';
 
 @Component({
   selector: 'app-data',

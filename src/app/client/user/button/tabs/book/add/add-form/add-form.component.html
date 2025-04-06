@@ -1,0 +1,398 @@
+<!-- Sección inicial para elegir el método de añadir libro -->
+<section class="form-section" *ngIf="showInitialOptions">
+    <div class="options-container">
+      <button class="btn btn-primary" (click)="showSearchOnlineModal()">
+        <i class="bi bi-search"></i>
+        Buscar online
+      </button>
+      <button class="btn btn-accent" (click)="showAddManuallyModal()">
+        <i class="bi bi-pencil-fill"></i>
+        Añadir manualmente
+      </button>
+    </div>
+  </section>
+  
+  <!-- Modal de buscar online -->
+  <section class="modal-section" *ngIf="showSearchOnline">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Buscar libro online</h3>
+        <button class="close-button" (click)="backToInitialOptions()">×</button>
+      </div>
+      <div class="modal-content">
+        <p class="empty-state">Funcionalidad en desarrollo</p>
+        <!-- Vacío por ahora, no añadimos nada -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToInitialOptions()">Volver</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de añadir manualmente -->
+  <section class="modal-section" *ngIf="showAddManually">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Añadir libro manualmente</h3>
+        <button class="close-button" (click)="backToInitialOptions()">×</button>
+      </div>
+      <div class="modal-content">
+        <form [formGroup]="bookForm">
+          <div class="book-form-container">
+            <div class="book-info-header">
+              <div class="book-image">
+                <img src="assets/images/book-placeholder.png" alt="imagen libro" class="book-cover">
+                <button class="image-upload-btn">
+                  <i class="bi bi-cloud-upload"></i>
+                </button>
+              </div>
+  
+              <div class="book-details">
+                <div class="form-row">
+                  <div class="form-group">
+                    <input type="text" formControlName="title" placeholder="Título" class="form-control" [ngClass]="{'is-invalid': bookForm.get('title')?.invalid && bookForm.get('title')?.touched}">
+                    <div class="invalid-feedback" *ngIf="bookForm.get('title')?.errors?.['required'] && bookForm.get('title')?.touched">
+                      El título es obligatorio
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" formControlName="pages" placeholder="Páginas" class="form-control" [ngClass]="{'is-invalid': bookForm.get('pages')?.invalid && bookForm.get('pages')?.touched}">
+                    <div class="invalid-feedback" *ngIf="bookForm.get('pages')?.errors?.['min'] && bookForm.get('pages')?.touched">
+                      El número de páginas debe ser mayor que 0
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="form-row">
+                  <div class="form-group select-group">
+                    <select formControlName="author" class="form-control">
+                      <option value="" disabled selected>Selecciona un autor o añade uno</option>
+                      <option value="autor1">Autor 1</option>
+                      <option value="autor2">Autor 2</option>
+                    </select>
+                    <button class="btn btn-icon" type="button" (click)="showAddAuthorModal()">
+                      <i class="bi bi-person-add"></i>
+                    </button>
+                  </div>
+                </div>
+  
+                <div class="form-row">
+                  <div class="form-group select-group">
+                    <select formControlName="saga" class="form-control">
+                      <option value="" disabled selected>Selecciona una saga o añade una</option>
+                      <option value="saga1">Saga 1</option>
+                      <option value="saga2">Saga 2</option>
+                    </select>
+                    <button class="btn btn-icon" type="button" (click)="showAddSagaModal()">
+                      <i class="bi bi-cloud-plus"></i>
+                    </button>
+                  </div>
+                </div>
+  
+                <div class="form-row">
+                  <div class="form-group">
+                    <select formControlName="status" class="form-control" (change)="showAddStatusModal()">
+                      <option value="" disabled selected>Selecciona un estado para el libro</option>
+                      <option value="enCurso">En curso</option>
+                      <option value="finalizado">Finalizado</option>
+                      <option value="abandonado">Abandonado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="form-group synopsis-group">
+              <textarea formControlName="synopsis" class="form-control" placeholder="Sinopsis del libro" rows="4"></textarea>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group select-group">
+                <select formControlName="genres" class="form-control">
+                  <option value="" disabled selected>Selecciona los géneros</option>
+                  <option value="genero1">Género 1</option>
+                  <option value="genero2">Género 2</option>
+                  <option value="genero3">Género 3</option>
+                </select>
+                <button class="btn btn-icon" type="button" (click)="showAddGenresModal()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+  
+            <!-- Lista de géneros seleccionados -->
+            <div class="selected-items" *ngIf="selectedGenres.length > 0">
+              <div class="badge-container">
+                <span class="badge" *ngFor="let genre of selectedGenres; let i = index">
+                  {{ genre }}
+                  <button class="badge-remove" (click)="removeGenre(i)">×</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToInitialOptions()">Cancelar</button>
+        <button class="btn btn-primary" (click)="submitBook()">Guardar libro</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de añadir autor -->
+  <section class="modal-section" *ngIf="showAddAuthor">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Añadir autor</h3>
+        <button class="close-button" (click)="backToAddManually()">×</button>
+      </div>
+      <div class="modal-content">
+        <form [formGroup]="authorForm">
+          <div class="author-form">
+            <div class="author-details">
+              <div class="form-group">
+                <input type="text" formControlName="name" placeholder="Nombre" class="form-control" [ngClass]="{'is-invalid': authorForm.get('name')?.invalid && authorForm.get('name')?.touched}">
+                <div class="invalid-feedback" *ngIf="authorForm.get('name')?.errors?.['required'] && authorForm.get('name')?.touched">
+                  El nombre es obligatorio
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="text" formControlName="lastName1" placeholder="Primer apellido" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="text" formControlName="lastName2" placeholder="Segundo apellido" class="form-control">
+              </div>
+            </div>
+            <div class="form-group description-group">
+              <textarea formControlName="description" class="form-control" placeholder="Descripción del autor" rows="4"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToAddManually()">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveAuthor()">Confirmar</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de añadir saga -->
+  <section class="modal-section" *ngIf="showAddSaga">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Añadir saga</h3>
+        <button class="close-button" (click)="backToAddManually()">×</button>
+      </div>
+      <div class="modal-content">
+        <form [formGroup]="sagaForm">
+          <div class="saga-form">
+            <div class="form-group">
+              <input type="text" formControlName="name" placeholder="Nombre de la saga" class="form-control" [ngClass]="{'is-invalid': sagaForm.get('name')?.invalid && sagaForm.get('name')?.touched}">
+              <div class="invalid-feedback" *ngIf="sagaForm.get('name')?.errors?.['required'] && sagaForm.get('name')?.touched">
+                El nombre de la saga es obligatorio
+              </div>
+            </div>
+            
+            <div class="form-check">
+              <div class="checkbox-container">
+                <input type="checkbox" formControlName="addImages" class="form-check-input" id="addSagaImages">
+                <div class="info-container">
+                  <label class="form-check-label" for="addSagaImages">Nuestra página proporciona una función de imágenes dinámicas referentes a las sagas</label>
+                  <p class="info-text">¿Quieres añadir imágenes para mostrarlas en la página web?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToAddManually()">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveSaga()">Confirmar</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de imágenes de saga -->
+  <section class="modal-section" *ngIf="showAddSagaImages">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Imágenes de saga</h3>
+        <button class="close-button" (click)="backToAddSaga()">×</button>
+      </div>
+      <div class="modal-content">
+        <div class="images-form">
+          <div class="image-section">
+            <h4>Imágenes de la página de inicio</h4>
+            <div class="image-upload-area">
+              <div class="image-placeholder">
+                <i class="bi bi-cloud-upload"></i>
+                <span>Haz clic para subir</span>
+              </div>
+              <div class="image-placeholder">
+                <i class="bi bi-cloud-upload"></i>
+                <span>Haz clic para subir</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="image-section">
+            <h4>Imágenes de la página de biblioteca</h4>
+            <div class="image-upload-area">
+              <div class="image-placeholder">
+                <i class="bi bi-cloud-upload"></i>
+                <span>Haz clic para subir</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToAddSaga()">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveSagaImages()">Confirmar</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de añadir estado -->
+  <section class="modal-section" *ngIf="showAddStatus">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Estado del libro</h3>
+        <button class="close-button" (click)="backToAddManually()">×</button>
+      </div>
+      <div class="modal-content">
+        <form [formGroup]="statusForm">
+          <div class="status-form">
+            <div class="form-row">
+              <div class="form-group">
+                <input type="date" formControlName="startDate" placeholder="Fecha de inicio" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="date" formControlName="endDate" placeholder="Fecha de finalización" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="number" formControlName="rating" placeholder="Calificación (0-10)" class="form-control" min="0" max="10">
+              </div>
+            </div>
+            
+            <div class="form-group review-group">
+              <textarea formControlName="review" class="form-control" placeholder="Reseña del libro" rows="4"></textarea>
+            </div>
+            
+            <div class="form-check">
+              <div class="checkbox-container">
+                <input type="checkbox" formControlName="addPhrasesNotes" class="form-check-input" id="addPhrasesNotes">
+                <label class="form-check-label" for="addPhrasesNotes">¿Quieres añadir alguna frase o poner una nota?</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToAddManually()">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveStatus()">Confirmar</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de añadir frases/notas -->
+  <section class="modal-section" *ngIf="showAddPhrasesNotes">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Frases y notas</h3>
+        <button class="close-button" (click)="backToAddStatus()">×</button>
+      </div>
+      <div class="modal-content">
+        <form [formGroup]="phrasesNotesForm">
+          <div class="phrases-notes-form">
+            <div class="form-group">
+              <div class="input-with-button">
+                <input type="text" formControlName="phrase" placeholder="Frase del libro" class="form-control">
+                <button class="btn btn-icon" type="button" (click)="addPhrase()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Lista de frases añadidas -->
+            <div class="items-list" *ngIf="phrases.length > 0">
+              <h4>Frases añadidas</h4>
+              <div class="list-item" *ngFor="let phrase of phrases; let i = index">
+                <div class="item-content">{{ phrase }}</div>
+                <div class="item-actions">
+                  <button class="btn-icon-small" (click)="removePhrase(i)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <div class="input-with-button">
+                <input type="text" formControlName="note" placeholder="Nota sobre el libro" class="form-control">
+                <button class="btn btn-icon" type="button" (click)="addNote()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Lista de notas añadidas -->
+            <div class="items-list" *ngIf="notes.length > 0">
+              <h4>Notas añadidas</h4>
+              <div class="list-item" *ngFor="let note of notes; let i = index">
+                <div class="item-content">{{ note }}</div>
+                <div class="item-actions">
+                  <button class="btn-icon-small" (click)="removeNote(i)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToAddStatus()">Cancelar</button>
+        <button class="btn btn-primary" (click)="savePhrasesNotes()">Confirmar</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal de añadir géneros -->
+  <section class="modal-section" *ngIf="showAddGenres">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Añadir géneros</h3>
+        <button class="close-button" (click)="backToAddManually()">×</button>
+      </div>
+      <div class="modal-content">
+        <form [formGroup]="genresForm">
+          <div class="genres-form">
+            <div class="form-group">
+              <div class="input-with-button">
+                <input type="text" formControlName="genre" placeholder="Nombre del género" class="form-control">
+                <button class="btn btn-icon" type="button" (click)="addGenre()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Lista de géneros añadidos -->
+            <div class="items-list" *ngIf="selectedGenres.length > 0">
+              <h4>Géneros añadidos</h4>
+              <div class="genre-tags">
+                <span class="badge" *ngFor="let genre of selectedGenres; let i = index">
+                  {{ genre }}
+                  <button class="badge-remove" (click)="removeGenre(i)">×</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="backToAddManually()">Cancelar</button>
+        <button class="btn btn-primary" (click)="saveGenres()">Confirmar</button>
+      </div>
+    </div>
+  </section>

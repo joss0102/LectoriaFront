@@ -1,0 +1,194 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: 460px;
+  height: 610px;
+  border-radius: 12px;
+  padding: 20px 30px 120px;
+  background: #3a3a3a;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.login-section {
+  position: absolute;
+  left: 50%;
+  bottom: -88%;
+  transform: translateX(-50%);
+  width: calc(100% + 180px);
+  padding: 20px 140px;
+  background: #fff;
+  border-radius: 230px;
+  height: 100%;
+  transition: all 0.6s ease;
+}
+
+.login-section .sigup,
+.signup-section .sigup {
+  font-size: 30px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.login {
+  font-size: 30px;
+  text-align: center;
+  color: #000000;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-section.sigup {
+  color: #333;
+  opacity: 0.6;
+}
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: w;
+}
+.social-buttons {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.social-buttons button {
+  width: 100%;
+  padding: 10px;
+  background: #f1683a;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.login-section .social-buttons button i,
+.signup-section .social-buttons button i {
+  font-size: 25px;
+}
+
+.separator {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
+}
+p {
+  color: white;
+}
+.separator .line {
+  width: 100%;
+  height: 1px;
+  background: #707070;
+}
+body.modo-noche .separator .line {
+  background-color: #ccc;
+}
+.separator p {
+  color: #fff;
+}
+
+.login-section .separator p {
+  color: #ffffff;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form input {
+  outline: none;
+  border: none;
+  padding: 10px 15px;
+  color: #333;
+  font-weight: 400;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.login-section input {
+  border: 1px solid #aaa;
+}
+
+form a {
+  color: #f8f8f8;
+}
+
+.signup-section form a {
+  color: #fff;
+}
+
+form .btn {
+  margin-top: 15px;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background: #f1683a;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.login-section .btn {
+  background: #f1683a;
+  color: #fff;
+  border: none;
+}
+.container.active div.login-section div.login {
+  color: white;
+}
+.container.active .login-section {
+  bottom: -12%;
+  border-radius: 210px;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+  background-color: #3a3a3a;
+}
+
+.container.active .login-section .sigup {
+  opacity: 1;
+}
+
+.container.active .signup-section .sigup {
+  opacity: 0.6;
+}
+body:not(.modo-noche) .container,
+body:not(.modo-noche) .container.active .login-section {
+  background: #d9d9d9;
+}
+
+body:not(.modo-noche) div,
+body:not(.modo-noche) .container.active div.login-section div.login,
+body:not(.modo-noche) .signup-section .sigup,
+body:not(.modo-noche) .signup-section form a,
+body:not(.modo-noche) .separator p,
+body:not(.modo-noche) form a,
+body:not(.modo-noche) .separator,
+body:not(.modo-noche) .separator .line {
+  color: #0b0b0b;
+}
+
+@media screen and (max-width: 668px) {
+  .container {
+    width: 300px;
+  }
+}
+@media screen and (max-width: 438px) {
+  .container {
+    width: 240px;
+  }
+  .social-buttons {
+    width: 60%;
+  }
+}

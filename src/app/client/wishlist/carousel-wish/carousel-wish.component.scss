@@ -1,10 +1,9 @@
-//@import "../../../../assets/colors.scss";
-
 #bookCarousel {
   position: relative;
   padding: 0 40px;
   max-width: 1300px;
   margin: 0 auto;
+
   .carousel-control-prev,
   .carousel-control-next {
     width: 40px;
@@ -33,6 +32,7 @@
   .carousel-inner {
     min-height: 300px;
   }
+
   .background-img {
     border-radius: 20px;
     position: absolute;
@@ -44,8 +44,10 @@
     z-index: -1;
     opacity: 0.5;
   }
+
   .carousel-item {
-    height: 400px;
+    min-height: 400px;
+    height: 280px;
     position: relative;
     overflow: hidden;
 
@@ -76,72 +78,109 @@
   }
 }
 
-/* Ajustes para pantallas más pequeñas */
-@media (max-width: 920px) {
+@media (max-width: 992px) {
   #bookCarousel {
+    padding: 0 25px;
+
     .carousel-item {
-      height: auto;
-      min-height: 380px;
-    }
-
-    .carousel-inner {
-      min-height: auto;
-    }
-
-    .book-cover {
-      max-height: 180px;
-      margin-top: 15px;
-    }
-
-    .text-content p {
-      max-height: 100px;
-    }
-  }
-}
-
-/* Responsive para móviles */
-@media (max-width: 768px) {
-  #bookCarousel {
-    padding: 0 30px;
-
-    .carousel-control-prev,
-    .carousel-control-next {
-      width: 30px;
-      height: 30px;
-    }
-
-    .carousel-inner {
-      min-height: 450px;
+      height: 300px;
     }
 
     .slide-content {
-      padding-bottom: 20px;
+      padding: 1.2rem;
     }
 
     .book-cover {
-      max-height: 180px;
-      margin-top: 15px;
+      width: 190px;
+      max-height: 280px;
+    }
+
+    .text-content h2 {
+      font-size: 1.4rem;
     }
 
     .text-content p {
-      max-height: 100px;
+      font-size: 0.95rem;
+      max-height: 120px;
     }
   }
 }
-
-/* Pantallas muy pequeñas */
-@media (max-width: 600px) {
-  button {
-    margin-top: 20px;
-  }
-
+@media (max-width: 768px) {
   #bookCarousel {
+    padding: 0 15px;
+
     .carousel-inner {
       min-height: 500px;
     }
 
+    .carousel-item {
+      min-height: 550px;
+    }
+
+    .slide-content {
+      flex-direction: column;
+      padding-bottom: 2rem;
+    }
+
+    .row {
+      flex-direction: column;
+    }
+
+    .col-md-7,
+    .col-md-5 {
+      width: 100%;
+    }
+
+    .text-content h2 {
+      font-size: 1.2rem;
+    }
+
     .text-content p {
+      font-size: 0.9rem;
       max-height: 160px;
+    }
+
+    .book-cover {
+      width: 160px;
+      max-height: 165px;
+      margin: 0 auto;
+    }
+
+    .d-flex.gap-2 {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      width: auto;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
+@media (max-width: 480px) {
+  #bookCarousel {
+    .text-content h2 {
+      font-size: 1rem;
+    }
+
+    .text-content p {
+      font-size: 0.85rem;
+    }
+
+    .book-cover {
+      width: 86px;
+    }
+
+    .btn {
+      font-size: 0.85rem;
     }
   }
 }

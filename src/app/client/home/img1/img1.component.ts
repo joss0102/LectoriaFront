@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import Vibrant from 'node-vibrant'; // Importación correcta
 
-import { BookService, Book } from '../../../core/services/book/book.service';
+import { BookService } from '../../../core/services/book/book.service';
 import { ColorPrimaryService } from '../../../core/services/ColorPrimary/color-primary.service';
 import { NgClass } from '@angular/common';
-
+import { Book } from '../../../core/models/book-model';
 @Component({
   selector: 'app-img1',
   standalone: true,

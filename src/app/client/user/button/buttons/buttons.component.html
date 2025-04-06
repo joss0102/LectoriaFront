@@ -1,6 +1,6 @@
-<!-- HTML modificado -->
 <section class="section">
-  <div class="settings">
+  <!-- Ajustes de usuario -->
+  <div class="settings" (click)="openSettingsModal()">
     <div class="icon-container">
       <i class="bi bi-gear-fill"></i>
     </div>
@@ -9,8 +9,21 @@
       <p class="description">Editar nombre, Nickname, contraseña y la imagen de perfil</p>
     </div>
   </div>
+  <!-- Modal de Ajustes - solo se muestra cuando showSettingsModal es true -->
+  <div class="modal" *ngIf="showSettingsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Ajustes de usuario</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-settings></app-settings>
+      </div>
+    </div>
+  </div>
 
-  <div class="books">
+  <!-- Tus libros -->
+  <div class="books" (click)="openBooksModal()">
     <div class="icon-container">
       <i class="bi bi-book-fill"></i>
     </div>
@@ -20,14 +33,39 @@
       <p class="description">Gestiona tus libros, imágenes, notas, frases y calificaciones</p>
     </div>
   </div>
+  <!-- Modal de Libros - solo se muestra cuando showBooksModal es true -->
+  <div class="modal" *ngIf="showBooksModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Tus libros</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-books></app-books>
+      </div>
+    </div>
+  </div>
 
-  <div class="preferences">
+  <!-- Preferencias -->
+  <div class="preferences" (click)="openPreferencesModal()">
     <div class="icon-container">
       <i class="bi bi-gear-fill"></i>
     </div>
     <div class="content">
       <p class="title">Preferencias</p>
       <p class="description">Configura tus preferencias</p>
+    </div>
+  </div>
+  <!-- Modal de Preferencias - solo se muestra cuando showPreferencesModal es true -->
+  <div class="modal" *ngIf="showPreferencesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Preferencias</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-preferences></app-preferences>
+      </div>
     </div>
   </div>
 </section>

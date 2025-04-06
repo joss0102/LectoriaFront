@@ -1,1 +1,70 @@
-<p>books works!</p>
+<section class="books-section">
+    <!-- Añadir libro -->
+    <div class="book-card add" (click)="openAddModal()">
+      <div class="icon-container">
+        <i class="bi bi-plus-circle-fill"></i>
+      </div>
+      <div class="content">
+        <p class="title">Añadir libro</p>
+        <p class="description">Agrega un nuevo libro a tu colección</p>
+      </div>
+    </div>
+    <!-- Modal de Añadir libro - solo se muestra cuando showAddModal es true -->
+    <div class="modal" *ngIf="showAddModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Añadir libro</h2>
+          <button class="close-button" (click)="closeAllModals()">×</button>
+        </div>
+        <div class="modal-body">
+          <app-add-form></app-add-form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Eliminar libro -->
+    <div class="book-card delete" (click)="openDeleteModal()">
+      <div class="icon-container">
+        <i class="bi bi-trash-fill"></i>
+      </div>
+      <div class="content">
+        <p class="title">Eliminar libro</p>
+        <p class="description">Elimina libros de tu colección</p>
+      </div>
+    </div>
+    <!-- Modal de Eliminar libro - solo se muestra cuando showDeleteModal es true -->
+    <div class="modal" *ngIf="showDeleteModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Eliminar libro</h2>
+          <button class="close-button" (click)="closeAllModals()">×</button>
+        </div>
+        <div class="modal-body">
+          <app-delete-form></app-delete-form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Tus frases -->
+    <div class="book-card phrases" (click)="openPhrasesModal()">
+      <div class="icon-container">
+        <i class="bi bi-chat-quote-fill"></i>
+      </div>
+      <div class="content">
+        <p class="title">Tus frases</p>
+        <p class="description">Guarda y explora tus citas favoritas</p>
+      </div>
+    </div>
+    <!-- Modal de Tus frases - solo se muestra cuando showPhrasesModal es true -->
+    <div class="modal" *ngIf="showPhrasesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Tus frases</h2>
+          <button class="close-button" (click)="closeAllModals()">×</button>
+        </div>
+        <div class="modal-body">
+          <app-phrases></app-phrases>
+        </div>
+      </div>
+    </div>
+  </section>

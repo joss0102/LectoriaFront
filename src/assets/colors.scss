@@ -7,6 +7,7 @@ $main-night: #707070;
 $header-night: #1a1a1a;
 $secondary-night: #494949;
 $tertiary-night: #929292;
+$quaternary-night: rgba(0, 0, 0, 0.05);
 $NightMode: (
     "main-night": $main-night,
     "header-night": $header-night,
@@ -20,6 +21,7 @@ $header-day: #B4AFA6;
 
 $secondary-day: #bdb5a4;
 $tertiary-day: #6e6b64;
+$quaternary-day: rgba(255, 255, 255, 0);
 
 $DayMode: (
     "main-day": $main-day,
@@ -56,6 +58,7 @@ $theme-colors: map-merge($theme-colors, $general);
     --body-bg: #{$header-night};
     --component-bg: #{$secondary-night};
     --border-color: #{$tertiary-night};
+    --quaternary-color: #{$quaternary-day};
 }
 
 .tema-dia {
@@ -74,6 +77,7 @@ $theme-colors: map-merge($theme-colors, $general);
     --body-bg: #{$header-night};
     --component-bg: #{$secondary-night};
     --border-color: #{$tertiary-night};
+    --quaternary-color: #{$quaternary-night};
 }
 
 // Importar Bootstrap después de definir los colores

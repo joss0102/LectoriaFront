@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Book, ReadingRecord } from '../../models/book-model';
-// La interfaz Book ya está definida en book-model.ts, no la redefinas aquí
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +16,7 @@ export class BookService {
       sinopsis:
         'Tras cumplir una condena de un año de trabajos forzados en las minas de sal de Endovier por sus crímenes, Celaena Sardothien, una asesina de 18 años de edad, es llevada ante el príncipe heredero. El príncipe Dorian le ofrece su libertad con una condición: ella debe actuar como su campeona en un torneo para encontrar un nuevo asesino real.',
       imagen: '/libros/Trono de cristal/covers/Trono de cristal.png',
+      generos: ['Fantasía', 'Juvenil', 'Aventura', 'Alta fantasía'],
       paginasTotales: 432,
       fechaInicio: new Date(2025, 2, 3), // 3 de marzo de 2025
       fechaFin: new Date(2025, 2, 15), // 15 de marzo de 2025
@@ -53,6 +53,7 @@ export class BookService {
       sinopsis:
         'Bryce Quinlan tenía la vida perfecta, trabajando todo el día y de fiesta toda la noche, hasta que un demonio asesinó a sus amigos y la dejó destrozada. Cuando el acusado es liberado, Bryce encuentra un aliado improbable en Hunt Athalar, un ángel caído esclavizado, que la ayudará a cazar al verdadero asesino y vengar la muerte de sus amigos.',
       imagen: '/libros/Ciudad medialuna/covers/Casa de llama y sombra.png',
+      generos: ['Fantasía urbana', 'Romance paranormal', 'Acción'],
       paginasTotales: 384,
       fechaInicio: new Date(2025, 1, 15), // 15 de febrero de 2025
       fechaFin: new Date(2025, 1, 28), // 28 de febrero de 2025
@@ -88,6 +89,7 @@ export class BookService {
       sinopsis:
         'Scarlett Dragna nunca ha abandonado la pequeña isla donde ella y su hermana, Tella, viven con su cruel padre. Ahora, Scarlett está a punto de ver su sueño hecho realidad: asistir a Caraval, el juego mágico y legendario. Pero cuando llega, Tella es secuestrada por Legend, el maestro de ceremonias. Este año, el premio del ganador es encontrar a Tella, y Scarlett tiene solo cinco noches para encontrarla.',
       imagen: '/libros/Caraval/covers/Caraval.png',
+      generos: ['Fantasía', 'Misterio', 'Magia', 'Aventura'],
       paginasTotales: 416,
       fechaInicio: new Date(2025, 3, 2), // 2 de abril de 2025
       fechaFin: null,
@@ -119,6 +121,7 @@ export class BookService {
       sinopsis:
         'Poppy, una Doncella, ha vivido toda su vida en aislamiento mientras aguarda el día de su Ascensión. No sabe que esperar, pero ha oído historias aterradoras sobre lo que ocurre después. Cuando conoce a Hawke, un guardia asignado a su protección, se siente tentada a romper las reglas que han mantenido su existencia a salvo. Pero debajo de la atracción, hay un secreto peligroso que podría destruirlo todo.',
       imagen: '/libros/De sangre y cenizas/covers/De sangre y cenizas.png',
+      generos: ['Fantasía romántica', 'Paranormal', 'Adulto'],
       paginasTotales: 625,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -141,6 +144,7 @@ export class BookService {
       sinopsis:
         'Damen es un guerrero y el legítimo heredero al trono de Akielos. Pero cuando su medio hermano se apodera del poder, Damen es capturado, despojado de su identidad y enviado como esclavo a servir al príncipe de una nación enemiga. Laurent es frío, bello y manipulador, un hombre con quien Damen no puede revelar su verdadera identidad, ya que en ese país, el nombre de Damen es sinónimo de muerte.',
       imagen: '/libros/El principe cautivo/covers/El principe cautivo.png',
+      generos: ['Fantasía', 'LGBTQ+', 'Romance', 'Política'],
       paginasTotales: 465,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -163,6 +167,7 @@ export class BookService {
       sinopsis:
         'En una sociedad divida por sangre, la Roja es la de la gente común y la Plateada es la de los que poseen poderes sobrenaturales. Mare Barrow es una Roja, pero tiene un poder Plateado que no entiende. En una peligrosa corte real, los principios políticos y las rebeldías personales de Mare marcarán su camino, mientras descubre que cualquiera puede traicionar a cualquiera.',
       imagen: '/libros/Empireo/covers/Alas de onix.png',
+      generos: ['Distopía', 'Fantasía', 'Revolución', 'Juvenil'],
       paginasTotales: 510,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -185,6 +190,7 @@ export class BookService {
       sinopsis:
         'Aelin Galathynius ha prometido su lealtad a muchos—a su pueblo, a su príncipe, a su amante y a su amigo. Pero la promesa de Aelin a su tierra está por encima de todo: proteger Terrasen de sus enemigos. Para demostrar esa promesa, debe recuperar la legendaria llave Wyrd de la puerta. Y cuando por fin derrota a los reyes y reinas que envían a sus ejércitos contra ella, se encuentra encadenada en un calabozo, destinada a soportar meses de tortura.',
       imagen: '/libros/Trono de cristal/covers/Reino de cenizas.png',
+      generos: ['Fantasía épica', 'Aventura', 'Alta fantasía'],
       paginasTotales: 578,
       fechaInicio: new Date(2024, 11, 15), // 15 de diciembre de 2024
       fechaFin: new Date(2025, 0, 8), // 8 de enero de 2025
@@ -226,6 +232,7 @@ export class BookService {
       sinopsis:
         'Adeline Reilly, una mujer con un pasado traumático, se encuentra en el radar de un asesino en serie obsesionado con ella. Mientras lucha por sobrevivir y proteger a los que ama, conoce a un hombre misterioso que podría ser su salvación o su perdición. En un juego mortal donde no puede confiar en nadie, Adeline debe decidir quién está realmente de su lado antes de que sea demasiado tarde.',
       imagen: '/libros/Hunting Adeline/covers/Nunca te dejare.png',
+      generos: ['Thriller', 'Romance oscuro', 'Suspense', 'Adulto'],
       paginasTotales: 485,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -248,6 +255,7 @@ export class BookService {
       sinopsis:
         'Feyre, una cazadora de 19 años, mata a un lobo en el bosque y una bestia exige retribución. Arrastrada a una tierra mágica, descubre que su captor no es un animal sino Tamlin, un inmortal que una vez gobernó el mundo feérico. Mientras vive en su estado, sus sentimientos por él se transforman de hostilidad a pasión. Pero una antigua sombra crece sobre las tierras feéricas, y Feyre debe encontrar la manera de detenerla.',
       imagen: '/libros/Acotar/covers/Una corte de niebla y furia.png',
+      generos: ['Fantasía', 'Romance', 'Adaptación de cuento', 'Fae'],
       paginasTotales: 448,
       fechaInicio: new Date(2025, 2, 20), // 20 de marzo de 2025
       fechaFin: null,
@@ -278,6 +286,7 @@ export class BookService {
       sinopsis:
         'En un mundo donde la luna se acerca peligrosamente a la Tierra, Cinder, una joven mecánica y ciborg, se ve envuelta en una lucha intergaláctica y una atracción prohibida con el príncipe Kai. Mientras descubre secretos sobre su pasado misterioso, debe enfrentarse a una reina lunar despiadada y a una plaga mortal que está devastando la población de la Tierra.',
       imagen: '/libros/La Caida Lunar/covers/Hasta que caiga la luna.png',
+      generos: ['Ciencia ficción', 'Distopía', 'Adaptación de cuento', 'Juvenil'],
       paginasTotales: 320,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -300,6 +309,7 @@ export class BookService {
       sinopsis:
         'Jude, una mortal, ha crecido en la traicionera Corte Suprema de Faerie, despreciada por su condición humana. Para ganar un lugar, debe desafiar al príncipe Cardan, hijo más joven y cruel del Alto Rey. Pero cuando la traición amenaza a la corte, Jude se ve envuelta en intrigas y engaños, descubriendo su propia capacidad para el derramamiento de sangre. Mientras luchas, civiles y coronas comienzan, ella debe tomar decisiones peligrosas.',
       imagen: '/libros/Los habitantes del aire/covers/El rey malvado.png',
+      generos: ['Fantasía', 'Intriga política', 'Fae', 'Juvenil'],
       paginasTotales: 530,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -322,6 +332,7 @@ export class BookService {
       sinopsis:
         'En un mundo donde casi todos poseen algún tipo de poder sobrenatural, Paige Olmstead es una de las raras personas sin habilidades. Cuando su ciudad es atacada y su familia es secuestrada, Paige debe unir fuerzas con un enigmático extraño que podría ayudarla a descubrir que lo que siempre consideró una debilidad puede ser su mayor fortaleza.',
       imagen: '/libros/Powerless/covers/Powerless.png',
+      generos: ['Fantasía urbana', 'Superhéroes', 'Romance', 'Juvenil'],
       paginasTotales: 395,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -344,6 +355,7 @@ export class BookService {
       sinopsis:
         'Han pasado veintisiete años desde que salió el último sol. Durante casi tres décadas, los vampiros han saqueado la tierra, construyendo su eterno reino bajo el perpetuo e inquebrantable crepúsculo. Gabriel de León, medio vampiro y último de los plateados, está encarcelado por la iglesia. Cuenta su historia, desde su entrenamiento en la Orden de San Miguel hasta las leyendas de los Tres Reyes y la Última Cruzada contra la Reina Oscura.',
       imagen: '/libros/El imperio del vampiro/covers/El imperio del vampiro.png',
+      generos: ['Fantasía oscura', 'Horror', 'Vampiros', 'Adulto'],
       paginasTotales: 736,
       fechaInicio: new Date(2025, 0, 10), // 10 de enero de 2025
       fechaFin: new Date(2025, 1, 5), // 5 de febrero de 2025
@@ -386,6 +398,7 @@ export class BookService {
       sinopsis:
         'En la ciudad de Elendor, donde dioses y monstruos caminan entre mortales, Azrael es un cazador de reliquias malditas y sirviente de la Diosa de la Muerte. Cuando una antigua reliquia desaparece del templo sagrado, Azrael es enviado a recuperarla antes de que caiga en manos equivocadas. Su búsqueda lo llevará a enfrentarse a enemigos sobrenaturales y a descubrir secretos sobre su propio origen divino.',
       imagen: '/libros/Dioses y monstruos/covers/El libro de azrael.png',
+      generos: ['Fantasía oscura', 'Mitología', 'Aventura', 'Adulto'],
       paginasTotales: 680,
       estado: 'no-iniciado',
       paginasLeidas: 0,
@@ -408,6 +421,7 @@ export class BookService {
       sinopsis:
         'Cuando Alma conoce a Daniel en la universidad, siente una conexión inexplicable e inmediata con él. Lo que empieza como una amistad pronto se convierte en algo más profundo, mientras ambos luchan contra sus propios demonios personales. Pero Daniel guarda un secreto que podría destruir todo lo que están construyendo juntos, un secreto que tiene que ver con el trágico pasado de Alma y una promesa hecha muchas vidas atrás.',
       imagen: '/libros/Alma/covers/Mi alma es tuya.png',
+      generos: ['Romance paranormal', 'Reencarnación', 'Contemporáneo', 'New Adult'],
       paginasTotales: 350,
       estado: 'no-iniciado',
       paginasLeidas: 0,

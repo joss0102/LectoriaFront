@@ -1,0 +1,183 @@
+<div class="your-books-container">
+    <div class="header-section">
+      <h1 class="main-title">Tu Biblioteca</h1>
+      <p class="main-description">Explora todos tus libros en un solo lugar. Haz clic en cualquier libro para ver más detalles.</p>
+      
+      <!-- Buscador -->
+      <div class="search-container">
+        <div class="search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            (input)="searchBooks()"
+            placeholder="Buscar por título, autor o saga..." 
+            class="search-input"
+          >
+          <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn">×</button>
+          <div class="search-icon">🔍</div>
+        </div>
+        <div class="search-results" *ngIf="searchQuery">
+          <span *ngIf="filteredBooks.length === 0">No se encontraron resultados</span>
+          <span *ngIf="filteredBooks.length === 1">1 libro encontrado</span>
+          <span *ngIf="filteredBooks.length > 1">{{filteredBooks.length}} libros encontrados</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Libros grid -->
+    <div class="books-grid">
+      <div class="book-card" *ngFor="let book of filteredBooks" (click)="openBookDetails(book)">
+        <div class="book-cover">
+          <img [src]="book.imagen" [alt]="book.titulo">
+          <div class="book-status" [ngClass]="getStatusClass(book.estado)">
+            {{ getStatusText(book.estado) }}
+          </div>
+        </div>
+        <div class="book-info">
+          <h3 class="book-title">{{ book.titulo }}</h3>
+          <p class="book-author">{{ book.autor }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mensaje si no hay libros -->
+    <div class="no-books" *ngIf="allBooks.length === 0">
+      <div class="empty-icon">📚</div>
+      <h2>No hay libros en tu biblioteca</h2>
+      <p>¡Comienza a añadir libros para crear tu biblioteca personal!</p>
+    </div>
+    
+    <!-- Mensaje si no hay resultados de búsqueda -->
+    <div class="no-search-results" *ngIf="allBooks.length > 0 && filteredBooks.length === 0">
+      <div class="empty-icon">🔍</div>
+      <h2>No se encontraron resultados</h2>
+      <p>Intenta con otra búsqueda o <button class="reset-search" (click)="clearSearch()">ver todos los libros</button></p>
+    </div>
+    
+    <!-- Modal de detalles del libro -->
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+      <div class="modal-content" (click)="preventClose($event)" *ngIf="selectedBook">
+        <button class="close-btn" (click)="closeModal()">×</button>
+        
+        <div class="modal-header">
+          <div class="book-cover-detail">
+            <img [src]="selectedBook.imagen" [alt]="selectedBook.titulo">
+          </div>
+          <div class="book-details">
+            <h2 class="book-title">{{ selectedBook.titulo }}</h2>
+            <p class="book-author">{{ selectedBook.autor }}</p>
+            
+            <div class="book-meta">
+              <div class="meta-item" *ngIf="selectedBook.saga">
+                <span class="meta-label">Saga:</span>
+                <span class="meta-value">{{ selectedBook.saga }}</span>
+              </div>
+              
+              <div class="meta-item">
+                <span class="meta-label">Estado:</span>
+                <span class="meta-value status-badge" [ngClass]="getStatusClass(selectedBook.estado)">
+                  {{ getStatusText(selectedBook.estado) }}
+                </span>
+              </div>
+              
+              <div class="meta-item" *ngIf="selectedBook.valoracion">
+                <span class="meta-label">Valoración:</span>
+                <span class="meta-value rating">
+                  <span class="star" *ngFor="let star of [1,2,3,4,5]">
+                    {{ (star <= selectedBook.valoracion!) ? '★' : '☆' }}
+                  </span>
+                  <span class="rating-number">({{ selectedBook.valoracion }})</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="book-stats" *ngIf="selectedBook.estado === 'finalizado' || selectedBook.estado === 'en-progreso'">
+          <div class="stat-item">
+            <div class="stat-value">{{ selectedBook.paginasTotales }}</div>
+            <div class="stat-label">Páginas totales</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-value">{{ selectedBook.paginasLeidas }}</div>
+            <div class="stat-label">Páginas leídas</div>
+          </div>
+          
+          <div class="stat-item" *ngIf="selectedBook.progreso !== undefined">
+            <div class="stat-value">{{ selectedBook.progreso }}%</div>
+            <div class="stat-label">Progreso</div>
+          </div>
+          
+          <div class="stat-item" *ngIf="selectedBook.fechaInicio">
+            <div class="stat-value">{{ formatDate(selectedBook.fechaInicio) }}</div>
+            <div class="stat-label">Fecha inicio</div>
+          </div>
+          
+          <div class="stat-item" *ngIf="selectedBook.fechaFin">
+            <div class="stat-value">{{ formatDate(selectedBook.fechaFin) }}</div>
+            <div class="stat-label">Fecha fin</div>
+          </div>
+          
+          <div class="stat-item" *ngIf="selectedBook.fechaInicio && selectedBook.fechaFin">
+            <div class="stat-value">{{ calculateReadingDays(selectedBook) }}</div>
+            <div class="stat-label">Días de lectura</div>
+          </div>
+        </div>
+        
+        <div class="book-content">
+          <div class="content-section">
+            <h3 class="section-title">Sinopsis</h3>
+            <p class="book-synopsis">{{ selectedBook.sinopsis }}</p>
+          </div>
+          
+          <div class="content-section" *ngIf="selectedBook.frases && selectedBook.frases.length > 0">
+            <h3 class="section-title">Frases destacadas</h3>
+            <div class="phrases-list">
+              <div class="phrase-item" *ngFor="let phrase of selectedBook.frases">
+                <div class="quote-marks">"</div>
+                <p>{{ phrase }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="content-section" *ngIf="selectedBook.anotaciones && selectedBook.anotaciones.length > 0">
+            <h3 class="section-title">Anotaciones</h3>
+            <div class="notes-list">
+              <div class="note-item" *ngFor="let note of selectedBook.anotaciones">
+                <div class="note-pin">📌</div>
+                <p>{{ note }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="content-section" *ngIf="selectedBook.registroLectura && selectedBook.registroLectura.length > 0">
+            <h3 class="section-title">Registro de lectura</h3>
+            <div class="reading-log">
+              <div class="log-header">
+                <span class="log-cell">Fecha</span>
+                <span class="log-cell">Páginas</span>
+                <span class="log-cell">Tiempo (min)</span>
+              </div>
+              <div class="log-row" *ngFor="let record of selectedBook.registroLectura">
+                <span class="log-cell">{{ formatDate(record.fecha) }}</span>
+                <span class="log-cell">{{ record.paginasLeidas }}</span>
+                <span class="log-cell">{{ record.tiempo || 'N/A' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button class="action-btn edit-btn">
+            <span class="action-icon">✎</span>
+            Editar libro
+          </button>
+          <button class="action-btn" [ngClass]="{'add-progress': selectedBook.estado !== 'finalizado', 'finalizar': selectedBook.estado === 'en-progreso'}">
+            <span class="action-icon">{{ selectedBook.estado === 'en-progreso' ? '✓' : '+' }}</span>
+            {{ selectedBook.estado === 'en-progreso' ? 'Marcar como finalizado' : 'Añadir progreso' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

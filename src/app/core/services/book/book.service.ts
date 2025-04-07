@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Book,ReadingRecord } from '../../models/book-model';
+import { Book, ReadingRecord } from '../../models/book-model';
 // La interfaz Book ya está definida en book-model.ts, no la redefinas aquí
 
 @Injectable({
@@ -12,10 +12,10 @@ export class BookService {
   private books: Book[] = [
     {
       autor: 'Sarah J. Maas',
-      saga: 'Trono de Cristal',
+      saga: 'Trono de cristal',
       titulo: 'Trono de Cristal',
       sinopsis:
-        'Tras cumplir una condena de un año de trabajos forzados en las minas de sal de Endovier por sus crímenes, Celaena Sardothien, una asesina de 18 años de edad, es llevada ante el príncipe heredero. El príncipe Dorian le ofrece su libertad con una condición: ella debe actuar como su defensora en un torneo para encontrar un nuevo asesino real.',
+        'Tras cumplir una condena de un año de trabajos forzados en las minas de sal de Endovier por sus crímenes, Celaena Sardothien, una asesina de 18 años de edad, es llevada ante el príncipe heredero. El príncipe Dorian le ofrece su libertad con una condición: ella debe actuar como su campeona en un torneo para encontrar un nuevo asesino real.',
       imagen: '/libros/Trono de cristal/covers/Trono de cristal.png',
       paginasTotales: 432,
       fechaInicio: new Date(2025, 2, 3), // 3 de marzo de 2025
@@ -34,14 +34,24 @@ export class BookService {
         { fecha: new Date(2025, 2, 13), paginasLeidas: 45, tiempo: 60 },
         { fecha: new Date(2025, 2, 14), paginasLeidas: 40, tiempo: 50 },
         { fecha: new Date(2025, 2, 15), paginasLeidas: 15, tiempo: 20 }
+      ],
+      anotaciones: [
+        "Celaena es un personaje fascinante, mezcla de arrogancia y vulnerabilidad",
+        "El mundo de Erilea tiene una interesante historia política",
+        "Los personajes secundarios son sorprendentemente complejos"
+      ],
+      frases: [
+        "Mi nombre es Celaena Sardothien. Pero no será lo único que sepan de mí.",
+        "Las bibliotecas siempre habían sido su paraíso en la Tierra.",
+        "Algún día, las puertas del infierno parecerán amables comparadas con lo que te haré."
       ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Stephanie Garber',
       saga: 'Ciudad medialuna',
       titulo: 'Casa de llama y sombra',
       sinopsis:
-        'Celaena Sardothien ha ganado el torneo real y se ha convertido en la campeona del rey, pero su lealtad no pertenece al trono. Mientras realiza misiones para el monarca, descubre una conspiración que amenaza el reino entero. Celaena debe elegir entre su libertad y luchar por un futuro mejor para el reino.',
+        'Bryce Quinlan tenía la vida perfecta, trabajando todo el día y de fiesta toda la noche, hasta que un demonio asesinó a sus amigos y la dejó destrozada. Cuando el acusado es liberado, Bryce encuentra un aliado improbable en Hunt Athalar, un ángel caído esclavizado, que la ayudará a cazar al verdadero asesino y vengar la muerte de sus amigos.',
       imagen: '/libros/Ciudad medialuna/covers/Casa de llama y sombra.png',
       paginasTotales: 384,
       fechaInicio: new Date(2025, 1, 15), // 15 de febrero de 2025
@@ -59,14 +69,24 @@ export class BookService {
         { fecha: new Date(2025, 1, 24), paginasLeidas: 58, tiempo: 75 },
         { fecha: new Date(2025, 1, 26), paginasLeidas: 52, tiempo: 70 },
         { fecha: new Date(2025, 1, 28), paginasLeidas: 36, tiempo: 50 }
+      ],
+      anotaciones: [
+        "Bryce es una protagonista refrescante y diferente a otros personajes de SJM",
+        "La mitología urbana está muy bien construida",
+        "Las escenas de acción son intensas y bien descritas"
+      ],
+      frases: [
+        "A través de amor, todas las cosas son posibles.",
+        "La verdad siempre sale a la luz.",
+        "Cuando encuentras algo o a alguien por quien vale la pena luchar, luchas, y nunca lo sueltas."
       ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Stephanie Garber',
       saga: 'Caraval',
       titulo: 'Caraval',
       sinopsis:
-        'Celaena Sardothien ha aceptado su identidad como Aelin Galathynius, reina de Terrasen. Viaja a Wendlyn para encontrar respuestas y entrenar con Rowan, un guerrero fae inmortal. Mientras tanto, fuerzas oscuras se están reuniendo para amenazar todo lo que ama, y ella debe aprender a controlar sus poderes para proteger su reino.',
+        'Scarlett Dragna nunca ha abandonado la pequeña isla donde ella y su hermana, Tella, viven con su cruel padre. Ahora, Scarlett está a punto de ver su sueño hecho realidad: asistir a Caraval, el juego mágico y legendario. Pero cuando llega, Tella es secuestrada por Legend, el maestro de ceremonias. Este año, el premio del ganador es encontrar a Tella, y Scarlett tiene solo cinco noches para encontrarla.',
       imagen: '/libros/Caraval/covers/Caraval.png',
       paginasTotales: 416,
       fechaInicio: new Date(2025, 3, 2), // 2 de abril de 2025
@@ -80,50 +100,90 @@ export class BookService {
         { fecha: new Date(2025, 3, 5), paginasLeidas: 100, tiempo: 45 },
         { fecha: new Date(2025, 3, 7), paginasLeidas: 39, tiempo: 50 },
         { fecha: new Date(2025, 3, 8), paginasLeidas: 33, tiempo: 40 }
+      ],
+      anotaciones: [
+        "El ambiente circense y mágico es cautivador",
+        "Los giros de la trama son inesperados",
+        "La relación entre las hermanas es el verdadero corazón del libro"
+      ],
+      frases: [
+        "Recuerda, es solo un juego.",
+        "Cada persona tiene un sueño diferente, una historia diferente.",
+        "Lo que sucede en Caraval se queda en Caraval."
       ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Jennifer L. Armentrout',
       saga: 'De sangre y cenizas',
       titulo: 'De sangre y cenizas',
       sinopsis:
-        'Aelin Galathynius ha regresado a Adarlan para reclamar su trono y vengar a su pueblo. Pero antes, debe reunir antiguos aliados y formar nuevas alianzas para enfrentar al rey oscuro que amenaza su tierra natal. En el proceso, descubre secretos que podrían cambiar el curso de la guerra.',
+        'Poppy, una Doncella, ha vivido toda su vida en aislamiento mientras aguarda el día de su Ascensión. No sabe que esperar, pero ha oído historias aterradoras sobre lo que ocurre después. Cuando conoce a Hawke, un guardia asignado a su protección, se siente tentada a romper las reglas que han mantenido su existencia a salvo. Pero debajo de la atracción, hay un secreto peligroso que podría destruirlo todo.',
       imagen: '/libros/De sangre y cenizas/covers/De sangre y cenizas.png',
       paginasTotales: 625,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "El sistema de castas y el mundo ficticio tienen muchas capas",
+        "La protagonista Poppy es interesante por su posición de vulnerabilidad y poder a la vez",
+        "El romance tiene elementos de 'enemigos a amantes' que promete ser intenso"
+      ],
+      frases: [
+        "A veces, el corazón reconoce lo que la mente rechaza.",
+        "El miedo es una emoción necesaria. Te mantiene vivo.",
+        "Algunos secretos son demasiado peligrosos para ser revelados."
+      ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'C.S. Pacat',
       saga: 'El principe cautivo',
       titulo: 'El principe cautivo',
       sinopsis:
-        'El reino está al borde de la guerra, y Aelin ha sido capturada por la reina de las hadas. Sus amigos están dispersos, cada uno enfrentando sus propias batallas. La única esperanza para su liberación es forjar alianzas improbables y descubrir la clave para derrotar a un enemigo ancestral antes de que sea demasiado tarde.',
+        'Damen es un guerrero y el legítimo heredero al trono de Akielos. Pero cuando su medio hermano se apodera del poder, Damen es capturado, despojado de su identidad y enviado como esclavo a servir al príncipe de una nación enemiga. Laurent es frío, bello y manipulador, un hombre con quien Damen no puede revelar su verdadera identidad, ya que en ese país, el nombre de Damen es sinónimo de muerte.',
       imagen: '/libros/El principe cautivo/covers/El principe cautivo.png',
       paginasTotales: 465,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "La dinámica de poder entre los protagonistas es fascinante",
+        "La construcción del mundo y la política entre reinos es compleja y bien desarrollada",
+        "El autor maneja magistralmente la tensión entre los personajes principales"
+      ],
+      frases: [
+        "Un esclavo no tiene poder excepto lo que le concede un amo generoso.",
+        "La política es como un juego de mesa; quienes mejor entienden sus reglas rara vez son quienes mueven las piezas.",
+        "Las lealtades, como las promesas, son fáciles de romper cuando se hacen bajo coacción."
+      ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Victoria Aveyard',
       saga: 'Empireo',
       titulo: 'Alas de onix',
       sinopsis:
-        'Aelin y sus compañeros luchan contra el tiempo mientras el mundo se precipita hacia la oscuridad. Con los Valg amenazando con conquistarlo todo, la única esperanza es encontrar y utilizar una antigua llave que podría salvar a los reinos o condenarlos. Las lealtades serán probadas y se formarán nuevos lazos en esta penúltima entrega.',
+        'En una sociedad divida por sangre, la Roja es la de la gente común y la Plateada es la de los que poseen poderes sobrenaturales. Mare Barrow es una Roja, pero tiene un poder Plateado que no entiende. En una peligrosa corte real, los principios políticos y las rebeldías personales de Mare marcarán su camino, mientras descubre que cualquiera puede traicionar a cualquiera.',
       imagen: '/libros/Empireo/covers/Alas de onix.png',
       paginasTotales: 510,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "La división de clases basada en la sangre refleja problemas sociales reales",
+        "El sistema de magia basado en habilidades elementales es muy original",
+        "La protagonista parece tener un arco de desarrollo prometedor como revolucionaria"
+      ],
+      frases: [
+        "En un mundo dividido por sangre, ¿de qué lado estás?",
+        "La revolución comienza con una chispa, pero termina en un incendio.",
+        "La diferencia entre la supervivencia y el poder es saber cuándo usar cada uno."
+      ]
     },
     {
       autor: 'Sarah J. Maas',
-      saga: 'Trono de Cristal',
+      saga: 'Trono de cristal',
       titulo: 'Reino de Cenizas',
       sinopsis:
-        'En la épica conclusión de la serie, Aelin arriesgará todo para salvar su mundo, incluso mientras enfrenta cadenas y torturas. Sus amigos y aliados están preparados para la batalla final contra un enemigo que amenaza con destruir no solo su reino, sino todos los mundos. El destino de todos descansa sobre sus hombros.',
+        'Aelin Galathynius ha prometido su lealtad a muchos—a su pueblo, a su príncipe, a su amante y a su amigo. Pero la promesa de Aelin a su tierra está por encima de todo: proteger Terrasen de sus enemigos. Para demostrar esa promesa, debe recuperar la legendaria llave Wyrd de la puerta. Y cuando por fin derrota a los reyes y reinas que envían a sus ejércitos contra ella, se encuentra encadenada en un calabozo, destinada a soportar meses de tortura.',
       imagen: '/libros/Trono de cristal/covers/Reino de cenizas.png',
       paginasTotales: 578,
       fechaInicio: new Date(2024, 11, 15), // 15 de diciembre de 2024
@@ -146,26 +206,47 @@ export class BookService {
         { fecha: new Date(2025, 0, 4), paginasLeidas: 47, tiempo: 65 },
         { fecha: new Date(2025, 0, 6), paginasLeidas: 38, tiempo: 50 },
         { fecha: new Date(2025, 0, 8), paginasLeidas: 12, tiempo: 20 }
+      ],
+      anotaciones: [
+        "El final épico que la saga merece",
+        "Los personajes secundarios tienen arcos narrativos increíbles",
+        "Las escenas de batalla son cinematográficas",
+        "El desarrollo del romance entre Aelin y Rowan es perfecto"
+      ],
+      frases: [
+        "Recuerda que toda la oscuridad del mundo no puede apagar la luz de una sola vela.",
+        "El mundo seguirá girando, incluso si no estamos aquí para verlo.",
+        "Para lo que sea que venga después, para quien venga después, no dejaremos nada salvo un mundo mejor."
       ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'H.D. Carlton',
       saga: 'Hunting Adeline',
       titulo: 'Nunca te dejare',
       sinopsis:
-        'Feyre, una cazadora de 19 años, mata a un lobo en el bosque y una bestia exige retribución. Arrastrada a una tierra mágica, descubre que su captor no es un animal sino Tamlin, un inmortal que una vez gobernó el mundo feérico. Mientras vive en su estado, sus sentimientos por él se transforman de hostilidad a pasión. Pero una antigua sombra crece sobre las tierras feéricas, y Feyre debe encontrar la manera de detenerla.',
+        'Adeline Reilly, una mujer con un pasado traumático, se encuentra en el radar de un asesino en serie obsesionado con ella. Mientras lucha por sobrevivir y proteger a los que ama, conoce a un hombre misterioso que podría ser su salvación o su perdición. En un juego mortal donde no puede confiar en nadie, Adeline debe decidir quién está realmente de su lado antes de que sea demasiado tarde.',
       imagen: '/libros/Hunting Adeline/covers/Nunca te dejare.png',
       paginasTotales: 485,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "La trama parece combinar elementos de thriller psicológico y romance oscuro",
+        "El tema de la obsesión y el trauma promete ser abordado con profundidad",
+        "La atmósfera de suspense y peligro constante suena intrigante"
+      ],
+      frases: [
+        "El miedo es la emoción más honesta que existe.",
+        "A veces lo que más nos asusta no es lo que acecha en las sombras, sino lo que sentimos por ello.",
+        "Nunca prometas por siempre a alguien que conoces desde hace un instante."
+      ]
     },
     {
       autor: 'Sarah J. Maas',
-      saga: 'Una Corte de Rosas y Espinas',
+      saga: 'Acotar',
       titulo: 'Una Corte de Rosas y Espinas',
       sinopsis:
-        'Feyre ha sobrevivido a Bajo la Montaña, pero a un costo terrible. Aunque ahora tiene poderes de alto fae, su corazón permanece humano, y no puede olvidar las atrocidades que tuvo que cometer para salvar al pueblo de Tamlin. Tampoco puede olvidar el pacto que hizo con Rhysand, el Alto Lord de la Corte Nocturna, quien ahora la reclama como parte del trato.',
+        'Feyre, una cazadora de 19 años, mata a un lobo en el bosque y una bestia exige retribución. Arrastrada a una tierra mágica, descubre que su captor no es un animal sino Tamlin, un inmortal que una vez gobernó el mundo feérico. Mientras vive en su estado, sus sentimientos por él se transforman de hostilidad a pasión. Pero una antigua sombra crece sobre las tierras feéricas, y Feyre debe encontrar la manera de detenerla.',
       imagen: '/libros/Acotar/covers/Una corte de niebla y furia.png',
       paginasTotales: 448,
       fechaInicio: new Date(2025, 2, 20), // 20 de marzo de 2025
@@ -178,48 +259,88 @@ export class BookService {
         { fecha: new Date(2025, 2, 22), paginasLeidas: 28, tiempo: 40 },
         { fecha: new Date(2025, 2, 25), paginasLeidas: 30, tiempo: 40 },
         { fecha: new Date(2025, 2, 28), paginasLeidas: 22, tiempo: 30 }
+      ],
+      anotaciones: [
+        "Las descripciones de la Corte de Primavera son preciosas",
+        "La transformación de Feyre a lo largo del libro es fascinante",
+        "La maldición tiene matices interesantes de La Bella y la Bestia"
+      ],
+      frases: [
+        "Hay buenas personas en el mundo. Y cuando las encuentras, hay que aferrarse a ellas.",
+        "Sea lo que sea que te ocurra, sea lo que sea que te enfrentes, quiero que recuerdes que eres más fuerte que ellos.",
+        "No me importa lo que dice la ley. No me importa lo que dice tu compromiso."
       ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Marissa Meyer',
       saga: 'La Caida Lunar',
       titulo: 'Hasta que caiga la luna',
       sinopsis:
-        'Una novela corta que sigue a Feyre y Rhysand mientras navegan por los desafíos posteriores a la guerra. Juntos enfrentan el proceso de reconstrucción y ayudan a sanar las heridas del conflicto, mientras también tratan de encontrar momentos de paz en un mundo que aún está cicatrizando.',
+        'En un mundo donde la luna se acerca peligrosamente a la Tierra, Cinder, una joven mecánica y ciborg, se ve envuelta en una lucha intergaláctica y una atracción prohibida con el príncipe Kai. Mientras descubre secretos sobre su pasado misterioso, debe enfrentarse a una reina lunar despiadada y a una plaga mortal que está devastando la población de la Tierra.',
       imagen: '/libros/La Caida Lunar/covers/Hasta que caiga la luna.png',
       paginasTotales: 320,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "La combinación de ciencia ficción con elementos de cuento de hadas suena prometedora",
+        "La protagonista ciborg ofrece una perspectiva única sobre la humanidad",
+        "El conflicto entre la Tierra y la Luna parece tener capas políticas interesantes"
+      ],
+      frases: [
+        "La tecnología puede reparar un corazón roto, pero no puede darle propósito.",
+        "Las estrellas conocen todos nuestros secretos, pero nunca los revelan.",
+        "Somos más que la suma de nuestras partes, sean de carne o de metal."
+      ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Holly Black',
       saga: 'Los habitantes del aire',
       titulo: 'El rey malvado',
       sinopsis:
-        'La historia sigue las consecuencias de la guerra contra Hybern. Nesta Archeron lucha con la pérdida y su transformación forzada en inmortal. A regañadientes, acepta entrenarse con Cassian en la Casa del Viento, donde debe enfrentar sus demonios internos mientras una nueva amenaza surge en el horizonte.',
+        'Jude, una mortal, ha crecido en la traicionera Corte Suprema de Faerie, despreciada por su condición humana. Para ganar un lugar, debe desafiar al príncipe Cardan, hijo más joven y cruel del Alto Rey. Pero cuando la traición amenaza a la corte, Jude se ve envuelta en intrigas y engaños, descubriendo su propia capacidad para el derramamiento de sangre. Mientras luchas, civiles y coronas comienzan, ella debe tomar decisiones peligrosas.',
       imagen: '/libros/Los habitantes del aire/covers/El rey malvado.png',
       paginasTotales: 530,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "El mundo de Faerie parece oscuro, cruel y fascinante",
+        "La dinámica entre mortales e inmortales explora temas de poder y vulnerabilidad",
+        "El personaje de Jude suena como una antiheroína compleja y ambigua moralmente"
+      ],
+      frases: [
+        "Si no puedo ser más fuerte que ellos, seré más astuta.",
+        "La mayoría de la gente lucha para ser extraordinaria, pero en Faerie, lucho por ser ordinaria.",
+        "Para engañar a un mentiroso, debes convertirte en uno mejor."
+      ]
     },
     {
-      autor: 'Sarah J. Maas',
+      autor: 'Lauren Roberts',
       saga: 'Powerless',
       titulo: 'Powerless',
       sinopsis:
-        'Feyre ha regresado a la Corte de Primavera, decidida a reunir información sobre los planes de Tamlin y del rey invasor que amenaza con destruir Prythian. Pero para hacerlo, debe jugar un juego mortal de engaño. Un solo error podría condenar no solo a Feyre, sino a todo su mundo.',
+        'En un mundo donde casi todos poseen algún tipo de poder sobrenatural, Paige Olmstead es una de las raras personas sin habilidades. Cuando su ciudad es atacada y su familia es secuestrada, Paige debe unir fuerzas con un enigmático extraño que podría ayudarla a descubrir que lo que siempre consideró una debilidad puede ser su mayor fortaleza.',
       imagen: '/libros/Powerless/covers/Powerless.png',
       paginasTotales: 395,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "El concepto de una protagonista sin poderes en un mundo de superpoderes es interesante",
+        "Parece explorar temas de identidad y autoestima a través de la metáfora de los poderes",
+        "Promete una historia de superación personal y descubrimiento interior"
+      ],
+      frases: [
+        "A veces el mayor poder es saber cuándo no usarlo.",
+        "Lo que te hace diferente es lo que te hace especial, incluso cuando esa diferencia parece una desventaja.",
+        "El verdadero valor no está en tener habilidades, sino en lo que haces con lo que tienes."
+      ]
     },
     {
       autor: 'Jay Kristoff',
-      saga: 'El Imperio del Vampiro',
-      titulo: 'El Imperio del Vampiro',
+      saga: 'El imperio del vampiro',
+      titulo: 'El Imperio del vampiro',
       sinopsis:
         'Han pasado veintisiete años desde que salió el último sol. Durante casi tres décadas, los vampiros han saqueado la tierra, construyendo su eterno reino bajo el perpetuo e inquebrantable crepúsculo. Gabriel de León, medio vampiro y último de los plateados, está encarcelado por la iglesia. Cuenta su historia, desde su entrenamiento en la Orden de San Miguel hasta las leyendas de los Tres Reyes y la Última Cruzada contra la Reina Oscura.',
       imagen: '/libros/El imperio del vampiro/covers/El imperio del vampiro.png',
@@ -245,6 +366,17 @@ export class BookService {
         { fecha: new Date(2025, 1, 1), paginasLeidas: 52, tiempo: 65 },
         { fecha: new Date(2025, 1, 3), paginasLeidas: 58, tiempo: 70 },
         { fecha: new Date(2025, 1, 5), paginasLeidas: 43, tiempo: 50 }
+      ],
+      anotaciones: [
+        "La estructura de la narración es brillante, mezclando presente y pasado",
+        "El sistema de magia de la sangre es único y bien desarrollado",
+        "Las escenas de acción son brutales y gráficas",
+        "La amistad entre Gabriel y Aaron es el corazón emocional del libro"
+      ],
+      frases: [
+        "La fe, como el amor, sigue siendo fe, incluso en la oscuridad.",
+        "La muerte es solo el comienzo. Y los dioses saben que estoy listo para comenzar.",
+        "Luz por la noche, esperanza en la oscuridad, nunca dejes que se apague la llama."
       ]
     },
     {
@@ -252,24 +384,44 @@ export class BookService {
       saga: 'Dioses y monstruos',
       titulo: 'El libro de azrael',
       sinopsis:
-        'Gabriel de León continúa su relato desde la prisión, narrando su búsqueda del Grial de Sangre. Mientras el ejército de la Reina Oscura se mueve inexorablemente hacia el último bastión de la humanidad, Gabriel y sus compañeros se adentran en territorios cada vez más peligrosos, enfrentándose a horrores inimaginables y sacrificios imposibles.',
+        'En la ciudad de Elendor, donde dioses y monstruos caminan entre mortales, Azrael es un cazador de reliquias malditas y sirviente de la Diosa de la Muerte. Cuando una antigua reliquia desaparece del templo sagrado, Azrael es enviado a recuperarla antes de que caiga en manos equivocadas. Su búsqueda lo llevará a enfrentarse a enemigos sobrenaturales y a descubrir secretos sobre su propio origen divino.',
       imagen: '/libros/Dioses y monstruos/covers/El libro de azrael.png',
       paginasTotales: 680,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "El estilo narrativo de Kristoff promete ser oscuro y poético como en sus obras anteriores",
+        "La mitología propia del autor siempre es rica y compleja",
+        "Espero que tenga la misma mezcla de violencia gráfica y belleza que caracteriza sus otros libros"
+      ],
+      frases: [
+        "La muerte no es el final del camino, sino sólo un desvío hacia otro destino.",
+        "Los dioses no crean monstruos; simplemente nos dan los medios para convertirnos en ellos.",
+        "En un mundo de dioses y monstruos, la línea entre héroe y villano es tan fina como el filo de una daga."
+      ]
     },
     {
       autor: 'Arancha Abad',
-      saga: '',
+      saga: 'Alma',
       titulo: 'Mi Alma es Tuya',
       sinopsis:
-        'Luna, una joven con un pasado oscuro, vive con su hermana gemela en un pequeño pueblo. Su vida cambia cuando conoce a Ethan, un chico misterioso con quien establece una conexión inmediata. Pero Ethan esconde un secreto sobrenatural que pondrá a prueba su relación y cambiará para siempre la vida de Luna, quien descubrirá que está más conectada con el mundo sobrenatural de lo que jamás hubiera imaginado.',
+        'Cuando Alma conoce a Daniel en la universidad, siente una conexión inexplicable e inmediata con él. Lo que empieza como una amistad pronto se convierte en algo más profundo, mientras ambos luchan contra sus propios demonios personales. Pero Daniel guarda un secreto que podría destruir todo lo que están construyendo juntos, un secreto que tiene que ver con el trágico pasado de Alma y una promesa hecha muchas vidas atrás.',
       imagen: '/libros/Alma/covers/Mi alma es tuya.png',
       paginasTotales: 350,
       estado: 'no-iniciado',
       paginasLeidas: 0,
-      progreso: 0
+      progreso: 0,
+      anotaciones: [
+        "Parece explorar el concepto de almas gemelas y conexiones a través del tiempo",
+        "La mezcla de romance contemporáneo con elementos sobrenaturales suena interesante",
+        "El tema de los secretos del pasado que afectan el presente es siempre atrapante"
+      ],
+      frases: [
+        "Hay personas que conoces en un instante pero sientes como si las hubieras conocido toda la vida.",
+        "El destino no es una cuestión de casualidad, es una cuestión de elección.",
+        "A veces los secretos que guardamos para proteger a otros terminan haciendo más daño que la verdad."
+      ]
     }
   ];
 

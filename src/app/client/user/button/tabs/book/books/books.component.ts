@@ -3,11 +3,24 @@ import { AddFormComponent } from "../add/add-form/add-form.component";
 import { DeleteFormComponent } from '../delete/delete-form/delete-form.component';
 import { PhrasesComponent } from "../phrases/phrases/phrases.component";
 import { CommonModule } from '@angular/common';
+import { CalificationsComponent } from "../califications/califications.component";
+import { ImagesComponent } from "../images/images.component";
+import { NotesComponent } from "../notes/notes.component";
+import { YourBooksComponent } from "../your-books/your-books.component";
 
 @Component({
   selector: 'app-books',
   standalone: true,
-  imports: [AddFormComponent, DeleteFormComponent, PhrasesComponent, CommonModule],
+  imports: [
+    CommonModule, 
+    AddFormComponent, 
+    DeleteFormComponent, 
+    PhrasesComponent, 
+    CalificationsComponent, 
+    ImagesComponent, 
+    NotesComponent, 
+    YourBooksComponent
+  ],
   templateUrl: './books.component.html',
   styleUrl: './books.component.scss'
 })
@@ -16,24 +29,45 @@ export class BooksComponent {
   showAddModal = false;
   showDeleteModal = false;
   showPhrasesModal = false;
+  showCalificationsModal = false;
+  showImagesModal = false;
+  showNotesModal = false;
+  showYourBooksModal = false;
 
   // Funciones para abrir cada modal
   openAddModal() {
+    this.closeAllModals();
     this.showAddModal = true;
-    this.showDeleteModal = false;
-    this.showPhrasesModal = false;
   }
 
   openDeleteModal() {
-    this.showAddModal = false;
+    this.closeAllModals();
     this.showDeleteModal = true;
-    this.showPhrasesModal = false;
   }
 
   openPhrasesModal() {
-    this.showAddModal = false;
-    this.showDeleteModal = false;
+    this.closeAllModals();
     this.showPhrasesModal = true;
+  }
+  
+  openCalificationsModal() {
+    this.closeAllModals();
+    this.showCalificationsModal = true;
+  }
+  
+  openImagesModal() {
+    this.closeAllModals();
+    this.showImagesModal = true;
+  }
+  
+  openNotesModal() {
+    this.closeAllModals();
+    this.showNotesModal = true;
+  }
+  
+  openYourBooksModal() {
+    this.closeAllModals();
+    this.showYourBooksModal = true;
   }
 
   // Función para cerrar todos los modales
@@ -41,5 +75,9 @@ export class BooksComponent {
     this.showAddModal = false;
     this.showDeleteModal = false;
     this.showPhrasesModal = false;
+    this.showCalificationsModal = false;
+    this.showImagesModal = false;
+    this.showNotesModal = false;
+    this.showYourBooksModal = false;
   }
 }

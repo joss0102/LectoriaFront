@@ -1,1 +1,92 @@
-<p>form works!</p>
+<div class="delete-books-container">
+    <div class="header-section">
+      <h1 class="main-title">Eliminar Libros</h1>
+      <p class="main-description">Gestiona tu biblioteca. Haz clic en un libro para eliminarlo de tu colección.</p>
+      
+      <!-- Buscador -->
+      <div class="search-container">
+        <div class="search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            (input)="searchBooks()"
+            placeholder="Buscar por título, autor o saga..." 
+            class="search-input"
+          >
+          <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn">×</button>
+          <div class="search-icon">🔍</div>
+        </div>
+        <div class="search-results" *ngIf="searchQuery">
+          <span *ngIf="filteredBooks.length === 0">No se encontraron resultados</span>
+          <span *ngIf="filteredBooks.length === 1">1 libro encontrado</span>
+          <span *ngIf="filteredBooks.length > 1">{{filteredBooks.length}} libros encontrados</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Libros grid -->
+    <div class="books-grid">
+      <div class="book-card" *ngFor="let book of filteredBooks" (click)="openDeleteModal(book)">
+        <div class="book-cover">
+          <img [src]="book.imagen" [alt]="book.titulo">
+          <div class="book-status" [ngClass]="getStatusClass(book.estado)">
+            {{ getStatusText(book.estado) }}
+          </div>
+          <div class="delete-hover-icon">
+            🗑️
+          </div>
+        </div>
+        <div class="book-info">
+          <h3 class="book-title">{{ book.titulo }}</h3>
+          <p class="book-author">{{ book.autor }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mensaje si no hay libros -->
+    <div class="no-books" *ngIf="allBooks.length === 0">
+      <div class="empty-icon">📚</div>
+      <h2>No hay libros en tu biblioteca</h2>
+      <p>¡Comienza a añadir libros para crear tu biblioteca personal!</p>
+    </div>
+    
+    <!-- Mensaje si no hay resultados de búsqueda -->
+    <div class="no-search-results" *ngIf="allBooks.length > 0 && filteredBooks.length === 0">
+      <div class="empty-icon">🔍</div>
+      <h2>No se encontraron resultados</h2>
+      <p>Intenta con otra búsqueda o <button class="reset-search" (click)="clearSearch()">ver todos los libros</button></p>
+    </div>
+    
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal-overlay" *ngIf="isDeleteModalOpen" (click)="closeDeleteModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()" *ngIf="selectedBookToDelete">
+        <div class="delete-confirmation">
+          <div class="delete-icon">🗑️</div>
+          <h2>Eliminar Libro</h2>
+          <p>¿Estás seguro de que quieres eliminar el siguiente libro?</p>
+          
+          <div class="book-details">
+            <div class="book-cover-delete">
+              <img [src]="selectedBookToDelete.imagen" [alt]="selectedBookToDelete.titulo">
+            </div>
+            <div class="book-info-delete">
+              <h3 class="book-title">{{ selectedBookToDelete.titulo }}</h3>
+              <p class="book-author">{{ selectedBookToDelete.autor }}</p>
+              <div class="book-status-delete" [ngClass]="getStatusClass(selectedBookToDelete.estado)">
+                {{ getStatusText(selectedBookToDelete.estado) }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="btn btn-cancel" (click)="closeDeleteModal()">
+              Cancelar
+            </button>
+            <button class="btn btn-delete" (click)="confirmDelete()">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -6,7 +6,7 @@ export interface Book {
     titulo: string;
     sinopsis: string;
     imagen: string;
-    
+    frases: string[];
     // Propiedades de seguimiento de lectura (opcionales)
     paginasTotales?: number;
     fechaInicio?: Date | null;

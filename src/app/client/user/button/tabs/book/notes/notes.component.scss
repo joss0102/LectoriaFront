@@ -1,6 +1,6 @@
-// Estilos para el componente de frases
+// Estilos para el componente de anotaciones
 
-.phrases-container {
+.notes-container {
     background-color: var(--bs-main-night);
     min-height: 100vh;
     padding: 2rem;
@@ -34,8 +34,8 @@
       margin-bottom: 3rem;
     }
     
-    // Estilos para mensajes cuando no hay frases
-    .no-phrases {
+    // Estilos para mensajes cuando no hay anotaciones
+    .no-notes {
       text-align: center;
       background-color: var(--bs-secondary-night);
       border-radius: 16px;
@@ -65,7 +65,7 @@
     }
     
     // Grid de libros en la vista principal
-    .phrases-grid {
+    .notes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 2rem;
@@ -109,7 +109,7 @@
             }
           }
           
-          .phrases-count {
+          .notes-count {
             position: absolute;
             bottom: 10px;
             right: 10px;
@@ -143,7 +143,7 @@
             margin-bottom: 1rem;
           }
           
-          .preview-phrase {
+          .preview-note {
             background-color: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
             padding: 1.2rem;
@@ -152,22 +152,20 @@
             flex-grow: 1;
             text-align: left;
             
-            .quote-mark {
+            .note-icon {
               position: absolute;
-              top: -10px;
-              left: 10px;
-              font-size: 3rem;
-              color: var(--bs-btn);
-              opacity: 0.5;
-              font-family: Georgia, serif;
+              top: 5px;
+              left: 5px;
+              font-size: 1.4rem;
+              opacity: 0.7;
             }
             
             p {
-              font-style: italic;
               color: var(--bs-light-night);
               font-size: 0.95rem;
               line-height: 1.5;
               margin: 0;
+              margin-left: 1.2rem;
               position: relative;
               z-index: 1;
             }
@@ -281,7 +279,7 @@
             }
           }
           
-          .phrases-counter {
+          .notes-counter {
             font-size: 1.1rem;
             color: var(--bs-tertiary-night);
             
@@ -313,10 +311,10 @@
         }
       }
       
-      .phrases-list {
+      .notes-list {
         margin-bottom: 3rem;
         
-        .phrase-item {
+        .note-item {
           display: flex;
           gap: 1.5rem;
           margin-bottom: 2rem;
@@ -327,13 +325,13 @@
           overflow: hidden;
           
           &:hover {
-            .phrase-actions {
+            .note-actions {
               opacity: 1;
               transform: translateY(0);
             }
           }
           
-          .phrase-number {
+          .note-number {
             width: 32px;
             height: 32px;
             min-width: 32px;
@@ -347,30 +345,29 @@
             align-self: flex-start;
           }
           
-          .phrase-content {
+          .note-content {
             position: relative;
             flex: 1;
             
-            .quote-marks {
+            .note-pin {
               position: absolute;
-              top: -15px;
+              top: -5px;
               left: -5px;
-              font-size: 3rem;
-              font-family: Georgia, serif;
-              color: var(--bs-tertiary-night);
-              opacity: 0.3;
+              font-size: 1.5rem;
+              opacity: 0.7;
             }
             
             p {
               font-size: 1.1rem;
               line-height: 1.6;
               margin-bottom: 2rem;
+              margin-left: 1.5rem;
               position: relative;
               z-index: 1;
               color: var(--bs-light-night);
             }
             
-            .phrase-actions {
+            .note-actions {
               position: absolute;
               bottom: 0;
               right: 0;
@@ -401,12 +398,12 @@
                   background-color: var(--bs-btn);
                 }
                 
-                &.share-btn:hover {
+                &.edit-btn:hover {
                   background-color: var(--bs-warning);
                 }
                 
-                &.edit-btn:hover {
-                  background-color: var(--bs-tertiary-night);
+                &.delete-btn:hover {
+                  background-color: var(--bs-danger);
                 }
                 
                 .action-icon {
@@ -418,7 +415,7 @@
         }
       }
       
-      .add-phrase-btn {
+      .add-note-btn {
         background-color: var(--bs-secondary-night);
         border: 2px dashed var(--bs-tertiary-night);
         border-radius: 12px;
@@ -448,10 +445,10 @@
   
   // Media queries para responsividad
   @media (max-width: 768px) {
-    .phrases-container {
+    .notes-container {
       padding: 1.5rem;
       
-      .phrases-grid {
+      .notes-grid {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       }
       
@@ -487,15 +484,15 @@
   
   // Para dispositivos muy pequeños
   @media (max-width: 480px) {
-    .phrases-container {
-      .phrases-grid {
+    .notes-container {
+      .notes-grid {
         grid-template-columns: 1fr;
       }
       
-      .phrase-item {
+      .note-item {
         flex-direction: column;
         
-        .phrase-number {
+        .note-number {
           margin-bottom: 1rem;
         }
       }

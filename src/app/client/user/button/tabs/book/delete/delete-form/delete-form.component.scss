@@ -1,35 +1,16 @@
 .delete-books-container {
-    background-color: var(--bs-header-night);
+    background-color: var(--background-color);
     min-height: 100vh;
     padding: 2rem;
-    color: var(--bs-light-night);
+    color: var(--border-color);
     
     // Estilos para el encabezado
     .header-section {
       margin-bottom: 3rem;
-      
-      .main-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: var(--bs-light-night);
-        position: relative;
-        display: inline-block;
-        
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: -0.5rem;
-          left: 0;
-          width: 60px;
-          height: 4px;
-          background-color: var(--bs-btn);
-          border-radius: 2px;
-        }
-      }
+
       
       .main-description {
-        color: var(--bs-tertiary-night);
+        color: var(--border-color);
         font-size: 1.1rem;
         max-width: 600px;
         margin-bottom: 1.5rem;
@@ -49,8 +30,8 @@
             padding: 1rem 2.5rem 1rem 1rem;
             border-radius: 30px;
             border: none;
-            background-color: var(--bs-secondary-night);
-            color: var(--bs-light-night);
+            background-color: var(--component-bg);
+            color: var(--border-color);
             font-size: 1rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
@@ -58,11 +39,11 @@
             &:focus {
               outline: none;
               box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-              background-color: var(--bs-header-night);
+              background-color: var(--background-color);
             }
             
             &::placeholder {
-              color: var(--bs-tertiary-night);
+              color: var(--border-color);
             }
           }
           
@@ -71,7 +52,7 @@
             right: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--bs-tertiary-night);
+            color: var(--border-color);
             pointer-events: none;
           }
           
@@ -82,13 +63,13 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: var(--bs-tertiary-night);
+            color: var(--border-color);
             font-size: 1.2rem;
             cursor: pointer;
             padding: 0;
             
             &:hover {
-              color: var(--bs-light-night);
+              color: var(--text-color);
             }
           }
         }
@@ -96,7 +77,7 @@
         .search-results {
           margin-top: 0.75rem;
           font-size: 0.9rem;
-          color: var(--bs-tertiary-night);
+          color: var(--text-color);
           padding-left: 1rem;
         }
       }
@@ -105,7 +86,7 @@
     // Mensaje cuando no hay libros
     .no-books, .no-search-results {
       text-align: center;
-      background-color: var(--bs-secondary-night);
+      background-color: var(--component-bg);
       border-radius: 16px;
       padding: 3rem 2rem;
       max-width: 600px;
@@ -115,17 +96,17 @@
       .empty-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
-        color: var(--bs-tertiary-night);
+        color: var(--border-color);
       }
       
       h2 {
         font-size: 1.5rem;
         margin-bottom: 1rem;
-        color: var(--bs-light-night);
+        color: var(--text-color);
       }
       
       p {
-        color: var(--bs-tertiary-night);
+        color: var(--border-color);
         margin: 0 auto;
         line-height: 1.6;
       }
@@ -152,7 +133,7 @@
       gap: 2rem;
       
             .book-card {
-        background-color: var(--bs-secondary-night);
+        background-color: var(--component-bg);
         border-radius: 12px;
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -254,7 +235,7 @@
             }
             
             &.status-not-started {
-              background-color: var(--bs-tertiary-night);
+              background-color: var(--border-color);
               color: white;
             }
           }
@@ -267,7 +248,7 @@
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 0.25rem;
-            color: var(--bs-light-night);
+            color: var(--text-color);
             display: -webkit-box;
             display: -ms-flexbox;
 
@@ -278,7 +259,7 @@
           
           .book-author {
             font-size: 0.85rem;
-            color: var(--bs-tertiary-night);
+            color: var(--border-color);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -303,7 +284,7 @@
       backdrop-filter: blur(5px);
       
       .modal-content {
-        background-color: var(--bs-main-night);
+        background-color: var(--main-bg);
         border-radius: 16px;
         width: 100%;
         max-width: 500px;
@@ -312,7 +293,7 @@
         .delete-confirmation {
           padding: 2rem;
           text-align: center;
-          
+
           .delete-icon {
             font-size: 4rem;
             color: var(--bs-danger);
@@ -320,12 +301,12 @@
           }
           
           h2 {
-            color: var(--bs-light-night);
+            color: var(--text-color);
             margin-bottom: 1rem;
           }
           
           p {
-            color: var(--bs-tertiary-night);
+            color: var(--border-color);
             margin-bottom: 1.5rem;
           }
           
@@ -333,7 +314,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            background-color: var(--bs-secondary-night);
+            background-color: var(--component-bg);
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 2rem;
@@ -359,12 +340,12 @@
               
               .book-title {
                 font-size: 1.2rem;
-                color: var(--bs-light-night);
+                color: var(--text-color);
                 margin-bottom: 0.5rem;
               }
               
               .book-author {
-                color: var(--bs-tertiary-night);
+                color: var(--border-color);
                 margin-bottom: 1rem;
               }
               
@@ -391,7 +372,7 @@
                 }
                 
                 &.status-not-started {
-                  background-color: var(--bs-tertiary-night);
+                  background-color: var(--border-color);
                   color: white;
                 }
               }
@@ -412,11 +393,11 @@
               transition: all 0.3s ease;
               
               &.btn-cancel {
-                background-color: var(--bs-secondary-night);
-                color: var(--bs-light-night);
+                background-color: var(--component-bg);
+                color: var(--text-color);
                 
                 &:hover {
-                  background-color: var(--bs-tertiary-night);
+                  background-color: var(--border-color);
                 }
               }
               

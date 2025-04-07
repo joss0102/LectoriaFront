@@ -32,7 +32,7 @@ export class NavVerticalService {
   // Alternar entre modo iconos y texto
   toggleIcons() {
     // En pantallas grandes, cambia entre modo icono y texto
-    if (window.innerWidth > 1200) {
+    if (window.innerWidth > 1300) {
       const newValue = !this.onlyIconSubject.value;
       this.onlyIconSubject.next(newValue);
       this.saveState();
@@ -61,7 +61,7 @@ export class NavVerticalService {
   private setupResizeListener() {
     window.addEventListener('resize', () => {
       // Si cambiamos a pantalla pequeña mientras el menú está visible, lo ocultamos
-      if (window.innerWidth <= 1200 && this.menuVisibleSubject.value) {
+      if (window.innerWidth <= 1300 && this.menuVisibleSubject.value) {
         this.menuVisibleSubject.next(false);
       }
     });

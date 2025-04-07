@@ -88,7 +88,7 @@ export class NavVerticalComponent implements AfterViewInit {
   // Verificar si es dispositivo móvil
   private checkIsMobile() {
     const wasMobile = this.isMobile;
-    this.isMobile = window.innerWidth <= 1200;
+    this.isMobile = window.innerWidth <= 1300;
     
     if (!this.isMobile && wasMobile) {
       // Si pasamos de móvil a desktop, eliminar la clase mobile-menu-open

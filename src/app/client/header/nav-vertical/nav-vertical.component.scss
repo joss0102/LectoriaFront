@@ -242,7 +242,7 @@ nav {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1040;
   
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 1300px) {
     &.active {
       display: block;
     }

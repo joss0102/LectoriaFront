@@ -297,23 +297,11 @@
             
             .synopsis-container {
                 margin-bottom: 1rem;
-                max-height: 120px;
+
                 overflow-y: auto;
                 padding-right: 0.5rem;
                 
-                /* Scrollbar personalizado */
-                &::-webkit-scrollbar {
-                width: 5px;
-                }
-                
-                &::-webkit-scrollbar-track {
-                background: rgba(0, 0, 0, 0.05);
-                }
-                
-                &::-webkit-scrollbar-thumb {
-                background: rgba(0, 0, 0, 0.15);
-                border-radius: 5px;
-                }
+          
                 
                 .book-synopsis {
                 font-size: 0.9rem;
@@ -401,28 +389,11 @@
                 overflow: hidden;
                 
                 .tab-pane {
-                height: 100%;
+
                 padding: 1rem;
                 overflow-y: auto;
                 
-                .scrollable {
-                    height: 100%;
-                    overflow-y: auto;
-                    
-                    /* Scrollbar personalizado */
-                    &::-webkit-scrollbar {
-                    width: 5px;
-                    }
-                    
-                    &::-webkit-scrollbar-track {
-                    background: rgba(0, 0, 0, 0.05);
-                    }
-                    
-                    &::-webkit-scrollbar-thumb {
-                    background: rgba(0, 0, 0, 0.15);
-                    border-radius: 5px;
-                    }
-                }
+
                 
                 // Contenido de notas (NUEVO DISEÑO)
                 .notes-content {
@@ -638,4 +609,10 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+@media screen and (max-width: 768px) {
+    .section{
+        height: 100%;
+        overflow: visible !important;
+    }
 }

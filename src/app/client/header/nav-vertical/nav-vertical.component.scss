@@ -4,7 +4,7 @@
 nav {
   display: flex;
   flex-direction: column;
-  height: 94vh;
+  height: 100%;
   width: 75px;
   transition: width 0.3s ease, transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
   position: relative;
@@ -179,7 +179,7 @@ nav {
 }
 
 // Estilos responsive
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1300px) {
   body {
     &.mobile-menu-open {
       overflow: hidden; // Prevenir scroll cuando el menú está abierto

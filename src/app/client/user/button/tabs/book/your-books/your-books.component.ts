@@ -1,30 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BookService } from '../../../../../../../core/services/book/book.service';
-import { Book } from '../../../../../../../core/models/book-model';
+import { BookService } from '../../../../../../core/services/book/book.service';
+import { Book } from '../../../../../../core/models/book-model';
 
 @Component({
-  selector: 'app-delete-form',
+  selector: 'app-your-books',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './delete-form.component.html',
-  styleUrl: './delete-form.component.scss'
+  templateUrl: './your-books.component.html',
+  styleUrl: './your-books.component.scss'
 })
-export class DeleteFormComponent implements OnInit {
+export class YourBooksComponent implements OnInit {
   // Todos los libros
   allBooks: Book[] = [];
   
-  // Libros filtrados para mostrar
+  // Libros filtrados para mostrar (según búsqueda)
   filteredBooks: Book[] = [];
   
-  // Libro seleccionado para eliminar
-  selectedBookToDelete: Book | null = null;
+  // Libro seleccionado para ver en el modal
+  selectedBook: Book | null = null;
   
-  // Estado del modal de confirmación
-  isDeleteModalOpen: boolean = false;
+  // Estado del modal
+  isModalOpen: boolean = false;
   
-  // Término de búsqueda
+  // Filtros y ordenamiento
+  sortBy: 'title' | 'author' | 'rating' | 'date' = 'title';
+  filterStatus: 'all' | 'reading' | 'completed' | 'not-started' | 'abandoned' = 'all';
   searchQuery: string = '';
 
   constructor(private bookService: BookService) {}
@@ -35,6 +37,27 @@ export class DeleteFormComponent implements OnInit {
     this.filteredBooks = [...this.allBooks];
   }
 
+  // Mostrar modal con detalles del libro
+  openBookDetails(book: Book): void {
+    this.selectedBook = book;
+    this.isModalOpen = true;
+    // Evitar scroll en el cuerpo cuando el modal está abierto
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Cerrar modal
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedBook = null;
+    // Restaurar scroll en el cuerpo
+    document.body.style.overflow = 'auto';
+  }
+  
+  // Prevenir que los clics dentro del modal cierren el modal
+  preventClose(event: Event): void {
+    event.stopPropagation();
+  }
+  
   // Método para buscar libros
   searchBooks(): void {
     if (!this.searchQuery || this.searchQuery.trim() === '') {
@@ -55,35 +78,7 @@ export class DeleteFormComponent implements OnInit {
     this.searchQuery = '';
     this.filteredBooks = [...this.allBooks];
   }
-
-  // Abrir modal de confirmación de eliminación
-  openDeleteModal(book: Book): void {
-    this.selectedBookToDelete = book;
-    this.isDeleteModalOpen = true;
-    // Evitar scroll en el cuerpo cuando el modal está abierto
-    document.body.style.overflow = 'hidden';
-  }
-
-  // Cerrar modal de eliminación
-  closeDeleteModal(): void {
-    this.isDeleteModalOpen = false;
-    this.selectedBookToDelete = null;
-    // Restaurar scroll en el cuerpo
-    document.body.style.overflow = 'auto';
-  }
-
-  // Confirmar eliminación del libro
-  confirmDelete(): void {
-    if (this.selectedBookToDelete) {
-
-      this.allBooks = this.allBooks.filter(
-        book => book.titulo !== this.selectedBookToDelete!.titulo
-      );
-      this.filteredBooks = [...this.allBooks];
-      this.closeDeleteModal();
-    }
-  }
-
+  
   // Método para obtener la clase CSS según el estado del libro
   getStatusClass(status?: string): string {
     switch(status) {
@@ -112,5 +107,21 @@ export class DeleteFormComponent implements OnInit {
       default:
         return 'No iniciado';
     }
+  }
+  
+  // Formatear fecha para mostrarla en el modal
+  formatDate(date: Date | null | undefined): string {
+    if (!date) return 'N/A';
+    return new Date(date).toLocaleDateString();
+  }
+  
+  // Calcular días de lectura
+  calculateReadingDays(book: Book): number {
+    if (!book.fechaInicio || !book.fechaFin) return 0;
+    
+    const start = new Date(book.fechaInicio);
+    const end = new Date(book.fechaFin);
+    const diff = end.getTime() - start.getTime();
+    return Math.ceil(diff / (1000 * 3600 * 24)) + 1; // +1 para incluir el día final
   }
 }

@@ -1,4 +1,5 @@
-<nav class="nav-horizontal bg-header-night text-white">
+<!-- nav-horizontal.component.html -->
+<nav class="nav-horizontal" [ngClass]="modoNoche ? 'bg-header-night' : 'bg-header-day'">
   <div class="menu d-flex gap-3">
     <i class="bi bi-list" (click)="toggleNav()"></i>
     <div class="links">
@@ -11,10 +12,18 @@
       <a routerLink="/library" routerLinkActive="active">Biblioteca</a>
     </div>
   </div>
-
   <div class="imagen">
-    <div>Modo noche</div>
-    <img src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
+    <div class="theme-toggle">
+      <div (click)="toggleTema()" class="theme-switch" [title]="modoNoche ? 'Cambiar a modo día' : 'Cambiar a modo noche'">
+        <div class="switch-track">
+          <i class="bi bi-moon-fill moon-icon"></i>
+          <i class="bi bi-sun-fill sun-icon"></i>
+          <div class="switch-thumb" [ngClass]="{'night-active': modoNoche, 'day-active': !modoNoche}"></div>
+        </div>
+      </div>
+    </div>
+    <img *ngIf="modoNoche" src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
+    <img *ngIf="!modoNoche" src="logos/logo-letras-negras.png" alt="Logo" class="imagen" />
   </div>
 </nav>
 <app-divider-timer></app-divider-timer>

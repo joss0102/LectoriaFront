@@ -1,13 +1,14 @@
-<nav class="bg-header-night d-flex justify-content-between">
-  <div>
+<nav [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible}">
+  <!-- Navegación principal -->
+  <div class="nav-content">
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
-      class="d-flex flex-column align-items-center py-0 my-2"
+      class="d-flex flex-column align-items-center py-0 justify-content-center"
       routerLinkActive="active"
       routerLink="/user"
       [routerLinkActiveOptions]="{ exact: true }"
     >
-      <i class="bi bi-person-circle display-2"></i>
+      <i class="bi bi-person-circle"></i>
       <p class="fs-5 mb-0 fw-bold">Nombre</p>
       <p class="fs-6 mb-0">Apellido</p>
     </a>
@@ -18,8 +19,8 @@
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
     >
-      <i class="bi bi-book fs-4"></i>
-      <p class="fs-6">Libro actual</p>
+      <i class="bi bi-book"></i>
+      <p class="fs-6 link">Lectura actual</p>
     </a>
 
     <a
@@ -27,41 +28,11 @@
       (click)="toggleSearchMenu()"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
+      id="search-button"
     >
-      <i class="bi bi-search fs-4"></i>
-      <p class="fs-6">Buscador</p>
+      <i class="bi bi-search"></i>
+      <p class="fs-6 link">Buscador</p>
     </a>
-
-    <!-- Menu del buscador -->
-    <div *ngIf="searchMenuVisible" class="search-menu">
-      <div class="search-container">
-        <i
-          class="bi bi-x fs-3 text-danger"
-          (click)="toggleSearchMenu()"
-          style="cursor: pointer; margin-left: 180px"
-        ></i>
-        <input
-          type="text"
-          placeholder="Buscar..."
-          [(ngModel)]="searchQuery"
-          class="form-control"
-        />
-        <hr class="text-white" />
-        <ul class="search-results">
-          <p class="text-white">
-            Recientes <small class="text-btn ms-5 fw-bold">Borrar todo</small>
-          </p>
-          <li *ngFor="let result of searchResults">
-            <img
-              class="rounded-circle me-3"
-              src="https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U="
-              alt=""
-            />
-            {{ result }}
-          </li>
-        </ul>
-      </div>
-    </div>
 
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
@@ -69,8 +40,8 @@
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
     >
-      <i class="bi bi-graph-up-arrow fs-4"></i>
-      <p class="fs-6">Estadísticas</p>
+      <i class="bi bi-graph-up-arrow"></i>
+      <p class="fs-6 link">Estadísticas</p>
     </a>
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
@@ -78,13 +49,51 @@
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
     >
-      <i class="bi bi-bookmark-heart fs-4"></i>
-      <p class="fs-6">Pendientes</p>
+      <i class="bi bi-bookmark-heart"></i>
+      <p class="fs-6 link">Pendientes</p>
     </a>
   </div>
 
   <a class="my-md my-2" [ngClass]="{ 'only-icon': onlyIcon }">
-    <i class="bi bi-box-arrow-right fs-4"></i>
-    <p class="fs-6">Cerrar Sesión</p>
+    <i class="bi bi-box-arrow-right"></i>
+    <p class="fs-6 link">Cerrar Sesión</p>
   </a>
 </nav>
+
+<!-- Overlay para móvil -->
+<div class="mobile-overlay" [ngClass]="{'active': menuVisible || searchMenuVisible}" (click)="closeAllMenus()"></div>
+
+<!-- Menu del buscador (fuera del nav para permitir superposición correcta) -->
+<div #searchMenuWrapper class="search-menu-wrapper" [ngClass]="{'search-visible': searchMenuVisible}">
+  <div class="search-container">
+    <div class="search-header">
+      <h5 class="mb-3">Buscador</h5>
+      <i
+        class="bi bi-x text-danger"
+        (click)="toggleSearchMenu()"
+        style="cursor: pointer;"
+      ></i>
+    </div>
+    <input
+      type="text"
+      placeholder="Buscar..."
+      [(ngModel)]="searchQuery"
+      class="form-control"
+    />
+    <hr />
+    <div class="recent-header">
+      <p class="mb-2">Recientes</p>
+      <small class="text-btn fw-bold cursor-pointer">Borrar todo</small>
+    </div>
+    <ul class="search-results">
+      <li *ngFor="let result of searchResults">
+        <img
+          class="rounded-circle me-3"
+          src="https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U="
+          alt=""
+        />
+        <span>{{ result }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

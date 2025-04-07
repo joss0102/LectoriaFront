@@ -1,6 +1,107 @@
-@import "./assets/colors";
-@import 'bootstrap/scss/bootstrap';
+/* styles.scss (archivo global de estilos) */
+@import "assets/colors.scss";
+
+/* Estilos de scrollbar minimalistas y modernos - Base */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(226, 226, 226, 0.3) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Color de fondo predeterminado */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* Sutilmente visible al hover */
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+  }
+}
+
+/* Modo día - ajuste específico para scrollbar */
+.tema-dia {
+  * {
+    scrollbar-color: rgb(111, 111, 111) rgba(110, 107, 100, 0.1);
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: rgba(110, 107, 100, 0.1); /* Color de fondo en modo día */
+    
+    &:hover {
+      background-color: rgba(110, 107, 100, 0.15);
+    }
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(211, 191, 191);
+    
+    &:hover {
+      background-color: rgba(191, 189, 189, 0.4);
+    }
+  }
+}
+
+/* Modo noche - ajuste específico para scrollbar */
+.tema-noche {
+  * {
+    scrollbar-color: rgba(180, 180, 180, 0.2) rgba(30, 30, 30, 0.2);
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: rgba(30, 30, 30, 0.2); /* Color de fondo en modo noche */
+    
+    &:hover {
+      background-color: rgba(30, 30, 30, 0.3);
+    }
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(180, 180, 180, 0.2);
+    
+    &:hover {
+      background-color: rgba(180, 180, 180, 0.4);
+    }
+  }
+}
 
 body {
-    background-color: $main-night;
+  background-color: var(--main-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ejemplos de cómo usar las variables CSS en otros componentes */
+
+/* Ejemplo para tarjetas o componentes */
+.card {
+  background-color: var(--component-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.section {
+  background-color: var(--main-bg);
+}
+
+/* Ajustar texto para mejor legibilidad según el tema */
+p, h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+}
+
+/* Ajustar bordes de elementos según el tema */
+.border-themed {
+  border-color: var(--border-color);
 }

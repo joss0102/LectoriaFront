@@ -1,1 +1,95 @@
-<p>phrases works!</p>
+<div class="phrases-container">
+  <!-- Vista principal (lista de libros con frases) -->
+  <div class="books-list" *ngIf="!detailView">
+    <p class="main-description">Explora las frases más destacadas de tus libros favoritos.</p>
+    
+    <!-- Mensaje cuando no hay frases -->
+    <div class="no-phrases" *ngIf="booksWithPhrases.length === 0">
+      <div class="empty-icon">📝</div>
+      <h2>No hay frases destacadas</h2>
+      <p>Aún no has guardado frases destacadas de tus libros. Cuando encuentres una frase que te guste durante la lectura, podrás guardarla aquí.</p>
+    </div>
+    
+    <!-- Grid de libros con frases -->
+    <div class="phrases-grid" *ngIf="booksWithPhrases.length > 0">
+      <div class="book-card" *ngFor="let book of booksWithPhrases" (click)="selectBook(book)">
+        <div class="book-cover">
+          <img [src]="book.imagen" [alt]="'Portada de ' + book.titulo">
+          <div class="phrases-count" *ngIf="book.frases && book.frases.length > 0">
+            {{ book.frases.length }} frases
+          </div>
+        </div>
+        <div class="book-info">
+          <h3 class="book-title">{{ book.titulo }}</h3>
+          <p class="book-author">{{ book.autor }}</p>
+          
+          <!-- Vista previa de la primera frase -->
+          <div class="preview-phrase" *ngIf="book.frases && book.frases.length > 0">
+            <div class="quote-mark">"</div>
+            <p>{{ shortenPhrase(book.frases[0]) }}</p>
+          </div>
+          
+          <button class="view-all-btn">
+            Ver todas
+            <span class="arrow-icon">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Vista detalle de un libro y sus frases -->
+  <div class="book-detail" *ngIf="detailView && selectedBook">
+    <button class="back-btn" (click)="backToList()">
+      <span class="back-arrow">←</span>
+      Volver
+    </button>
+    
+    <div class="detail-header">
+      <div class="book-cover-detail">
+        <img [src]="selectedBook.imagen" [alt]="'Portada de ' + selectedBook.titulo">
+      </div>
+      <div class="book-info-detail">
+        <h2 class="detail-title">{{ selectedBook.titulo }}</h2>
+        <p class="detail-author">{{ selectedBook.autor }}</p>
+        <div class="book-meta" *ngIf="selectedBook.saga">
+          <span class="saga-badge">{{ selectedBook.saga }}</span>
+        </div>
+        <p class="phrases-counter">
+          <span class="counter-number">{{ selectedBook.frases.length || 0 }}</span> 
+          frases destacadas
+        </p>
+      </div>
+    </div>
+    
+    <div class="phrases-list">
+      <h3 class="section-title">Frases Destacadas</h3>
+      
+      <!-- Lista de todas las frases del libro -->
+      <div class="phrase-item" *ngFor="let phrase of selectedBook.frases; let i = index">
+        <div class="phrase-number">{{ i + 1 }}</div>
+        <div class="phrase-content">
+          <div class="quote-marks">"</div>
+          <p>{{ phrase }}</p>
+          <div class="phrase-actions">
+            <button class="action-btn copy-btn" title="Copiar frase">
+              <span class="action-icon">📋</span>
+            </button>
+            <button class="action-btn share-btn" title="Compartir frase">
+              <span class="action-icon">📤</span>
+            </button>
+            <button class="action-btn edit-btn" title="Editar frase">
+              <span class="action-icon">✎</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Botón para añadir nueva frase -->
+    <button class="add-phrase-btn">
+      <span class="add-icon">+</span>
+      Añadir nueva frase
+    </button>
+  </div>
+</div>

@@ -54,11 +54,11 @@ $transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
       
       &.btn-accent {
-        background-color: var(--bs-secondary-night);
+        background-color: var(--component-bg);
         color: white;
         
         &:hover {
-          background-color: rgba(var(--bs-secondary-night-rgb), 0.8);
+          background-color: rgba(var(--component-bg-rgb), 0.8);
         }
       }
       
@@ -101,7 +101,7 @@ $transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
   
       .modal-container {
-    background-color: var(--bs-header-night);
+    background-color: var(--background-color);
     border-radius: $border-radius;
     width: 90%;
     max-width: 800px;
@@ -226,7 +226,7 @@ $transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
       height: 200px;
       border-radius: 8px;
       overflow: hidden;
-      background-color: var(--bs-tertiary-night);
+      background-color: var(--border-color);
       
       @media (max-width: 767px) {
         width: 120px;
@@ -348,7 +348,7 @@ textarea.form-control {
   transition: all 0.2s ease;
   
   &:hover {
-    background-color: (--bs-secondary-night);
+    background-color: (--component-bg);
     transform: scale(1.05);
   }
 }

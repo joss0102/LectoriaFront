@@ -2,12 +2,13 @@
 
 .parent {
   padding: 20px;
-  background-color: $main-night;
+  background-color: var(--main-bg); // Valor por defecto, pero será sobrescrito por JS
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(8, 1fr);
   gap: 8px;
   height: 94vh;
+  transition: background-color 0.3s ease; // Transición suave al cambiar de tema
 
   .datos {
     grid-column: span 3 / span 3;
@@ -30,7 +31,7 @@
   }
 
   .carrusel {
-    color: white;
+    color: var(--text-color); // Usar la variable de color de texto del tema
     border-radius: 40px;
     grid-column: span 4 / span 4;
     grid-row: span 4 / span 4;
@@ -38,6 +39,8 @@
     grid-row-start: 5;
   }
 }
+
+// Media queries
 @media screen and (max-width: 1600px) {
   .parent {
     display: flex;
@@ -47,17 +50,14 @@
 
     .datos {
       position: absolute;
-      top: 0;
-      padding-top: 150px;
+      top: 7rem;
       width: 60%;
-      z-index: 10 !important;
     }
 
     .imagen1 {
       position: absolute;
-      top: 0;
+      top: 7rem;
       opacity: 0.3;
-      padding-top: 150px;
     }
 
     .imagen2 {
@@ -69,24 +69,19 @@
     }
   }
 }
+
 @media screen and (max-width: 900px) {
   .parent {
     .datos {
-      z-index: 10 !important;
       width: 70%;
-    }
-
-    .imagen1 {
     }
 
     .imagen2 {
       display: none !important;
     }
-
-    .carrusel {
-    }
   }
 }
+
 @media screen and (max-width: 600px) {
   .parent {
     grid-template-columns: repeat(3, 1fr);
@@ -94,27 +89,18 @@
     gap: 8px;
     height: 93vh;
 
-    .datos {
-      z-index: 10 !important;
-    }
-
     .imagen1 {
       display: none !important;
     }
 
     .imagen2 {
       display: none !important;
-    }
-
-    .carrusel {
     }
   }
 }
+
 @media screen and (max-width: 400px) {
   .parent {
-    .datos {
-    }
-
     .imagen1 {
       display: none;
       opacity: 0;
@@ -124,8 +110,24 @@
       display: none;
       opacity: 0;
     }
+  }
+}
 
+// Ajustes específicos para tema día/noche
+.tema-dia {
+  .parent {
+    // El color de fondo se maneja con JavaScript, pero podemos ajustar otros elementos
     .carrusel {
+      // Ajustes específicos para el carrusel en modo día si son necesarios
+    }
+  }
+}
+
+.tema-noche {
+  .parent {
+    // El color de fondo se maneja con JavaScript
+    .carrusel {
+      // Ajustes específicos para el carrusel en modo noche si son necesarios
     }
   }
 }

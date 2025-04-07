@@ -1,0 +1,99 @@
+<div class="califications-container">
+  <!-- Sección del podio de los mejores valorados -->
+  <section class="top-books">
+    <h2 class="section-title">Libros Mejor Valorados</h2>
+    
+    <div class="podium-container">
+      <!-- Segundo lugar -->
+      <div class="podium-item second-place" *ngIf="topLibros.length >= 2">
+        <div class="podium-position">2</div>
+        <div class="book-card">
+          <div class="book-cover">
+            <img [src]="topLibros[1].imagen" [alt]="topLibros[1].titulo">
+          </div>
+          <div class="book-info">
+            <h3>{{ topLibros[1].titulo }}</h3>
+            <div class="rating">
+              <span class="rating-number">{{ topLibros[1].valoracion }}</span>
+              <div class="stars">
+                <i class="star filled" *ngFor="let star of getEstrellas(topLibros[1].valoracion)">★</i>
+                <i class="star empty" *ngFor="let star of getEstrellasVacias(topLibros[1].valoracion)">☆</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Primer lugar (más alto) -->
+      <div class="podium-item first-place" *ngIf="topLibros.length >= 1">
+        <div class="podium-position">1</div>
+        <div class="book-card">
+          <div class="crown-icon">👑</div>
+          <div class="book-cover">
+            <img [src]="topLibros[0].imagen" [alt]="topLibros[0].titulo">
+          </div>
+          <div class="book-info">
+            <h3>{{ topLibros[0].titulo }}</h3>
+            <div class="rating">
+              <span class="rating-number">{{ topLibros[0].valoracion }}</span>
+              <div class="stars">
+                <i class="star filled" *ngFor="let star of getEstrellas(topLibros[0].valoracion)">★</i>
+                <i class="star empty" *ngFor="let star of getEstrellasVacias(topLibros[0].valoracion)">☆</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tercer lugar -->
+      <div class="podium-item third-place" *ngIf="topLibros.length >= 3">
+        <div class="podium-position">3</div>
+        <div class="book-card">
+          <div class="book-cover">
+            <img [src]="topLibros[2].imagen" [alt]="topLibros[2].titulo">
+          </div>
+          <div class="book-info">
+            <h3>{{ topLibros[2].titulo }}</h3>
+            <div class="rating">
+              <span class="rating-number">{{ topLibros[2].valoracion }}</span>
+              <div class="stars">
+                <i class="star filled" *ngFor="let star of getEstrellas(topLibros[2].valoracion)">★</i>
+                <i class="star empty" *ngFor="let star of getEstrellasVacias(topLibros[2].valoracion)">☆</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lista de todos los libros valorados -->
+  <section class="rated-books">
+    <h2 class="section-title">Tus Calificaciones</h2>
+    
+    <div class="books-grid">
+      <div class="book-item" *ngFor="let libro of librosValorados">
+        <div class="book-cover">
+          <img [src]="libro.imagen" [alt]="libro.titulo">
+        </div>
+        <div class="book-info">
+          <h3>{{ libro.titulo }}</h3>
+          <p class="author">{{ libro.autor }}</p>
+          <div class="rating">
+            <span class="rating-number">{{ libro.valoracion }}</span>
+            <div class="stars">
+              <i class="star filled" *ngFor="let star of getEstrellas(libro.valoracion)">★</i>
+              <i class="star empty" *ngFor="let star of getEstrellasVacias(libro.valoracion)">☆</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mensaje si no hay libros valorados -->
+  <div class="no-books" *ngIf="librosValorados.length === 0">
+    <p>Aún no has valorado ningún libro.</p>
+    <p>Cuando termines de leer un libro, podrás asignarle una valoración de 1 a 5 estrellas.</p>
+  </div>
+</div>

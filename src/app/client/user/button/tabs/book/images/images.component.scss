@@ -1,0 +1,319 @@
+// Componente de imágenes - Estilos SCSS anidados
+
+.images-container {
+  padding: 2rem;
+  background-color: var(--background-color);
+  min-height: 100vh;
+  color: var(--text-color);
+
+  // Selector de vista (libros o sagas)
+  .view-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    gap: 1rem;
+    
+    .selector-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 30px;
+      background-color: var(--component-bg);
+      color: var(--text-color);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      
+      &:hover {
+        background-color: var(--background-color);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      }
+      
+      &.active {
+        background-color: var(--bs-btn);
+        color: white;
+        
+        &:hover {
+          background-color: var(--bs-btn-hover);
+        }
+      }
+    }
+  }
+
+  // Estilos para títulos de sección
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50%;
+      height: 3px;
+      background-color: var(--bs-btn);
+    }
+  }
+
+  .section-description {
+    color: var(--border-color);
+    margin-bottom: 2rem;
+    max-width: 800px;
+  }
+
+  // Grid de imágenes para libros
+  .images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    
+    .image-card {
+      background: linear-gradient(to bottom, var(--component-bg), var(--background-color));
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        
+        .image-container .image-overlay {
+          opacity: 1;
+        }
+      }
+      
+      .image-container {
+        width: 180px;
+        height: 270px;
+        position: relative; // Esto es crucial para posicionamiento absoluto
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center top;
+          transition: transform 0.5s ease;
+        }
+        
+        .image-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          
+          .edit-btn {
+            background-color: var(--bs-btn);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            
+            &:hover {
+              background-color: var(--bs-btn-hover);
+              transform: scale(1.05);
+            }
+            
+            .edit-icon {
+              font-size: 1.2rem;
+            }
+          }
+        }
+      }
+      
+      .image-info {
+        padding: 1.25rem;
+        width: 100%;
+        text-align: center;
+        
+        .image-title {
+          font-size: 1.1rem;
+          margin-bottom: 0.25rem;
+          color: var(--text-color);
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .image-meta {
+          font-size: 0.9rem;
+          color: var(--border-color);
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  // Estilos para sagas
+  .sagas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    
+    .saga-section {
+      background: linear-gradient(to bottom, var(--component-bg), var(--background-color));
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      
+      .saga-title {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-color);
+        font-weight: 600;
+        border-left: 4px solid var(--bs-btn);
+        padding-left: 0.75rem;
+      }
+      
+      .saga-images {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        
+        .saga-image-container {
+          .image-container {
+            height: 200px;
+            position: relative; // Importante para posicionamiento absoluto
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.75rem;
+            
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              transition: transform 0.5s ease;
+            }
+            
+            &:hover {
+              img {
+                transform: scale(1.05);
+              }
+              
+              .image-overlay {
+                opacity: 1;
+              }
+            }
+            
+            .image-overlay {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.5);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              opacity: 0;
+              transition: opacity 0.3s ease;
+              
+              .edit-btn {
+                background-color: var(--bs-btn);
+                color: white;
+                border: none;
+                border-radius: 30px;
+                padding: 0.5rem 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                
+                &:hover {
+                  background-color: var(--bs-btn-hover);
+                  transform: scale(1.05);
+                }
+                
+                .edit-icon {
+                  font-size: 1.2rem;
+                }
+              }
+            }
+          }
+          
+          .image-label {
+            font-size: 0.9rem;
+            color: var(--border-color);
+            text-align: center;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .images-container {
+    padding: 1rem;
+    
+    .view-selector {
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 2rem auto;
+      
+      .selector-btn {
+        width: 100%;
+      }
+    }
+    
+    .sagas-container {
+      .saga-section {
+        .saga-images {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+// Para pantallas muy pequeñas
+@media (max-width: 480px) {
+  .images-container {
+    .images-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Efectos de hover solo para dispositivos que lo soportan
+@media (hover: hover) {
+  .image-container:hover .image-overlay {
+    opacity: 1;
+  }
+  
+  .image-container:hover img {
+    transform: scale(1.05);
+  }
+}

@@ -1,0 +1,96 @@
+<div class="notes-container">
+    <!-- Vista principal (lista de libros con anotaciones) -->
+    <div class="books-list" *ngIf="!detailView">
+      <h1 class="main-title">Tus Anotaciones</h1>
+      <p class="main-description">Explora las anotaciones y reflexiones que has guardado de tus lecturas.</p>
+      
+      <!-- Mensaje cuando no hay anotaciones -->
+      <div class="no-notes" *ngIf="booksWithNotes.length === 0">
+        <div class="empty-icon">📝</div>
+        <h2>No hay anotaciones guardadas</h2>
+        <p>Aún no has guardado anotaciones de tus libros. Cuando quieras recordar algún detalle o reflexión importante durante la lectura, podrás guardarla aquí.</p>
+      </div>
+      
+      <!-- Grid de libros con anotaciones -->
+      <div class="notes-grid" *ngIf="booksWithNotes.length > 0">
+        <div class="book-card" *ngFor="let book of booksWithNotes" (click)="selectBook(book)">
+          <div class="book-cover">
+            <img [src]="book.imagen" [alt]="'Portada de ' + book.titulo">
+            <div class="notes-count" *ngIf="book.anotaciones && book.anotaciones.length > 0">
+              {{ book.anotaciones.length }} {{ book.anotaciones.length === 1 ? 'nota' : 'notas' }}
+            </div>
+          </div>
+          <div class="book-info">
+            <h3 class="book-title">{{ book.titulo }}</h3>
+            <p class="book-author">{{ book.autor }}</p>
+            
+            <!-- Vista previa de la primera anotación -->
+            <div class="preview-note" *ngIf="book.anotaciones && book.anotaciones.length > 0">
+              <div class="note-icon">📌</div>
+              <p>{{ shortenNote(book.anotaciones[0]) }}</p>
+            </div>
+            
+            <button class="view-all-btn">
+              Ver todas
+              <span class="arrow-icon">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Vista detalle de un libro y sus anotaciones -->
+    <div class="book-detail" *ngIf="detailView && selectedBook">
+      <button class="back-btn" (click)="backToList()">
+        <span class="back-arrow">←</span>
+        Volver
+      </button>
+      
+      <div class="detail-header">
+        <div class="book-cover-detail">
+          <img [src]="selectedBook.imagen" [alt]="'Portada de ' + selectedBook.titulo">
+        </div>
+        <div class="book-info-detail">
+          <h2 class="detail-title">{{ selectedBook.titulo }}</h2>
+          <p class="detail-author">{{ selectedBook.autor }}</p>
+          <div class="book-meta" *ngIf="selectedBook.saga">
+            <span class="saga-badge">{{ selectedBook.saga }}</span>
+          </div>
+          <p class="notes-counter">
+            <span class="counter-number">{{ selectedBook.anotaciones?.length || 0 }}</span> 
+            {{ (selectedBook.anotaciones?.length || 0) === 1 ? 'anotación' : 'anotaciones' }} guardadas
+          </p>
+        </div>
+      </div>
+      
+      <div class="notes-list">
+        <h3 class="section-title">Anotaciones</h3>
+        
+        <!-- Lista de todas las anotaciones del libro -->
+        <div class="note-item" *ngFor="let note of selectedBook.anotaciones; let i = index">
+          <div class="note-number">{{ i + 1 }}</div>
+          <div class="note-content">
+            <div class="note-pin">📌</div>
+            <p>{{ note }}</p>
+            <div class="note-actions">
+              <button class="action-btn copy-btn" title="Copiar anotación">
+                <span class="action-icon">📋</span>
+              </button>
+              <button class="action-btn edit-btn" title="Editar anotación">
+                <span class="action-icon">✎</span>
+              </button>
+              <button class="action-btn delete-btn" title="Eliminar anotación">
+                <span class="action-icon">🗑️</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Botón para añadir nueva anotación -->
+      <button class="add-note-btn">
+        <span class="add-icon">+</span>
+        Añadir nueva anotación
+      </button>
+    </div>
+  </div>

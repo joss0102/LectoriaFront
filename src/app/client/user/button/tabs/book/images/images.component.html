@@ -1,0 +1,71 @@
+<div class="images-container">
+    <!-- Selector de tipo de imágenes -->
+    <div class="view-selector">
+      <button 
+        [class.active]="vistaActiva === 'libros'" 
+        (click)="cambiarVista('libros')"
+        class="selector-btn">
+        Portadas de Libros
+      </button>
+      <button 
+        [class.active]="vistaActiva === 'sagas'" 
+        (click)="cambiarVista('sagas')"
+        class="selector-btn">
+        Fondos de Sagas
+      </button>
+    </div>
+  
+    <!-- Contenedor principal de imágenes -->
+    <div class="images-content">
+      <!-- Vista de portadas de libros -->
+      <div class="books-images" *ngIf="vistaActiva === 'libros'">
+        <h2 class="section-title">Portadas de Libros</h2>
+        <p class="section-description">Aquí encontrarás todas las portadas de tus libros. Puedes editarlas haciendo clic en el botón de editar.</p>
+        
+        <div class="images-grid">
+          <div class="image-card" *ngFor="let libro of libros">
+            <div class="image-container">
+              <img [src]="libro.imagen" [alt]="'Portada de ' + libro.titulo">
+              <div class="image-overlay">
+                <button class="edit-btn" (click)="editarImagen('libro', libro.titulo)">
+                  <i class="edit-icon">✎</i>
+                  Editar
+                </button>
+              </div>
+            </div>
+            <div class="image-info">
+              <h3 class="image-title">{{ libro.titulo }}</h3>
+              <p class="image-meta">{{ libro.autor }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Vista de fondos de sagas -->
+      <div class="sagas-images" *ngIf="vistaActiva === 'sagas'">
+        <h2 class="section-title">Fondos de Sagas</h2>
+        <p class="section-description">Explora los fondos disponibles para cada saga. Cada saga tiene dos variantes de fondo.</p>
+        
+        <div class="sagas-container">
+          <div class="saga-section" *ngFor="let saga of sagas">
+            <h3 class="saga-title">{{ saga.nombre }}</h3>
+            
+            <div class="saga-images">
+              <div class="saga-image-container" *ngFor="let fondo of saga.fondos; let i = index">
+                <div class="image-container">
+                  <img [src]="fondo" [alt]="'Fondo ' + (i+1) + ' de ' + saga.nombre">
+                  <div class="image-overlay">
+                    <button class="edit-btn" (click)="editarImagen('saga', saga.nombre + '-fondo' + (i+1))">
+                      <i class="edit-icon">✎</i>
+                      Editar
+                    </button>
+                  </div>
+                </div>
+                <p class="image-label">Fondo {{ i+1 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

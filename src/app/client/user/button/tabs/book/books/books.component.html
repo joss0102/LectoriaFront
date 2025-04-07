@@ -1,70 +1,163 @@
+<!-- books.component.html -->
 <section class="books-section">
-    <!-- Añadir libro -->
-    <div class="book-card add" (click)="openAddModal()">
-      <div class="icon-container">
-        <i class="bi bi-plus-circle-fill"></i>
+  <!-- Añadir libro -->
+  <div class="book-card add" (click)="openAddModal()">
+    <div class="icon-container">
+      <i class="bi bi-plus-circle-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Añadir libro</p>
+      <p class="description">Agrega un nuevo libro a tu colección</p>
+    </div>
+  </div>
+  <!-- Modal de Añadir libro - solo se muestra cuando showAddModal es true -->
+  <div class="modal" *ngIf="showAddModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Añadir libro</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
       </div>
-      <div class="content">
-        <p class="title">Añadir libro</p>
-        <p class="description">Agrega un nuevo libro a tu colección</p>
+      <div class="modal-body">
+        <app-add-form></app-add-form>
       </div>
     </div>
-    <!-- Modal de Añadir libro - solo se muestra cuando showAddModal es true -->
-    <div class="modal" *ngIf="showAddModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Añadir libro</h2>
-          <button class="close-button" (click)="closeAllModals()">×</button>
-        </div>
-        <div class="modal-body">
-          <app-add-form></app-add-form>
-        </div>
+  </div>
+
+  <!-- Eliminar libro -->
+  <div class="book-card delete" (click)="openDeleteModal()">
+    <div class="icon-container">
+      <i class="bi bi-trash-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Eliminar libro</p>
+      <p class="description">Elimina libros de tu colección</p>
+    </div>
+  </div>
+  <!-- Modal de Eliminar libro - solo se muestra cuando showDeleteModal es true -->
+  <div class="modal" *ngIf="showDeleteModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Eliminar libro</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-delete-form></app-delete-form>
       </div>
     </div>
-  
-    <!-- Eliminar libro -->
-    <div class="book-card delete" (click)="openDeleteModal()">
-      <div class="icon-container">
-        <i class="bi bi-trash-fill"></i>
+  </div>
+
+  <!-- Tus frases -->
+  <div class="book-card phrases" (click)="openPhrasesModal()">
+    <div class="icon-container">
+      <i class="bi bi-chat-quote-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Tus frases</p>
+      <p class="description">Guarda y explora tus citas favoritas</p>
+    </div>
+  </div>
+  <!-- Modal de Tus frases - solo se muestra cuando showPhrasesModal es true -->
+  <div class="modal" *ngIf="showPhrasesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Tus frases</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
       </div>
-      <div class="content">
-        <p class="title">Eliminar libro</p>
-        <p class="description">Elimina libros de tu colección</p>
+      <div class="modal-body">
+        <app-phrases></app-phrases>
       </div>
     </div>
-    <!-- Modal de Eliminar libro - solo se muestra cuando showDeleteModal es true -->
-    <div class="modal" *ngIf="showDeleteModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Eliminar libro</h2>
-          <button class="close-button" (click)="closeAllModals()">×</button>
-        </div>
-        <div class="modal-body">
-          <app-delete-form></app-delete-form>
-        </div>
+  </div>
+
+  <!-- Calificaciones -->
+  <div class="book-card califications" (click)="openCalificationsModal()">
+    <div class="icon-container">
+      <i class="bi bi-star-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Calificaciones</p>
+      <p class="description">Gestiona las calificaciones de tus libros</p>
+    </div>
+  </div>
+  <!-- Modal de Calificaciones - solo se muestra cuando showCalificationsModal es true -->
+  <div class="modal" *ngIf="showCalificationsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Calificaciones</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-califications></app-califications>
       </div>
     </div>
-  
-    <!-- Tus frases -->
-    <div class="book-card phrases" (click)="openPhrasesModal()">
-      <div class="icon-container">
-        <i class="bi bi-chat-quote-fill"></i>
+  </div>
+
+  <!-- Imágenes -->
+  <div class="book-card images" (click)="openImagesModal()">
+    <div class="icon-container">
+      <i class="bi bi-image"></i>
+    </div>
+    <div class="content">
+      <p class="title">Imágenes</p>
+      <p class="description">Guarda y administra imágenes de tus libros</p>
+    </div>
+  </div>
+  <!-- Modal de Imágenes - solo se muestra cuando showImagesModal es true -->
+  <div class="modal" *ngIf="showImagesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Imágenes</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
       </div>
-      <div class="content">
-        <p class="title">Tus frases</p>
-        <p class="description">Guarda y explora tus citas favoritas</p>
+      <div class="modal-body">
+        <app-images></app-images>
       </div>
     </div>
-    <!-- Modal de Tus frases - solo se muestra cuando showPhrasesModal es true -->
-    <div class="modal" *ngIf="showPhrasesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Tus frases</h2>
-          <button class="close-button" (click)="closeAllModals()">×</button>
-        </div>
-        <div class="modal-body">
-          <app-phrases></app-phrases>
-        </div>
+  </div>
+
+  <!-- Notas -->
+  <div class="book-card notes" (click)="openNotesModal()">
+    <div class="icon-container">
+      <i class="bi bi-journal-text"></i>
+    </div>
+    <div class="content">
+      <p class="title">Notas</p>
+      <p class="description">Toma notas sobre tus lecturas</p>
+    </div>
+  </div>
+  <!-- Modal de Notas - solo se muestra cuando showNotesModal es true -->
+  <div class="modal" *ngIf="showNotesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Notas</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-notes></app-notes>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Tus libros -->
+  <div class="book-card your-books" (click)="openYourBooksModal()">
+    <div class="icon-container">
+      <i class="bi bi-collection-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Tus libros</p>
+      <p class="description">Explora y gestiona tu colección de libros</p>
+    </div>
+  </div>
+  <!-- Modal de Tus libros - solo se muestra cuando showYourBooksModal es true -->
+  <div class="modal" *ngIf="showYourBooksModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Tus libros</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-your-books></app-your-books>
+      </div>
+    </div>
+  </div>
+</section>

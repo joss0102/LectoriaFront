@@ -21,7 +21,7 @@
     padding: 25px;
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    background-color: var(--bs-tertiary-night);
+    background-color: var(--component-bg);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
     overflow: hidden;
@@ -111,7 +111,7 @@
         margin: 0;
         font-size: 1.75rem;
         font-weight: 600;
-        color: white;
+        color: var(--text-color);
         transition: transform 0.3s ease;
         
         /* Ajustar tamaño del título en tablets */
@@ -128,7 +128,7 @@
       .description {
         margin: 0;
         font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--border-color);
         transition: opacity 0.3s ease;
         
         /* Ajustar tamaño de la descripción en móviles */
@@ -172,7 +172,7 @@
 }
 
 .modal-content {
-  background-color: var(--bs-header-night);
+  background-color: var(--background-color);
   border-radius: 20px;
   width: 90%;
   max-width: 1200px;
@@ -180,7 +180,7 @@
   overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   animation: modalUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   
   @media (max-width: 576px) {
     width: 95%;
@@ -199,13 +199,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
   
   h2 {
     margin: 0;
     font-size: 1.7rem;
     font-weight: 600;
-    color: white;
+    color: var(--text-color);
     display: flex;
     align-items: center;
     
@@ -232,7 +232,7 @@
     font-size: 24px;
     line-height: 1;
     cursor: pointer;
-    color: white;
+    color: var(--text-color);
     transition: all 0.2s ease;
     background-color: rgba(255, 255, 255, 0.1);
     
@@ -245,9 +245,47 @@
 
 .modal-body {
   padding: 30px;
-  color: white;
+  color: var(--text-color);
   
   @media (max-width: 576px) {
     padding: 20px;
+  }
+}
+
+// Estilos específicos para tema día
+.tema-dia {
+  .settings,
+  .books,
+  .preferences {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    
+    &:hover {
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .icon-container {
+      i {
+        color: white; // El ícono siempre es blanco en el contenedor de color
+      }
+    }
+  }
+  
+  .modal {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-content {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Ajustes para modo noche
+.tema-noche {
+  .settings,
+  .books,
+  .preferences {
+    &::after {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 50%);
+    }
   }
 }

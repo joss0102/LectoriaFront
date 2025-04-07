@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { BookService } from '../../../../../../../core/services/book/book.service';
 import { Book } from '../../../../../../../core/models/book-model';
 
-
 @Component({
   selector: 'app-phrases',
   standalone: true,
@@ -40,6 +39,11 @@ export class PhrasesComponent implements OnInit {
   selectBook(book: Book): void {
     this.selectedBook = book;
     this.detailView = true;
+    
+    // Nos aseguramos de que el libro seleccionado tenga un array frases, incluso si está vacío
+    if (!this.selectedBook.frases) {
+      this.selectedBook.frases = [];
+    }
   }
 
   // Volver a la lista de libros

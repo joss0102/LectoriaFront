@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { ColorPrimaryService } from '../../../core/services/ColorPrimary/color-primary.service';
+import { ThemeService } from '../../../core/services/ThemeService/theme.service';
 import { DataComponent } from '../data/data.component';
 import { Img1Component } from '../img1/img1.component';
 import { Img2Component } from '../img2/img2.component';
@@ -13,16 +15,29 @@ import { CarruselComponent } from '../carrusel/carrusel.component';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   primaryColor: string = '#000000'; // Color inicial
+  modoNoche: boolean = true; // Por defecto en modo noche
+  
+  private colorSubscription: Subscription = new Subscription();
+  private themeSubscription: Subscription = new Subscription();
 
-  constructor(private colorService: ColorPrimaryService) { }
+  constructor(
+    private colorService: ColorPrimaryService,
+    private themeService: ThemeService
+  ) { }
 
   ngOnInit(): void {
     // Nos suscribimos al servicio para obtener el color primario
-    this.colorService.getPrimaryColor().subscribe(color => {
+    this.colorSubscription = this.colorService.getPrimaryColor().subscribe(color => {
       this.primaryColor = color;
       this.updateBackgroundColor(); // Cambiamos el color de fondo
+    });
+    
+    // Nos suscribimos al servicio del tema
+    this.themeSubscription = this.themeService.modoNoche$.subscribe(modoNoche => {
+      this.modoNoche = modoNoche;
+      this.updateBackgroundColor(); // Actualizamos el color cuando cambia el tema
     });
   }
 
@@ -32,9 +47,17 @@ export class HomeComponent implements OnInit {
     const hex = this.primaryColor;
     const hsl = this.hexToHsl(hex);
 
-    // Reducir la saturación (por ejemplo, al 50%)
-    hsl.s = 10;  // Reducimos la saturación para hacerlo más suave
-    hsl.l = 20;  // Aumentamos la luminosidad para hacerlo más claro y pastel
+    // Ajustamos los valores según el modo (día/noche)
+    if (this.modoNoche) {
+      // Modo noche: color más oscuro y menos saturado
+      hsl.s = 10;  // Reducimos la saturación
+      hsl.l = 20;  // Luminosidad baja para modo oscuro
+    } else {
+      // Modo día: color más claro y menos saturado
+      hsl.s = 6;  // Un poco más de saturación para el modo día
+      hsl.l = 50;  // Aumentamos la luminosidad significativamente para modo día
+      hsl.h = (hsl.h + 10) % 360;
+    }
 
     // Convertir de nuevo a hex
     const newColor = this.hslToHex(hsl.h, hsl.s, hsl.l);
@@ -45,7 +68,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // Función para convertir hex a HSL
   // Función para convertir hex a HSL
   hexToHsl(hex: string): { h: number, s: number, l: number } {
     let r: number = 0, g: number = 0, b: number = 0;
@@ -80,9 +102,8 @@ export class HomeComponent implements OnInit {
       h /= 6;
     }
 
-    return { h: h * 360, s, l };
+    return { h: h * 360, s: s * 100, l: l * 100 };
   }
-
 
   // Función para convertir HSL a hex
   hslToHex(h: number, s: number, l: number): string {
@@ -110,5 +131,10 @@ export class HomeComponent implements OnInit {
     if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
     return p;
   }
-
+  
+  ngOnDestroy(): void {
+    // Limpiamos las suscripciones
+    this.colorSubscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
+  }
 }

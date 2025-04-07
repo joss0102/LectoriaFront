@@ -6,9 +6,9 @@ nav {
   flex-direction: column;
   height: 94vh;
   width: 75px;
-  transition: width 0.3s ease, transform 0.3s ease;
+  transition: width 0.3s ease, transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
   position: relative;
-
+  background-color: var(--background-color);
 
   // Cuando se muestra el texto
   &:not(.only-icon) {
@@ -24,7 +24,7 @@ nav {
   a {
     cursor: pointer;
     padding: 15px;
-    color: white;
+    color: var(--text-color);
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -110,9 +110,9 @@ nav {
   .search-container {
     width: 320px;
     height: 93vh;
-    background-color: $header-night;
+    background-color: var(--background-color);
     padding: 20px;
-    border-left: 1px solid $secondary-night;
+    border-left: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
    
@@ -121,13 +121,20 @@ nav {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
-    
+      
+      h5 {
+        color: var(--text-color);
+      }
     }
     
     .recent-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      
+      p {
+        color: var(--text-color);
+      }
       
       small {
         cursor: pointer;
@@ -159,11 +166,11 @@ nav {
         padding: 12px;
         margin-bottom: 6px;
         border-radius: 8px;
-        color: white;
+        color: var(--text-color);
         transition: background-color 0.2s ease, transform 0.2s ease;
         
         &:hover {
-          background-color: $secondary-night;
+          background-color: var(--component-bg);
           transform: translateX(4px);
         }
       }
@@ -238,6 +245,32 @@ nav {
   @media screen and (max-width: 767px) {
     &.active {
       display: block;
+    }
+  }
+}
+
+// Estilos para el tema día
+.tema-dia {
+  nav {
+    a {
+      &:hover, &.active {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+  
+  .search-container {
+    hr {
+      border-color: var(--border-color) !important;
+    }
+  }
+}
+
+// Modo noche
+.tema-noche {
+  .search-container {
+    hr {
+      border-color: var(--border-color) !important;
     }
   }
 }

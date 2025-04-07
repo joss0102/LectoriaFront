@@ -3,33 +3,31 @@
   padding: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
-  //background-color: var(--bs-main-night);
+  background-color: var(--main-bg);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 
   .btn{
     border-radius: 20px;
     width: 70px;
   }
   .month-title {
-
     font-size: 2rem; // Reducido
     font-weight: 600;
     margin: 0;
-    color: var(--bs-light-night);
+    color: var(--text-color);
   }
   
   .stats-container {
-
-
-    background-color: var(--bs-secondary-night);
+    background-color: var(--component-bg);
     border-radius: 8px;
     
     .stat-value {
       font-size: 1.3rem; // Reducido
-      color: var(--bs-light-night);
+      color: var(--text-color);
     }
     
     .stat-label {
-      color: var(--bs-tertiary-night);
+      color: var(--border-color);
       font-size: 0.85rem; // Reducido
     }
   }
@@ -44,14 +42,13 @@
   .weekdays-row {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-
     margin-bottom: 3px; // Reducido
     
     .weekday {
       text-align: center;
       font-weight: 600;
       font-size: 1.5rem; // Reducido
-      color: var(--bs-tertiary-night);
+      color: var(--border-color);
       padding: 2px 0; // Reducido
     }
   }
@@ -68,8 +65,8 @@
       align-items: center;
       justify-content: center;
       font-size: 0.9rem; // Reducido
-      color: var(--bs-light-night);
-      background-color: var(--bs-secondary-night);
+      color: var(--text-color);
+      background-color: var(--component-bg);
       border-radius: 6px; // Reducido
       cursor: pointer;
       transition: all 0.2s;
@@ -77,7 +74,7 @@
       height: 60px; // Altura fija más pequeña
       
       &:hover {
-        background-color: var(--bs-tertiary-night);
+        background-color: var(--border-color);
       }
       
       &.empty {
@@ -107,7 +104,7 @@
           
           .pages-count {
             font-size: 0.7rem; // Reducido
-            color: var(--bs-light-night);
+            color: var(--text-color);
           }
         }
       }
@@ -116,12 +113,11 @@
         background-color: rgba(255, 193, 7, 0.2);
         
         &::after {
-
           position: absolute;
           top: 2px;
           right: 2px;
           font-size: 0.7rem; // Reducido
-          color: var(--bs-terciary-night);
+          color: var(--border-color);
         }
       }
     }
@@ -130,24 +126,24 @@
 
 // Estilos para la meta anual - más compacta
 .goal-container {
-  background-color: var(--bs-secondary-night);
+  background-color: var(--component-bg);
   border-radius: 8px;
   padding: 10px !important; // Reducido
   
   h3 {
-    color: var(--bs-light-night);
+    color: var(--text-color);
     font-size: 1rem; // Reducido
     margin-bottom: 5px; // Reducido
   }
   
   p {
-    color: var(--bs-tertiary-night);
+    color: var(--border-color);
     font-size: 0.85rem; // Reducido
     margin-bottom: 5px; // Reducido
   }
   
   .progress {
-    background-color: var(--bs-header-night);
+    background-color: var(--background-color);
     height: 6px !important; // Reducido
     margin-bottom: 5px !important; // Reducido
     
@@ -163,11 +159,11 @@
 
 // Estilos para el modal
 .modal-content {
-  background-color: var(--bs-main-night);
-  color: var(--bs-light-night);
+  background-color: var(--main-bg);
+  color: var(--text-color);
   
   .modal-header {
-    border-bottom-color: var(--bs-secondary-night);
+    border-bottom-color: var(--background-color);
     padding: 0.75rem 1rem; // Reducido
   }
   
@@ -176,14 +172,14 @@
   }
   
   .modal-footer {
-    border-top-color: var(--bs-secondary-night);
+    border-top-color: var(--background-color);
     padding: 0.75rem 1rem; // Reducido
   }
   
   .form-control, .form-select {
-    background-color: var(--bs-tertiary-night);
-    border-color: var(--bs-tertiary-night);
-    color: var(--bs-light-night);
+    background-color: var(--component-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
     
     &:focus {
       box-shadow: 0 0 0 0.25rem rgba(255, 136, 0, 0.25);
@@ -191,7 +187,7 @@
   }
   
   .form-text {
-    color: var(--bs-tertiary-night);
+    color: var(--border-color);
     font-size: 0.75rem; // Reducido
   }
   
@@ -444,7 +440,6 @@
   
   .calendar-horizontal {
     .weekdays-row {
-
       .weekday {
         font-size: 0.8rem;
       }
@@ -475,5 +470,19 @@
     .progress-text {
       font-size: 0.2rem !important;
     }
+  }
+}
+
+// Ajustes específicos para tema día
+.tema-dia {
+  .reading-calendar-container {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Ajustes específicos para tema noche
+.tema-noche {
+  .reading-calendar-container {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   }
 }

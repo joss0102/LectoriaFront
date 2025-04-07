@@ -18,6 +18,7 @@ $NightMode: (
 $main-day: #D8D6CB;
 $header-day: #B4AFA6;
 $secondary-day: #A19B8E;
+$tertiary-day: #6e6b64;
 $DayMode: (
     "main-day": $main-day,
     "header-day": $header-day,
@@ -44,6 +45,34 @@ $general: (
 $theme-colors: map-merge($theme-colors, $NightMode);
 $theme-colors: map-merge($theme-colors, $DayMode);
 $theme-colors: map-merge($theme-colors, $general);
+
+// Variables de tema para uso en CSS
+:root {
+    --background-color: #{$header-night};
+    --text-color: #{$light-night};
+    --main-bg: #{$main-night};
+    --body-bg: #{$header-night};
+    --component-bg: #{$secondary-night};
+    --border-color: #{$tertiary-night};
+}
+
+.tema-dia {
+    --background-color: #{$header-day};
+    --text-color: #{$dark-night};
+    --main-bg: #{$main-day};
+    --body-bg: #{$main-day};
+    --component-bg: #{$secondary-day};
+    --border-color: #{$tertiary-day};
+}
+
+.tema-noche {
+    --background-color: #{$header-night};
+    --text-color: #{$light-night};
+    --main-bg: #{$main-night};
+    --body-bg: #{$header-night};
+    --component-bg: #{$secondary-night};
+    --border-color: #{$tertiary-night};
+}
 
 // Importar Bootstrap después de definir los colores
 @import "bootstrap/scss/bootstrap";

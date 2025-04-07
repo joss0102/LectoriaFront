@@ -1,6 +1,31 @@
-@import "./assets/colors";
-@import 'bootstrap/scss/bootstrap';
+/* styles.scss (archivo global de estilos) */
+@import "assets/colors.scss";
 
 body {
-    background-color: $main-night;
+  background-color: var(--main-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ejemplos de cómo usar las variables CSS en otros componentes */
+
+/* Ejemplo para tarjetas o componentes */
+.card {
+  background-color: var(--component-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.section {
+  background-color: var(--main-bg);
+}
+
+/* Ajustar texto para mejor legibilidad según el tema */
+p, h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+}
+
+/* Ajustar bordes de elementos según el tema */
+.border-themed {
+  border-color: var(--border-color);
 }

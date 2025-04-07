@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ThemeService } from '../../../core/services/ThemeService/theme.service';
 
 @Component({
   selector: 'app-nav-vertical',
@@ -21,12 +22,15 @@ export class NavVerticalComponent implements AfterViewInit {
   searchQuery = '';
   searchResults = ['Resultado 1', 'Resultado 2', 'Resultado 3'];
   isMobile: boolean = false;
+  modoNoche: boolean = true;
   
   private iconSubscription: Subscription;
   private menuVisibleSubscription: Subscription;
+  private themeSubscription: Subscription;
   
   constructor(
     private verticalService: NavVerticalService,
+    private themeService: ThemeService,
     private renderer: Renderer2,
     private el: ElementRef
   ) {
@@ -61,6 +65,11 @@ export class NavVerticalComponent implements AfterViewInit {
       
       // Actualizar la posición del buscador
       setTimeout(() => this.updateSearchMenuPosition(), 0);
+    });
+    
+    // Suscripción al servicio de tema
+    this.themeSubscription = this.themeService.modoNoche$.subscribe((value) => {
+      this.modoNoche = value;
     });
   }
   
@@ -116,6 +125,8 @@ export class NavVerticalComponent implements AfterViewInit {
     setTimeout(() => this.updateSearchMenuPosition(), 0);
   }
   
+  // El nav vertical no tiene botón de tema, solo aplica los estilos
+  
   // Cerrar todos los menús (para el overlay)
   closeAllMenus() {
     this.searchMenuVisible = false;
@@ -129,6 +140,9 @@ export class NavVerticalComponent implements AfterViewInit {
     }
     if (this.menuVisibleSubscription) {
       this.menuVisibleSubscription.unsubscribe();
+    }
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
     }
     
     // Limpiar clases en el body

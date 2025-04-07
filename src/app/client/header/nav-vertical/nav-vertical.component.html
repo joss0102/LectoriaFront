@@ -1,4 +1,4 @@
-<nav class="bg-header-night d-flex justify-content-between" [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible}">
+<nav [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible}">
   <!-- Navegación principal -->
   <div class="nav-content">
     <a
@@ -67,7 +67,7 @@
 <div #searchMenuWrapper class="search-menu-wrapper" [ngClass]="{'search-visible': searchMenuVisible}">
   <div class="search-container">
     <div class="search-header">
-      <h5 class="text-white mb-3">Buscador</h5>
+      <h5 class="mb-3">Buscador</h5>
       <i
         class="bi bi-x text-danger"
         (click)="toggleSearchMenu()"
@@ -80,9 +80,9 @@
       [(ngModel)]="searchQuery"
       class="form-control"
     />
-    <hr class="text-white" />
+    <hr />
     <div class="recent-header">
-      <p class="text-white mb-2">Recientes</p>
+      <p class="mb-2">Recientes</p>
       <small class="text-btn fw-bold cursor-pointer">Borrar todo</small>
     </div>
     <ul class="search-results">

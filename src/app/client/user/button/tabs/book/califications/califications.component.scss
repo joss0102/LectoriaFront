@@ -2,7 +2,7 @@
 
 .califications-container {
   padding: 2rem;
-  background-color: var(--bs-main-night);
+  background-color: var(--bs-header-night);
   min-height: 100vh;
   color: var(--bs-light-night);
 
@@ -76,7 +76,7 @@
         }
 
         .book-card {
-          background-color: var(--bs-secondary-night);
+          background: linear-gradient(to bottom, var(--bs-secondary-night), var(--bs-header-night));
           border-radius: 16px;
           padding: 1rem;
           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -137,7 +137,6 @@
         z-index: 3;
 
         .book-card {
-          background: linear-gradient(to bottom, var(--bs-secondary-night), var(--bs-header-night));
           border: 2px solid var(--bs-btn);
           transform: scale(1.1);
         }
@@ -164,7 +163,7 @@
       gap: 2rem;
       
               .book-item {
-        background-color: var(--bs-secondary-night);
+                background: linear-gradient(to bottom, var(--bs-secondary-night), var(--bs-header-night));
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);

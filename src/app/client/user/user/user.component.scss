@@ -1,42 +1,47 @@
 :host {
-    display: block;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  // Contenedor para organizar los componentes
-  .user-container {
-    display: flex;
-    flex-direction: column;
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-    gap: 30px;
-    width: 100%;
+// Contenedor para organizar los componentes
+.user-container {
+  display: flex;
+  flex-direction: column;
+
+  gap: 30px;
+  width: 100%;
+}
+
+// Asegurar que el slider tenga el ancho adecuado
+app-slider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+// Asegurar que los botones tengan el ancho adecuado
+app-buttons {
+  display: block;
+  width: 100%;
+}
+
+// Media queries para dispositivos más pequeños
+@media (max-width: 768px) {
+  :host {
+    padding: 15px;
   }
-  
-  // Asegurar que el slider tenga el ancho adecuado
-  app-slider {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+
+  .user-container {
+    gap: 20px;
   }
-  
-  // Asegurar que los botones tengan el ancho adecuado
-  app-buttons {
-    display: block;
-    width: 100%;
+}
+@media (max-width: 355px) {
+  :host {
+    display: contents;
   }
-  
-  // Media queries para dispositivos más pequeños
-  @media (max-width: 768px) {
-    :host {
-      padding: 15px;
-    }
-    
-    .user-container {
-      gap: 20px;
-    }
-  }
+}

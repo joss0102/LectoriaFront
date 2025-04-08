@@ -83,11 +83,11 @@
     }
   }
   .carrusel {
-    padding-top: 450px !important;
+    padding-top: 550px !important;
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 630px) {
   .parent {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(12, 1fr);
@@ -109,6 +109,9 @@
     .imagen1 {
       display: none;
       opacity: 0;
+    }
+    .carrusel {
+      padding-top: 380px !important;
     }
 
     .imagen2 {

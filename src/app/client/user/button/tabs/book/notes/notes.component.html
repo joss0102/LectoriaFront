@@ -1,96 +1,107 @@
-<div class="notes-container">
-    <!-- Vista principal (lista de libros con anotaciones) -->
-    <div class="books-list" *ngIf="!detailView">
-      <h1 class="main-title">Tus Anotaciones</h1>
-      <p class="main-description">Explora las anotaciones y reflexiones que has guardado de tus lecturas.</p>
-      
-      <!-- Mensaje cuando no hay anotaciones -->
-      <div class="no-notes" *ngIf="booksWithNotes.length === 0">
-        <div class="empty-icon">📝</div>
-        <h2>No hay anotaciones guardadas</h2>
-        <p>Aún no has guardado anotaciones de tus libros. Cuando quieras recordar algún detalle o reflexión importante durante la lectura, podrás guardarla aquí.</p>
-      </div>
-      
-      <!-- Grid de libros con anotaciones -->
-      <div class="notes-grid" *ngIf="booksWithNotes.length > 0">
-        <div class="book-card" *ngFor="let book of booksWithNotes" (click)="selectBook(book)">
-          <div class="book-cover">
-            <img [src]="book.imagen" [alt]="'Portada de ' + book.titulo">
-            <div class="notes-count" *ngIf="book.anotaciones && book.anotaciones.length > 0">
-              {{ book.anotaciones.length }} {{ book.anotaciones.length === 1 ? 'nota' : 'notas' }}
-            </div>
+<!-- notes.component.html -->
+<div class="notes-container bg-theme p-3 p-md-4">
+  <!-- Vista principal (lista de libros con anotaciones) -->
+  <div class="books-list" *ngIf="!detailView">
+    <h1 class="main-title position-relative d-inline-block mb-2 fw-bold text-theme-text">Tus Anotaciones</h1>
+    <p class="main-description text-theme fs-6 mb-5 mw-600">Explora las anotaciones y reflexiones que has guardado de tus lecturas.</p>
+    
+    <!-- Mensaje cuando no hay anotaciones -->
+    <div class="no-notes empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" *ngIf="booksWithNotes.length === 0">
+      <div class="empty-icon fs-1 mb-3 text-theme">📝</div>
+      <h2 class="fs-4 mb-3 text-theme-text">No hay anotaciones guardadas</h2>
+      <p class="text-theme mw-400 mx-auto lh-base">Aún no has guardado anotaciones de tus libros. Cuando quieras recordar algún detalle o reflexión importante durante la lectura, podrás guardarla aquí.</p>
+    </div>
+    
+    <!-- Grid de libros con anotaciones -->
+    <div class="notes-grid" *ngIf="booksWithNotes.length > 0">
+      <div class="book-card gradient-card rounded-4 p-4 d-flex flex-column align-items-center shadow card-hover" 
+           *ngFor="let book of booksWithNotes" 
+           (click)="selectBook(book)">
+        <div class="book-cover position-relative rounded-3 shadow overflow-hidden mb-4">
+          <img [src]="book.imagen" [alt]="'Portada de ' + book.titulo" class="w-100 h-100 object-fit-cover">
+          <div class="notes-count position-absolute bottom-10 end-10 badge bg-dark-80 text-white" 
+               *ngIf="book.anotaciones && book.anotaciones.length > 0">
+            {{ book.anotaciones.length }} {{ book.anotaciones.length === 1 ? 'nota' : 'notas' }}
           </div>
-          <div class="book-info">
-            <h3 class="book-title">{{ book.titulo }}</h3>
-            <p class="book-author">{{ book.autor }}</p>
-            
-            <!-- Vista previa de la primera anotación -->
-            <div class="preview-note" *ngIf="book.anotaciones && book.anotaciones.length > 0">
-              <div class="note-icon">📌</div>
-              <p>{{ shortenNote(book.anotaciones[0]) }}</p>
-            </div>
-            
-            <button class="view-all-btn">
-              Ver todas
-              <span class="arrow-icon">→</span>
+        </div>
+        <div class="book-info d-flex flex-column w-100 text-center">
+          <h3 class="book-title fw-semibold mb-1 text-theme-text">{{ book.titulo }}</h3>
+          <p class="book-author fs-7 text-theme mb-3">{{ book.autor }}</p>
+          
+          <!-- Vista previa de la primera anotación -->
+          <div class="preview-note bg-dark-20 rounded-3 p-4 mb-4 position-relative text-start flex-grow-1" 
+               *ngIf="book.anotaciones && book.anotaciones.length > 0">
+            <div class="note-icon position-absolute top-5 start-5 opacity-70 fs-5">📌</div>
+            <p class="text-theme-text fs-7 lh-base mb-0 ms-4 position-relative z-1">{{ shortenNote(book.anotaciones[0]) }}</p>
+          </div>
+          
+          <button class="view-all-btn btn bg-btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto">
+            Ver todas
+            <span class="arrow-icon ms-2">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Vista detalle de un libro y sus anotaciones -->
+  <div class="book-detail mw-900 mx-auto" *ngIf="detailView && selectedBook">
+    <button class="back-btn btn d-flex align-items-center gap-2 mb-4 text-theme fw-semibold border-0" (click)="backToList()">
+      <span class="back-arrow">←</span>
+      Volver
+    </button>
+    
+    <div class="detail-header d-flex gap-4 mb-5">
+      <div class="book-cover-detail rounded-3 shadow overflow-hidden">
+        <img [src]="selectedBook.imagen" [alt]="'Portada de ' + selectedBook.titulo" class="w-100 h-100 object-fit-cover">
+      </div>
+      <div class="book-info-detail d-flex flex-column justify-content-center">
+        <h2 class="detail-title fw-bold mb-2 text-theme-text">{{ selectedBook.titulo }}</h2>
+        <p class="detail-author fs-5 text-theme mb-3">{{ selectedBook.autor }}</p>
+        <div class="book-meta d-flex gap-3 mb-4" *ngIf="selectedBook.saga">
+          <span class="saga-badge bg-component rounded-pill px-3 py-2 fs-7 text-theme">{{ selectedBook.saga }}</span>
+        </div>
+        <p class="notes-counter fs-6 text-theme">
+          <span class="counter-number fw-bold text-btn fs-5">{{ selectedBook.anotaciones?.length || 0 }}</span> 
+          {{ (selectedBook.anotaciones?.length || 0) === 1 ? 'anotación' : 'anotaciones' }} guardadas
+        </p>
+      </div>
+    </div>
+    
+    <div class="notes-list mb-5">
+      <h3 class="section-title position-relative d-inline-block mb-4 text-theme-text">Anotaciones</h3>
+      
+      <!-- Lista de todas las anotaciones del libro -->
+      <div class="note-item d-flex gap-4 mb-4 bg-component rounded-3 p-4 position-relative overflow-hidden" 
+           *ngFor="let note of selectedBook.anotaciones; let i = index">
+        <div class="note-number bg-btn text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start">
+          {{ i + 1 }}
+        </div>
+        <div class="note-content position-relative flex-grow-1">
+          <div class="note-pin position-absolute opacity-70 fs-5">📌</div>
+          <p class="fs-6 lh-base mb-5 ms-5 position-relative z-1 text-theme-text">{{ note }}</p>
+          <div class="note-actions position-absolute bottom-0 end-0 d-flex gap-2">
+            <button class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover" 
+                    title="Copiar anotación">
+              <span class="action-icon">📋</span>
+            </button>
+            <button class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit" 
+                    title="Editar anotación">
+              <span class="action-icon">✎</span>
+            </button>
+            <button class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover delete" 
+                    title="Eliminar anotación">
+              <span class="action-icon">🗑️</span>
             </button>
           </div>
         </div>
       </div>
     </div>
     
-    <!-- Vista detalle de un libro y sus anotaciones -->
-    <div class="book-detail" *ngIf="detailView && selectedBook">
-      <button class="back-btn" (click)="backToList()">
-        <span class="back-arrow">←</span>
-        Volver
-      </button>
-      
-      <div class="detail-header">
-        <div class="book-cover-detail">
-          <img [src]="selectedBook.imagen" [alt]="'Portada de ' + selectedBook.titulo">
-        </div>
-        <div class="book-info-detail">
-          <h2 class="detail-title">{{ selectedBook.titulo }}</h2>
-          <p class="detail-author">{{ selectedBook.autor }}</p>
-          <div class="book-meta" *ngIf="selectedBook.saga">
-            <span class="saga-badge">{{ selectedBook.saga }}</span>
-          </div>
-          <p class="notes-counter">
-            <span class="counter-number">{{ selectedBook.anotaciones?.length || 0 }}</span> 
-            {{ (selectedBook.anotaciones?.length || 0) === 1 ? 'anotación' : 'anotaciones' }} guardadas
-          </p>
-        </div>
-      </div>
-      
-      <div class="notes-list">
-        <h3 class="section-title">Anotaciones</h3>
-        
-        <!-- Lista de todas las anotaciones del libro -->
-        <div class="note-item" *ngFor="let note of selectedBook.anotaciones; let i = index">
-          <div class="note-number">{{ i + 1 }}</div>
-          <div class="note-content">
-            <div class="note-pin">📌</div>
-            <p>{{ note }}</p>
-            <div class="note-actions">
-              <button class="action-btn copy-btn" title="Copiar anotación">
-                <span class="action-icon">📋</span>
-              </button>
-              <button class="action-btn edit-btn" title="Editar anotación">
-                <span class="action-icon">✎</span>
-              </button>
-              <button class="action-btn delete-btn" title="Eliminar anotación">
-                <span class="action-icon">🗑️</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Botón para añadir nueva anotación -->
-      <button class="add-note-btn">
-        <span class="add-icon">+</span>
-        Añadir nueva anotación
-      </button>
-    </div>
+    <!-- Botón para añadir nueva anotación -->
+    <button class="add-note-btn bg-component border-dashed text-theme fw-semibold rounded-3 p-4 w-100 d-flex align-items-center justify-content-center gap-3">
+      <span class="add-icon fs-4">+</span>
+      Añadir nueva anotación
+    </button>
   </div>
+</div>

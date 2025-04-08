@@ -1,107 +1,160 @@
-/* styles.scss (archivo global de estilos) */
 @import "assets/colors.scss";
 
 /* Estilos de scrollbar minimalistas y modernos - Base */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(226, 226, 226, 0.3) transparent;
+* { 
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(226, 226, 226, 0.3) transparent; 
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+::-webkit-scrollbar { 
+  width: 6px; 
+  height: 6px; 
 }
 
-::-webkit-scrollbar-track {
-  background-color: transparent; /* Color de fondo predeterminado */
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05); /* Sutilmente visible al hover */
-  }
+::-webkit-scrollbar-track { 
+  background-color: transparent; 
+  border-radius: 8px; 
+  transition: background-color 0.3s ease; 
+
+  &:hover { 
+    background-color: rgba(0, 0, 0, 0.05); 
+  } 
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  
-  &:hover {
-    background-color: rgba(255, 0, 0, 0.5);
-  }
+::-webkit-scrollbar-thumb { 
+  border-radius: 8px; 
+  transition: background-color 0.3s ease; 
+
+  &:hover { 
+    background-color: rgba(255, 0, 0, 0.5); 
+  } 
 }
 
 /* Modo día - ajuste específico para scrollbar */
-.tema-dia {
-  * {
-    scrollbar-color: rgb(111, 111, 111) rgba(110, 107, 100, 0.1);
+.tema-dia { 
+  * { 
+    scrollbar-color: rgb(111, 111, 111) rgba(110, 107, 100, 0.1); 
   }
-  
-  ::-webkit-scrollbar-track {
-    background-color: rgba(110, 107, 100, 0.1); /* Color de fondo en modo día */
-    
-    &:hover {
-      background-color: rgba(110, 107, 100, 0.15);
-    }
+
+  ::-webkit-scrollbar-track { 
+    background-color: rgba(110, 107, 100, 0.1); 
+
+    &:hover { 
+      background-color: rgba(110, 107, 100, 0.15); 
+    } 
   }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: rgb(211, 191, 191);
-    
-    &:hover {
-      background-color: rgba(191, 189, 189, 0.4);
-    }
+
+  ::-webkit-scrollbar-thumb { 
+    background-color: rgb(211, 191, 191); 
+
+    &:hover { 
+      background-color: rgba(191, 189, 189, 0.4); 
+    } 
   }
 }
 
 /* Modo noche - ajuste específico para scrollbar */
-.tema-noche {
-  * {
-    scrollbar-color: rgba(180, 180, 180, 0.2) rgba(30, 30, 30, 0.2);
+.tema-noche { 
+  * { 
+    scrollbar-color: rgba(180, 180, 180, 0.2) rgba(30, 30, 30, 0.2); 
   }
-  
-  ::-webkit-scrollbar-track {
-    background-color: rgba(30, 30, 30, 0.2); /* Color de fondo en modo noche */
-    
-    &:hover {
-      background-color: rgba(30, 30, 30, 0.3);
-    }
+
+  ::-webkit-scrollbar-track { 
+    background-color: rgba(30, 30, 30, 0.2); 
+
+    &:hover { 
+      background-color: rgba(30, 30, 30, 0.3); 
+    } 
   }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(180, 180, 180, 0.2);
-    
-    &:hover {
-      background-color: rgba(180, 180, 180, 0.4);
-    }
+
+  ::-webkit-scrollbar-thumb { 
+    background-color: rgba(180, 180, 180, 0.2); 
+
+    &:hover { 
+      background-color: rgba(180, 180, 180, 0.4); 
+    } 
   }
 }
 
-body {
-  background-color: var(--main-bg);
+body { 
+  background-color: var(--main-bg); 
+  color: var(--text-color); 
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+/* Estilos para formularios - Aplicables a todos los form-control */
+.form-control { 
+  padding: 12px 16px; 
+  transition: all 0.2s ease; 
   color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--component-bg);
+  border-color: var(--border-color);
+
+  &:focus { 
+    outline: none; 
+    border-color: var(--btn); 
+    box-shadow: 0 0 0 2px rgba(255, 136, 0, 0.3); 
+  }
+
+  &::placeholder { 
+    color: var(--text-color); 
+    opacity: 0.7; 
+  }
+
+  &.is-invalid { 
+    border-color: var(--danger); 
+
+    &:focus { 
+      box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.3); 
+    } 
+  }
+}
+
+/* Estilos específicos para selects */
+select.form-control { 
+  color: var(--text-color);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+  padding-right: 30px;
+
+  /* Estilo para las opciones */
+  option {
+    color: var(--text-color);
+    background-color: var(--component-bg);
+
+    &:first-child {
+      opacity: 0.7;
+    }
+
+    &:disabled {
+      color: var(--text-color);
+      opacity: 0.5;
+    }
+  }
 }
 
 /* Ejemplos de cómo usar las variables CSS en otros componentes */
-
-/* Ejemplo para tarjetas o componentes */
-.card {
-  background-color: var(--component-bg);
-  color: var(--text-color);
-  border-color: var(--border-color);
+.card { 
+  background-color: var(--component-bg); 
+  color: var(--text-color); 
+  border-color: var(--border-color); 
 }
 
-.section {
-  background-color: var(--main-bg);
+.section { 
+  background-color: var(--main-bg); 
 }
 
 /* Ajustar texto para mejor legibilidad según el tema */
-p, h1, h2, h3, h4, h5, h6 {
-  color: var(--text-color);
+p, h1, h2, h3, h4, h5, h6 { 
+  color: var(--text-color); 
 }
 
 /* Ajustar bordes de elementos según el tema */
-.border-themed {
-  border-color: var(--border-color);
+.border-themed { 
+  border-color: var(--border-color); 
 }

@@ -1,70 +1,96 @@
-<section class="section">
+<section class="section container my-4">
   <!-- Ajustes de usuario -->
-  <div class="settings" (click)="openSettingsModal()">
-    <div class="icon-container">
-      <i class="bi bi-gear-fill"></i>
-    </div>
-    <div class="content">
-      <p class="title">Ajustes de usuario</p>
-      <p class="description">Editar nombre, Nickname, contraseña y la imagen de perfil</p>
-    </div>
-  </div>
-  <!-- Modal de Ajustes - solo se muestra cuando showSettingsModal es true -->
-  <div class="modal" *ngIf="showSettingsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Ajustes de usuario</h2>
-        <button class="close-button" (click)="closeAllModals()">×</button>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="card h-100 settings custom-card" (click)="openSettingsModal()">
+        <div class="card-body d-flex align-items-start">
+          <div class="icon-container bg-btn me-3 d-flex align-items-center justify-content-center rounded-3">
+            <i class="bi bi-gear-fill text-white"></i>
+          </div>
+          <div class="content">
+            <p class="card-title h4 mb-2">Ajustes de usuario</p>
+            <p class="card-text text-muted">Editar nombre, Nickname, contraseña y la imagen de perfil</p>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <app-settings></app-settings>
+    </div>
+
+    <!-- Tus libros -->
+    <div class="col-lg-4">
+      <div class="card h-100 books custom-card" (click)="openBooksModal()">
+        <div class="card-body d-flex align-items-start">
+          <div class="icon-container bg-btn me-3 d-flex align-items-center justify-content-center rounded-3">
+            <i class="bi bi-book-fill text-white"></i>
+          </div>
+          <div class="content">
+            <p class="card-title h4 mb-2">Tus libros</p>
+              <p class="card-text text-muted">Gestiona tus libros, añade y elimina. Visualiza tu contenido, imágenes, notas, frases y calificaciones</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferencias -->
+    <div class="col-lg-4">
+      <div class="card h-100 preferences custom-card" (click)="openPreferencesModal()">
+        <div class="card-body d-flex align-items-start">
+          <div class="icon-container bg-btn me-3 d-flex align-items-center justify-content-center rounded-3">
+            <i class="bi bi-gear-fill text-white"></i>
+          </div>
+          <div class="content">
+            <p class="card-title h4 mb-2">Preferencias</p>
+            <p class="card-text text-muted">Configura tus preferencias</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Tus libros -->
-  <div class="books" (click)="openBooksModal()">
-    <div class="icon-container">
-      <i class="bi bi-book-fill"></i>
-    </div>
-    <div class="content">
-      <p class="title">Tus libros</p>
-      <p class="description">Añade y elimina</p>
-      <p class="description">Gestiona tus libros, imágenes, notas, frases y calificaciones</p>
-    </div>
-  </div>
-  <!-- Modal de Libros - solo se muestra cuando showBooksModal es true -->
-  <div class="modal" *ngIf="showBooksModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Tus libros</h2>
-        <button class="close-button" (click)="closeAllModals()">×</button>
-      </div>
-      <div class="modal-body">
-        <app-books></app-books>
+  <!-- Modal de Ajustes -->
+  <div class="modal fade" [class.show]="showSettingsModal" [style.display]="showSettingsModal ? 'block' : 'none'" 
+       tabindex="-1" *ngIf="showSettingsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header border-bottom">
+          <h2 class="modal-title position-relative ps-4"><span class="modal-title-line"></span>Ajustes de usuario</h2>
+          <button type="button" class="btn-close custom-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <app-settings></app-settings>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Preferencias -->
-  <div class="preferences" (click)="openPreferencesModal()">
-    <div class="icon-container">
-      <i class="bi bi-gear-fill"></i>
-    </div>
-    <div class="content">
-      <p class="title">Preferencias</p>
-      <p class="description">Configura tus preferencias</p>
+  <!-- Modal de Libros -->
+  <div class="modal fade" [class.show]="showBooksModal" [style.display]="showBooksModal ? 'block' : 'none'" 
+       tabindex="-1" *ngIf="showBooksModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header border-bottom">
+          <h2 class="modal-title position-relative ps-4"><span class="modal-title-line"></span>Tus libros</h2>
+          <button type="button" class="btn-close custom-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <app-books></app-books>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- Modal de Preferencias - solo se muestra cuando showPreferencesModal es true -->
-  <div class="modal" *ngIf="showPreferencesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Preferencias</h2>
-        <button class="close-button" (click)="closeAllModals()">×</button>
-      </div>
-      <div class="modal-body">
-        <app-preferences></app-preferences>
+
+  <!-- Modal de Preferencias -->
+  <div class="modal fade" [class.show]="showPreferencesModal" [style.display]="showPreferencesModal ? 'block' : 'none'" 
+       tabindex="-1" *ngIf="showPreferencesModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header border-bottom">
+          <h2 class="modal-title position-relative ps-4"><span class="modal-title-line"></span>Preferencias</h2>
+          <button type="button" class="btn-close custom-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <app-preferences></app-preferences>
+        </div>
       </div>
     </div>
   </div>

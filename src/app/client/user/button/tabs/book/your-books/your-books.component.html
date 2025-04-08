@@ -1,183 +1,219 @@
-<div class="your-books-container">
-    <div class="header-section">
-      <h1 class="main-title">Tu Biblioteca</h1>
-      <p class="main-description">Explora todos tus libros en un solo lugar. Haz clic en cualquier libro para ver más detalles.</p>
-      
-      <!-- Buscador -->
-      <div class="search-container">
-        <div class="search-box">
-          <input 
-            type="text" 
-            [(ngModel)]="searchQuery" 
-            (input)="searchBooks()"
-            placeholder="Buscar por título, autor o saga..." 
-            class="search-input"
-          >
-          <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn">×</button>
-          <div class="search-icon">🔍</div>
-        </div>
-        <div class="search-results" *ngIf="searchQuery">
-          <span *ngIf="filteredBooks.length === 0">No se encontraron resultados</span>
-          <span *ngIf="filteredBooks.length === 1">1 libro encontrado</span>
-          <span *ngIf="filteredBooks.length > 1">{{filteredBooks.length}} libros encontrados</span>
-        </div>
+<!-- your-books.component.html -->
+<div class="your-books-container bg-theme p-3 p-md-4">
+  <div class="header-section mb-5">
+    <h1 class="main-title position-relative d-inline-block mb-2 fw-bold text-theme-text">Tu Biblioteca</h1>
+    <p class="main-description text-theme fs-6 mb-4 mw-600">Explora todos tus libros en un solo lugar. Haz clic en cualquier libro para ver más detalles.</p>
+    
+    <!-- Buscador -->
+    <div class="search-container mw-600 mb-4">
+      <div class="search-box position-relative w-100">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (input)="searchBooks()"
+          placeholder="Buscar por título, autor o saga..." 
+          class="search-input form-control rounded-pill border-0 py-3 px-4 shadow-sm bg-component"
+        >
+        <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn btn-icon border-0 bg-transparent position-absolute">×</button>
+        <div class="search-icon position-absolute">🔍</div>
       </div>
-    </div>
-    
-    <!-- Libros grid -->
-    <div class="books-grid">
-      <div class="book-card" *ngFor="let book of filteredBooks" (click)="openBookDetails(book)">
-        <div class="book-cover">
-          <img [src]="book.imagen" [alt]="book.titulo">
-          <div class="book-status" [ngClass]="getStatusClass(book.estado)">
-            {{ getStatusText(book.estado) }}
-          </div>
-        </div>
-        <div class="book-info">
-          <h3 class="book-title">{{ book.titulo }}</h3>
-          <p class="book-author">{{ book.autor }}</p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Mensaje si no hay libros -->
-    <div class="no-books" *ngIf="allBooks.length === 0">
-      <div class="empty-icon">📚</div>
-      <h2>No hay libros en tu biblioteca</h2>
-      <p>¡Comienza a añadir libros para crear tu biblioteca personal!</p>
-    </div>
-    
-    <!-- Mensaje si no hay resultados de búsqueda -->
-    <div class="no-search-results" *ngIf="allBooks.length > 0 && filteredBooks.length === 0">
-      <div class="empty-icon">🔍</div>
-      <h2>No se encontraron resultados</h2>
-      <p>Intenta con otra búsqueda o <button class="reset-search" (click)="clearSearch()">ver todos los libros</button></p>
-    </div>
-    
-    <!-- Modal de detalles del libro -->
-    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
-      <div class="modal-content" (click)="preventClose($event)" *ngIf="selectedBook">
-        <button class="close-btn" (click)="closeModal()">×</button>
-        
-        <div class="modal-header">
-          <div class="book-cover-detail">
-            <img [src]="selectedBook.imagen" [alt]="selectedBook.titulo">
-          </div>
-          <div class="book-details">
-            <h2 class="book-title">{{ selectedBook.titulo }}</h2>
-            <p class="book-author">{{ selectedBook.autor }}</p>
-            
-            <div class="book-meta">
-              <div class="meta-item" *ngIf="selectedBook.saga">
-                <span class="meta-label">Saga:</span>
-                <span class="meta-value">{{ selectedBook.saga }}</span>
-              </div>
-              
-              <div class="meta-item">
-                <span class="meta-label">Estado:</span>
-                <span class="meta-value status-badge" [ngClass]="getStatusClass(selectedBook.estado)">
-                  {{ getStatusText(selectedBook.estado) }}
-                </span>
-              </div>
-              
-              <div class="meta-item" *ngIf="selectedBook.valoracion">
-                <span class="meta-label">Valoración:</span>
-                <span class="meta-value rating">
-                  <span class="star" *ngFor="let star of [1,2,3,4,5]">
-                    {{ (star <= selectedBook.valoracion!) ? '★' : '☆' }}
-                  </span>
-                  <span class="rating-number">({{ selectedBook.valoracion }})</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="book-stats" *ngIf="selectedBook.estado === 'finalizado' || selectedBook.estado === 'en-progreso'">
-          <div class="stat-item">
-            <div class="stat-value">{{ selectedBook.paginasTotales }}</div>
-            <div class="stat-label">Páginas totales</div>
-          </div>
-          
-          <div class="stat-item">
-            <div class="stat-value">{{ selectedBook.paginasLeidas }}</div>
-            <div class="stat-label">Páginas leídas</div>
-          </div>
-          
-          <div class="stat-item" *ngIf="selectedBook.progreso !== undefined">
-            <div class="stat-value">{{ selectedBook.progreso }}%</div>
-            <div class="stat-label">Progreso</div>
-          </div>
-          
-          <div class="stat-item" *ngIf="selectedBook.fechaInicio">
-            <div class="stat-value">{{ formatDate(selectedBook.fechaInicio) }}</div>
-            <div class="stat-label">Fecha inicio</div>
-          </div>
-          
-          <div class="stat-item" *ngIf="selectedBook.fechaFin">
-            <div class="stat-value">{{ formatDate(selectedBook.fechaFin) }}</div>
-            <div class="stat-label">Fecha fin</div>
-          </div>
-          
-          <div class="stat-item" *ngIf="selectedBook.fechaInicio && selectedBook.fechaFin">
-            <div class="stat-value">{{ calculateReadingDays(selectedBook) }}</div>
-            <div class="stat-label">Días de lectura</div>
-          </div>
-        </div>
-        
-        <div class="book-content">
-          <div class="content-section">
-            <h3 class="section-title">Sinopsis</h3>
-            <p class="book-synopsis">{{ selectedBook.sinopsis }}</p>
-          </div>
-          
-          <div class="content-section" *ngIf="selectedBook.frases && selectedBook.frases.length > 0">
-            <h3 class="section-title">Frases destacadas</h3>
-            <div class="phrases-list">
-              <div class="phrase-item" *ngFor="let phrase of selectedBook.frases">
-                <div class="quote-marks">"</div>
-                <p>{{ phrase }}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="content-section" *ngIf="selectedBook.anotaciones && selectedBook.anotaciones.length > 0">
-            <h3 class="section-title">Anotaciones</h3>
-            <div class="notes-list">
-              <div class="note-item" *ngFor="let note of selectedBook.anotaciones">
-                <div class="note-pin">📌</div>
-                <p>{{ note }}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="content-section" *ngIf="selectedBook.registroLectura && selectedBook.registroLectura.length > 0">
-            <h3 class="section-title">Registro de lectura</h3>
-            <div class="reading-log">
-              <div class="log-header">
-                <span class="log-cell">Fecha</span>
-                <span class="log-cell">Páginas</span>
-                <span class="log-cell">Tiempo (min)</span>
-              </div>
-              <div class="log-row" *ngFor="let record of selectedBook.registroLectura">
-                <span class="log-cell">{{ formatDate(record.fecha) }}</span>
-                <span class="log-cell">{{ record.paginasLeidas }}</span>
-                <span class="log-cell">{{ record.tiempo || 'N/A' }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="modal-actions">
-          <button class="action-btn edit-btn">
-            <span class="action-icon">✎</span>
-            Editar libro
-          </button>
-          <button class="action-btn" [ngClass]="{'add-progress': selectedBook.estado !== 'finalizado', 'finalizar': selectedBook.estado === 'en-progreso'}">
-            <span class="action-icon">{{ selectedBook.estado === 'en-progreso' ? '✓' : '+' }}</span>
-            {{ selectedBook.estado === 'en-progreso' ? 'Marcar como finalizado' : 'Añadir progreso' }}
-          </button>
-        </div>
+      <div class="search-results ps-3 mt-2 fs-7 text-theme" *ngIf="searchQuery">
+        <span *ngIf="filteredBooks.length === 0">No se encontraron resultados</span>
+        <span *ngIf="filteredBooks.length === 1">1 libro encontrado</span>
+        <span *ngIf="filteredBooks.length > 1">{{filteredBooks.length}} libros encontrados</span>
       </div>
     </div>
   </div>
+  
+  <!-- Libros grid -->
+  <div class="books-grid">
+    <div class="book-card bg-component rounded-3 shadow overflow-hidden h-100 card-hover" 
+         *ngFor="let book of filteredBooks" 
+         (click)="openBookDetails(book)">
+      <div class="book-cover position-relative">
+        <img [src]="book.imagen" [alt]="book.titulo" class="w-100 h-100 object-fit-cover">
+        <div class="book-status position-absolute top-10 end-10 rounded-pill fw-semibold shadow-sm" 
+             [ngClass]="getStatusClass(book.estado)">
+          {{ getStatusText(book.estado) }}
+        </div>
+      </div>
+      <div class="book-info p-3">
+        <h3 class="book-title fw-semibold mb-1 text-truncate text-theme-text">{{ book.titulo }}</h3>
+        <p class="book-author fs-7 text-theme text-truncate mb-0">{{ book.autor }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mensaje si no hay libros -->
+  <div class="no-books empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="allBooks.length === 0">
+    <div class="empty-icon fs-1 mb-3 text-theme">📚</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No hay libros en tu biblioteca</h2>
+    <p class="text-theme lh-base mb-0">¡Comienza a añadir libros para crear tu biblioteca personal!</p>
+  </div>
+  
+  <!-- Mensaje si no hay resultados de búsqueda -->
+  <div class="no-search-results empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="allBooks.length > 0 && filteredBooks.length === 0">
+    <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
+    <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
+      <button class="reset-search bg-transparent border-0 text-btn fw-semibold text-decoration-underline" 
+              (click)="clearSearch()">ver todos los libros</button>
+    </p>
+  </div>
+  
+  <!-- Modal de detalles del libro -->
+  <div class="modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center p-3 bg-dark-blur backdrop-blur z-1000" 
+       *ngIf="isModalOpen" 
+       (click)="closeModal()">
+    <div class="modal-content bg-main rounded-4 w-100 shadow-lg position-relative" 
+         (click)="preventClose($event)" 
+         *ngIf="selectedBook">
+      <button class="close-btn position-absolute d-flex align-items-center justify-content-center rounded-circle border-0 bg-theme text-theme-text" 
+              (click)="closeModal()">×</button>
+      
+      <div class="modal-header gradient-header d-flex gap-4 p-4 rounded-top-4">
+        <div class="book-cover-detail rounded-3 shadow overflow-hidden">
+          <img [src]="selectedBook.imagen" [alt]="selectedBook.titulo" class="w-100 h-100 object-fit-cover">
+        </div>
+        <div class="book-details flex-grow-1">
+          <h2 class="book-title fw-bold mb-2 text-theme-text">{{ selectedBook.titulo }}</h2>
+          <p class="book-author fs-5 text-theme mb-4">{{ selectedBook.autor }}</p>
+          
+          <div class="book-meta d-flex flex-column gap-3">
+            <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.saga">
+              <span class="meta-label fs-7 text-theme min-w-100">Saga:</span>
+              <span class="meta-value fs-6 text-theme-text">{{ selectedBook.saga }}</span>
+            </div>
+            
+            <div class="meta-item d-flex align-items-center">
+              <span class="meta-label fs-7 text-theme min-w-100">Estado:</span>
+              <span class="meta-value status-badge rounded-pill px-3 py-1 fs-7 fw-semibold" 
+                    [ngClass]="getStatusClass(selectedBook.estado)">
+                {{ getStatusText(selectedBook.estado) }}
+              </span>
+            </div>
+            
+            <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.valoracion">
+              <span class="meta-label fs-7 text-theme min-w-100">Valoración:</span>
+              <span class="meta-value rating d-flex align-items-center">
+                <span class="star text-btn" *ngFor="let star of [1,2,3,4,5]">
+                  {{ (star <= selectedBook.valoracion!) ? '★' : '☆' }}
+                </span>
+                <span class="rating-number ms-2 text-theme">({{ selectedBook.valoracion }})</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="book-stats bg-component p-4" 
+           *ngIf="selectedBook.estado === 'finalizado' || selectedBook.estado === 'en-progreso'">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+          <div class="col">
+            <div class="stat-item text-center">
+              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ selectedBook.paginasTotales }}</div>
+              <div class="stat-label fs-7 text-theme">Páginas totales</div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="stat-item text-center">
+              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ selectedBook.paginasLeidas }}</div>
+              <div class="stat-label fs-7 text-theme">Páginas leídas</div>
+            </div>
+          </div>
+          
+          <div class="col" *ngIf="selectedBook.progreso !== undefined">
+            <div class="stat-item text-center">
+              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ selectedBook.progreso }}%</div>
+              <div class="stat-label fs-7 text-theme">Progreso</div>
+            </div>
+          </div>
+          
+          <div class="col" *ngIf="selectedBook.fechaInicio">
+            <div class="stat-item text-center">
+              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ formatDate(selectedBook.fechaInicio) }}</div>
+              <div class="stat-label fs-7 text-theme">Fecha inicio</div>
+            </div>
+          </div>
+          
+          <div class="col" *ngIf="selectedBook.fechaFin">
+            <div class="stat-item text-center">
+              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ formatDate(selectedBook.fechaFin) }}</div>
+              <div class="stat-label fs-7 text-theme">Fecha fin</div>
+            </div>
+          </div>
+          
+          <div class="col" *ngIf="selectedBook.fechaInicio && selectedBook.fechaFin">
+            <div class="stat-item text-center">
+              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ calculateReadingDays(selectedBook) }}</div>
+              <div class="stat-label fs-7 text-theme">Días de lectura</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="book-content p-4">
+        <div class="content-section mb-4">
+          <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Sinopsis</h3>
+          <p class="book-synopsis text-theme-text lh-base">{{ selectedBook.sinopsis }}</p>
+        </div>
+        
+        <div class="content-section mb-4" *ngIf="selectedBook.frases && selectedBook.frases.length > 0">
+          <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Frases destacadas</h3>
+          <div class="phrases-list">
+            <div class="phrase-item bg-theme rounded-3 p-4 mb-3 position-relative" 
+                 *ngFor="let phrase of selectedBook.frases">
+              <div class="quote-marks position-absolute top-n10 start-10 fs-1 text-btn opacity-50 font-serif">&#8220;</div>
+              <p class="fst-italic text-theme-text position-relative z-1 lh-base mb-0">{{ phrase }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="content-section mb-4" *ngIf="selectedBook.anotaciones && selectedBook.anotaciones.length > 0">
+          <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Anotaciones</h3>
+          <div class="notes-list">
+            <div class="note-item bg-theme rounded-3 p-4 mb-3 position-relative" 
+                 *ngFor="let note of selectedBook.anotaciones">
+              <div class="note-pin position-absolute top-5 start-5 fs-5 opacity-70">📌</div>
+              <p class="text-theme-text lh-base ms-5 mb-0 position-relative z-1">{{ note }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="content-section" *ngIf="selectedBook.registroLectura && selectedBook.registroLectura.length > 0">
+          <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Registro de lectura</h3>
+          <div class="reading-log bg-theme rounded-3 overflow-hidden">
+            <div class="log-header d-grid bg-component p-3 fw-semibold text-theme-text" style="grid-template-columns: 1fr 1fr 1fr;">
+              <span class="log-cell">Fecha</span>
+              <span class="log-cell">Páginas</span>
+              <span class="log-cell">Tiempo (min)</span>
+            </div>
+            <div class="log-row d-grid p-3 border-bottom border-subtle" 
+                 style="grid-template-columns: 1fr 1fr 1fr;"
+                 *ngFor="let record of selectedBook.registroLectura; let isOdd = odd"
+                 [class.bg-light-dark]="isOdd">
+              <span class="log-cell text-theme">{{ formatDate(record.fecha) }}</span>
+              <span class="log-cell text-theme">{{ record.paginasLeidas }}</span>
+              <span class="log-cell text-theme">{{ record.tiempo || 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-actions d-flex justify-content-end gap-3 p-4 bg-theme">
+        <button class="action-btn edit-btn btn bg-component text-theme-text d-flex align-items-center gap-2 fw-semibold rounded-pill px-4 py-3 border-0">
+          <span class="action-icon">✎</span>
+          Editar libro
+        </button>
+        <button class="action-btn rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-3 border-0" 
+                [ngClass]="{'add-progress bg-btn text-white': selectedBook.estado !== 'finalizado', 'finalizar bg-success text-white': selectedBook.estado === 'en-progreso'}">
+          <span class="action-icon">{{ selectedBook.estado === 'en-progreso' ? '✓' : '+' }}</span>
+          {{ selectedBook.estado === 'en-progreso' ? 'Marcar como finalizado' : 'Añadir progreso' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

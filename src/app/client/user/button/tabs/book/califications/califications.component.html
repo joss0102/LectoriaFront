@@ -1,23 +1,24 @@
-<div class="califications-container">
+<!-- califications.component.html -->
+<div class="califications-container bg-theme p-3 p-md-4">
   <!-- Sección del podio de los mejores valorados -->
-  <section class="top-books">
-    <h2 class="section-title">Libros Mejor Valorados</h2>
+  <section class="top-books mb-5">
+    <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Libros Mejor Valorados</h2>
     
-    <div class="podium-container">
+    <div class="podium-container d-flex justify-content-center align-items-end gap-4 mt-4 p-3 position-relative">
       <!-- Segundo lugar -->
-      <div class="podium-item second-place" *ngIf="topLibros.length >= 2">
-        <div class="podium-position">2</div>
-        <div class="book-card">
-          <div class="book-cover">
-            <img [src]="topLibros[1].imagen" [alt]="topLibros[1].titulo">
+      <div class="podium-item second-place transition-y" *ngIf="topLibros.length >= 2">
+
+        <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
+          <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
+            <img [src]="topLibros[1].imagen" [alt]="topLibros[1].titulo" class="w-100 h-100 object-fit-cover img-hover">
           </div>
           <div class="book-info">
-            <h3>{{ topLibros[1].titulo }}</h3>
-            <div class="rating">
-              <span class="rating-number">{{ topLibros[1].valoracion }}</span>
-              <div class="stars">
-                <i class="star filled" *ngFor="let star of getEstrellas(topLibros[1].valoracion)">★</i>
-                <i class="star empty" *ngFor="let star of getEstrellasVacias(topLibros[1].valoracion)">☆</i>
+            <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[1].titulo }}</h3>
+            <div class="rating d-flex align-items-center">
+              <span class="rating-number fw-bold text-btn me-2">{{ topLibros[1].valoracion }}</span>
+              <div class="stars d-flex">
+                <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(topLibros[1].valoracion)">★</i>
+                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[1].valoracion)">☆</i>
               </div>
             </div>
           </div>
@@ -25,20 +26,20 @@
       </div>
       
       <!-- Primer lugar (más alto) -->
-      <div class="podium-item first-place" *ngIf="topLibros.length >= 1">
-        <div class="podium-position">1</div>
-        <div class="book-card">
-          <div class="crown-icon">👑</div>
-          <div class="book-cover">
-            <img [src]="topLibros[0].imagen" [alt]="topLibros[0].titulo">
+      <div class="podium-item first-place transition-y mb-4 z-3" *ngIf="topLibros.length >= 1">
+
+        <div class="book-card gradient-card rounded-4 p-3 shadow border-btn scale-110 position-relative">
+          <div class="crown-icon position-absolute end-n10 top-n10 fs-2 rotate-30">👑</div>
+          <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
+            <img [src]="topLibros[0].imagen" [alt]="topLibros[0].titulo" class="w-100 h-100 object-fit-cover img-hover">
           </div>
           <div class="book-info">
-            <h3>{{ topLibros[0].titulo }}</h3>
-            <div class="rating">
-              <span class="rating-number">{{ topLibros[0].valoracion }}</span>
-              <div class="stars">
-                <i class="star filled" *ngFor="let star of getEstrellas(topLibros[0].valoracion)">★</i>
-                <i class="star empty" *ngFor="let star of getEstrellasVacias(topLibros[0].valoracion)">☆</i>
+            <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[0].titulo }}</h3>
+            <div class="rating d-flex align-items-center">
+              <span class="rating-number fw-bold text-btn me-2">{{ topLibros[0].valoracion }}</span>
+              <div class="stars d-flex">
+                <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(topLibros[0].valoracion)">★</i>
+                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[0].valoracion)">☆</i>
               </div>
             </div>
           </div>
@@ -46,19 +47,19 @@
       </div>
       
       <!-- Tercer lugar -->
-      <div class="podium-item third-place" *ngIf="topLibros.length >= 3">
-        <div class="podium-position">3</div>
-        <div class="book-card">
-          <div class="book-cover">
-            <img [src]="topLibros[2].imagen" [alt]="topLibros[2].titulo">
+      <div class="podium-item third-place transition-y z-1" *ngIf="topLibros.length >= 3">
+
+        <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
+          <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
+            <img [src]="topLibros[2].imagen" [alt]="topLibros[2].titulo" class="w-100 h-100 object-fit-cover img-hover">
           </div>
           <div class="book-info">
-            <h3>{{ topLibros[2].titulo }}</h3>
-            <div class="rating">
-              <span class="rating-number">{{ topLibros[2].valoracion }}</span>
-              <div class="stars">
-                <i class="star filled" *ngFor="let star of getEstrellas(topLibros[2].valoracion)">★</i>
-                <i class="star empty" *ngFor="let star of getEstrellasVacias(topLibros[2].valoracion)">☆</i>
+            <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[2].titulo }}</h3>
+            <div class="rating d-flex align-items-center">
+              <span class="rating-number fw-bold text-btn me-2">{{ topLibros[2].valoracion }}</span>
+              <div class="stars d-flex">
+                <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(topLibros[2].valoracion)">★</i>
+                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[2].valoracion)">☆</i>
               </div>
             </div>
           </div>
@@ -69,21 +70,21 @@
 
   <!-- Lista de todos los libros valorados -->
   <section class="rated-books">
-    <h2 class="section-title">Tus Calificaciones</h2>
+    <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Tus Calificaciones</h2>
     
     <div class="books-grid">
-      <div class="book-item" *ngFor="let libro of librosValorados">
-        <div class="book-cover">
-          <img [src]="libro.imagen" [alt]="libro.titulo">
+      <div class="book-item gradient-card rounded-3 shadow p-4 d-flex flex-column align-items-center transition-y" *ngFor="let libro of librosValorados">
+        <div class="book-cover rounded-3 shadow overflow-hidden mb-4">
+          <img [src]="libro.imagen" [alt]="libro.titulo" class="w-100 h-100 object-fit-cover img-hover">
         </div>
-        <div class="book-info">
-          <h3>{{ libro.titulo }}</h3>
-          <p class="author">{{ libro.autor }}</p>
-          <div class="rating">
-            <span class="rating-number">{{ libro.valoracion }}</span>
-            <div class="stars">
-              <i class="star filled" *ngFor="let star of getEstrellas(libro.valoracion)">★</i>
-              <i class="star empty" *ngFor="let star of getEstrellasVacias(libro.valoracion)">☆</i>
+        <div class="book-info text-center w-100">
+          <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ libro.titulo }}</h3>
+          <p class="author fs-7 text-theme mb-2">{{ libro.autor }}</p>
+          <div class="rating d-flex align-items-center justify-content-center">
+            <span class="rating-number fw-bold text-btn me-2">{{ libro.valoracion }}</span>
+            <div class="stars d-flex">
+              <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(libro.valoracion)">★</i>
+              <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(libro.valoracion)">☆</i>
             </div>
           </div>
         </div>
@@ -92,8 +93,8 @@
   </section>
 
   <!-- Mensaje si no hay libros valorados -->
-  <div class="no-books" *ngIf="librosValorados.length === 0">
-    <p>Aún no has valorado ningún libro.</p>
-    <p>Cuando termines de leer un libro, podrás asignarle una valoración de 1 a 5 estrellas.</p>
+  <div class="no-books bg-component rounded-3 p-4 text-center shadow mt-4" *ngIf="librosValorados.length === 0">
+    <p class="fs-5 mb-3 text-theme-text">Aún no has valorado ningún libro.</p>
+    <p class="mb-0 text-theme">Cuando termines de leer un libro, podrás asignarle una valoración de 1 a 5 estrellas.</p>
   </div>
 </div>

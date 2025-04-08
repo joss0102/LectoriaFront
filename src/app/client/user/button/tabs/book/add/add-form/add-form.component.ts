@@ -26,6 +26,7 @@ export class AddFormComponent {
   bookForm: FormGroup;
   authorForm: FormGroup;
   sagaForm: FormGroup;
+  imagesForm: FormGroup;
   statusForm: FormGroup;
   phrasesNotesForm: FormGroup;
   genresForm: FormGroup;
@@ -34,7 +35,6 @@ export class AddFormComponent {
   selectedGenres: string[] = [];
   phrases: string[] = [];
   notes: string[] = [];
-  addSagaImages = false;
 
   constructor(private fb: FormBuilder) {
     // Inicializar formularios
@@ -56,16 +56,19 @@ export class AddFormComponent {
     });
 
     this.sagaForm = this.fb.group({
-      name: ['', [Validators.required]],
-      addImages: [false]
+      name: ['', [Validators.required]]
+
+    });
+    this.imagesForm = this.fb.group({
+
     });
 
     this.statusForm = this.fb.group({
       startDate: [''],
       endDate: [''],
       rating: ['', [Validators.min(0), Validators.max(10)]],
-      review: [''],
-      addPhrasesNotes: [false]
+      review: ['']
+
     });
 
     this.phrasesNotesForm = this.fb.group({
@@ -117,10 +120,8 @@ export class AddFormComponent {
   }
 
   showSagaImagesModal() {
-    if (this.sagaForm.get('addImages')?.value) {
-      this.showAddSagaImages = true;
-      this.showAddSaga = false;
-    }
+    this.showAddSagaImages = true;
+    this.showAddSaga = false;
   }
 
   // Cerrar modales y volver
@@ -133,6 +134,7 @@ export class AddFormComponent {
     this.showAddManually = true;
     this.showAddAuthor = false;
     this.showAddSaga = false;
+    this.showAddStatus = false;
     this.showAddGenres = false;
   }
 
@@ -198,48 +200,32 @@ export class AddFormComponent {
 
   // Guardar datos de formularios
   saveAuthor() {
-    // Guardar datos del autor y volver al formulario de libro
     console.log('Autor guardado:', this.authorForm.value);
     this.backToAddManually();
   }
 
   saveSaga() {
-    // Si se quieren añadir imágenes, mostrar el modal correspondiente
-    if (this.sagaForm.get('addImages')?.value) {
-      this.showSagaImagesModal();
-    } else {
-      // Si no, guardar datos y volver al formulario de libro
-      console.log('Saga guardada:', this.sagaForm.value);
-      this.backToAddManually();
-    }
+    console.log('Saga guardada:', this.sagaForm.value);
+    this.backToAddManually();
   }
 
   saveSagaImages() {
-    // Guardar imágenes de saga y volver al modal de saga
-    console.log('Imágenes de saga guardadas');
+    console.log('Imágenes de saga guardadas',this.imagesForm.value);
     this.backToAddSaga();
   }
 
   saveStatus() {
-    // Si se quieren añadir frases/notas, mostrar el modal correspondiente
-    if (this.statusForm.get('addPhrasesNotes')?.value) {
-      this.showAddPhrasesNotesModal();
-    } else {
-      // Si no, guardar datos y volver al formulario de libro
-      console.log('Estado guardado:', this.statusForm.value);
-      this.backToAddManually();
-    }
+    console.log('Estado guardado:', this.statusForm.value);
+    this.backToAddManually();
   }
 
   savePhrasesNotes() {
-    // Guardar frases/notas y volver al formulario de estado
     console.log('Frases guardadas:', this.phrases);
     console.log('Notas guardadas:', this.notes);
     this.backToAddStatus();
   }
 
   saveGenres() {
-    // Guardar géneros y volver al formulario de libro
     console.log('Géneros guardados:', this.selectedGenres);
     this.backToAddManually();
   }
@@ -247,7 +233,6 @@ export class AddFormComponent {
   // Enviar formulario principal
   submitBook() {
     if (this.bookForm.valid) {
-      // Aquí iría la lógica para guardar el libro
       console.log('Libro guardado:', {
         ...this.bookForm.value,
         genres: this.selectedGenres,
@@ -257,7 +242,6 @@ export class AddFormComponent {
       this.resetAllData();
       this.backToInitialOptions();
     } else {
-      // Marcar todos los campos como tocados para mostrar errores
       Object.keys(this.bookForm.controls).forEach(key => {
         this.bookForm.get(key)?.markAsTouched();
       });
@@ -275,6 +259,5 @@ export class AddFormComponent {
     this.selectedGenres = [];
     this.phrases = [];
     this.notes = [];
-    this.addSagaImages = false;
   }
 }

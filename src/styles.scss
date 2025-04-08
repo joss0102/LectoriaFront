@@ -139,11 +139,7 @@ select.form-control {
 }
 
 /* Ejemplos de cómo usar las variables CSS en otros componentes */
-.card { 
-  background-color: var(--component-bg); 
-  color: var(--text-color); 
-  border-color: var(--border-color); 
-}
+
 
 .section { 
   background-color: var(--main-bg); 

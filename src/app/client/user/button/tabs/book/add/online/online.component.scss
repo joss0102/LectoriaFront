@@ -1,0 +1,81 @@
+.section {
+    background-color: var(--main-color);
+    
+    .subtitle {
+      color: var(--color-text);
+    }
+    
+    .upload-card {
+      background: --border-color;
+    }
+    
+    .label {
+      background-color: var(--component-bg);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        border-color: var(--bs-btn) !important;
+        background-color: var(--main-color);
+      }
+      
+      i {
+        color: var(--bs-btn);
+      }
+      
+      span {
+        color: var(--gray-color);
+      }
+    }
+    
+    .input-group i {
+      color: var(--gray-color);
+    }
+    
+    .modern-input {
+      border: 1px solid var(--border-color);
+      background-color: var(--component-bg);
+      transition: all 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: var(--bs-btn);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      }
+    }
+    
+    .primary-button {
+      background-color: var(--bs-btn);
+      color: white;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: var(--bs-btn-hover);
+        transform: translateY(-2px);
+      }
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .upload-card {
+      padding: 1.5rem !important;
+    }
+    
+    .app-section h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .upload-card {
+      padding: 1rem !important;
+    }
+    
+    .file-input-label {
+      padding: 1.5rem;
+    }
+  }
+  
+  .border-dashed {
+    border-style: dashed !important;
+  }

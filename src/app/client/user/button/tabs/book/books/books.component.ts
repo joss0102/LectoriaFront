@@ -7,6 +7,7 @@ import { CalificationsComponent } from "../califications/califications.component
 import { ImagesComponent } from "../images/images.component";
 import { NotesComponent } from "../notes/notes.component";
 import { YourBooksComponent } from "../your-books/your-books.component";
+import { AuthorsComponent } from "../authors/authors.component";
 
 @Component({
   selector: 'app-books',
@@ -19,7 +20,8 @@ import { YourBooksComponent } from "../your-books/your-books.component";
     CalificationsComponent, 
     ImagesComponent, 
     NotesComponent, 
-    YourBooksComponent
+    YourBooksComponent,
+    AuthorsComponent
   ],
   templateUrl: './books.component.html',
   styleUrl: './books.component.scss'
@@ -33,6 +35,7 @@ export class BooksComponent {
   showImagesModal = false;
   showNotesModal = false;
   showYourBooksModal = false;
+  showAuthorsModal = false;
 
   // Funciones para abrir cada modal
   openAddModal() {
@@ -48,6 +51,11 @@ export class BooksComponent {
   openPhrasesModal() {
     this.closeAllModals();
     this.showPhrasesModal = true;
+  }
+  
+  openAuthorsModal() {
+    this.closeAllModals();
+    this.showAuthorsModal = true;
   }
   
   openCalificationsModal() {
@@ -79,5 +87,6 @@ export class BooksComponent {
     this.showImagesModal = false;
     this.showNotesModal = false;
     this.showYourBooksModal = false;
+    this.showAuthorsModal = false;
   }
 }

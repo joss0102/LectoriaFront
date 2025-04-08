@@ -1,45 +1,63 @@
-<!-- HTML: carrusel.component.html -->
-<h3 class="slider-title">Últimos libros leídos</h3>
-<div class="book-slider">
-  <div class="slider-viewport">
-    <div #sliderTrack class="slider-track">
-      <div *ngFor="let book of displayBooks; let i = index" class="book-card">
-        <div class="book-inner">
-          <div class="book-cover">
-            <img [src]="book.image" [alt]="book.title" loading="lazy" />
-          </div>
-          <div class="book-info">
-            <p class="book-author">{{ book.author }}</p>
-            <h4 class="book-title">{{ book.title }}</h4>
-            <div class="book-meta">
-              <span class="book-pages">{{ book.pages }} páginas</span>
-              <span class="book-dates"
-                >{{ formatDate(book.startDate) }} -
-                {{ formatDate(book.endDate) }}</span
-              >
+<div class="carrusel-container">
+    <h2 class="section-title">Libros Finalizados</h2>
+    
+    <div class="carrusel-wrapper">
+      <!-- Controles de navegación -->
+      <button class="carrusel-control prev-btn" (click)="prevBook()">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      
+      <!-- Contenedor principal del carrusel -->
+      <div class="carrusel-content">
+        <div class="carrusel-track">
+          <div class="carrusel-book" *ngFor="let book of finishedBooks; let i = index" 
+               [class.active]="currentIndex === i"
+               [style.transform]="getBookTransform(i)"
+               [style.opacity]="getBookOpacity(i)">
+            <div class="book-card">
+              <div class="book-cover">
+                <img [src]="book.imagen || 'assets/images/default-cover.png'" [alt]="book.titulo" class="book-image">
+                <div class="book-rating" *ngIf="book.valoracion">
+                  <span>{{book.valoracion}}</span>
+                </div>
+              </div>
+              <div class="book-info">
+                <div>
+                  <h3 class="book-title">{{book.titulo}}</h3>
+                  <p class="book-author">{{book.autor}}</p>
+                </div>
+                <div>
+                  <div class="book-dates">
+                    <p class="date-item">
+                      <i class="bi bi-calendar-date"></i>
+                      <span>Inicio: {{formatDate(book.fechaInicio)}}</span>
+                    </p>
+                    <p class="date-item">
+                      <i class="bi bi-calendar-check"></i>
+                      <span>Final: {{formatDate(book.fechaFin)}}</span>
+                    </p>
+                  </div>
+                  <div class="book-stats" *ngIf="book.paginasTotales && book.paginasLeidas">
+                    <p class="pages-info"><i class="bi bi-book"></i> {{book.paginasLeidas}}/{{book.paginasTotales}} págs.</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <button class="book-action">Saber más</button>
           </div>
         </div>
       </div>
+      
+      <!-- Control de navegación -->
+      <button class="carrusel-control next-btn" (click)="nextBook()">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+    
+    <!-- Indicadores de posición -->
+    <div class="carrusel-indicators" *ngIf="finishedBooks.length > 1">
+      <span class="indicator" 
+            *ngFor="let book of finishedBooks; let i = index" 
+            [ngClass]="{'active': currentIndex === i}"
+            (click)="goToBook(i)"></span>
     </div>
   </div>
-
-  <div class="slider-controls">
-    <button
-      class="control-btn prev"
-      (click)="prevSlide()"
-      aria-label="Anterior"
-    >
-      <i class="bi bi-caret-left-fill"></i>
-    </button>
-
-    <button
-      class="control-btn next"
-      (click)="nextSlide()"
-      aria-label="Siguiente"
-    >
-      <i class="bi bi-caret-right-fill"></i>
-    </button>
-  </div>
-</div>

@@ -10,4 +10,4 @@ import { DataAuthorComponent } from "../../library/data-author/data-author.compo
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss',
 })
-export class LibraryComponent { }
+export class LibraryComponent {}

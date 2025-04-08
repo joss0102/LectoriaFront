@@ -2,12 +2,14 @@
 
 .parent {
   padding: 20px;
-  background-color: var(--main-bg); // Valor por defecto, pero será sobrescrito por JS
+  height: auto;
+  background-color: var(
+    --main-bg
+  ); // Valor por defecto, pero será sobrescrito por JS
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(8, 1fr);
   gap: 8px;
-  height: 94vh;
   transition: background-color 0.3s ease; // Transición suave al cambiar de tema
 
   .datos {
@@ -47,7 +49,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100%;
     overflow: visible !important;
     .datos {
       position: absolute;
@@ -66,7 +67,7 @@
     }
     .carrusel {
       top: 0;
-      padding-top: 550px;
+      padding-top: 490px;
     }
   }
 }
@@ -81,6 +82,9 @@
       display: none !important;
     }
   }
+  .carrusel {
+    padding-top: 450px !important;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -88,7 +92,6 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(12, 1fr);
     gap: 8px;
-    height: 93vh;
 
     .imagen1 {
       display: none !important;

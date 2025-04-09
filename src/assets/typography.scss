@@ -30,23 +30,27 @@ $dmserif: 'DM Serif Display', serif;
 $librecaslon: 'Libre Caslon Text', serif;
 $bodoni: 'Bodoni Moda', serif;
 
-*{
-    // font-family: $font-decorative;
-    // font-family: $font-decorative;
-}
 
-h1 {
-    font-weight: 700;
-}
-
-p{
-    font-family: $inter;
-}
-
-h3{
-    font-size: 15px;
-}
 @font-face {
     font-family: 'TitleBook';
     src: url('../assets/fonts/KaushanScript-Regular.ttf');
   }
+  @font-face {
+    font-family: 'parraf';
+    src: url('../assets/fonts/Vollkorn-Regular.ttf');
+}
+*{
+    font-family: 'parraf';
+}
+
+h1 {
+    font-weight: 700;
+    font-family: 'TitleBook';
+}
+
+h2,h3,h4,h5,h6,p,button,a{
+    font-family: 'parraf';
+}
+h3{
+    font-size: 15px;
+}

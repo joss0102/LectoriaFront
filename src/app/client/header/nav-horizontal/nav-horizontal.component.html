@@ -13,7 +13,9 @@
     </div>
   </div>
   <div class="imagen">
+    <!--
     <div class="theme-toggle">
+      
       <div (click)="toggleTema()" class="theme-switch" [ngClass]="themeToggleClasses" [title]="getThemeToggleTitle()">
         <div class="switch-track">
           <i class="bi bi-moon-fill moon-icon"></i>
@@ -22,6 +24,7 @@
         </div>
       </div>
     </div>
+  -->
     <img *ngIf="isDarkTheme" src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
     <img *ngIf="!isDarkTheme" src="logos/logo-letras-negras.png" alt="Logo" class="imagen" />
   </div>

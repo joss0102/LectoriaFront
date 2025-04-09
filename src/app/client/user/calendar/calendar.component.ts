@@ -7,13 +7,13 @@ import { Book, ReadingRecord } from '../../../core/models/book-model';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-slider',
+  selector: 'app-calendar',
   standalone: true,
   imports: [CommonModule, DatePipe],
-  templateUrl: './slider.component.html',
-  styleUrl: './slider.component.scss'
+  templateUrl: './calendar.component.html',
+  styleUrl: './calendar.component.scss'
 })
-export class SliderComponent implements OnInit, AfterViewInit {
+export class CalendarComponent implements OnInit, AfterViewInit {
   // Datos del calendario
   currentDate: Date = new Date();
   currentMonth: number = this.currentDate.getMonth();

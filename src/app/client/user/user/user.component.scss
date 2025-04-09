@@ -7,7 +7,6 @@
   padding: 20px;
 }
 
-// Contenedor para organizar los componentes
 .user-container {
   display: flex;
   flex-direction: column;
@@ -16,8 +15,7 @@
   width: 100%;
 }
 
-// Asegurar que el slider tenga el ancho adecuado
-app-slider {
+app-calendar {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,7 +29,6 @@ app-buttons {
   width: 100%;
 }
 
-// Media queries para dispositivos más pequeños
 @media (max-width: 768px) {
   :host {
     padding: 15px;

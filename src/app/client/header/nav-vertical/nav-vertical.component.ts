@@ -1,4 +1,4 @@
-import { Component, Renderer2, HostListener, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Renderer2, HostListener, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NavVerticalService } from '../../../core/services/NavVerticalService/NavVertical.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { ThemeService } from '../../../core/services/ThemeService/theme.service'
   templateUrl: './nav-vertical.component.html',
   styleUrl: './nav-vertical.component.scss',
 })
-export class NavVerticalComponent implements AfterViewInit {
+export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('searchMenuWrapper') searchMenuWrapper: ElementRef | undefined;
 
   onlyIcon: boolean = true;
@@ -23,10 +23,13 @@ export class NavVerticalComponent implements AfterViewInit {
   searchResults = ['Resultado 1', 'Resultado 2', 'Resultado 3'];
   isMobile: boolean = false;
   modoNoche: boolean = true;
+  showMainLinks: boolean = false;
   
   private iconSubscription: Subscription;
   private menuVisibleSubscription: Subscription;
   private themeSubscription: Subscription;
+  private linksSubscription: Subscription;
+  private responsiveSubscription: Subscription;
   
   constructor(
     private verticalService: NavVerticalService,
@@ -70,6 +73,16 @@ export class NavVerticalComponent implements AfterViewInit {
     // Suscripción al servicio de tema
     this.themeSubscription = this.themeService.modoNoche$.subscribe((value) => {
       this.modoNoche = value;
+    });
+    
+    // Suscripción para saber si mostrar los enlaces principales en el nav vertical
+    this.linksSubscription = this.verticalService.linksInHorizontalNav$.subscribe((inHorizontal) => {
+      this.showMainLinks = !inHorizontal;
+    });
+    
+    // Suscripción para saber si estamos en modo responsive
+    this.responsiveSubscription = this.verticalService.isResponsive$.subscribe((isResponsive) => {
+      this.isMobile = isResponsive;
     });
   }
   
@@ -125,8 +138,6 @@ export class NavVerticalComponent implements AfterViewInit {
     setTimeout(() => this.updateSearchMenuPosition(), 0);
   }
   
-  // El nav vertical no tiene botón de tema, solo aplica los estilos
-  
   // Cerrar todos los menús (para el overlay)
   closeAllMenus() {
     this.searchMenuVisible = false;
@@ -135,15 +146,11 @@ export class NavVerticalComponent implements AfterViewInit {
   
   // Limpiar suscripciones al destruir el componente
   ngOnDestroy() {
-    if (this.iconSubscription) {
-      this.iconSubscription.unsubscribe();
-    }
-    if (this.menuVisibleSubscription) {
-      this.menuVisibleSubscription.unsubscribe();
-    }
-    if (this.themeSubscription) {
-      this.themeSubscription.unsubscribe();
-    }
+    this.iconSubscription?.unsubscribe();
+    this.menuVisibleSubscription?.unsubscribe();
+    this.themeSubscription?.unsubscribe();
+    this.linksSubscription?.unsubscribe();
+    this.responsiveSubscription?.unsubscribe();
     
     // Limpiar clases en el body
     this.renderer.removeClass(document.body, 'mobile-menu-open');

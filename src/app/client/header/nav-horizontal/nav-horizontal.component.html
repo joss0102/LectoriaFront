@@ -2,7 +2,7 @@
 <nav class="nav-horizontal" [ngClass]="modoNoche ? 'bg-header-night' : 'bg-header-day'">
   <div class="menu d-flex gap-3">
     <i class="bi bi-list" (click)="toggleNav()"></i>
-    <div class="links">
+    <div class="links" *ngIf="showLinks">
       <a
         routerLink="/"
         routerLinkActive="active"

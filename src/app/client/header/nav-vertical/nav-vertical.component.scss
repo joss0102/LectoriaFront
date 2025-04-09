@@ -76,6 +76,55 @@ nav {
   }
 }
 
+// Clase utilitaria
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Overlay para móvil
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  
+  @media screen and (max-width: 1300px) {
+    &.active {
+      display: block;
+    }
+  }
+}
+
+// Estilos para el tema día
+.tema-dia {
+  nav {
+    a {
+      &:hover, &.active {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+  
+  .search-container {
+    hr {
+      border-color: var(--border-color) !important;
+    }
+  }
+}
+
+// Modo noche
+.tema-noche {
+  .search-container {
+    hr {
+      border-color: var(--border-color) !important;
+    }
+  }
+}
+
 // Menú de búsqueda - ahora controlado principalmente desde TypeScript
 .search-menu-wrapper {
   position: fixed;
@@ -100,11 +149,6 @@ nav {
     visibility: visible;
     z-index: 10;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
-    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                left 0.3s ease,
-                opacity 0.3s ease,
-                visibility 0s,
-                z-index 0s;
   }
   
   .search-container {
@@ -222,55 +266,6 @@ nav {
     .search-container {
       width: 100%;
       max-width: 100%;
-    }
-  }
-}
-
-// Clase utilitaria
-.cursor-pointer {
-  cursor: pointer;
-}
-
-// Overlay para móvil
-.mobile-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1040;
-  
-  @media screen and (max-width: 1300px) {
-    &.active {
-      display: block;
-    }
-  }
-}
-
-// Estilos para el tema día
-.tema-dia {
-  nav {
-    a {
-      &:hover, &.active {
-        background-color: rgba(0, 0, 0, 0.05);
-      }
-    }
-  }
-  
-  .search-container {
-    hr {
-      border-color: var(--border-color) !important;
-    }
-  }
-}
-
-// Modo noche
-.tema-noche {
-  .search-container {
-    hr {
-      border-color: var(--border-color) !important;
     }
   }
 }

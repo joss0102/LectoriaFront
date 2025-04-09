@@ -13,6 +13,14 @@ export class NavVerticalService {
   private menuVisibleSubject = new BehaviorSubject<boolean>(false);
   menuVisible$ = this.menuVisibleSubject.asObservable();
 
+  // Estado para controlar si los enlaces principales están en el nav horizontal o vertical
+  private linksInHorizontalNavSubject = new BehaviorSubject<boolean>(true);
+  linksInHorizontalNav$ = this.linksInHorizontalNavSubject.asObservable();
+
+  // Estado para indicar si estamos en modo responsive
+  private isResponsiveSubject = new BehaviorSubject<boolean>(false);
+  isResponsive$ = this.isResponsiveSubject.asObservable();
+
   constructor() {
     // Inicializar el estado del menú desde localStorage si existe
     const savedState = localStorage.getItem('navState');
@@ -24,6 +32,9 @@ export class NavVerticalService {
         console.error('Error parsing saved nav state', e);
       }
     }
+
+    // Verificar el tamaño inicial de la pantalla
+    this.checkScreenSize();
     
     // Escuchar cambios de tamaño de pantalla para ajustar el menú en responsive
     this.setupResizeListener();
@@ -36,7 +47,7 @@ export class NavVerticalService {
       const newValue = !this.onlyIconSubject.value;
       this.onlyIconSubject.next(newValue);
       this.saveState();
-    } 
+    }
     // En pantallas pequeñas, muestra/oculta el menú
     else {
       const newValue = !this.menuVisibleSubject.value;
@@ -57,11 +68,25 @@ export class NavVerticalService {
     localStorage.setItem('navState', JSON.stringify(state));
   }
   
+  // Verificar el tamaño de la pantalla y actualizar estados
+  private checkScreenSize() {
+    const isResponsive = window.innerWidth <= 1300;
+    this.isResponsiveSubject.next(isResponsive);
+    this.linksInHorizontalNavSubject.next(!isResponsive);
+  }
+
   // Configurar listener para cambios de tamaño de pantalla
   private setupResizeListener() {
     window.addEventListener('resize', () => {
+      // Verificar si estamos en modo responsive
+      const isResponsive = window.innerWidth <= 1300;
+      this.isResponsiveSubject.next(isResponsive);
+      
+      // Actualizar la ubicación de los enlaces (horizontal vs vertical)
+      this.linksInHorizontalNavSubject.next(!isResponsive);
+      
       // Si cambiamos a pantalla pequeña mientras el menú está visible, lo ocultamos
-      if (window.innerWidth <= 1300 && this.menuVisibleSubject.value) {
+      if (isResponsive && this.menuVisibleSubject.value) {
         this.menuVisibleSubject.next(false);
       }
     });

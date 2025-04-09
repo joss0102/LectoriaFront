@@ -2,7 +2,7 @@
 
 .parent {
   padding: 20px;
-  height: auto;
+  height: 93vh;
   background-color: var(
     --main-bg
   ); // Valor por defecto, pero será sobrescrito por JS
@@ -45,6 +45,7 @@
 // Media queries
 @media screen and (max-width: 1600px) {
   .parent {
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;

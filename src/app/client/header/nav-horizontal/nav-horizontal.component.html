@@ -1,5 +1,5 @@
 <!-- nav-horizontal.component.html -->
-<nav class="nav-horizontal" [ngClass]="modoNoche ? 'bg-header-night' : 'bg-header-day'">
+<nav class="nav-horizontal">
   <div class="menu d-flex gap-3">
     <i class="bi bi-list" (click)="toggleNav()"></i>
     <div class="links" *ngIf="showLinks">
@@ -14,16 +14,16 @@
   </div>
   <div class="imagen">
     <div class="theme-toggle">
-      <div (click)="toggleTema()" class="theme-switch" [title]="modoNoche ? 'Cambiar a modo día' : 'Cambiar a modo noche'">
+      <div (click)="toggleTema()" class="theme-switch" [ngClass]="themeToggleClasses" [title]="getThemeToggleTitle()">
         <div class="switch-track">
           <i class="bi bi-moon-fill moon-icon"></i>
           <i class="bi bi-sun-fill sun-icon"></i>
-          <div class="switch-thumb" [ngClass]="{'night-active': modoNoche, 'day-active': !modoNoche}"></div>
+          <div class="switch-thumb" [ngClass]="{'night-active': isDarkTheme, 'day-active': !isDarkTheme}"></div>
         </div>
       </div>
     </div>
-    <img *ngIf="modoNoche" src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
-    <img *ngIf="!modoNoche" src="logos/logo-letras-negras.png" alt="Logo" class="imagen" />
+    <img *ngIf="isDarkTheme" src="logos/logo-letras-naranjas.png" alt="Logo" class="imagen" />
+    <img *ngIf="!isDarkTheme" src="logos/logo-letras-negras.png" alt="Logo" class="imagen" />
   </div>
 </nav>
 <app-divider-timer></app-divider-timer>

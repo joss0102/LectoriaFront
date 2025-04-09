@@ -4,13 +4,13 @@
         <div class="dashboard-header">
         <h2 class="section-title">Lectura Actual</h2>
         <div class="book-navigation">
-            <button class="nav-btn bg-btn" [disabled]="!hasPrevBook()" (click)="prevBook()">
+            <button class="nav-btn " [disabled]="!hasPrevBook()" (click)="prevBook()">
                 <i class="bi bi-caret-left-fill"></i>
             </button>
             <span class="book-counter" *ngIf="booksInProgress.length > 0">
             {{ currentBookIndex + 1 }} / {{ booksInProgress.length }}
             </span>
-            <button class="nav-btn bg-btn" [disabled]="!hasNextBook()" (click)="nextBook()">
+            <button class="nav-btn " [disabled]="!hasNextBook()" (click)="nextBook()">
                 <i class="bi bi-caret-right-fill"></i>
             </button>
         </div>

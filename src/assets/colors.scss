@@ -17,8 +17,7 @@ $NightMode: (
 
 // Colores modo día
 $main-day: #D8D6CB;
-$header-day: #B4AFA6;
-
+$header-day: #B4AFA6; 
 $secondary-day: #bdb5a4;
 $tertiary-day: #6e6b64;
 $quaternary-day: rgba(255, 255, 255, 0);
@@ -29,10 +28,84 @@ $DayMode: (
     "secondary-day": $secondary-day
 );
 
+// Tema Ártico
+$main-arctic: #e0f2fa;
+$header-arctic: #76b4d2;
+$secondary-arctic: #b5d8e8;
+$tertiary-arctic: #5997b2;
+$quaternary-arctic: rgba(118, 180, 210, 0.05);
+
+$ArcticMode: (
+    "main-arctic": $main-arctic,
+    "header-arctic": $header-arctic,
+    "secondary-arctic": $secondary-arctic,
+    "tertiary-arctic": $tertiary-arctic
+);
+
+// Tema Bosque
+$main-forest: #daecd5;
+$header-forest: #7faf80;
+$secondary-forest: #a9c9a3;
+$tertiary-forest: #3d6b3d;
+$quaternary-forest: rgba(89, 140, 90, 0.05);
+
+$ForestMode: (
+    "main-forest": $main-forest,
+    "header-forest": $header-forest,
+    "secondary-forest": $secondary-forest,
+    "tertiary-forest": $tertiary-forest
+);
+
+// Tema Atardecer
+$main-sunset: #fbe0d1;
+$header-sunset: #c58372;
+$secondary-sunset: #f2bc9e;
+$tertiary-sunset: #b35240;
+$quaternary-sunset: rgba(224, 121, 94, 0.05);
+
+$SunsetMode: (
+    "main-sunset": $main-sunset,
+    "header-sunset": $header-sunset,
+    "secondary-sunset": $secondary-sunset,
+    "tertiary-sunset": $tertiary-sunset
+);
+
+// Colores de acento predefinidos
+$accent-orange: #FF8800; // Naranja (actual)
+$accent-blue: #3498DB;   // Azul
+$accent-green: #009229;  // Verde
+$accent-red: #E74C3C;    // Rojo
+$accent-purple: #9B59B6; // Morado
+$accent-yellow: #F1C40F; // Amarillo
+$accent-turquoise: #1ABC9C; // Turquesa
+$accent-dark-blue: #34495E; // Azul oscuro
+$accent-dark-orange: #E67E22; // Naranja oscuro
+$accent-gray: #95A5A6;   // Gris
+
+// Lista de colores predefinidos para selector en componentes
+$predefined-colors: (
+    $accent-orange,
+    $accent-blue,
+    $accent-green,
+    $accent-red,
+    $accent-purple,
+    $accent-yellow,
+    $accent-turquoise,
+    $accent-dark-blue,
+    $accent-dark-orange,
+    $accent-gray
+);
+
+// Colores base para la paleta por defecto
+$default-primary: #0d6efd;
+$default-secondary: #6c757d;
+$default-success: #198754;
+$default-danger: #dc3545;
+
 // Colores generales
-$btn: #FF8800;
+$btn: $accent-orange;
 $btn-hover: #b96300;
-$danger-night: #dc3545;
+$danger-night: $default-danger;
 $warning-night: #ffc107;
 $dark-night: #212529;
 $light-night: #f8f9fa;
@@ -48,7 +121,27 @@ $general: (
 // Fusionar los mapas en `$theme-colors`
 $theme-colors: map-merge($theme-colors, $NightMode);
 $theme-colors: map-merge($theme-colors, $DayMode);
+$theme-colors: map-merge($theme-colors, $ArcticMode);
+$theme-colors: map-merge($theme-colors, $ForestMode);
+$theme-colors: map-merge($theme-colors, $SunsetMode);
 $theme-colors: map-merge($theme-colors, $general);
+
+:export {
+    accentOrange: $accent-orange;
+    accentBlue: $accent-blue;
+    accentGreen: $accent-green;
+    accentRed: $accent-red;
+    accentPurple: $accent-purple;
+    accentYellow: $accent-yellow;
+    accentTurquoise: $accent-turquoise;
+    accentDarkBlue: $accent-dark-blue;
+    accentDarkOrange: $accent-dark-orange;
+    accentGray: $accent-gray;
+    defaultPrimary: $default-primary;
+    defaultSecondary: $default-secondary;
+    defaultSuccess: $default-success;
+    defaultDanger: $default-danger;
+}
 
 // Variables de tema para uso en CSS
 :root {
@@ -78,6 +171,36 @@ $theme-colors: map-merge($theme-colors, $general);
     --component-bg: #{$secondary-night};
     --border-color: #{$tertiary-night};
     --quaternary-color: #{$quaternary-night};
+}
+
+.tema-artico {
+    --background-color: #{$header-arctic};
+    --text-color: #{$dark-night};
+    --main-bg: #{$main-arctic};
+    --body-bg: #{$main-arctic};
+    --component-bg: #{$secondary-arctic};
+    --border-color: #{$tertiary-arctic};
+    --quaternary-color: #{$quaternary-arctic};
+}
+
+.tema-bosque {
+    --background-color: #{$header-forest};
+    --text-color: #{$dark-night};
+    --main-bg: #{$main-forest};
+    --body-bg: #{$main-forest};
+    --component-bg: #{$secondary-forest};
+    --border-color: #{$tertiary-forest};
+    --quaternary-color: #{$quaternary-forest};
+}
+
+.tema-atardecer {
+    --background-color: #{$header-sunset};
+    --text-color: #{$dark-night};
+    --main-bg: #{$main-sunset};
+    --body-bg: #{$main-sunset};
+    --component-bg: #{$secondary-sunset};
+    --border-color: #{$tertiary-sunset};
+    --quaternary-color: #{$quaternary-sunset};
 }
 
 // Importar Bootstrap después de definir los colores

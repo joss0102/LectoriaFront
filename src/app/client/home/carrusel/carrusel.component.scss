@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 5px;
-  background-color: rgb(122, 71, 0);
+  background-color: var(--bs-btn-hover);
   z-index: 10;
   transition: width 0.1s linear;
 }
@@ -53,7 +53,7 @@
 
   z-index: 5;
   button {
-    background-color: ($btn);
+    background-color: var(--bs-btn);
     color: white;
     border: none;
     padding: 10px;

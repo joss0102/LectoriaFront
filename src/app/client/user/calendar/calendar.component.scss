@@ -9,6 +9,7 @@
   .btn {
     border-radius: 20px;
     width: 70px;
+    background-color: var(--bs-btn);
   }
   .month-title {
     font-size: 2rem; // Reducido
@@ -109,7 +110,7 @@
       }
 
       &.goal-achieved {
-        background-color: rgba(255, 193, 7, 0.2);
+        background-color: var(--background-color);
 
         &::after {
           position: absolute;

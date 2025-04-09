@@ -1,0 +1,305 @@
+<section class="preferences-section">
+  <!-- Tema -->
+  <div class="preference-card theme" (click)="openThemeModal()">
+    <div class="icon-container">
+      <i class="bi bi-palette-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Tema</p>
+      <p class="description">Configura el modo día/noche y apariencia</p>
+    </div>
+  </div>
+
+  <!-- Idioma -->
+  <div class="preference-card language" (click)="openLanguageModal()">
+    <div class="icon-container">
+      <i class="bi bi-translate"></i>
+    </div>
+    <div class="content">
+      <p class="title">Idioma</p>
+      <p class="description">Cambia el idioma de la aplicación</p>
+    </div>
+  </div>
+
+  <!-- Colores de Acento -->
+  <div class="preference-card accent-colors" (click)="openAccentColorsModal()">
+    <div class="icon-container">
+      <i class="bi bi-droplet-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Colores de Acento</p>
+      <p class="description">Personaliza los colores principales</p>
+    </div>
+  </div>
+
+  <!-- Metas de Lectura -->
+  <div class="preference-card reading-goals" (click)="openReadingGoalsModal()">
+    <div class="icon-container">
+      <i class="bi bi-graph-up"></i>
+    </div>
+    <div class="content">
+      <p class="title">Metas de Lectura</p>
+      <p class="description">Establece y monitorea tus objetivos</p>
+    </div>
+  </div>
+</section>
+<!-- Modal Tema -->
+<div class="modal fade" [class.show]="showThemeModal" [style.display]="showThemeModal ? 'block' : 'none'" 
+     tabindex="-1" aria-labelledby="themeModalLabel" aria-hidden="true" 
+     *ngIf="showThemeModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="themeModalLabel">Configuración de Tema</h2>
+        <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+      </div>
+      <div class="modal-body">
+        <form #themeForm="ngForm">
+          <div class="mb-4">
+            <label class="form-label fw-bold">Tema de la aplicación</label>
+            <div class="theme-options">
+              <div class="theme-option" [class.active]="preferences.themeType === 'dia'" (click)="selectTheme('dia')">
+                <div class="theme-preview day-preview">
+                  <div class="preview-header"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <div class="theme-name">Día</div>
+              </div>
+              <div class="theme-option" [class.active]="preferences.themeType === 'noche'" (click)="selectTheme('noche')">
+                <div class="theme-preview night-preview">
+                  <div class="preview-header"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <div class="theme-name">Noche</div>
+              </div>
+              <div class="theme-option" [class.active]="preferences.themeType === 'artico'" (click)="selectTheme('artico')">
+                <div class="theme-preview arctic-preview">
+                  <div class="preview-header"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <div class="theme-name">Ártico</div>
+              </div>
+              <div class="theme-option" [class.active]="preferences.themeType === 'bosque'" (click)="selectTheme('bosque')">
+                <div class="theme-preview forest-preview">
+                  <div class="preview-header"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <div class="theme-name">Bosque</div>
+              </div>
+              <div class="theme-option" [class.active]="preferences.themeType === 'atardecer'" (click)="selectTheme('atardecer')">
+                <div class="theme-preview sunset-preview">
+                  <div class="preview-header"></div>
+                  <div class="preview-content"></div>
+                </div>
+                <div class="theme-name">Atardecer</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Nuevo interruptor para desactivar colores dinámicos -->
+          <div class="mb-4">
+            <div class="form-check form-switch switch-container">
+              <input class="form-check-input" type="checkbox" id="disableDynamicColors" 
+                      [(ngModel)]="preferences.disableDynamicColors" 
+                      name="disableDynamicColors" 
+                      (click)="toggleDynamicColors()">
+              <label class="form-check-label ms-2" for="disableDynamicColors">
+                Desactivar colores dinámicos en inicio
+              </label>
+            </div>
+            <small class="text-muted">Si activas esta opción, no se aplicarán colores de fondo dinámicos en la página de inicio.</small>
+          </div>
+
+          <div class="row mb-3" *ngIf="preferences.autoThemeEnabled">
+            <div class="col-md-6">
+              <label for="dayStartTime" class="form-label">Inicio modo día</label>
+              <input type="time" class="form-control" id="dayStartTime" [(ngModel)]="preferences.dayModeStartTime" name="dayModeStartTime">
+            </div>
+            <div class="col-md-6">
+              <label for="nightStartTime" class="form-label">Inicio modo noche</label>
+              <input type="time" class="form-control" id="nightStartTime" [(ngModel)]="preferences.nightModeStartTime" name="nightModeStartTime">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+            <button type="button" class="btn btn-primary custom-btn" (click)="saveThemeSettings()">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Idioma -->
+<div class="modal fade" [class.show]="showLanguageModal" [style.display]="showLanguageModal ? 'block' : 'none'" 
+     tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true" 
+     *ngIf="showLanguageModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="languageModalLabel">Configuración de Idioma</h2>
+        <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+      </div>
+      <div class="modal-body">
+        <form #languageForm="ngForm">
+          <div class="mb-4">
+            <label class="form-label fw-bold">Idioma de la aplicación</label>
+            <div class="language-options">
+              <div class="language-option" [class.active]="preferences.language === 'es'" (click)="preferences.language = 'es'">
+                <div class="language-flag">🇪🇸</div>
+                <div class="language-name">Español</div>
+              </div>
+              <div class="language-option" [class.active]="preferences.language === 'en'" (click)="preferences.language = 'en'">
+                <div class="language-flag">🇬🇧</div>
+                <div class="language-name">English</div>
+              </div>
+              <div class="language-option" [class.active]="preferences.language === 'fr'" (click)="preferences.language = 'fr'">
+                <div class="language-flag">🇫🇷</div>
+                <div class="language-name">Français</div>
+              </div>
+              <div class="language-option" [class.active]="preferences.language === 'de'" (click)="preferences.language = 'de'">
+                <div class="language-flag">🇩🇪</div>
+                <div class="language-name">Deutsch</div>
+              </div>
+              <div class="language-option" [class.active]="preferences.language === 'it'" (click)="preferences.language = 'it'">
+                <div class="language-flag">🇮🇹</div>
+                <div class="language-name">Italiano</div>
+              </div>
+              <div class="language-option" [class.active]="preferences.language === 'pt'" (click)="preferences.language = 'pt'">
+                <div class="language-flag">🇵🇹</div>
+                <div class="language-name">Português</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Formato regional</label>
+            <select class="form-select" [(ngModel)]="preferences.region" name="region">
+              <option value="ES">España</option>
+              <option value="LATAM">Latinoamérica</option>
+              <option value="US">Estados Unidos</option>
+              <option value="UK">Reino Unido</option>
+              <option value="EU">Europa (Continental)</option>
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+            <button type="button" class="btn btn-primary custom-btn" (click)="saveLanguageSettings()">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Colores de Acento -->
+<div class="modal fade" [class.show]="showAccentColorsModal" [style.display]="showAccentColorsModal ? 'block' : 'none'" 
+     tabindex="-1" aria-labelledby="accentColorsModalLabel" aria-hidden="true" 
+     *ngIf="showAccentColorsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="accentColorsModalLabel">Colores de Acento</h2>
+        <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+      </div>
+      <div class="modal-body">
+        <form #accentColorsForm="ngForm">
+          <div class="mb-4">
+            <label class="form-label fw-bold">Color principal</label>
+            <div class="d-flex align-items-center mb-3">
+              <div class="color-preview" [style.background-color]="preferences.accentColor"></div>
+              <input type="color" class="form-control form-control-color ms-3" id="accentColorPicker" [(ngModel)]="preferences.accentColor" name="accentColor" title="Elegir color de acento" (input)="onColorPreview()">
+              <input type="text" class="form-control ms-3" [(ngModel)]="preferences.accentColor" name="accentColorText" placeholder="#FF8800" (input)="onColorPreview()">
+            </div>
+            <div class="color-presets d-flex flex-wrap">
+              <div class="color-preset" *ngFor="let color of predefinedColors" [style.background-color]="color" (click)="previewColor(color)"></div>
+            </div>
+          </div>
+
+
+
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-secondary me-2" (click)="resetAccentColors()">Restablecer valores predeterminados</button>
+
+              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+              <button type="button" class="btn btn-primary custom-btn" (click)="saveAccentColors()">Guardar</button>
+ 
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Metas de Lectura -->
+<div class="modal fade" [class.show]="showReadingGoalsModal" [style.display]="showReadingGoalsModal ? 'block' : 'none'" 
+     tabindex="-1" aria-labelledby="readingGoalsModalLabel" aria-hidden="true" 
+     *ngIf="showReadingGoalsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="readingGoalsModalLabel">Metas de Lectura</h2>
+        <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+      </div>
+      <div class="modal-body">
+        <form #readingGoalsForm="ngForm">
+          <div class="mb-4">
+            <label class="form-label fw-bold">Meta diaria</label>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.daily" name="dailyPages" min="1" max="1000">
+              <span class="input-group-text">páginas por día</span>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label fw-bold">Meta semanal</label>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.weekly" name="weeklyBooks" min="1" max="10">
+              <span class="input-group-text">libros por semana</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold">Meta anual</label>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.yearly" name="yearlyBooks" min="1" max="500">
+              <span class="input-group-text">libros por año</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold">Recordatorios</label>
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="enableReminders" [(ngModel)]="preferences.readingGoals.remindersEnabled" name="remindersEnabled">
+              <label class="form-check-label" for="enableReminders">Activar recordatorios</label>
+            </div>
+            
+            <div *ngIf="preferences.readingGoals.remindersEnabled" class="reminder-settings">
+              <div class="mb-3">
+                <label for="reminderTime" class="form-label">Hora del recordatorio</label>
+                <input type="time" class="form-control" id="reminderTime" [(ngModel)]="preferences.readingGoals.reminderTime" name="reminderTime">
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Días de la semana</label>
+                <div class="d-flex flex-wrap gap-2">
+                  <div class="form-check form-check-inline" *ngFor="let day of weekdays; let i = index">
+                    <input class="form-check-input" type="checkbox" id="day{{i}}" [(ngModel)]="preferences.readingGoals.reminderDays[i]" name="day{{i}}">
+                    <label class="form-check-label" for="day{{i}}">{{day}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+            <button type="button" class="btn btn-primary custom-btn" (click)="saveReadingGoals()">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

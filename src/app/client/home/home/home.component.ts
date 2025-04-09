@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ColorPrimaryService } from '../../../core/services/ColorPrimary/color-primary.service';
-import { ThemeService } from '../../../core/services/ThemeService/theme.service';
+import { ThemeService, ThemeType } from '../../../core/services/ThemeService/theme.service';
 import { DataComponent } from '../data/data.component';
 import { Img1Component } from '../img1/img1.component';
 import { Img2Component } from '../img2/img2.component';
@@ -18,9 +18,13 @@ import { CarruselComponent } from '../carrusel/carrusel.component';
 export class HomeComponent implements OnInit, OnDestroy {
   primaryColor: string = '#000000'; // Color inicial
   modoNoche: boolean = true; // Por defecto en modo noche
+  temaActual: ThemeType = 'noche'; // Tema actual
+  dynamicColorsDisabled: boolean = false; // Si los colores dinámicos están desactivados
   
   private colorSubscription: Subscription = new Subscription();
   private themeSubscription: Subscription = new Subscription();
+  private customThemeSubscription: Subscription = new Subscription();
+  private dynamicColorsSubscription: Subscription = new Subscription();
 
   constructor(
     private colorService: ColorPrimaryService,
@@ -28,44 +32,97 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // Obtener el estado actual de los colores dinámicos
+    this.dynamicColorsDisabled = this.themeService.getDynamicColorsDisabled();
+    
     // Nos suscribimos al servicio para obtener el color primario
     this.colorSubscription = this.colorService.getPrimaryColor().subscribe(color => {
       this.primaryColor = color;
       this.updateBackgroundColor(); // Cambiamos el color de fondo
     });
     
-    // Nos suscribimos al servicio del tema
+    // Nos suscribimos al servicio del tema (modo noche/día)
     this.themeSubscription = this.themeService.modoNoche$.subscribe(modoNoche => {
       this.modoNoche = modoNoche;
       this.updateBackgroundColor(); // Actualizamos el color cuando cambia el tema
+    });
+    
+    // Nos suscribimos al servicio de tema personalizado
+    this.customThemeSubscription = this.themeService.temaActual$.subscribe(tema => {
+      this.temaActual = tema;
+      this.updateBackgroundColor(); // Actualizamos el color cuando cambia el tema personalizado
+    });
+
+    // Nos suscribimos a los cambios en la configuración de colores dinámicos
+    this.dynamicColorsSubscription = this.themeService.dynamicColorsDisabled$.subscribe(disabled => {
+      this.dynamicColorsDisabled = disabled;
+      this.updateBackgroundColor(); // Actualizamos el color cuando cambia la configuración
     });
   }
 
   // Método para actualizar el color de fondo del contenedor principal
   updateBackgroundColor(): void {
+    const parentElement = document.querySelector('.parent') as HTMLElement;
+    if (!parentElement) {
+      return;
+    }
+
+    // Si los colores dinámicos están desactivados, quitar el color de fondo personalizado
+    if (this.dynamicColorsDisabled) {
+      // Importante: usar removeProperty para eliminar completamente el estilo
+      parentElement.style.removeProperty('background-color');
+      return;
+    }
+
     // Convertir el color de hex a hsl
     const hex = this.primaryColor;
     const hsl = this.hexToHsl(hex);
 
-    // Ajustamos los valores según el modo (día/noche)
-    if (this.modoNoche) {
-      // Modo noche: color más oscuro y menos saturado
-      hsl.s = 10;  // Reducimos la saturación
-      hsl.l = 20;  // Luminosidad baja para modo oscuro
-    } else {
-      // Modo día: color más claro y menos saturado
-      hsl.s = 6;  // Un poco más de saturación para el modo día
-      hsl.l = 50;  // Aumentamos la luminosidad significativamente para modo día
-      hsl.h = (hsl.h + 10) % 360;
+    // Ajustamos los valores según el tema actual
+    switch (this.temaActual) {
+      case 'noche':
+        // Modo noche: color más oscuro y menos saturado
+        hsl.s = 10;  // Reducimos la saturación
+        hsl.l = 20;  // Luminosidad baja para modo oscuro
+        break;
+      case 'dia':
+        // Modo día: color más claro y menos saturado
+        hsl.s = 6;   // Un poco más de saturación para el modo día
+        hsl.l = 60;  // Aumentamos la luminosidad significativamente para modo día
+        break;
+      case 'artico':
+        // Tema ártico: colores azulados y fríos
+        hsl.h = this.blendHue(hsl.h, 200); // Mezclar con un tono azul
+        hsl.s = 25;  // Saturación media
+        hsl.l = 85;  // Alta luminosidad para un aspecto frío
+        break;
+      case 'bosque':
+        // Tema bosque: colores verdosos
+        hsl.h = this.blendHue(hsl.h, 120); // Mezclar con un tono verde
+        hsl.s = 30;  // Buena saturación para los verdes
+        hsl.l = 75;  // Luminosidad para un aspecto natural
+        break;
+      case 'atardecer':
+        // Tema atardecer: colores cálidos
+        hsl.h = this.blendHue(hsl.h, 30); // Mezclar con un tono naranja/rojizo
+        hsl.s = 35;  // Buena saturación para los tonos cálidos
+        hsl.l = 70;  // Luminosidad media-alta para sensación de calidez
+        break;
     }
 
     // Convertir de nuevo a hex
     const newColor = this.hslToHex(hsl.h, hsl.s, hsl.l);
 
-    const parentElement = document.querySelector('.parent') as HTMLElement;
-    if (parentElement) {
-      parentElement.style.backgroundColor = newColor; // Aplicar el color manipulado
-    }
+    // Aplicar el color manipulado
+    parentElement.style.backgroundColor = newColor;
+  }
+
+  // Función auxiliar para mezclar tonos (hues)
+  blendHue(originalHue: number, targetHue: number, strength: number = 0.7): number {
+    // Mezcla el tono original con el tono objetivo usando el factor de fuerza
+    // Un valor de strength = 1 significa que el resultado es 100% el targetHue
+    // Un valor de strength = 0 significa que el resultado es 100% el originalHue
+    return (originalHue * (1 - strength) + targetHue * strength) % 360;
   }
 
   // Función para convertir hex a HSL
@@ -136,5 +193,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Limpiamos las suscripciones
     this.colorSubscription.unsubscribe();
     this.themeSubscription.unsubscribe();
+    this.customThemeSubscription.unsubscribe();
+    this.dynamicColorsSubscription.unsubscribe();
   }
 }

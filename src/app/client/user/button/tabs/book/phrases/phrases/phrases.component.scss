@@ -70,14 +70,15 @@ $transition-standard: all 0.3s ease;
   .preview-phrase {
     .quote-mark {
       font-size: 3rem;
+      color: var(--bs-btn);
     }
   }
   
   .view-all-btn {
     transition: background-color 0.3s ease, transform 0.2s ease;
-    
+    background-color: var(--bs-btn);
     &:hover {
-      background-color: var(--btn-hover);
+      background-color: var(--bs-btn-hover);
       transform: translateX(5px);
     }
   }
@@ -121,6 +122,7 @@ $transition-standard: all 0.3s ease;
     }
     
     .phrase-number {
+      background-color: var(--bs-btn);
       width: 32px;
       height: 32px;
       min-width: 32px;
@@ -168,7 +170,9 @@ $transition-standard: all 0.3s ease;
     }
   }
 }
-
+.counter-number{
+  color: var(--bs-btn);
+}
 // Media queries responsivos
 @media (max-width: 768px) {
   .book-detail {

@@ -58,7 +58,7 @@
     <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
     <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
     <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
-      <button class="reset-search bg-transparent border-0 text-btn fw-semibold text-decoration-underline" 
+      <button class="reset-search bg-transparent border-0  fw-semibold text-decoration-underline" 
               (click)="clearSearch()">ver todos los libros</button>
     </p>
   </div>
@@ -98,7 +98,7 @@
             <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.valoracion">
               <span class="meta-label fs-7 text-theme min-w-100">Valoración:</span>
               <span class="meta-value rating d-flex align-items-center">
-                <span class="star text-btn" *ngFor="let star of [1,2,3,4,5]">
+                <span class="star " *ngFor="let star of [1,2,3,4,5]">
                   {{ (star <= selectedBook.valoracion!) ? '★' : '☆' }}
                 </span>
                 <span class="rating-number ms-2 text-theme">({{ selectedBook.valoracion }})</span>
@@ -113,42 +113,42 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           <div class="col">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ selectedBook.paginasTotales }}</div>
+              <div class="stat-value fs-4 fw-bold  mb-1">{{ selectedBook.paginasTotales }}</div>
               <div class="stat-label fs-7 text-theme">Páginas totales</div>
             </div>
           </div>
           
           <div class="col">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ selectedBook.paginasLeidas }}</div>
+              <div class="stat-value fs-4 fw-bold  mb-1">{{ selectedBook.paginasLeidas }}</div>
               <div class="stat-label fs-7 text-theme">Páginas leídas</div>
             </div>
           </div>
           
           <div class="col" *ngIf="selectedBook.progreso !== undefined">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ selectedBook.progreso }}%</div>
+              <div class="stat-value fs-4 fw-bold  mb-1">{{ selectedBook.progreso }}%</div>
               <div class="stat-label fs-7 text-theme">Progreso</div>
             </div>
           </div>
           
           <div class="col" *ngIf="selectedBook.fechaInicio">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ formatDate(selectedBook.fechaInicio) }}</div>
+              <div class="stat-value fs-4 fw-bold  mb-1">{{ formatDate(selectedBook.fechaInicio) }}</div>
               <div class="stat-label fs-7 text-theme">Fecha inicio</div>
             </div>
           </div>
           
           <div class="col" *ngIf="selectedBook.fechaFin">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ formatDate(selectedBook.fechaFin) }}</div>
+              <div class="stat-value fs-4 fw-bold  mb-1">{{ formatDate(selectedBook.fechaFin) }}</div>
               <div class="stat-label fs-7 text-theme">Fecha fin</div>
             </div>
           </div>
           
           <div class="col" *ngIf="selectedBook.fechaInicio && selectedBook.fechaFin">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ calculateReadingDays(selectedBook) }}</div>
+              <div class="stat-value fs-4 fw-bold  mb-1">{{ calculateReadingDays(selectedBook) }}</div>
               <div class="stat-label fs-7 text-theme">Días de lectura</div>
             </div>
           </div>
@@ -166,7 +166,7 @@
           <div class="phrases-list">
             <div class="phrase-item bg-theme rounded-3 p-4 mb-3 position-relative" 
                  *ngFor="let phrase of selectedBook.frases">
-              <div class="quote-marks position-absolute top-n10 start-10 fs-1 text-btn opacity-50 font-serif">&#8220;</div>
+              <div class="quote-marks position-absolute top-n10 start-10 fs-1  opacity-50 font-serif">&#8220;</div>
               <p class="fst-italic text-theme-text position-relative z-1 lh-base mb-0">{{ phrase }}</p>
             </div>
           </div>
@@ -203,13 +203,13 @@
         </div>
       </div>
       
-      <div class="modal-actions d-flex justify-content-end gap-3 p-4 bg-theme">
+      <div class="modal-actions d-flex justify-content-end gap-3 p-4 ">
         <button class="action-btn edit-btn btn bg-component text-theme-text d-flex align-items-center gap-2 fw-semibold rounded-pill px-4 py-3 border-0">
           <span class="action-icon">✎</span>
           Editar libro
         </button>
-        <button class="action-btn rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-3 border-0" 
-                [ngClass]="{'add-progress bg-btn text-white': selectedBook.estado !== 'finalizado', 'finalizar bg-success text-white': selectedBook.estado === 'en-progreso'}">
+        <button class="action-btn-success rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-3 border-0" 
+                [ngClass]="{'add-progress text-white': selectedBook.estado !== 'finalizado', 'finalizar text-white': selectedBook.estado === 'en-progreso'}">
           <span class="action-icon">{{ selectedBook.estado === 'en-progreso' ? '✓' : '+' }}</span>
           {{ selectedBook.estado === 'en-progreso' ? 'Marcar como finalizado' : 'Añadir progreso' }}
         </button>

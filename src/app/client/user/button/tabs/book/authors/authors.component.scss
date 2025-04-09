@@ -13,8 +13,8 @@
   .bg-main { background-color: var(--main-bg); }
   .text-theme { color: var(--border-color); }
   .text-theme-text { color: var(--text-color); }
-  .text-btn { color: var(--btn); }
-  .bg-btn { background-color: var(--btn); }
+  .text-btn { color: var(--bs-btn); }
+  .bg-btn {     background-color: var(--bs-btn); }
   .bg-dark-blur { background-color: rgba(0, 0, 0, 0.8); }
   .backdrop-blur { backdrop-filter: blur(5px); }
   .fs-7 { font-size: 0.9rem; }
@@ -22,7 +22,7 @@
   .top-10 { top: 10px; }
   .end-10 { right: 10px; }
   .z-1000 { z-index: 1000; }
-  .border-btn { border-color: var(--btn) !important; }
+  .border-btn { border-color: var(--bs-btn) !important; }
   .border-main { border-color: var(--main-bg) !important; }
   .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
   .text-shadow { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); }
@@ -49,7 +49,7 @@
       left: 0;
       width: 60px;
       height: 4px;
-      background-color: var(--btn);
+          background-color: var(--bs-btn);
       border-radius: 2px;
     }
   }
@@ -64,7 +64,7 @@
       left: 0;
       width: 40px;
       height: 3px;
-      background-color: var(--btn);
+          background-color: var(--bs-btn);
       border-radius: 2px;
     }
   }
@@ -236,7 +236,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     
     &.status-reading {
-      background-color: var(--btn);
+          background-color: var(--bs-btn);
       color: white;
     }
     

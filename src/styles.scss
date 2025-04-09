@@ -1,5 +1,5 @@
 @import "assets/colors.scss";
-
+@import "assets/typography.scss";
 /* Estilos de scrollbar minimalistas y modernos - Base */
 * { 
   scrollbar-width: thin; 
@@ -137,8 +137,6 @@ select.form-control {
     }
   }
 }
-
-/* Ejemplos de cómo usar las variables CSS en otros componentes */
 
 
 .section { 

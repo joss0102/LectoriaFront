@@ -1,0 +1,52 @@
+// Importaciones de Bootstrap (si es necesario)
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// Definición de familias de fuentes
+$secondary: 'Open Sans', sans-serif;
+$decorative: 'Playfair Display', serif;
+
+// Sans-Serif modernas
+$poppins: 'Poppins', sans-serif;
+$inter: 'Inter', sans-serif;
+$nunito: 'Nunito', sans-serif;
+$raleway: 'Raleway', sans-serif;
+$work: 'Work Sans', sans-serif;
+$quicksand: 'Quicksand', sans-serif;
+$dms: 'DM Sans', sans-serif;
+$montserrat: 'Montserrat Alternates', sans-serif;
+$josefin: 'Josefin Sans', sans-serif;
+$rubik: 'Rubik', sans-serif;
+
+// Serif elegantes
+$merriweather: 'Merriweather', serif;
+$librebaskerville: 'Libre Baskerville', serif;
+$lora: 'Lora', serif;
+$crimsontext: 'Crimson Text', serif;
+$garamond: 'EB Garamond', serif;
+$cormorant: 'Cormorant Garamond', serif;
+$dmserif: 'DM Serif Display', serif;
+$librecaslon: 'Libre Caslon Text', serif;
+$bodoni: 'Bodoni Moda', serif;
+
+*{
+    // font-family: $font-decorative;
+    // font-family: $font-decorative;
+}
+
+h1 {
+    font-weight: 700;
+}
+
+p{
+    font-family: $inter;
+}
+
+h3{
+    font-size: 15px;
+}
+@font-face {
+    font-family: 'TitleBook';
+    src: url('../assets/fonts/KaushanScript-Regular.ttf');
+  }

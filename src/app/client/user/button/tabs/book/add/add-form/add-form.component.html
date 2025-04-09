@@ -2,7 +2,7 @@
 <!-- Sección inicial para elegir el método de añadir libro -->
 <section class="form-section d-flex justify-content-center align-items-center w-100" *ngIf="showInitialOptions">
   <div class="options-container d-flex gap-4">
-    <button class="btn btn-primary d-flex align-items-center justify-content-center gap-3 fw-semibold rounded-3 bg-btn" 
+    <button class="btn btn-primary d-flex align-items-center justify-content-center gap-3 fw-semibold rounded-3" 
             (click)="showSearchOnlineModal()">
       <i class="bi bi-search fs-5"></i>
       Buscar online
@@ -135,7 +135,7 @@
           <!-- Lista de géneros seleccionados -->
           <div class="selected-items" *ngIf="selectedGenres.length > 0">
             <div class="badge-container d-flex flex-wrap gap-2">
-              <span class="badge d-inline-flex align-items-center gap-2 py-1 px-3 rounded-pill bg-btn-10" 
+              <span class="badge d-inline-flex align-items-center gap-2 py-1 px-3 rounded-pill -10" 
                     *ngFor="let genre of selectedGenres; let i = index">
                 {{ genre }}
                 <button class="badge-remove bg-transparent border-0  d-flex align-items-center justify-content-center" 
@@ -148,7 +148,7 @@
     </div>
     <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
       <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToInitialOptions()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="submitBook()">Guardar libro</button>
+      <button class="btn btn-primary rounded-3 fw-semibold " (click)="submitBook()">Guardar libro</button>
     </div>
   </div>
 </section>
@@ -193,7 +193,7 @@
     </div>
     <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
       <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="saveAuthor()">Guardar autor</button>
+      <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveAuthor()">Guardar autor</button>
     </div>
   </div>
 </section>
@@ -237,7 +237,7 @@
     </div>
     <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
       <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="saveSaga()">Confirmar</button>
+      <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveSaga()">Confirmar</button>
     </div>
   </div>
 </section>
@@ -283,7 +283,7 @@
     </div>
     <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
       <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddSaga()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="saveSagaImages()">Confirmar</button>
+      <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveSagaImages()">Confirmar</button>
     </div>
   </div>
 </section>
@@ -334,7 +334,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
               <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-              <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="saveStatus()">Confirmar</button>
+              <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveStatus()">Confirmar</button>
             </div>
           </div>
         </section>
@@ -407,7 +407,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
               <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddStatus()">Cancelar</button>
-              <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="savePhrasesNotes()">Confirmar</button>
+              <button class="btn btn-primary rounded-3 fw-semibold " (click)="savePhrasesNotes()">Confirmar</button>
             </div>
           </div>
         </section>
@@ -439,7 +439,7 @@
                   <div class="items-list my-4" *ngIf="selectedGenres.length > 0">
                     <h4 class="fs-5 mb-3 -90">Géneros añadidos</h4>
                     <div class="genre-tags d-flex flex-wrap gap-2">
-                      <span class="badge d-inline-flex align-items-center gap-2 py-1 px-3 rounded-pill bg-btn-10" 
+                      <span class="badge d-inline-flex align-items-center gap-2 py-1 px-3 rounded-pill -10" 
                             *ngFor="let genre of selectedGenres; let i = index">
                         {{ genre }}
                         <button class="badge-remove bg-transparent border-0  d-flex align-items-center justify-content-center" 
@@ -452,7 +452,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
               <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-              <button class="btn btn-primary rounded-3 fw-semibold bg-btn" (click)="saveGenres()">Confirmar</button>
+              <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveGenres()">Confirmar</button>
             </div>
           </div>
         </section>

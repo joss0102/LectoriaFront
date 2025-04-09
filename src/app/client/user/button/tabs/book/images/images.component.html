@@ -41,7 +41,7 @@
           <div class="image-container position-relative overflow-hidden rounded-3 shadow">
             <img [src]="libro.imagen" [alt]="'Portada de ' + libro.titulo" class="w-100 h-100 object-fit-cover">
             <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-              <button class="edit-btn bg-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale">
+              <button class="edit-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale">
                 <i class="edit-icon fs-5">✎</i>
                 Editar
               </button>
@@ -62,13 +62,13 @@
       
       <div class="sagas-container d-flex flex-column gap-5">
         <div class="saga-section gradient-card rounded-4 p-4 shadow" *ngFor="let saga of sagas">
-          <h3 class="saga-title border-start border-4 border-btn ps-3 fw-semibold mb-4">{{ saga.nombre }}</h3>
+          <h3 class="saga-title border-start border-4  ps-3 fw-semibold mb-4">{{ saga.nombre }}</h3>
           <div class="saga-images">
             <div class="saga-image-container" *ngFor="let fondo of saga.fondos; let i = index">
               <div class="image-container position-relative overflow-hidden rounded-3 shadow mb-2">
                 <img [src]="fondo" [alt]="'Fondo ' + (i+1) + ' de ' + saga.nombre" class="w-100 h-100 object-fit-cover">
                 <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-                  <button class="edit-btn bg-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
+                  <button class="edit-btn  text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
                           (click)="editarImagen('saga', saga.nombre + '-fondo' + (i+1))">
                     <i class="edit-icon fs-5">✎</i>
                     Editar
@@ -93,7 +93,7 @@
           <div class="image-container author-image position-relative overflow-hidden rounded-circle shadow">
             <img [src]="'/autores/' +autor.nombre + '/autor/'+autor.nombre+'.jpg'" [alt]="'Foto de ' + autor.nombre" class="w-100 h-100 object-fit-cover">
             <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-              <button class="edit-btn bg-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale"
+              <button class="edit-btn  text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale"
                      (click)="editarImagen('autor', autor.nombre)">
                 <i class="edit-icon fs-5">✎</i>
                 Editar
@@ -115,14 +115,14 @@
       
       <div class="banners-container d-flex flex-column gap-5">
         <div class="author-section gradient-card rounded-4 p-4 shadow" *ngFor="let autor of autores">
-          <h3 class="author-title border-start border-4 border-btn ps-3 fw-semibold mb-4">{{ autor.nombre }}</h3>
+          <h3 class="author-title border-start border-4  ps-3 fw-semibold mb-4">{{ autor.nombre }}</h3>
           
           <div class="banner-images">
             <div class="banner-image-container" *ngFor="let banner of autor.banners; let i = index">
               <div class="image-container banner-container position-relative overflow-hidden rounded-3 shadow mb-2">
                 <img [src]="banner" [alt]="'Banner ' + (i+1) + ' de ' + autor.nombre+'.jpg'" class="w-100 h-100 object-fit-cover">
                 <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-                  <button class="edit-btn bg-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
+                  <button class="edit-btn  text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
                           (click)="editarImagen('banner', autor.nombre + '-banner' + (i+1))">
                     <i class="edit-icon fs-5">✎</i>
                     Editar

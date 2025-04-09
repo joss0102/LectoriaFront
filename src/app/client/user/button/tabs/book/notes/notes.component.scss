@@ -8,8 +8,8 @@ $transition-standard: all 0.3s ease;
 .bg-component { background-color: var(--component-bg); }
 .text-theme { color: var(--border-color); }
 .text-theme-text { color: var(--text-color); }
-.text-btn { color: var(--btn); }
-.bg-btn { background-color: var(--btn); }
+.text-btn { color: var(--bs-btn); }
+.bg-btn { background-color: var(--bs-btn); }
 .bg-dark-80 { background-color: rgba(0, 0, 0, 0.7); }
 .bg-dark-20 { background-color: rgba(0, 0, 0, 0.2); }
 .border-dashed { border: 2px dashed var(--border-color); }
@@ -109,9 +109,10 @@ $transition-standard: all 0.3s ease;
 // Botón "Ver todas"
 .view-all-btn {
   transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: var(--bs-btn);
   
   &:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--bs-btn-hover);
     transform: translateX(5px);
   }
 }
@@ -131,6 +132,7 @@ $transition-standard: all 0.3s ease;
   width: 32px;
   height: 32px;
   min-width: 32px;
+  background-color: var(--bs-btn);
 }
 
 .note-actions {
@@ -147,16 +149,16 @@ $transition-standard: all 0.3s ease;
   
   .action-hover {
     &:hover {
-      background-color: var(--border-color);
+      background-color: var(--bs-btn);
       transform: translateY(-3px);
     }
     
     &.edit:hover {
-      background-color: var(--warning);
+      background-color: var(--bs-btn);
     }
     
     &.delete:hover {
-      background-color: var(--danger);
+      background-color: var(--bs-btn);
     }
   }
 }
@@ -173,7 +175,7 @@ $transition-standard: all 0.3s ease;
   
   &:hover {
     background-color: rgba(255, 136, 0, 0.1);
-    border-color: var(--btn);
+    border-color: var(--bs-btn);
     color: var(--btn);
   }
 }

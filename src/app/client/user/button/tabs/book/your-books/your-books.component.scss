@@ -13,8 +13,8 @@
 .bg-main { background-color: var(--main-bg); }
 .text-theme { color: var(--border-color); }
 .text-theme-text { color: var(--text-color); }
-.text-btn { color: var(--btn); }
-.bg-btn { background-color: var(--btn); }
+.text-btn { color: var(--bs-btn); }
+.bg-btn { background-color: var(--bs-btn); }
 .bg-dark-blur { background-color: rgba(0, 0, 0, 0.8); }
 .bg-light-dark { background-color: rgba(0, 0, 0, 0.1); }
 .border-subtle { border-color: rgba(255, 255, 255, 0.1) !important; }
@@ -44,7 +44,9 @@
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
 }
-
+.stat-value{
+  color: var(--bs-btn);
+}
 // Estilos para títulos con línea
 .main-title {
   font-size: 2.5rem;
@@ -56,7 +58,7 @@
     left: 0;
     width: 60px;
     height: 4px;
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
     border-radius: 2px;
   }
 }
@@ -71,7 +73,7 @@
     left: 0;
     width: 40px;
     height: 3px;
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
     border-radius: 2px;
   }
 }
@@ -121,7 +123,7 @@
 
 .reset-search {
   &:hover {
-    color: var(--btn-hover);
+    color: var(--bs-btn-hover);
   }
 }
 
@@ -142,7 +144,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   
   &.status-reading {
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
     color: white;
   }
   
@@ -204,16 +206,18 @@
   height: 270px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
-
+.action-btn-success{
+  background-color: var(--bs-btn-hover);
+}
 .action-btn {
   transition: all 0.3s ease;
-  
+  background-color: var(--bs-btn);
   &.edit-btn:hover {
-    background-color: var(--border-color);
+    background-color: var(--bs-btn-hover);
   }
   
   &.add-progress:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--bs-btn-hover);
   }
 }
 

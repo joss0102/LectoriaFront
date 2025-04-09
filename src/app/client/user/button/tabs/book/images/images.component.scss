@@ -12,8 +12,8 @@
 .bg-component { background-color: var(--component-bg); }
 .text-theme { color: var(--border-color); }
 .text-theme-text { color: var(--text-color); }
-.bg-btn { background-color: var(--btn); }
-.border-btn { border-color: var(--btn) !important; }
+.bg-btn { background-color: var(--bs-btn); }
+.border-btn { border-color: var(--bs-btn) !important; }
 .bg-dark-50 { background-color: rgba(0, 0, 0, 0.5); }
 .gradient-card { background: linear-gradient(to bottom, var(--component-bg), var(--background-color)); }
 .fs-7 { font-size: 0.9rem; }
@@ -35,11 +35,11 @@
   }
   
   &.active {
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
     color: white;
     
     &:hover {
-      background-color: var(--btn-hover);
+      background-color: var(--bs-btn-hover);
     }
   }
 }
@@ -55,7 +55,7 @@
     left: 0;
     width: 50%;
     height: 3px;
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
   }
 }
 
@@ -78,7 +78,7 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
   
   &:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--bs-btn-hover);
     transform: scale(1.05);
   }
 }
@@ -104,7 +104,6 @@
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  border: 3px solid var(--btn);
 }
 
 .banner-container {
@@ -138,7 +137,9 @@
   font-size: 1.4rem;
   color: var(--text-color);
 }
-
+.edit-btn{
+  background-color: var(--bs-btn);
+}
 // Media queries para responsividad
 @media (max-width: 768px) {
   .view-selector {

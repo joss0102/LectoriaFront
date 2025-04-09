@@ -16,7 +16,7 @@
       color: var(--text-color);
 
       &:hover {
-        color: $btn;
+        color: var(--bs-btn);
       }
     }
 
@@ -40,7 +40,7 @@
       font-size: 30px;
       transition: color 0.3s ease;
       &:hover {
-        color: $btn;
+        color: var(--bs-btn);
       }
     }
   }
@@ -59,7 +59,7 @@
       transition: color 0.3s ease;
       color: var(--text-color);
       &:hover {
-        color: $btn;
+        color: var(--bs-btn);
       }
       &.active::after {
         content: "";
@@ -68,7 +68,7 @@
         bottom: 0;
         width: 100%;
         height: 2px;
-        background-color: $btn;
+        background-color: var(--bs-btn);
       }
     }
   }

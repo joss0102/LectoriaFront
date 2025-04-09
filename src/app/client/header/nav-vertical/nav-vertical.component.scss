@@ -1,6 +1,4 @@
-@import "../../../../assets/colors.scss";
 
-// Contendor principal de la navegación
 nav {
   display: flex;
   flex-direction: column;
@@ -10,7 +8,6 @@ nav {
   position: relative;
   background-color: var(--background-color);
 
-  // Cuando se muestra el texto
   &:not(.only-icon) {
     width: 220px;
   }
@@ -21,8 +18,8 @@ nav {
     height: 100%;
   }
   
-  a {
-    cursor: pointer;
+  // Estilos comunes para enlaces y perfil de usuario
+  a, .user-profile {
     padding: 15px;
     color: var(--text-color);
     display: flex;
@@ -30,14 +27,8 @@ nav {
     text-decoration: none;
     transition: color 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
     
-    &:hover {
-      color: $btn;
-      background-color: rgba(206, 206, 206, 0.1);
-    }
-    
-    &.active {
-      color: $btn;
-      background-color: rgba(206, 206, 206, 0.1);
+    &.clickable {
+      cursor: pointer;
     }
     
     .link {
@@ -58,6 +49,7 @@ nav {
         font-size: 3rem !important;
       }
     }
+    
     //Cuando es solo icono
     &.only-icon {
       p {
@@ -74,53 +66,32 @@ nav {
       }
     }
   }
-}
-
-// Clase utilitaria
-.cursor-pointer {
-  cursor: pointer;
-}
-
-// Overlay para móvil
-.mobile-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1040;
   
-  @media screen and (max-width: 1300px) {
+  // Aplicar hover solo a los enlaces (no al perfil de usuario)
+  a {
+    cursor: pointer;
+    
+    &:hover {
+      color: var(--bs-btn);
+      background-color: var(--main-bg);
+    }
+    
     &.active {
-      display: block;
-    }
-  }
-}
-
-// Estilos para el tema día
-.tema-dia {
-  nav {
-    a {
-      &:hover, &.active {
-        background-color: rgba(0, 0, 0, 0.05);
-      }
+      color: var(--bs-btn);
+      background-color: rgba(206, 206, 206, 0.1);
     }
   }
   
-  .search-container {
-    hr {
-      border-color: var(--border-color) !important;
+  // Estilos específicos para el perfil de usuario
+  .user-profile {
+    &:not(.clickable) {
+      cursor: default;
     }
-  }
-}
-
-// Modo noche
-.tema-noche {
-  .search-container {
-    hr {
-      border-color: var(--border-color) !important;
+    
+    // En modo clickable (responsive), añadir efectos hover
+    &.clickable:hover {
+      color: var(--bs-btn);
+      background-color: rgba(206, 206, 206, 0.1);
     }
   }
 }
@@ -249,6 +220,11 @@ nav {
         left: 0; // Visible cuando se activa
       }
     }
+    
+    // En responsive, el perfil de usuario siempre es clickable
+    .user-profile {
+      cursor: pointer;
+    }
   }
   
   .search-menu-wrapper {
@@ -266,6 +242,55 @@ nav {
     .search-container {
       width: 100%;
       max-width: 100%;
+    }
+  }
+}
+
+// Clase utilitaria
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Overlay para móvil
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  
+  @media screen and (max-width: 1300px) {
+    &.active {
+      display: block;
+    }
+  }
+}
+
+// Estilos para el tema día
+.tema-dia {
+  nav {
+    a, .user-profile.clickable {
+      &:hover, &.active {
+        background-color: rgba(0, 0, 0, 0.575);
+      }
+    }
+  }
+  
+  .search-container {
+    hr {
+      border-color: var(--border-color) !important;
+    }
+  }
+}
+
+// Modo noche
+.tema-noche {
+  .search-container {
+    hr {
+      border-color: var(--border-color) !important;
     }
   }
 }

@@ -1,1 +1,215 @@
-<p>settings works!</p>
+<section class="settings-section">
+    <!-- Perfil -->
+    <div class="profile-card personal-info" (click)="openProfileModal()">
+      <div class="icon-container">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div class="content">
+        <p class="title">Información Personal</p>
+        <p class="description">Actualiza tu nombre y apellidos</p>
+      </div>
+    </div>
+  
+    <!-- Foto de perfil -->
+    <div class="profile-card profile-pic" (click)="openProfilePicModal()">
+      <div class="icon-container">
+        <i class="bi bi-camera-fill"></i>
+      </div>
+      <div class="content">
+        <p class="title">Foto de Perfil</p>
+        <p class="description">Cambia tu imagen de perfil</p>
+      </div>
+    </div>
+  
+    <!-- Contraseña -->
+    <div class="profile-card password" (click)="openPasswordModal()">
+      <div class="icon-container">
+        <i class="bi bi-key-fill"></i>
+      </div>
+      <div class="content">
+        <p class="title">Contraseña</p>
+        <p class="description">Modifica tu contraseña de acceso</p>
+      </div>
+    </div>
+  
+    <!-- Perfil Completo -->
+    <div class="profile-card complete-profile" (click)="openUserDetailsModal()">
+      <div class="icon-container">
+        <i class="bi bi-person-vcard-fill"></i>
+      </div>
+      <div class="content">
+        <p class="title">Perfil Completo</p>
+        <p class="description">Visualiza y edita todos tus datos</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal Información Personal -->
+  <div class="modal fade" [class.show]="showProfileModal" [style.display]="showProfileModal ? 'block' : 'none'" 
+       tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true" 
+       *ngIf="showProfileModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="profileModalLabel">Información Personal</h2>
+          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updatePersonalInfo()" #personalInfoForm="ngForm">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" [(ngModel)]="currentUser.nombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="primerApellido" class="form-label">Primer Apellido</label>
+              <input type="text" class="form-control" id="primerApellido" [(ngModel)]="currentUser.primerApellido" name="primerApellido" required>
+            </div>
+            <div class="mb-3">
+              <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+              <input type="text" class="form-control" id="segundoApellido" [(ngModel)]="currentUser.segundoApellido" name="segundoApellido">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+              <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Foto de Perfil -->
+  <div class="modal fade" [class.show]="showProfilePicModal" [style.display]="showProfilePicModal ? 'block' : 'none'" 
+       tabindex="-1" aria-labelledby="profilePicModalLabel" aria-hidden="true" 
+       *ngIf="showProfilePicModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="profilePicModalLabel">Foto de Perfil</h2>
+          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <img [src]="currentUser.imagenPerfil || 'assets/img/default-profile.png'" alt="Foto de perfil" class="img-thumbnail profile-preview">
+          </div>
+          <form (ngSubmit)="updateProfilePic()" #profilePicForm="ngForm">
+            <div class="mb-3">
+              <label for="profilePic" class="form-label">Selecciona una nueva imagen</label>
+              <input type="file" class="form-control" id="profilePic" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+              <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Contraseña -->
+  <div class="modal fade" [class.show]="showPasswordModal" [style.display]="showPasswordModal ? 'block' : 'none'" 
+       tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true" 
+       *ngIf="showPasswordModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="passwordModalLabel">Cambiar Contraseña</h2>
+          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updatePassword()" #passwordForm="ngForm">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label">Contraseña Actual</label>
+              <input type="password" class="form-control" id="currentPassword" [(ngModel)]="passwordData.current" name="currentPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">Nueva Contraseña</label>
+              <input type="password" class="form-control" id="newPassword" [(ngModel)]="passwordData.new" name="newPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+              <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="passwordData.confirm" name="confirmPassword" required>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+              <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Usuario Completo -->
+  <div class="modal fade" [class.show]="showUserDetailsModal" [style.display]="showUserDetailsModal ? 'block' : 'none'" 
+       tabindex="-1" aria-labelledby="userDetailsModalLabel" aria-hidden="true" 
+       *ngIf="showUserDetailsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="userDetailsModalLabel">Perfil Completo</h2>
+          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+
+            <div class="col-md-4 text-center">
+              <img [src]="currentUser.imagenPerfil || 'assets/img/default-profile.png'" alt="Foto de perfil" class="img-thumbnail profile-large mb-3">
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  Cambiar Usuario
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                  <li *ngFor="let user of users">
+                    <a class="dropdown-item" href="javascript:void(0)" (click)="selectUser(user.id)">
+                      {{ user.nombre }} {{ user.primerApellido }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="col-md-8">
+              <form (ngSubmit)="updateUserDetails()" #userDetailsForm="ngForm">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="fullNombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="fullNombre" [(ngModel)]="currentUser.nombre" name="fullNombre" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="fullPrimerApellido" class="form-label">Primer Apellido</label>
+                    <input type="text" class="form-control" id="fullPrimerApellido" [(ngModel)]="currentUser.primerApellido" name="fullPrimerApellido" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="fullSegundoApellido" class="form-label">Segundo Apellido</label>
+                    <input type="text" class="form-control" id="fullSegundoApellido" [(ngModel)]="currentUser.segundoApellido" name="fullSegundoApellido">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="fullNickname" class="form-label">Nickname</label>
+                    <input type="text" class="form-control" id="fullNickname" [(ngModel)]="currentUser.nickname" name="fullNickname" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="fullFechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="fullFechaNacimiento" [(ngModel)]="currentUser.fechaNacimiento" name="fullFechaNacimiento" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="fullRol" class="form-label">Rol</label>
+                    <input type="text" class="form-control" id="fullRol" [(ngModel)]="currentUser.rol" name="fullRol" readonly>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
+                  <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

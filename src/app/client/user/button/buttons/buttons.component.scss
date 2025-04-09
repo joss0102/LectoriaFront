@@ -25,7 +25,7 @@
     .icon-container {
       transform: rotate(10deg);
       background-color: var(--btn-hover);
-      
+      background-color: var(--bs-btn-hover);
       i {
         transform: scale(1.1);
       }
@@ -39,21 +39,24 @@
   &:active {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    
   }
 }
-
+.bi:hover{
+  background-color: var(--bs-btn-hover);
+}
 .icon-container {
   min-width: 50px;
   height: 50px;
   border-radius: 14px;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; 
   background-color: var(--bs-btn);
-      
-  
+
   i {
     font-size: 22px;
     transition: transform 0.3s ease;
   }
+
 }
 
 /* Estilos para los modales */

@@ -14,6 +14,7 @@
         *ngFor="let book of books; let i = index"
         [attr.data-book-index]="i"
       >
+        <img class="blur-bg" [src]="book.imagen" [alt]=""> <!-- Imagen para el efecto de desenfoque -->
         <img [src]="book.imagen" [alt]="book.titulo" />
       </div>
     </div>

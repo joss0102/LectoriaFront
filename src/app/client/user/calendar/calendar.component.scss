@@ -10,9 +10,12 @@
     border-radius: 20px;
     width: 70px;
     background-color: var(--bs-btn);
+    &:hover {
+      background-color: var(--bs-btn-hover);
+    }
   }
   .month-title {
-    font-size: 2rem; // Reducido
+    font-size: 2rem;
     font-weight: 600;
     margin: 0;
     color: var(--text-color);

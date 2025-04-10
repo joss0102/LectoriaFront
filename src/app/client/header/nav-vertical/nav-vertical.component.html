@@ -1,4 +1,4 @@
-<nav [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible}">
+<nav [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible, 'home-page-nav': isHomePage}">
   <!-- Navegación principal -->
   <div class="nav-content">
     <div
@@ -11,7 +11,7 @@
       <p class="fs-5 mb-0 fw-bold">Nombre</p>
       <p class="fs-6 mb-0">Apellido</p>
     </div>
-
+    
     <!-- Enlaces principales que aparecen en modo responsive -->
     <ng-container *ngIf="showMainLinks">
       <a
@@ -24,7 +24,7 @@
         <p class="fs-6 link">Inicio</p>
       </a>
     </ng-container>
-
+    
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
       routerLink="/library"
@@ -34,7 +34,7 @@
       <i class="bi bi-collection"></i>
       <p class="fs-6 link">Biblioteca</p>
     </a>
-
+    
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
       routerLink="/current-book"
@@ -44,9 +44,7 @@
       <i class="bi bi-book"></i>
       <p class="fs-6 link">Lectura actual</p>
     </a>
-
-
-
+      
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
       routerLink="/statistics"

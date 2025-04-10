@@ -193,6 +193,14 @@ nav {
   }
 }
 
+
+/* Aseguramos que en dispositivos móviles se muestre correctamente */
+@media (max-width: 1300px) {
+  .home-page-nav.menu-visible {
+    transform: translateX(0);
+    z-index: 1000;
+  }
+}
 // Estilos responsive
 @media screen and (max-width: 1300px) {
   body {

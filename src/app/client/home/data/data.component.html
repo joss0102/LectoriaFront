@@ -1,12 +1,20 @@
 <section>
-    <div class="d-flex flex-column datos-libro" *ngIf="book" [class.fade-in]="showData" [class.fade-out]="!showData">
-        <h6 class="autor">{{ book.autor }}</h6>
-        <h6 class="saga">{{ book.saga }}</h6>
-        <h1 class="titulo">{{ book.titulo }}</h1>
-        <div class="datos-sinopsis">
-            <p class="sinopsis">Sinopsis</p>
-            <p class="texto-sinopsis">{{ book.sinopsis }}</p>
-        </div>
-        <button class="boton btn  fw-bold">Saber más</button>
+    <div
+      class="d-flex flex-column datos-libro"
+      *ngIf="book"
+      [class.fade-in]="showData"
+      [class.fade-out]="!showData"
+    >
+      <h6 class="autor" *ngIf="book.authors">{{ book.authors }}</h6>
+      <h6 class="saga" *ngIf="book.sagas">{{ book.sagas }}</h6>
+      <h1 class="titulo" *ngIf="book.book_title">{{ book.book_title }}</h1>
+  
+      <div class="datos-sinopsis" *ngIf="book.synopsis">
+        <p class="sinopsis">Sinopsis</p>
+        <p class="texto-sinopsis">{{ book.synopsis }}</p>
+      </div>
+  
+      <button class="boton btn fw-bold">Saber más</button>
     </div>
-</section>
+  </section>
+  

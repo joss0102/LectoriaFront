@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../../../core/services/ThemeService/theme.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-vertical',
@@ -24,18 +26,21 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   isMobile: boolean = false;
   modoNoche: boolean = true;
   showMainLinks: boolean = false;
+  isHomePage: boolean = false;
   
   private iconSubscription: Subscription;
   private menuVisibleSubscription: Subscription;
   private themeSubscription: Subscription;
   private linksSubscription: Subscription;
   private responsiveSubscription: Subscription;
+  private routerSubscription: Subscription;
   
   constructor(
     private verticalService: NavVerticalService,
     private themeService: ThemeService,
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef,
+    private router: Router
   ) {
     // Detectar si es dispositivo móvil al inicio
     this.checkIsMobile();
@@ -84,6 +89,19 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     this.responsiveSubscription = this.verticalService.isResponsive$.subscribe((isResponsive) => {
       this.isMobile = isResponsive;
     });
+
+    // Suscripción para detectar cambios en la ruta y verificar si estamos en la página de inicio
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.isHomePage = event.urlAfterRedirects === '/';
+        // Actualizar el estado en el servicio
+        this.verticalService.setIsHomePage(this.isHomePage);
+      });
+      
+    // Verificar la ruta actual al iniciar el componente
+    this.isHomePage = this.router.url === '/';
+    this.verticalService.setIsHomePage(this.isHomePage);
   }
   
   ngAfterViewInit() {
@@ -151,6 +169,7 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     this.themeSubscription?.unsubscribe();
     this.linksSubscription?.unsubscribe();
     this.responsiveSubscription?.unsubscribe();
+    this.routerSubscription?.unsubscribe();
     
     // Limpiar clases en el body
     this.renderer.removeClass(document.body, 'mobile-menu-open');

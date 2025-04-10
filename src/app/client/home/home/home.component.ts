@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-
+import { HttpClientModule } from '@angular/common/http';
 import { ColorPrimaryService } from '../../../core/services/ColorPrimary/color-primary.service';
 import { ThemeService, ThemeType } from '../../../core/services/ThemeService/theme.service';
 import { DataComponent } from '../data/data.component';
@@ -11,7 +12,7 @@ import { CarruselComponent } from '../carrusel/carrusel.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DataComponent, Img1Component, Img2Component, CarruselComponent],
+  imports: [CommonModule, DataComponent, Img1Component, Img2Component, CarruselComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

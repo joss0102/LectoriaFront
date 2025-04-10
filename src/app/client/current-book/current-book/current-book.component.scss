@@ -35,13 +35,13 @@
         gap: 0.75rem;
         
         .nav-btn {
+            background-color: var(--bs-btn);
             width: 32px;
             height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-color);
             cursor: pointer;

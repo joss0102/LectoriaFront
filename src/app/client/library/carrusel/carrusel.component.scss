@@ -97,7 +97,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: var(--btn);
+            background-color: var(--bs-btn);
             color: white;
             width: 30px;
             height: 30px;
@@ -145,7 +145,7 @@
             margin-bottom: 0.3rem;
             
             i {
-            color: var(--btn);
+            color: var(--bs-btn);
             font-size: 0.85rem;
             }
         }
@@ -163,14 +163,14 @@
             margin: 0;
             
             i {
-            color: var(--btn);
+            color: var(--bs-btn);
             font-size: 0.85rem;
             }
         }
         }
         
         .carrusel-control {
-        background-color: var(--btn);
+        background-color: var(--bs-btn);
         color: white;
         border: none;
         width: 45px;
@@ -220,7 +220,7 @@
             cursor: pointer;
             
             &.active {
-            background-color: var(--btn);
+            background-color: var(--bs-btn);
             transform: scale(1.2);
             }
             

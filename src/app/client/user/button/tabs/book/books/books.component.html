@@ -69,6 +69,8 @@
     </div>
   </div>
 
+  
+
   <!-- Calificaciones -->
   <div class="book-card califications" (click)="openCalificationsModal()">
     <div class="icon-container">
@@ -157,6 +159,28 @@
       </div>
       <div class="modal-body">
         <app-your-books></app-your-books>
+      </div>
+    </div>
+  </div>
+  <!-- Tus autores -->
+  <div class="book-card authors" (click)="openAuthorsModal()">
+    <div class="icon-container">
+      <i class="bi bi-person-fill"></i>
+    </div>
+    <div class="content">
+      <p class="title">Tus autores</p>
+      <p class="description">Gestiona tu colección de autores favoritos</p>
+    </div>
+  </div>
+  <!-- Modal de Tus autores - solo se muestra cuando showAuthorsModal es true -->
+  <div class="modal" *ngIf="showAuthorsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Tus autores</h2>
+        <button class="close-button" (click)="closeAllModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-authors></app-authors>
       </div>
     </div>
   </div>

@@ -1,12 +1,10 @@
-@import "../../../../assets/colors.scss";
-
 .divide-timer {
   position: absolute;
   top: 69px;
   left: 0;
   width: 100vw;
   height: 5px;
-  background-color: rgb(122, 71, 0);
+  background-color: var(--bs-btn-hover);
   z-index: 10;
   transition: width 0.1s linear;
 }
@@ -14,7 +12,7 @@
 .carousel {
   margin-top: 0;
   width: 920px;
-  height: 400px;
+  height: 420px;
   overflow: hidden;
 
   .list {
@@ -26,19 +24,45 @@
   }
   .item {
     padding: 10px;
-    transition: transform 0.5s ease-in-out;
-    img {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease;
+    position: relative;
+    
+    .blur-bg {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      filter: blur(25px) saturate(1.5);
+      z-index: -1;
+      transform: scale(1.22);
+      opacity: 0; /* Por defecto, el efecto de desenfoque está desactivado */
+      border-radius: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    img:not(.blur-bg) {
       height: 250px;
       border-radius: 10px;
       object-fit: cover;
       transition: transform 0.5s ease-in-out, filter 0.5s ease;
+      position: relative;
+      z-index: 2;
     }
   }
-  .item.first img {
+
+  /* Solo el elemento activo tiene el efecto de desenfoque */
+  .item.first .blur-bg {
+    opacity: 0.9; /* Activar el efecto solo para el elemento principal */
+  }
+
+  .item.first img:not(.blur-bg) {
     transform: scale(1.2);
     filter: brightness(1);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
+  
+  /* Elementos con opacidad reducida */
   .item.first + .item + .item + .item + .item {
     opacity: 0.5;
   }
@@ -50,10 +74,9 @@
 .arrows {
   display: flex;
   margin-bottom: 0;
-
   z-index: 5;
   button {
-    background-color: ($btn);
+    background-color: var(--bs-btn);
     color: white;
     border: none;
     padding: 10px;
@@ -69,7 +92,7 @@
     justify-content: center;
   }
   button:hover {
-    background-color: ($btn-hover);
+    background-color: var(--bs-btn-hover);
     color: black;
     transform: scale(1.1);
   }

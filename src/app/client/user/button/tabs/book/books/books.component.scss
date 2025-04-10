@@ -81,6 +81,11 @@
       }
     }
     
+    &.authors .icon-container {
+      background-color: var(--bs-success);
+      width: 50px;
+    }
+    
     &.califications .icon-container {
       background-color: var(--bs-purple);
       width: 50px;

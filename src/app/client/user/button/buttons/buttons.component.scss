@@ -5,7 +5,7 @@
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
   overflow: hidden;
-  background-color: var(--component-bg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(187, 187, 187, 0) 50%);
   
   &::after {
     content: '';
@@ -14,7 +14,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+
     z-index: 1;
   }
   
@@ -25,7 +25,7 @@
     .icon-container {
       transform: rotate(10deg);
       background-color: var(--btn-hover);
-      
+      background-color: var(--bs-btn-hover);
       i {
         transform: scale(1.1);
       }
@@ -39,25 +39,30 @@
   &:active {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    
   }
 }
-
+.bi:hover{
+  background-color: var(--bs-btn-hover);
+}
 .icon-container {
   min-width: 50px;
   height: 50px;
   border-radius: 14px;
-  transition: all 0.3s ease;
-  
+  transition: all 0.3s ease; 
+  background-color: var(--bs-btn);
+
   i {
     font-size: 22px;
     transition: transform 0.3s ease;
   }
+
 }
 
 /* Estilos para los modales */
 .modal {
   &.show {
-    background-color: rgba(0, 0, 0, 0.6);
+
     backdrop-filter: blur(5px);
     animation: fadeIn 0.3s ease;
   }
@@ -79,7 +84,7 @@
   transform: translateY(-50%);
   width: 6px;
   height: 24px;
-  background-color: var(--btn);
+  background-color: var(--bs-btn);
   border-radius: 3px;
 }
 
@@ -87,12 +92,12 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--bs-btn);
   transition: all 0.2s ease;
   opacity: 1;
   
   &:hover {
-    background-color: var(--btn);
+    background-color: var(--bs-btn-hover);
     transform: rotate(90deg);
     opacity: 1;
   }
@@ -145,10 +150,3 @@
 }
 
 /* Tema noche */
-.tema-noche {
-  .custom-card {
-    &::after {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 50%);
-    }
-  }
-}

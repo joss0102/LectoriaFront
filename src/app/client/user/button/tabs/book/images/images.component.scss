@@ -1,4 +1,4 @@
-// images.component.scss ultra reducido
+// images.component.scss
 
 // Variables y utilidades
 :root {
@@ -12,8 +12,8 @@
 .bg-component { background-color: var(--component-bg); }
 .text-theme { color: var(--border-color); }
 .text-theme-text { color: var(--text-color); }
-.bg-btn { background-color: var(--btn); }
-.border-btn { border-color: var(--btn) !important; }
+.bg-btn { background-color: var(--bs-btn); }
+.border-btn { border-color: var(--bs-btn) !important; }
 .bg-dark-50 { background-color: rgba(0, 0, 0, 0.5); }
 .gradient-card { background: linear-gradient(to bottom, var(--component-bg), var(--background-color)); }
 .fs-7 { font-size: 0.9rem; }
@@ -35,11 +35,11 @@
   }
   
   &.active {
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
     color: white;
     
     &:hover {
-      background-color: var(--btn-hover);
+      background-color: var(--bs-btn-hover);
     }
   }
 }
@@ -55,7 +55,7 @@
     left: 0;
     width: 50%;
     height: 3px;
-    background-color: var(--btn);
+    background-color: var(--bs-btn);
   }
 }
 
@@ -78,7 +78,7 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
   
   &:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--bs-btn-hover);
     transform: scale(1.05);
   }
 }
@@ -94,15 +94,29 @@
   }
 }
 
+// Estilos específicos para diferentes tipos de imágenes
 .saga-image-container .image-container {
   height: 220px;
   width: 350px;
+}
+
+.author-image {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+}
+
+.banner-container {
+  height: 180px;
+  width: 350px;
+  border-radius: 8px;
 }
 
 // Overlay con opacidad
 .image-overlay {
   opacity: 0;
   transition: opacity 0.3s ease;
+  border-radius: inherit;
 }
 
 // Grid de imágenes
@@ -112,26 +126,38 @@
   gap: 2rem;
 }
 
-.saga-images {
+.saga-images, .banner-images {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
+// Ajuste para la sección de autores
+.author-title, .saga-title {
+  font-size: 1.4rem;
+  color: var(--text-color);
+}
+.edit-btn{
+  background-color: var(--bs-btn);
+}
 // Media queries para responsividad
 @media (max-width: 768px) {
   .view-selector {
-    flex-direction: column !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem !important;
     width: 100%;
-    max-width: 300px;
     margin: 0 auto 2rem auto !important;
     
     .selector-btn {
-      width: 100%;
+      flex: 1 0 40%;
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
     }
   }
   
-  .saga-images {
+  .saga-images, .banner-images {
     grid-template-columns: 1fr;
   }
   
@@ -140,9 +166,37 @@
   }
 }
 
+@media (max-width: 576px) {
+  .view-selector {
+    .selector-btn {
+      flex: 1 0 45%;
+      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+  
+  .images-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    
+    .author-image {
+      width: 140px;
+      height: 140px;
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .images-grid {
-    grid-template-columns: 1fr;
+    .image-container {
+      width: 160px;
+      height: 240px;
+    }
+    
+    .author-image {
+      width: 120px;
+      height: 120px;
+    }
   }
 }
 

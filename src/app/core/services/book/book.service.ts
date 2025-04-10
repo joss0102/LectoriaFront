@@ -138,7 +138,7 @@ export class BookService {
       ]
     },
     {
-      autor: 'C.S. Pacat',
+      autor: 'C. S. Pecat',
       saga: 'El principe cautivo',
       titulo: 'El principe cautivo',
       sinopsis:
@@ -161,7 +161,7 @@ export class BookService {
       ]
     },
     {
-      autor: 'Victoria Aveyard',
+      autor: 'Rebecca Yarros',
       saga: 'Empireo',
       titulo: 'Alas de onix',
       sinopsis:
@@ -226,7 +226,7 @@ export class BookService {
       ]
     },
     {
-      autor: 'H.D. Carlton',
+      autor: 'H. D. Carlton',
       saga: 'Hunting Adeline',
       titulo: 'Nunca te dejare',
       sinopsis:
@@ -280,7 +280,7 @@ export class BookService {
       ]
     },
     {
-      autor: 'Marissa Meyer',
+      autor: 'Sarah A. Parker',
       saga: 'La Caida Lunar',
       titulo: 'Hasta que caiga la luna',
       sinopsis:
@@ -415,7 +415,7 @@ export class BookService {
       ]
     },
     {
-      autor: 'Arancha Abad',
+      autor: 'Harley Laroux',
       saga: 'Alma',
       titulo: 'Mi Alma es Tuya',
       sinopsis:

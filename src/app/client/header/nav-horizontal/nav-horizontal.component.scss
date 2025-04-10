@@ -7,40 +7,17 @@
   justify-content: space-between;
   box-sizing: border-box;
   transition: background-color 0.3s ease, color 0.3s ease;
-
-  &.bg-header-day {
-    background-color: var(--background-color);
-    color: var(--text-color);
-
-    .links a {
-      color: var(--text-color);
-
-      &:hover {
-        color: $btn;
-      }
-    }
-
-    .menu i {
-      color: var(--text-color);
-    }
-
-    .theme-switch .switch-track {
-      background-color: rgba(255, 255, 255, 0.4);
-    }
-  }
-
-  &.bg-header-night {
-    background-color: var(--background-color);
-    color: var(--text-color);
-  }
+  background-color: var(--background-color);
+  color: var(--text-color);
 
   .menu {
     cursor: pointer;
     i {
       font-size: 30px;
       transition: color 0.3s ease;
+      color: var(--text-color);
       &:hover {
-        color: $btn;
+        color: var(--bs-btn);
       }
     }
   }
@@ -59,7 +36,7 @@
       transition: color 0.3s ease;
       color: var(--text-color);
       &:hover {
-        color: $btn;
+        color: var(--bs-btn);
       }
       &.active::after {
         content: "";
@@ -68,7 +45,7 @@
         bottom: 0;
         width: 100%;
         height: 2px;
-        background-color: $btn;
+        background-color: var(--bs-btn);
       }
     }
   }
@@ -133,14 +110,12 @@
         .moon-icon {
           color: $light-night;
           font-size: 16px;
-
           margin-left: 2px;
         }
 
         .sun-icon {
           color: $warning-night;
           font-size: 16px;
-
           margin-right: 2px;
         }
 
@@ -155,16 +130,154 @@
           top: 3px;
 
           &.night-active {
-            transform: translateX(-1);
+            transform: translateX(-1px);
             background-color: $secondary-night;
           }
 
           &.day-active {
-            transform: translateX(27px);
+            transform: translateX(32px);
             background-color: $light-night;
           }
         }
       }
+
+      // Temas personalizados para el interruptor
+      &.theme-arctic {
+        .switch-track {
+          background-color: rgba(118, 180, 210, 0.3);
+          
+          .moon-icon {
+            color: #5997b2;
+          }
+          
+          .sun-icon {
+            color: #e0f2fa;
+          }
+          
+          .switch-thumb {
+            &.night-active {
+              background-color: #5997b2;
+            }
+            
+            &.day-active {
+              background-color: #b5d8e8;
+            }
+          }
+        }
+      }
+      
+      &.theme-forest {
+        .switch-track {
+          background-color: rgba(89, 140, 90, 0.3);
+          
+          .moon-icon {
+            color: #3d6b3d;
+          }
+          
+          .sun-icon {
+            color: #daecd5;
+          }
+          
+          .switch-thumb {
+            &.night-active {
+              background-color: #3d6b3d;
+            }
+            
+            &.day-active {
+              background-color: #a9c9a3;
+            }
+          }
+        }
+      }
+      
+      &.theme-sunset {
+        .switch-track {
+          background-color: rgba(224, 121, 94, 0.3);
+          
+          .moon-icon {
+            color: #b35240;
+          }
+          
+          .sun-icon {
+            color: #fbe0d1;
+          }
+          
+          .switch-thumb {
+            &.night-active {
+              background-color: #b35240;
+            }
+            
+            &.day-active {
+              background-color: #f2bc9e;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Estilos específicos para cada tema
+:host-context(.tema-dia) {
+  .nav-horizontal {
+    .links a {
+      color: var(--text-color);
+    }
+    
+    .menu i {
+      color: var(--text-color);
+    }
+    
+    .theme-switch .switch-track {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+}
+
+:host-context(.tema-noche) {
+  .nav-horizontal {
+    .links a {
+      color: var(--text-color);
+    }
+    
+    .menu i {
+      color: var(--text-color);
+    }
+  }
+}
+
+:host-context(.tema-artico) {
+  .nav-horizontal {
+    .links a {
+      color: var(--text-color);
+    }
+    
+    .menu i {
+      color: var(--text-color);
+    }
+  }
+}
+
+:host-context(.tema-bosque) {
+  .nav-horizontal {
+    .links a {
+      color: var(--text-color);
+    }
+    
+    .menu i {
+      color: var(--text-color);
+    }
+  }
+}
+
+:host-context(.tema-atardecer) {
+  .nav-horizontal {
+    .links a {
+      color: var(--text-color);
+    }
+    
+    .menu i {
+      color: var(--text-color);
     }
   }
 }

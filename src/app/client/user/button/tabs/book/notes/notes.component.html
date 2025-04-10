@@ -35,7 +35,7 @@
             <p class="text-theme-text fs-7 lh-base mb-0 ms-4 position-relative z-1">{{ shortenNote(book.anotaciones[0]) }}</p>
           </div>
           
-          <button class="view-all-btn btn bg-btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto">
+          <button class="view-all-btn btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto">
             Ver todas
             <span class="arrow-icon ms-2">→</span>
           </button>
@@ -61,8 +61,8 @@
         <div class="book-meta d-flex gap-3 mb-4" *ngIf="selectedBook.saga">
           <span class="saga-badge bg-component rounded-pill px-3 py-2 fs-7 text-theme">{{ selectedBook.saga }}</span>
         </div>
-        <p class="notes-counter fs-6 text-theme">
-          <span class="counter-number fw-bold text-btn fs-5">{{ selectedBook.anotaciones?.length || 0 }}</span> 
+        <p class="notes-counter fs-6">
+          <span class="counter-number fw-bold fs-5">{{ selectedBook.anotaciones?.length || 0 }}</span> 
           {{ (selectedBook.anotaciones?.length || 0) === 1 ? 'anotación' : 'anotaciones' }} guardadas
         </p>
       </div>
@@ -74,7 +74,7 @@
       <!-- Lista de todas las anotaciones del libro -->
       <div class="note-item d-flex gap-4 mb-4 bg-component rounded-3 p-4 position-relative overflow-hidden" 
            *ngFor="let note of selectedBook.anotaciones; let i = index">
-        <div class="note-number bg-btn text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start">
+        <div class="note-number text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start">
           {{ i + 1 }}
         </div>
         <div class="note-content position-relative flex-grow-1">

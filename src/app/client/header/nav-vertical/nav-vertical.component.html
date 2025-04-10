@@ -1,16 +1,38 @@
 <nav [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible}">
   <!-- Navegación principal -->
   <div class="nav-content">
-    <a
+    <div
       [ngClass]="{ 'only-icon': onlyIcon }"
-      class="d-flex flex-column align-items-center py-0 justify-content-center"
-      routerLinkActive="active"
-      routerLink="/user"
-      [routerLinkActiveOptions]="{ exact: true }"
+      class="user-profile d-flex flex-column align-items-center py-2 justify-content-center"
+      [routerLink]="isMobile ? '/user' : null"
+      [class.clickable]="isMobile"
     >
       <i class="bi bi-person-circle"></i>
       <p class="fs-5 mb-0 fw-bold">Nombre</p>
       <p class="fs-6 mb-0">Apellido</p>
+    </div>
+
+    <!-- Enlaces principales que aparecen en modo responsive -->
+    <ng-container *ngIf="showMainLinks">
+      <a
+        [ngClass]="{ 'only-icon': onlyIcon }"
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="bi bi-house"></i>
+        <p class="fs-6 link">Inicio</p>
+      </a>
+    </ng-container>
+
+    <a
+      [ngClass]="{ 'only-icon': onlyIcon }"
+      routerLink="/library"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <i class="bi bi-collection"></i>
+      <p class="fs-6 link">Biblioteca</p>
     </a>
 
     <a
@@ -23,16 +45,7 @@
       <p class="fs-6 link">Lectura actual</p>
     </a>
 
-    <a
-      [ngClass]="{ 'only-icon': onlyIcon }"
-      (click)="toggleSearchMenu()"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      id="search-button"
-    >
-      <i class="bi bi-search"></i>
-      <p class="fs-6 link">Buscador</p>
-    </a>
+
 
     <a
       [ngClass]="{ 'only-icon': onlyIcon }"
@@ -52,6 +65,16 @@
       <i class="bi bi-bookmark-heart"></i>
       <p class="fs-6 link">Pendientes</p>
     </a>
+    <a
+    [ngClass]="{ 'only-icon': onlyIcon }"
+    (click)="toggleSearchMenu()"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    id="search-button"
+  >
+    <i class="bi bi-search"></i>
+    <p class="fs-6 link">Buscador</p>
+  </a>
   </div>
 
   <a class="my-md my-2" [ngClass]="{ 'only-icon': onlyIcon }">

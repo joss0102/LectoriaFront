@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { OnlineComponent } from "../online/online.component";
 
 @Component({
   selector: 'app-add-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, OnlineComponent],
   templateUrl: './add-form.component.html',
   styleUrl: './add-form.component.scss'
 })

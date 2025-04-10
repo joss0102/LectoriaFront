@@ -1,0 +1,334 @@
+// authors.component.scss
+
+// Variables y utilidades
+:root {
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  // Utilidades personalizadas
+  .bg-theme { background-color: var(--background-color); }
+  .bg-component { background-color: var(--component-bg); }
+  .bg-main { background-color: var(--main-bg); }
+  .text-theme { color: var(--border-color); }
+  .text-theme-text { color: var(--text-color); }
+  .text-btn { color: var(--bs-btn); }
+  .bg-btn {     background-color: var(--bs-btn); }
+  .bg-dark-blur { background-color: rgba(0, 0, 0, 0.8); }
+  .backdrop-blur { backdrop-filter: blur(5px); }
+  .fs-7 { font-size: 0.9rem; }
+  .mw-600 { max-width: 600px; }
+  .top-10 { top: 10px; }
+  .end-10 { right: 10px; }
+  .z-1000 { z-index: 1000; }
+  .border-btn { border-color: var(--bs-btn) !important; }
+  .border-main { border-color: var(--main-bg) !important; }
+  .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+  .text-shadow { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); }
+  .text-shadow-sm { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
+  
+  // Estilos para tarjetas con efecto de elevación
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  // Estilos para títulos con línea
+  .main-title {
+    font-size: 2.5rem;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      width: 60px;
+      height: 4px;
+          background-color: var(--bs-btn);
+      border-radius: 2px;
+    }
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -0.3rem;
+      left: 0;
+      width: 40px;
+      height: 3px;
+          background-color: var(--bs-btn);
+      border-radius: 2px;
+    }
+  }
+  
+  // Estilos para elementos de búsqueda
+  .search-input {
+    color: var(--text-color);
+    box-shadow: var(--shadow-sm);
+    
+    &:focus {
+      outline: none;
+      box-shadow: var(--shadow-sm);
+      background-color: var(--background-color);
+    }
+    
+    &::placeholder {
+      color: var(--border-color);
+    }
+  }
+  
+  .search-icon {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--border-color);
+    pointer-events: none;
+  }
+  
+  .clear-search-btn {
+    right: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--border-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    
+    &:hover {
+      color: var(--text-color);
+    }
+  }
+  
+  // Mensaje vacío
+  .empty-message {
+    max-width: 600px;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .reset-search {
+    cursor: pointer;
+    
+    &:hover {
+      color: var(--btn-hover);
+    }
+  }
+  
+  // Grid de autores
+  .authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+  
+  // Estilos para autores
+  .author-avatar {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    
+    img {
+      transition: transform 0.3s ease;
+    }
+  }
+  
+  .author-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    
+    &:hover {
+      .author-avatar img {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  // Estilos para el modal
+  .modal-content {
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--background-color);
+      border-radius: 0 16px 16px 0;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--component-bg);
+      border-radius: 10px;
+    }
+  }
+  
+  .close-btn {
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: var(--danger);
+      transform: rotate(90deg);
+    }
+  }
+  
+  // Estilos para la cabecera de perfil estilo Facebook
+  .author-profile-header {
+    height: 320px;
+    
+    .author-banner {
+      height: 220px;
+      
+      img {
+        height: 100%;
+        object-position: center 25%;
+      }
+      
+      .banner-gradient {
+        background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+        pointer-events: none;
+      }
+    }
+    
+    .author-avatar-large {
+      width: 140px;
+      height: 140px;
+      min-width: 140px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .author-profile-info {
+      height: 100px;
+    }
+  }
+  
+  // Grid de libros en el modal
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    
+    .book-cover {
+      height: 260px;
+    }
+  }
+  
+  // Estilos para estados de los libros
+  .book-status {
+    padding: 0.25rem 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    
+    &.status-reading {
+          background-color: var(--bs-btn);
+      color: white;
+    }
+    
+    &.status-completed {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    &.status-abandoned {
+      background-color: var(--danger);
+      color: white;
+    }
+    
+    &.status-not-started {
+      background-color: var(--border-color);
+      color: white;
+    }
+  }
+  
+  // Media queries
+  @media (max-width: 768px) {
+    .main-title {
+      font-size: 2rem;
+    }
+    
+    .authors-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .author-avatar {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .author-profile-header {
+      height: auto;
+      
+      .author-banner {
+        height: 180px;
+      }
+      
+      .author-avatar-large {
+        width: 100px;
+        height: 100px;
+        min-width: 100px;
+      }
+      
+      .author-profile-info {
+        padding-bottom: 0 !important;
+      }
+      
+      .author-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .books-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .author-profile-header {
+      .author-banner {
+        height: 150px;
+      }
+      
+      .author-avatar-large {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+      }
+      
+      .author-title {
+        font-size: 1.25rem;
+      }
+      
+      .author-stats {
+        font-size: 0.85rem;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .authors-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    
+    .books-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }

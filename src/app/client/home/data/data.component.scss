@@ -3,6 +3,7 @@ section {
   color: white;
   h1 {
     font-size: 70px;
+    font-family: 'TitleBook';
   }
 
   h6 {
@@ -22,6 +23,7 @@ section {
 
   .boton {
     width: 120px;
+    background-color: var(--bs-btn);
   }
 
   .fade-in {

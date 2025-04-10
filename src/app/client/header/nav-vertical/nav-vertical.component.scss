@@ -1,6 +1,4 @@
-@import "../../../../assets/colors.scss";
 
-// Contendor principal de la navegación
 nav {
   display: flex;
   flex-direction: column;
@@ -10,7 +8,6 @@ nav {
   position: relative;
   background-color: var(--background-color);
 
-  // Cuando se muestra el texto
   &:not(.only-icon) {
     width: 220px;
   }
@@ -21,8 +18,8 @@ nav {
     height: 100%;
   }
   
-  a {
-    cursor: pointer;
+  // Estilos comunes para enlaces y perfil de usuario
+  a, .user-profile {
     padding: 15px;
     color: var(--text-color);
     display: flex;
@@ -30,14 +27,8 @@ nav {
     text-decoration: none;
     transition: color 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
     
-    &:hover {
-      color: $btn;
-      background-color: rgba(206, 206, 206, 0.1);
-    }
-    
-    &.active {
-      color: $btn;
-      background-color: rgba(206, 206, 206, 0.1);
+    &.clickable {
+      cursor: pointer;
     }
     
     .link {
@@ -58,6 +49,7 @@ nav {
         font-size: 3rem !important;
       }
     }
+    
     //Cuando es solo icono
     &.only-icon {
       p {
@@ -72,6 +64,34 @@ nav {
       .bi-person-circle {
         font-size: 3rem !important;
       }
+    }
+  }
+  
+  // Aplicar hover solo a los enlaces (no al perfil de usuario)
+  a {
+    cursor: pointer;
+    
+    &:hover {
+      color: var(--bs-btn);
+      background-color: var(--main-bg);
+    }
+    
+    &.active {
+      color: var(--bs-btn);
+      background-color: rgba(206, 206, 206, 0.1);
+    }
+  }
+  
+  // Estilos específicos para el perfil de usuario
+  .user-profile {
+    &:not(.clickable) {
+      cursor: default;
+    }
+    
+    // En modo clickable (responsive), añadir efectos hover
+    &.clickable:hover {
+      color: var(--bs-btn);
+      background-color: rgba(206, 206, 206, 0.1);
     }
   }
 }
@@ -100,11 +120,6 @@ nav {
     visibility: visible;
     z-index: 10;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
-    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                left 0.3s ease,
-                opacity 0.3s ease,
-                visibility 0s,
-                z-index 0s;
   }
   
   .search-container {
@@ -205,6 +220,11 @@ nav {
         left: 0; // Visible cuando se activa
       }
     }
+    
+    // En responsive, el perfil de usuario siempre es clickable
+    .user-profile {
+      cursor: pointer;
+    }
   }
   
   .search-menu-wrapper {
@@ -252,9 +272,9 @@ nav {
 // Estilos para el tema día
 .tema-dia {
   nav {
-    a {
+    a, .user-profile.clickable {
       &:hover, &.active {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: rgba(0, 0, 0, 0.575);
       }
     }
   }

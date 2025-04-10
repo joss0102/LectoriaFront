@@ -30,11 +30,11 @@
           <!-- Vista previa de la primera frase -->
           <div class="preview-phrase bg-dark-20 rounded-3 p-4 mb-4 position-relative text-start flex-grow-1" 
                *ngIf="book.frases && book.frases.length > 0">
-            <div class="quote-mark position-absolute top-n10 start-10 fs-1 text-btn opacity-50 font-serif">&#8220;</div>
+            <div class="quote-mark position-absolute top-n10 start-10 fs-1  opacity-50 font-serif">&#8220;</div>
             <p class="fst-italic text-theme-text fs-7 lh-base mb-0 position-relative z-1">{{ shortenPhrase(book.frases[0]) }}</p>
           </div>
           
-          <button class="view-all-btn btn bg-btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto">
+          <button class="view-all-btn btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto">
             Ver todas
             <span class="arrow-icon ms-2">→</span>
           </button>
@@ -61,7 +61,7 @@
           <span class="saga-badge bg-component rounded-pill px-3 py-2 fs-7 text-theme">{{ selectedBook.saga }}</span>
         </div>
         <p class="phrases-counter fs-6 text-theme">
-          <span class="counter-number fw-bold text-btn fs-5">{{ selectedBook.frases.length || 0 }}</span> 
+          <span class="counter-number fw-bold fs-5">{{ selectedBook.frases.length || 0 }}</span> 
           frases destacadas
         </p>
       </div>
@@ -73,7 +73,7 @@
       <!-- Lista de todas las frases del libro -->
       <div class="phrase-item d-flex gap-4 mb-4 bg-component rounded-3 p-4 position-relative overflow-hidden" 
            *ngFor="let phrase of selectedBook.frases; let i = index">
-        <div class="phrase-number bg-btn text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start">
+        <div class="phrase-number  text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start">
           {{ i + 1 }}
         </div>
         <div class="phrase-content position-relative flex-grow-1">

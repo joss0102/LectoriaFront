@@ -15,9 +15,9 @@
           <div class="book-info">
             <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[1].titulo }}</h3>
             <div class="rating d-flex align-items-center">
-              <span class="rating-number fw-bold text-btn me-2">{{ topLibros[1].valoracion }}</span>
+              <span class="rating-number fw-bold  me-2">{{ topLibros[1].valoracion }}</span>
               <div class="stars d-flex">
-                <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(topLibros[1].valoracion)">★</i>
+                <i class="star filled  me-1" *ngFor="let star of getEstrellas(topLibros[1].valoracion)">★</i>
                 <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[1].valoracion)">☆</i>
               </div>
             </div>
@@ -28,7 +28,7 @@
       <!-- Primer lugar (más alto) -->
       <div class="podium-item first-place transition-y mb-4 z-3" *ngIf="topLibros.length >= 1">
 
-        <div class="book-card gradient-card rounded-4 p-3 shadow border-btn scale-110 position-relative">
+        <div class="book-card gradient-card rounded-4 p-3 shadow  scale-110 position-relative">
           <div class="crown-icon position-absolute end-n10 top-n10 fs-2 rotate-30">👑</div>
           <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
             <img [src]="topLibros[0].imagen" [alt]="topLibros[0].titulo" class="w-100 h-100 object-fit-cover img-hover">
@@ -36,9 +36,9 @@
           <div class="book-info">
             <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[0].titulo }}</h3>
             <div class="rating d-flex align-items-center">
-              <span class="rating-number fw-bold text-btn me-2">{{ topLibros[0].valoracion }}</span>
+              <span class="rating-number fw-bold me-2">{{ topLibros[0].valoracion }}</span>
               <div class="stars d-flex">
-                <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(topLibros[0].valoracion)">★</i>
+                <i class="star filled  me-1" *ngFor="let star of getEstrellas(topLibros[0].valoracion)">★</i>
                 <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[0].valoracion)">☆</i>
               </div>
             </div>
@@ -56,9 +56,9 @@
           <div class="book-info">
             <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[2].titulo }}</h3>
             <div class="rating d-flex align-items-center">
-              <span class="rating-number fw-bold text-btn me-2">{{ topLibros[2].valoracion }}</span>
+              <span class="rating-number fw-bold  me-2">{{ topLibros[2].valoracion }}</span>
               <div class="stars d-flex">
-                <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(topLibros[2].valoracion)">★</i>
+                <i class="star filled  me-1" *ngFor="let star of getEstrellas(topLibros[2].valoracion)">★</i>
                 <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[2].valoracion)">☆</i>
               </div>
             </div>
@@ -81,9 +81,9 @@
           <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ libro.titulo }}</h3>
           <p class="author fs-7 text-theme mb-2">{{ libro.autor }}</p>
           <div class="rating d-flex align-items-center justify-content-center">
-            <span class="rating-number fw-bold text-btn me-2">{{ libro.valoracion }}</span>
+            <span class="rating-number fw-bold  me-2">{{ libro.valoracion }}</span>
             <div class="stars d-flex">
-              <i class="star filled text-btn me-1" *ngFor="let star of getEstrellas(libro.valoracion)">★</i>
+              <i class="star filled  me-1" *ngFor="let star of getEstrellas(libro.valoracion)">★</i>
               <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(libro.valoracion)">☆</i>
             </div>
           </div>

@@ -1,4 +1,4 @@
-.data-author {
+.authors {
   h2 {
     color: white;
   }
@@ -20,10 +20,16 @@
       }
     }
   }
-
+.btn{
+  background-color: var(--bs-btn);
+}
   button {
     border: none;
-    cursor: pointer;
-    padding: 5px;
+
+    padding: 10px;
+    background-color: var(--bs-btn);
+    .btn{
+      background-color: var(--bs-btn);
+    }
   }
 }

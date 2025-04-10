@@ -39,17 +39,21 @@ $bodoni: 'Bodoni Moda', serif;
     font-family: 'parraf';
     src: url('../assets/fonts/Vollkorn-Regular.ttf');
 }
+@font-face {
+    font-family: 'TitleBook2';
+    src: url('../assets/fonts/Newsreader-VariableFont_opsz\,wght.ttf');
+}
 *{
-    font-family: 'parraf';
+    font-family: 'TitleBook2';
 }
 
 h1 {
     font-weight: 700;
-    font-family: 'TitleBook';
+    font-family: 'TitleBook2';
 }
 
 h2,h3,h4,h5,h6,p,button,a{
-    font-family: 'parraf';
+    font-family: 'TitleBook2';
 }
 h3{
     font-size: 15px;

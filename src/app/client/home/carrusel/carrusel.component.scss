@@ -72,6 +72,9 @@
 }
 
 .arrows {
+  position:absolute;
+  left: 21%;
+  bottom: 35%;
   display: flex;
   margin-bottom: 0;
   z-index: 5;
@@ -102,6 +105,7 @@
   .carousel {
     width: 700px;
   }
+
 }
 @media screen and (max-width: 900px) {
   .carousel {
@@ -116,6 +120,11 @@
 @media screen and (max-width: 640px) {
   .carousel {
     width: 400px;
+  }
+  .arrows {
+
+    left: 35%;
+    bottom: 45%;
   }
 }
 @media screen and (max-width: 480px) {

@@ -108,6 +108,7 @@
 @media screen and (max-width: 400px) {
   .parent {
     padding: 0px !important;
+    height: 100vh;
     .imagen1 {
       display: none;
       opacity: 0;
@@ -123,21 +124,3 @@
   }
 }
 
-// Ajustes específicos para tema día/noche
-.tema-dia {
-  .parent {
-    // El color de fondo se maneja con JavaScript, pero podemos ajustar otros elementos
-    .carrusel {
-      // Ajustes específicos para el carrusel en modo día si son necesarios
-    }
-  }
-}
-
-.tema-noche {
-  .parent {
-    // El color de fondo se maneja con JavaScript
-    .carrusel {
-      // Ajustes específicos para el carrusel en modo noche si son necesarios
-    }
-  }
-}

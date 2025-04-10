@@ -94,13 +94,24 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        this.isHomePage = event.urlAfterRedirects === '/';
+        const newIsHomePage = event.urlAfterRedirects === '/';
+        
+        // Si estamos entrando a la página de inicio, ocultamos el menú
+        if (newIsHomePage && !this.isHomePage) {
+          this.verticalService.setMenuVisible(false);
+        }
+        
+        this.isHomePage = newIsHomePage;
         // Actualizar el estado en el servicio
         this.verticalService.setIsHomePage(this.isHomePage);
       });
       
     // Verificar la ruta actual al iniciar el componente
     this.isHomePage = this.router.url === '/';
+    // Si estamos en la página de inicio, aseguramos que el menú esté oculto inicialmente
+    if (this.isHomePage) {
+      this.verticalService.setMenuVisible(false);
+    }
     this.verticalService.setIsHomePage(this.isHomePage);
   }
   

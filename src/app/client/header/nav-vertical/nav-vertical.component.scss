@@ -1,12 +1,21 @@
-
 nav {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 75px;
   transition: width 0.3s ease, transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-  position: relative;
+  position: relative; /* Posición relativa para el comportamiento normal */
   background-color: var(--background-color);
+
+  /* Estilos específicos para cuando está en la página de inicio */
+  &.homepage-menu {
+    position: fixed !important;
+    top: 0;
+    height: 100vh;
+    z-index: 1050;
+    margin-top: 74px;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+  }
 
   &:not(.only-icon) {
     width: 220px;
@@ -193,14 +202,6 @@ nav {
   }
 }
 
-
-/* Aseguramos que en dispositivos móviles se muestre correctamente */
-@media (max-width: 1300px) {
-  .home-page-nav.menu-visible {
-    transform: translateX(0);
-    z-index: 1000;
-  }
-}
 // Estilos responsive
 @media screen and (max-width: 1300px) {
   body {

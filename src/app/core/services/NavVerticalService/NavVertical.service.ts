@@ -63,6 +63,11 @@ export class NavVerticalService {
   setMenuVisible(visible: boolean) {
     this.menuVisibleSubject.next(visible);
   }
+  
+  // Método para obtener el estado actual de la visibilidad del menú
+  getMenuVisible(): boolean {
+    return this.menuVisibleSubject.getValue();
+  }
 
   // Método para indicar si estamos en la página de inicio
   setIsHomePage(isHomePage: boolean) {

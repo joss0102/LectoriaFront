@@ -1,4 +1,5 @@
-<nav [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible, 'home-page-nav': isHomePage}">
+<nav *ngIf="!isHomePage || menuVisible" 
+     [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible, 'homepage-menu': isHomePage}">
   <!-- Navegación principal -->
   <div class="nav-content">
     <div

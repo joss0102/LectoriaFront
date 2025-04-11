@@ -10,14 +10,20 @@ import { WishlistComponent } from './client/wishlist/wishlist/wishlist.component
 import { UserComponent } from './client/user/user/user.component';
 import { SearchBookComponent } from './client/features/search/search-book/search-book.component';
 import { SearchAuthorComponent } from './client/features/search/search-author/search-author.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { AuthorsComponent } from './admin/authors/authors.component';
+import { BooksComponent } from './admin/books/books.component';
+
+import { UsersComponent } from './admin/users/users.component';
+
+import { LayoutComponentAdmin } from './admin/layout/layout.component';
+
 
 export const routes: Routes = [
-  // User
   {
     path: '',
     component: LayoutComponent,
     children: [
-      // -> www.ejemplo.com
       { path: '', component: HomeComponent },
       { path: 'library', component: LibraryComponent },
       { path: 'login', component: LoginComponent },
@@ -29,5 +35,19 @@ export const routes: Routes = [
       { path: 'searchBook', component: SearchBookComponent },
     ],
   },
+
+  // Nueva sección /app con layout propio
+  {
+    path: 'app',
+    component: LayoutComponentAdmin,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'authors', component: AuthorsComponent },
+      { path: 'books', component: BooksComponent },
+      { path: 'users', component: UsersComponent },
+    ],
+  },
+
   { path: '**', component: PageNotFoundComponent },
 ];

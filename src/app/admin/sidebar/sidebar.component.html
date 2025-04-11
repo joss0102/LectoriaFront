@@ -1,0 +1,52 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <span class="logo-icon material-icons">auto_stories</span>
+      <h2 class="logo-text">LibraryAdmin</h2>
+    </div>
+  </div>
+
+  <div class="sidebar-content">
+    <ul class="menu-list">
+      <li *ngFor="let item of menuItems" 
+          class="menu-item" 
+          [class.active]="item.active" 
+          [class.has-submenu]="hasSubItems(item)">
+        
+        <a *ngIf="!hasSubItems(item)" [routerLink]="item.link" class="menu-link">
+          <span class="material-icons menu-icon">{{ item.icon }}</span>
+          <span class="menu-label">{{ item.label }}</span>
+        </a>
+
+        <button *ngIf="hasSubItems(item)" class="menu-link" (click)="toggleSubItems(item)">
+          <span class="material-icons menu-icon">{{ item.icon }}</span>
+          <span class="menu-label">{{ item.label }}</span>
+          <span class="material-icons arrow-icon" [class.expanded]="expandedItem === item">
+            expand_more
+          </span>
+        </button>
+
+        <ul *ngIf="hasSubItems(item) && expandedItem === item" class="submenu-list">
+          <li *ngFor="let subItem of item.subItems" class="submenu-item">
+            <a *ngIf="subItem.link !== '/settings/theme'" [routerLink]="subItem.link" class="submenu-link">
+              <span class="material-icons submenu-icon">{{ subItem.icon }}</span>
+              <span class="submenu-label">{{ subItem.label }}</span>
+            </a>
+            <button *ngIf="subItem.link === '/settings/theme'" class="submenu-link" (click)="subItem.action?.()">
+              <span class="material-icons submenu-icon">{{ subItem.icon }}</span>
+              <span class="submenu-label">{{ subItem.label }}</span>
+            </button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="version-info">v1.4.0</div>
+    <div class="logout-button">
+      <span class="material-icons">exit_to_app</span>
+      <span class="logout-text">Logout</span>
+    </div>
+  </div>
+</aside>

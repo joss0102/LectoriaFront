@@ -1,0 +1,21 @@
+<header class="app-header">
+    <div class="header-left">
+      <button *ngIf="showMenuButton" class="menu-toggle" (click)="onToggleSidebar()">
+        <span class="material-icons">menu</span>
+      </button>
+      
+      <div class="breadcrumb">
+        Dashboard
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <button class="header-icon">
+        <span class="material-icons">notifications</span>
+      </button>
+      
+      <button class="header-icon">
+        <span class="material-icons">account_circle</span>
+      </button>
+    </div>
+  </header>

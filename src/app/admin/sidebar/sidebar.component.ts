@@ -25,47 +25,47 @@ export class SidebarComponent implements OnInit {
   menuItems: MenuItem[] = [
     {
       icon: 'dashboard',
-      label: 'Dashboard',
+      label: 'Inicio',
       link: '/app/dashboard'
     },
     {
       icon: 'people',
-      label: 'Users',
+      label: 'Usuarios',
       link: '/app/users'
     },
     {
       icon: 'menu_book',
-      label: 'Books',
+      label: 'Libros',
       link: '/app/books'
     },
     {
       icon: 'person',
-      label: 'Authors',
+      label: 'Autores',
       link: '/app/authors'
     },
     {
       icon: 'settings',
-      label: 'Settings',
+      label: 'Más ajustes',
       link: '/app/settings',
       subItems: [
         {
           icon: 'person',
-          label: 'Profile',
-          link: '/settings/profile'
+          label: 'Perfil',
+          link: '/app/dashboard'
         },
         {
           icon: 'security',
-          label: 'Security',
-          link: '/settings/security'
+          label: 'Seguridad',
+          link: '/app/dashboard'
         },
         {
           icon: 'notifications',
-          label: 'Notifications',
-          link: '/settings/notifications'
+          label: 'Notificaciones',
+          link: '/app/dashboard'
         },
         {
           icon: 'palette',
-          label: 'Theme Color',
+          label: 'Temas de colores',
           link: '/settings/theme',
           action: () => this.onOpenThemeModal()
         }

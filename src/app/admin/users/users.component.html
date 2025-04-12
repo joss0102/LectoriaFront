@@ -1,1 +1,388 @@
-<p>users works!</p>
+
+<div class="users-container px-4 py-4 w-100">
+  <div class="page-header d-flex justify-content-between align-items-center mb-4 flex-column flex-lg-row">
+    <h1 class="fs-4 fw-semibold mb-0 mb-lg-0">Gestión de usuarios</h1>
+    <div class="actions d-flex gap-3 w-100 w-lg-auto mt-3 mt-lg-0">
+      <div class="search-container position-relative flex-grow-1 edit-form">
+        <span class= "material-icons position-absolute start-3 top-50 translate-middle-y text-muted ">search</span>
+        <input type="text" class="form-control ps-5 rounded-2 border edit-form" placeholder="Buscar usuarios..." [(ngModel)]="searchTerm" (input)="applyFilters()">
+      </div>
+      <button class="btn add-button d-flex align-items-center gap-2 rounded-2 py-2 px-3 buttonadd" (click)="openAddUserModal()">
+        <span class="material-icons">add</span>
+        <span >Añadir usuario</span>
+      </button>
+    </div>
+  </div>
+
+  <div class=" edit-form d-flex gap-4 mb-4 flex-wrap">
+    <div class="filter-item d-flex align-items-center gap-2">
+      <label class="fw-medium fs-6">Status:</label>
+      <select class="form-select rounded-2 border" [(ngModel)]="filterStatus" (change)="applyFilters()">
+        <option value="">Todos los estados</option>
+        <option value="active">Activo</option>
+        <option value="inactive">Inactivo</option>
+        <option value="new">Nuevo</option>
+      </select>
+    </div>
+    <div class="filter-item d-flex align-items-center gap-2">
+      <label class="fw-medium fs-6">Ordenar por:</label>
+      <select class="form-select rounded-2 border" [(ngModel)]="sortBy" (change)="applyFilters()">
+        <option value="name">Nombre</option>
+        <option value="recent">Agregado recientemente</option>
+        <option value="books">Número de libros</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Users -->
+  <div class="users-grid mb-4">
+    <div class="user-card p-4 rounded-3 d-flex flex-column align-items-center shadow-sm" *ngFor="let user of filteredUsers" (click)="openUserDetails(user)">
+      <div class="user-avatar position-relative mb-3" style="width: 80px; height: 80px;">
+        <img class="rounded-circle w-100 h-100 object-fit-cover" [src]="user.avatarUrl || 'assets/images/user-placeholder.jpg'" [alt]="user.name">
+        <span class="status-indicator position-absolute bottom-0 end-0 rounded-circle border border-2" [class]="user.status.toLowerCase()"></span>
+      </div>
+      <div class="user-info text-center w-100">
+        <h3 class="user-name fs-5 fw-semibold mb-1">{{ user.name }}</h3>
+        <p class="user-email fs-6 text-truncate mb-2">{{ user.email }}</p>
+        <div class="user-stats d-flex justify-content-around mt-2">
+          <div class="stat-item d-flex flex-column align-items-center">
+            <span class="material-icons mb-1">menu_book</span>
+            <span class="fs-6 fw-medium">{{ user.stats.books }}</span>
+          </div>
+          <div class="stat-item d-flex flex-column align-items-center">
+            <span class="material-icons mb-1">person</span>
+            <span class="fs-6 fw-medium">{{ user.stats.authors }}</span>
+          </div>
+          <div class="stat-item d-flex flex-column align-items-center">
+            <span class="material-icons mb-1">auto_stories</span>
+            <span class="fs-6 fw-medium">{{ user.stats.pagesRead }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay usuario -->
+  <div class="no-results py-5 text-center" *ngIf="filteredUsers.length === 0">
+    <span class="material-icons fs-1 mb-3">person_off</span>
+    <p class="fs-5 mb-3">No se encontraron usuarios que coincidan con tus criterios</p>
+    <button class="btn border py-2 px-3 rounded-2" (click)="clearFilters()">Limiar filtros</button>
+  </div>
+
+<!-- Paginación -->
+  <div class="pagination d-flex justify-content-center align-items-center gap-3 mt-4" *ngIf="totalPages > 1">
+    <button class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px;" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+      <span class="material-icons">navigate_before</span>
+    </button>
+    <span class="fs-6 text-muted">Página {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px;" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+      <span class="material-icons">navigate_next</span>
+    </button>
+  </div>
+</div>
+
+<!-- Barra lateral modal para detalles/edición del usuario -->
+ <div class="side-modal position-fixed top-0 end-0 bottom-0 w-100 h-100 bg-dark bg-opacity-50" style="z-index: 1100;" [class.open]="selectedUser" (click)="closeCurrentModal()">
+  <div class="modal-content h-100 overflow-auto" style="max-width: 90%;" (click)="$event.stopPropagation()">
+    <div class="modal-header sticky-top d-flex justify-content-between align-items-center p-4 border-bottom">
+      <h2 class="fs-5 fw-semibold m-0">{{ getModalTitle() }}</h2>
+      <button class="btn-close" type="button" (click)="closeCurrentModal()"></button>
+    </div>
+
+    <div class="modal-body p-4" *ngIf="selectedUser">
+<!-- Vista de detalles principales -->
+        <div class="user-detail-content" [class.d-none]="currentView !== 'details'">
+        <div class="user-profile d-flex flex-column align-items-center mb-4">
+          <div class="user-avatar-large position-relative mb-3" style="width: 120px; height: 120px;">
+            <img class="rounded-circle w-100 h-100 object-fit-cover" [src]="selectedUser.avatarUrl || 'assets/images/user-placeholder.jpg'" [alt]="selectedUser.name">
+            <span class="status-indicator position-absolute bottom-1 end-1 rounded-circle border border-3" [class]="selectedUser.status.toLowerCase()"></span>
+          </div>
+          
+          <div class="user-detail-info text-center">
+            <h2 class="fs-4 fw-semibold mb-1">{{ selectedUser.name }}</h2>
+            <p class="user-email fs-6 mb-3">{{ selectedUser.email }}</p>
+            <p class="mb-1"><strong>Estado:</strong> {{ selectedUser.status }}</p>
+            <p class="mb-1"><strong>Unido:</strong> {{ selectedUser.joinDate | date }}</p>
+            <p class="mb-1"><strong>Última vez activo:</strong> {{ selectedUser.lastActive | date:'medium' }}</p>
+          </div>
+        </div>
+
+        <div class="user-stats-detail d-flex justify-content-between mb-4">
+          <div class="stat-card flex-1 d-flex flex-column align-items-center p-3 rounded-3 mx-1">
+            <div class="stat-icon d-flex align-items-center justify-content-center rounded-circle mb-2" style="width: 50px; height: 50px;">
+              <span class="material-icons text-white">menu_book</span>
+            </div>
+            <div class="stat-info text-center">
+              <span class="stat-value d-block fs-4 fw-semibold mb-1">{{ selectedUser.stats.books }}</span>
+              <span class="stat-label fs-6">Libros</span>
+            </div>
+          </div>
+          
+          <div class="stat-card flex-1 d-flex flex-column align-items-center p-3 rounded-3 mx-1">
+            <div class="stat-icon d-flex align-items-center justify-content-center rounded-circle mb-2" style="width: 50px; height: 50px;">
+              <span class="material-icons text-white">person</span>
+            </div>
+            <div class="stat-info text-center">
+              <span class="stat-value d-block fs-4 fw-semibold mb-1">{{ selectedUser.stats.authors }}</span>
+              <span class="stat-label fs-6">Autores</span>
+            </div>
+          </div>
+          
+          <div class="stat-card flex-1 d-flex flex-column align-items-center p-3 rounded-3 mx-1">
+            <div class="stat-icon d-flex align-items-center justify-content-center rounded-circle mb-2" style="width: 50px; height: 50px;">
+              <span class="material-icons text-white">auto_stories</span>
+            </div>
+            <div class="stat-info text-center">
+              <span class="stat-value d-block fs-4 fw-semibold mb-1">{{ selectedUser.stats.pagesRead }}</span>
+              <span class="stat-label fs-6">Páginas leidas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-actions d-grid mb-4 gap-2" style="grid-template-columns: repeat(3, 1fr);">
+          <button class="action-button d-flex flex-column align-items-center p-3 rounded-3 border-0" (click)="showUserBooks()">
+            <span class="material-icons mb-2">menu_book</span>
+            <span class="fw-medium">Ver libros</span>
+          </button>
+          <button class="action-button d-flex flex-column align-items-center p-3 rounded-3 border-0" (click)="showUserAuthors()">
+            <span class="material-icons mb-2">person</span>
+            <span class="fw-medium">Ver autores</span>
+          </button>
+          <button class="action-button d-flex flex-column align-items-center p-3 rounded-3 border-0" (click)="showUserStats()">
+            <span class="material-icons mb-2">insights</span>
+            <span class="fw-medium">Ver estadisticas</span>
+          </button>
+        </div>
+
+        <div class="detail-actions d-flex gap-2">
+          <button class="edit-button d-flex align-items-center justify-content-center gap-2 py-3 rounded-2 border-0 w-100 fw-medium" (click)="toggleEditMode()">
+            <span class="material-icons">edit</span>
+            Editar
+          </button>
+          <button class="delete-button d-flex align-items-center justify-content-center gap-2 py-3 rounded-2 border-0 w-100 fw-medium" (click)="confirmDelete()">
+            <span class="material-icons">delete</span>
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <!-- Vista de libros de usuario -->
+      <div class="user-books-content" [class.d-none]="currentView !== 'books'">
+        <div class="section-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <h3 class="fs-5 fw-medium m-0">Libros ({{ selectedUser.books.length }})</h3>
+          <button class="btn d-flex align-items-center gap-1 py-1 px-2 rounded" (click)="backToDetails()">
+            <span class="material-icons">arrow_back</span>
+            Volver
+          </button>
+        </div>
+
+        <div class="books-list d-flex flex-column gap-3">
+          <div class="book-item d-flex rounded-3 overflow-hidden" *ngFor="let book of selectedUser.books">
+            <div class="book-cover" style="width: 80px; height: 120px;">
+              <img class="w-100 h-100 object-fit-cover" [src]="book.coverUrl" [alt]="book.title">
+            </div>
+            <div class="book-info flex-1 d-flex flex-column p-3">
+              <h4 class="book-title fs-6 fw-semibold mb-1">{{ book.title }}</h4>
+              <p class="book-author fs-6 mb-auto">{{ book.author }}</p>
+              <span class="book-status d-inline-block py-1 px-2 rounded-1 text-nowrap mt-1 align-self-start fs-6 small lh-1" 
+                    [class]="book.status.toLowerCase().replace(' ', '-')">
+                {{ book.status }}
+              </span>
+            </div>
+          </div>
+
+          <div class="no-items text-center p-4 rounded-3" *ngIf="selectedUser.books.length === 0">
+            <p class="mb-0">Este usuario no ha añadido ningún libro todavía.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de autores del usuario -->
+      <div class="user-authors-content" [class.d-none]="currentView !== 'authors'">
+        <div class="section-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <h3 class="fs-5 fw-medium m-0">Autores ({{ selectedUser.authors.length }})</h3>
+          <button class="btn d-flex align-items-center gap-1 py-1 px-2 rounded" (click)="backToDetails()">
+            <span class="material-icons">arrow_back</span>
+            Volver
+          </button>
+        </div>
+
+        <div class="authors-list">
+          <div class="author-item  p-2 rounded-3 d-flex flex-column align-items-center" *ngFor="let author of selectedUser.authors">
+            <div class="author-avatar mb-2" style="width: 60px; height: 60px;">
+              <img class="rounded-circle w-100 h-100 object-fit-cover" [src]="author.imageUrl || 'assets/images/author-placeholder.jpg'" [alt]="author.name">
+            </div>
+            <div class="author-info text-center">
+              <h4 class="author-name fs-6 fw-semibold mb-1">{{ author.name }}</h4>
+              <p class="author-books fs-7 mb-0">{{ author.bookCount }} {{ author.bookCount === 1 ? 'book' : 'books' }}</p>
+            </div>
+          </div>
+
+          <div class="no-items text-center p-4 rounded-3" *ngIf="selectedUser.authors.length === 0">
+            <p class="mb-0">Este usuario no ha seguido a ningún autor todavía</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de estadísticas de usuario -->
+      <div class="user-stats-content" [class.d-none]="currentView !== 'stats'">
+        <div class="section-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <h3 class="fs-5 fw-medium m-0">Estadisticas de lecturas</h3>
+          <button class="btn d-flex align-items-center gap-1 py-1 px-2 rounded" (click)="backToDetails()">
+            <span class="material-icons">arrow_back</span>
+            Volver
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <!-- Tabla de géneros -->
+          <div class="stat-chart rounded-3 p-3 mb-3">
+            <h4 class="fs-6 fw-medium text-center mb-3">Libros por género</h4>
+            <div class="chart-container position-relative" style="height: 300px;">
+
+              <div class="chart-placeholder d-flex justify-content-center align-items-center w-100 h-100">
+                <div class="donut position-relative rounded-circle d-flex justify-content-center align-items-center" style="width: 200px; height: 200px;">
+                  <div class="donut-segment position-absolute w-100 h-100 rounded-circle" style="--segment-color: #3498db; --segment-size: 35%;"></div>
+                  <div class="donut-segment position-absolute w-100 h-100 rounded-circle" style="--segment-color: #2ecc71; --segment-size: 25%;"></div>
+                  <div class="donut-segment position-absolute w-100 h-100 rounded-circle" style="--segment-color: #e74c3c; --segment-size: 20%;"></div>
+                  <div class="donut-segment position-absolute w-100 h-100 rounded-circle" style="--segment-color: #f39c12; --segment-size: 15%;"></div>
+                  <div class="donut-segment position-absolute w-100 h-100 rounded-circle" style="--segment-color: #9b59b6; --segment-size: 5%;"></div>
+                </div>
+              </div>
+              <div class="chart-legend d-flex flex-column gap-1 mt-3">
+                <div class="legend-item d-flex align-items-center gap-1">
+                  <span class="color-dot rounded-circle" style="background-color: #3498db; width: 12px; height: 12px;"></span>
+                  <span class="legend-label fs-7">1</span>
+                </div>
+                <div class="legend-item d-flex align-items-center gap-1">
+                  <span class="color-dot rounded-circle" style="background-color: #2ecc71; width: 12px; height: 12px;"></span>
+                  <span class="legend-label fs-7">2</span>
+                </div>
+                <div class="legend-item d-flex align-items-center gap-1">
+                  <span class="color-dot rounded-circle" style="background-color: #e74c3c; width: 12px; height: 12px;"></span>
+                  <span class="legend-label fs-7">3</span>
+                </div>
+                <div class="legend-item d-flex align-items-center gap-1">
+                  <span class="color-dot rounded-circle" style="background-color: #f39c12; width: 12px; height: 12px;"></span>
+                  <span class="legend-label fs-7">4</span>
+                </div>
+                <div class="legend-item d-flex align-items-center gap-1">
+                  <span class="color-dot rounded-circle" style="background-color: #9b59b6; width: 12px; height: 12px;"></span>
+                  <span class="legend-label fs-7">5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla de páginas leídas -->
+          <div class="stat-chart rounded-3 p-3 mb-3">
+            <h4 class="fs-6 fw-medium text-center mb-3">Paginas por mes</h4>
+            <div class="chart-container position-relative" style="height: 300px;">
+
+              <div class="chart-placeholder w-100 h-100 d-flex justify-content-center align-items-center">
+                <div class="bar-container d-flex align-items-end justify-content-between pt-4 w-100 h-80">
+                  <div class="bar rounded-top position-relative" style="height: 40%; width: 40px;" title="Jan: 420 pages">
+                    <span class="bar-label position-absolute bottom-0 start-50 translate-middle-x fs-7" style="bottom: -20px;">Jan</span>
+                  </div>
+                  <div class="bar rounded-top position-relative" style="height: 60%; width: 40px;" title="Feb: 630 pages">
+                    <span class="bar-label position-absolute bottom-0 start-50 translate-middle-x fs-7" style="bottom: -20px;">Feb</span>
+                  </div>
+                  <div class="bar rounded-top position-relative" style="height: 80%; width: 40px;" title="Mar: 840 pages">
+                    <span class="bar-label position-absolute bottom-0 start-50 translate-middle-x fs-7" style="bottom: -20px;">Mar</span>
+                  </div>
+                  <div class="bar rounded-top position-relative" style="height: 30%; width: 40px;" title="Apr: 315 pages">
+                    <span class="bar-label position-absolute bottom-0 start-50 translate-middle-x fs-7" style="bottom: -20px;">Apr</span>
+                  </div>
+                  <div class="bar rounded-top position-relative" style="height: 50%; width: 40px;" title="May: 525 pages">
+                    <span class="bar-label position-absolute bottom-0 start-50 translate-middle-x fs-7" style="bottom: -20px;">May</span>
+                  </div>
+                  <div class="bar rounded-top position-relative" style="height: 70%; width: 40px;" title="Jun: 735 pages">
+                    <span class="bar-label position-absolute bottom-0 start-50 translate-middle-x fs-7" style="bottom: -20px;">Jun</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reading stats -->
+          <div class="reading-stats  rounded-3 p-3">
+            <h4 class="fs-6 fw-medium text-center mb-3">Resumen de lectura</h4>
+            <div class="reading-stats-items">
+              <div class="reading-stat-item d-flex flex-column align-items-center text-center p-2">
+                <div class="stat-label fs-6 text-muted mb-1">Tasa de lectura promedio</div>
+                <div class="stat-value fs-5 fw-semibold">1</div>
+              </div>
+              <div class="reading-stat-item d-flex flex-column align-items-center text-center p-2">
+                <div class="stat-label fs-6 text-muted mb-1">Libros leidos este mes</div>
+                <div class="stat-value fs-5 fw-semibold">2</div>
+              </div>
+              <div class="reading-stat-item d-flex flex-column align-items-center text-center p-2">
+                <div class="stat-label fs-6 text-muted mb-1">Genero favorito</div>
+                <div class="stat-value fs-5 fw-semibold">3</div>
+              </div>
+              <div class="reading-stat-item d-flex flex-column align-items-center text-center p-2">
+                <div class="stat-label fs-6 text-muted mb-1">Autor mas leido</div>
+                <div class="stat-value fs-5 fw-semibold">4</div>
+              </div>
+              <div class="reading-stat-item d-flex flex-column align-items-center text-center p-2">
+                <div class="stat-label fs-6 text-muted mb-1">Racha de lectura</div>
+                <div class="stat-value fs-5 fw-semibold">5</div>
+              </div>
+              <div class="reading-stat-item d-flex flex-column align-items-center text-center p-2">
+                <div class="stat-label fs-6 text-muted mb-1">Total paginas leidas</div>
+                <div class="stat-value fs-5 fw-semibold">6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- formulario de editar -->
+      <form class="edit-form" [class.d-none]="currentView !== 'edit'" (ngSubmit)="saveUserChanges()" *ngIf="editingUser">
+        <div class="mb-3">
+          <label for="name" class="form-label fw-medium">Full Name</label>
+          <input type="text" class="form-control rounded-2 p-3" id="name" [(ngModel)]="editingUser.name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label fw-medium">Email</label>
+          <input type="email" class="form-control rounded-2 p-3" id="email" [(ngModel)]="editingUser.email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="status" class="form-label fw-medium">Status</label>
+          <select class="form-select rounded-2 p-3" id="status" [(ngModel)]="editingUser.status" name="status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="New">New</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="avatarUrl" class="form-label fw-medium">Avatar URL</label>
+          <input type="text" class="form-control rounded-2 p-3" id="avatarUrl" [(ngModel)]="editingUser.avatarUrl" name="avatarUrl">
+          <div class="avatar-preview mt-2 text-center" *ngIf="editingUser.avatarUrl">
+            <img class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" [src]="editingUser.avatarUrl" alt="Avatar Preview">
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          <button type="button" class="btn btn-secondary flex-1 p-3 rounded-2 fw-medium w-100" (click)="cancelEdit()">Cancel</button>
+          <button type="submit" class="btn btn-accent flex-1 p-3 rounded-2 fw-medium text-white w-100">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- modal de confirmación de eliminar-->
+<div class="confirmation-modal position-fixed top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center" style="z-index: 1200;" *ngIf="showDeleteConfirmation">
+  <div class="confirmation-content bg-white rounded-3 p-4 shadow-lg" style="max-width: 400px;">
+    <h3 class="fs-5 fw-semibold mb-3">Confirm Deletion</h3>
+    <p class="mb-4">Are you sure you want to delete "{{ selectedUser?.name }}"? This action cannot be undone.</p>
+    <div class="d-flex gap-2">
+      <button class="btn btn-secondary flex-1 py-2 px-3 rounded-2 w-100" (click)="cancelDelete()">Cancel</button>
+      <button class="btn btn-danger flex-1 py-2 px-3 rounded-2 w-100" (click)="deleteUser()">Delete</button>
+    </div>
+  </div>
+</div>

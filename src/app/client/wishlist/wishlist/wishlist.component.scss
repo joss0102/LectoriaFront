@@ -1,8 +1,7 @@
-.parent{
-    height: 92vh;
-    @media screen and (max-width: 1300px) {
-        .parent{
-            height: auto;
-        }
+.parent {
+  @media screen and (max-width: 1300px) {
+    .parent {
+      height: auto;
     }
+  }
 }

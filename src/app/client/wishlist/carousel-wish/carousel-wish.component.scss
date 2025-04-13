@@ -20,11 +20,11 @@
       background-color: var(--bs-btn-hover);
     }
   }
-  .info-btn{
+  .info-btn {
     background-color: var(--bs-btn);
-&:hover {
-  background-color: var(--bs-btn-hover);
-}
+    &:hover {
+      background-color: var(--bs-btn-hover);
+    }
   }
   .carousel-control-prev {
     left: 0;
@@ -97,7 +97,7 @@
 
     .book-cover {
       width: 190px;
-      max-height: 280px;
+      max-height: 380px;
     }
 
     .text-content h2 {
@@ -161,13 +161,15 @@
       width: auto;
       padding: 0.5rem 1rem;
       font-size: 0.9rem;
-      background-color: var(--bs-btn);
     }
 
     .carousel-control-prev,
     .carousel-control-next {
       width: 32px;
       height: 32px;
+    }
+    .book-cover {
+      max-height: 210px !important;
     }
   }
 }
@@ -182,7 +184,8 @@
     }
 
     .book-cover {
-      width: 86px;
+      max-height: 140px !important;
+      margin-bottom: 2px;
     }
 
     .btn {

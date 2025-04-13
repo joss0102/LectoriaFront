@@ -1,0 +1,33 @@
+<div class="dashboard-layout">
+  <!-- Sidebar que se oculta en pantallas menores a 1300px -->
+  <app-sidebar 
+    class="sidebar" 
+    [class.mobile-open]="isSidebarOpen"
+    (openThemeModal)="openThemeModal()">
+  </app-sidebar>
+  
+  <!-- Overlay para cerrar el sidebar en modo móvil -->
+  <div 
+    *ngIf="isSidebarOpen" 
+    class="sidebar-overlay"
+    (click)="toggleSidebar()">
+  </div>
+  
+  <div class="main-content">
+    <app-header 
+      [showMenuButton]="isSmallScreen"
+      (toggleSidebar)="toggleSidebar()">
+    </app-header>
+    
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <!-- Modal de selección de tema-->
+  <app-theme-color 
+    *ngIf="isThemeModalOpen" 
+    (close)="closeThemeModal()" 
+    (themeChanged)="handleThemeChanged($event)">
+  </app-theme-color>
+</div>

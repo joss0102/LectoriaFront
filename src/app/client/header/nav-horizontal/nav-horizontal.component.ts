@@ -1,4 +1,3 @@
-// nav-horizontal.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DividerTimerComponent } from '../divider-timer/divider-timer.component';
 import { RouterModule } from '@angular/router';
@@ -18,10 +17,12 @@ export class NavHorizontalComponent implements OnInit, OnDestroy {
   modoNoche: boolean = true;
   currentTheme: ThemeType = 'noche';
   showLinks: boolean = true;
+  isHomePage: boolean = false;
   
   private themeSubscription: Subscription | undefined;
   private themeTypeSubscription: Subscription | undefined;
   private linksSubscription: Subscription | undefined;
+  private homePageSubscription: Subscription | undefined;
   
   constructor(
     private navService: NavVerticalService,
@@ -43,10 +44,28 @@ export class NavHorizontalComponent implements OnInit, OnDestroy {
     this.linksSubscription = this.navService.linksInHorizontalNav$.subscribe(visible => {
       this.showLinks = visible;
     });
+    
+    // Suscribirse al estado de la página de inicio
+    this.homePageSubscription = this.navService.isHomePage$.subscribe(isHome => {
+      this.isHomePage = isHome;
+    });
   }
   
   toggleNav() {
-    this.navService.toggleIcons();
+    // Si estamos en página de inicio, siempre mostramos/ocultamos el menú
+    // independientemente del tamaño de pantalla
+    if (this.isHomePage) {
+      const menuVisible = this.navService.getMenuVisible();
+      this.navService.setMenuVisible(!menuVisible);
+    } else {
+      // Comportamiento normal para otras páginas
+      if (window.innerWidth > 1300) {
+        this.navService.toggleIcons();
+      } else {
+        const menuVisible = this.navService.getMenuVisible();
+        this.navService.setMenuVisible(!menuVisible);
+      }
+    }
   }
   
   toggleTema() {
@@ -111,6 +130,9 @@ export class NavHorizontalComponent implements OnInit, OnDestroy {
     }
     if (this.linksSubscription) {
       this.linksSubscription.unsubscribe();
+    }
+    if (this.homePageSubscription) {
+      this.homePageSubscription.unsubscribe();
     }
   }
 }

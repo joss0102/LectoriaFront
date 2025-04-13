@@ -8,9 +8,8 @@ import {
   ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService } from '../../../core/services/book/book.service';
-
-import { Book } from '../../../core/models/book-model';
+import { HomeService } from '../../../core/services/HomeService/home.service';
+import { HomeModel } from '../../../core/models/home.model';
 
 @Component({
   selector: 'app-carrusel',
@@ -40,20 +39,65 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
   originalItemCount: number = 0;
 
   // Array de libros obtenido del servicio
-  books: Book[] = [];
+  books: HomeModel[] = [];
   
   constructor(
-    private bookService: BookService,
+    private homeService: HomeService,
     private cdr: ChangeDetectorRef
   ) {}
-
+  seleccionarLibro(libro: HomeModel) {
+    this.homeService.actualizarBookActual(libro);
+  }
   ngOnInit(): void {
-    // Obtener los libros del servicio
-    this.books = this.bookService.getAllBooks();
+    console.log('Initializing carousel component');
+    
+    // Añadimos valores de prueba en caso de error
+    const dummyBooks: HomeModel[] = [
+      {
+        book_id: 1,
+        book_title: 'Libro de prueba 1',
+        book_pages: 200,
+        synopsis: 'Sinopsis de prueba',
+        authors: 'Autor de prueba',
+        genres: 'Género de prueba',
+        sagas: 'Saga de prueba',
+        imagen: 'assets/images/placeholder.jpg' // Imagen de placeholder
+      },
+      // Puedes añadir más libros de prueba si lo deseas
+    ];
+    
+    // Obtener TODOS los libros para el carrusel (pasando 0 como límite)
+    this.homeService.getBooksForCarousel(0).subscribe({
+      next: (books) => {
+        console.log('Received books:', books.length);
+        // Añadir URL de imagen a cada libro
+        this.books = books.map(book => ({
+          ...book,
+          imagen: this.getBookImageUrl(book)
+        }));
+        
+        console.log('Books with images prepared for carousel:', this.books.length);
+        this.cdr.detectChanges();
+        // Inicializar el carrusel después de recibir los datos
+        setTimeout(() => {
+          this.initializeCarousel();
+        }, 100);
+      },
+      error: (error) => {
+        console.error('Error al cargar los libros:', error);
+        // Usar datos de prueba en caso de error para mostrar algo
+        this.books = dummyBooks;
+        this.cdr.detectChanges();
+        // Inicializar el carrusel con los datos de prueba
+        setTimeout(() => {
+          this.initializeCarousel();
+        }, 100);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.initializeCarousel(), 100);
+    // Ahora esperamos a que los datos se carguen antes de inicializar
   }
 
   initializeCarousel(): void {
@@ -61,9 +105,10 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
       !this.sliderContainer ||
       !this.nextButton ||
       !this.prevButton ||
-      !this.timerBar
+      !this.timerBar ||
+      this.books.length === 0
     ) {
-      console.error('No se pudieron encontrar los elementos DOM necesarios');
+      console.error('No se pudieron encontrar los elementos DOM necesarios o no hay libros');
       return;
     }
 
@@ -314,13 +359,32 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
       if (bookIndexAttr !== null) {
         const bookIndex = parseInt(bookIndexAttr, 10);
         if (bookIndex >= 0 && bookIndex < this.books.length) {
-          this.bookService.actualizarBookActual(this.books[bookIndex]);
+          this.homeService.actualizarBookActual(this.books[bookIndex]);
         }
       }
     }
   }
 
+  /**
+   * Construye la URL de la imagen del libro según el formato:
+   * libros/{nombre.saga}/covers/{nombre.libro}.png
+   * 
+   * @param book Libro del que se desea obtener la imagen
+   * @returns URL de la imagen
+   */
+  private getBookImageUrl(book: HomeModel): string {
+    // Formatear el nombre de la saga (reemplazar espacios por guiones bajos y convertir a minúsculas)
+    const saga = book.sagas ? book.sagas.trim().replace(/\s+/g, '_').toLowerCase() : 'general';
+    
+    // Formatear el título del libro (reemplazar espacios por guiones bajos y convertir a minúsculas)
+    const titulo = book.book_title.trim().replace(/\s+/g, '_').toLowerCase();
+    
+    // Construir la URL según el formato especificado
+    //return `libros/${saga}/covers/${titulo}.png`;
+    return `libros/${book.sagas}/covers/${book.book_title}.png`;
+  }
+
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
   }
-}
+} 

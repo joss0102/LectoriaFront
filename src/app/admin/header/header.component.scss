@@ -1,0 +1,70 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  padding: 0 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  
+  .menu-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    margin-right: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: var(--quaternary-color, rgba(255, 255, 255, 0.1));
+    }
+    
+    .material-icons {
+      font-size: 24px;
+    }
+  }
+  
+  .breadcrumb {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  
+  .header-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    margin-left: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: var(--quaternary-color, rgba(255, 255, 255, 0.1));
+    }
+    
+    .material-icons {
+      font-size: 22px;
+    }
+  }
+}

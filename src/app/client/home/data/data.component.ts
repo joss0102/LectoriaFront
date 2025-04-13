@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService } from '../../../core/services/book/book.service';
 import { Subscription } from 'rxjs';
-import { Book } from '../../../core/models/book-model';
+
+import { HomeService } from '../../../core/services/HomeService/home.service';
+import { HomeModel } from '../../../core/models/home.model';
 
 @Component({
   selector: 'app-data',
@@ -12,32 +13,24 @@ import { Book } from '../../../core/models/book-model';
   styleUrl: './data.component.scss'
 })
 export class DataComponent implements OnInit, OnDestroy {
-  book: Book | null = null;
-  showData: boolean = true; // Control de visibilidad para la animación
+  book: HomeModel | null = null;
+  showData: boolean = true;
   private subscription: Subscription = new Subscription();
 
   constructor(
-    private bookService: BookService,
+    private homeService: HomeService,
     private cdr: ChangeDetectorRef
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
-
-
-    // Suscribirse al observable del servicio para recibir actualizaciones
-    this.subscription = this.bookService.bookActual$.subscribe(book => {
-
-
+    this.subscription = this.homeService.currentBook$.subscribe(book => {
       if (book) {
-        // Implementar animación de fade-out/fade-in sin animations API
-        this.showData = false; // Ocultar
+        this.showData = false;
         this.cdr.detectChanges();
 
         setTimeout(() => {
-          this.book = book; // Actualizar el libro
-          this.showData = true; // Mostrar nuevamente
+          this.book = book;
+          this.showData = true;
           this.cdr.detectChanges();
         }, 300);
       } else {
@@ -45,11 +38,9 @@ export class DataComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Verificar si ya hay un libro disponible en el servicio
     setTimeout(() => {
-      const currentBook = this.bookService.getBookActual();
+      const currentBook = this.homeService.getBookActual();
       if (currentBook) {
-
         this.book = currentBook;
         this.showData = true;
         this.cdr.detectChanges();
@@ -58,8 +49,6 @@ export class DataComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('DataComponent: Destruyendo componente, limpiando suscripción');
-    // Limpiar la suscripción cuando el componente se destruye
     this.subscription.unsubscribe();
   }
 }

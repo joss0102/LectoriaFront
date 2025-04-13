@@ -1,0 +1,76 @@
+.dashboard-layout {
+  display: flex;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    z-index: 1100;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  // Overlay para cuando se abre el sidebar en modo móvil
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1050;
+    animation: fadeIn 0.2s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    margin-left: 260px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--body-bg);
+    transition: margin-left 0.3s ease;
+    
+    app-header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .page-content {
+      padding: 2rem;
+      flex-grow: 1;
+      overflow-y: auto;
+      background-color: var(--main-bg);
+    }
+  }
+}
+
+@media (max-width: 1299px) {
+  .dashboard-layout {
+    .sidebar {
+      transform: translateX(-100%);
+      
+      &.mobile-open {
+        transform: translateX(0);
+      }
+    }
+    
+    .main-content {
+      margin-left: 0;
+    }
+  }
+}

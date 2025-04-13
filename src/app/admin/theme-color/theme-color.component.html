@@ -1,0 +1,81 @@
+<!-- Overlay para el modal -->
+<div class="modal-overlay" (click)="close.emit()">
+
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Configuración de Tema</h3>
+        <button class="close-button" (click)="close.emit()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+
+        <div class="global-preview-section">
+          <div class="global-preview" [ngClass]="'preview-' + currentTheme">
+            <div class="preview-header">
+              <div class="preview-logo">
+                <span class="preview-icon material-icons">auto_stories</span>
+                <span class="preview-text">LibraryAdmin</span>
+              </div>
+            </div>
+            <div class="preview-sidebar">
+              <div class="preview-menu-item"></div>
+              <div class="preview-menu-item"></div>
+              <div class="preview-menu-item"></div>
+            </div>
+            <div class="preview-content">
+              <div class="preview-card">
+                <div class="preview-card-header" [style.background-color]="currentAccent"></div>
+                <div class="preview-card-body"></div>
+              </div>
+              <div class="preview-card">
+                <div class="preview-card-header" [style.background-color]="currentAccent"></div>
+                <div class="preview-card-body"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="theme-section">
+          <h4>Temas</h4>
+          <div class="theme-options">
+            <div 
+              *ngFor="let theme of themes" 
+              class="theme-option" 
+              [class.active]="currentTheme === theme.class"
+              (click)="onThemeSelect(theme.class)"
+            >
+              <div class="theme-preview" [ngClass]="'preview-' + theme.class">
+                <div class="mini-sidebar"></div>
+                <div class="mini-content">
+                  <div class="mini-header" [style.background-color]="currentAccent"></div>
+                  <div class="mini-body"></div>
+                </div>
+              </div>
+              <span>{{ theme.name }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="theme-section">
+          <h4>Color de Acento</h4>
+          <div class="accent-options">
+            <div 
+              *ngFor="let accent of accentColors" 
+              class="accent-option" 
+              [class.active]="currentAccent === accent.color"
+              (click)="onAccentSelect(accent.color)"
+            >
+              <div class="accent-preview" [style.background-color]="accent.color"></div>
+              <span>{{ accent.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="save-button" (click)="saveAndClose()">Guardar</button>
+      </div>
+    </div>
+  </div>

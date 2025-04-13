@@ -21,6 +21,10 @@ export class NavVerticalService {
   private isResponsiveSubject = new BehaviorSubject<boolean>(false);
   isResponsive$ = this.isResponsiveSubject.asObservable();
 
+  // Estado para indicar si estamos en la página de inicio
+  private isHomePageSubject = new BehaviorSubject<boolean>(false);
+  isHomePage$ = this.isHomePageSubject.asObservable();
+
   constructor() {
     // Inicializar el estado del menú desde localStorage si existe
     const savedState = localStorage.getItem('navState');
@@ -58,6 +62,16 @@ export class NavVerticalService {
   // Método específico para establecer la visibilidad del menú
   setMenuVisible(visible: boolean) {
     this.menuVisibleSubject.next(visible);
+  }
+  
+  // Método para obtener el estado actual de la visibilidad del menú
+  getMenuVisible(): boolean {
+    return this.menuVisibleSubject.getValue();
+  }
+
+  // Método para indicar si estamos en la página de inicio
+  setIsHomePage(isHomePage: boolean) {
+    this.isHomePageSubject.next(isHomePage);
   }
 
   // Guardar el estado en localStorage

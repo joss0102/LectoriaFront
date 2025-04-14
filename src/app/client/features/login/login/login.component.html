@@ -23,15 +23,31 @@
         formControlName="fullName"
         placeholder="Nombre completo"
       />
+      <div *ngIf="signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid" class="error-message">
+        El nombre completo es obligatorio
+      </div>
+      
       <input type="text" formControlName="nickname" placeholder="Nickname" />
+      <div *ngIf="signupForm.get('nickname')?.touched && signupForm.get('nickname')?.invalid" class="error-message">
+        El Nickname es obligatorio
+      </div>
+      
       <input
         type="password"
         formControlName="password"
         placeholder="Contraseña"
       />
-      <button type="submit" class="btn">Registrarse</button>
+      <div *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid" class="error-message">
+        Se requiere una contraseña de al menos 6 caracteres
+      </div>
+      
+      <button type="submit" class="btn" [disabled]="signupForm.invalid || isLoading">
+        <span *ngIf="isLoading">Cargando...</span>
+        <span *ngIf="!isLoading">Registrarse</span>
+      </button>
     </form>
   </div>
+  
   <!-- Sección de Login -->
   <div class="login-section">
     <h3 class="switch-tab text-btn text-center" (click)="toggleForm(true)">
@@ -52,13 +68,28 @@
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       <input type="text" formControlName="nickname" placeholder="Nickname" />
+      <div *ngIf="loginForm.get('nickname')?.touched && loginForm.get('nickname')?.invalid" class="error-message">
+        El NickName es obligatorio
+      </div>
+      
       <input
         type="password"
         formControlName="password"
         placeholder="Contraseña"
       />
-      <a href="#">¿Olvidaste tu contraseña?</a>
-      <button type="submit" class="btn">Iniciar Sesión</button>
+      <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="error-message">
+        La contraseña es obligatorio
+      </div>
+      
+      <div *ngIf="loginError" class="alert alert-danger">
+        {{ loginError }}
+      </div>
+      
+      <a href="/login">¿Olvidaste tu contraseña?</a>
+      <button type="submit" class="btn" [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="isLoading">Cargando...</span>
+        <span *ngIf="!isLoading">Iniciar Sesión</span>
+      </button>
     </form>
   </div>
 </div>

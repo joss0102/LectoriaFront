@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { ThemeService } from '../../../core/services/ThemeService/theme.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-nav-vertical',
@@ -27,6 +28,7 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   modoNoche: boolean = true;
   showMainLinks: boolean = false;
   isHomePage: boolean = false;
+  isLoginPage: boolean = false;
   
   private iconSubscription: Subscription;
   private menuVisibleSubscription: Subscription;
@@ -40,7 +42,8 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     private themeService: ThemeService,
     private renderer: Renderer2,
     private el: ElementRef,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     // Detectar si es dispositivo móvil al inicio
     this.checkIsMobile();
@@ -90,11 +93,13 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
       this.isMobile = isResponsive;
     });
 
-    // Suscripción para detectar cambios en la ruta y verificar si estamos en la página de inicio
+    // Suscripción para detectar cambios en la ruta y verificar si estamos en la página de inicio o login
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        const newIsHomePage = event.urlAfterRedirects === '/';
+        const url = event.urlAfterRedirects;
+        const newIsHomePage = url === '/';
+        const newIsLoginPage = url === '/login';
         
         // Si estamos entrando a la página de inicio, ocultamos el menú
         if (newIsHomePage && !this.isHomePage) {
@@ -102,12 +107,16 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
         }
         
         this.isHomePage = newIsHomePage;
+        this.isLoginPage = newIsLoginPage;
+        
         // Actualizar el estado en el servicio
         this.verticalService.setIsHomePage(this.isHomePage);
       });
       
     // Verificar la ruta actual al iniciar el componente
     this.isHomePage = this.router.url === '/';
+    this.isLoginPage = this.router.url === '/login';
+    
     // Si estamos en la página de inicio, aseguramos que el menú esté oculto inicialmente
     if (this.isHomePage) {
       this.verticalService.setMenuVisible(false);
@@ -171,6 +180,25 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   closeAllMenus() {
     this.searchMenuVisible = false;
     this.verticalService.setMenuVisible(false);
+  }
+  
+  // Método para cerrar sesión
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error al cerrar sesión:', error);
+        // Incluso si hay un error, intentamos navegar al login
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+  
+  // Determinar si el nav vertical debe mostrarse
+  shouldShowNavVertical(): boolean {
+    return !this.isLoginPage;
   }
   
   // Limpiar suscripciones al destruir el componente

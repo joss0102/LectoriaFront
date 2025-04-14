@@ -5,6 +5,9 @@ import { NavVerticalService } from '../../../core/services/NavVerticalService/Na
 import { CommonModule } from '@angular/common';
 import { ThemeService, ThemeType } from '../../../core/services/ThemeService/theme.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-horizontal',
@@ -18,37 +21,58 @@ export class NavHorizontalComponent implements OnInit, OnDestroy {
   currentTheme: ThemeType = 'noche';
   showLinks: boolean = true;
   isHomePage: boolean = false;
+  isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
+  isLoginPage: boolean = false;
   
   private themeSubscription: Subscription | undefined;
   private themeTypeSubscription: Subscription | undefined;
   private linksSubscription: Subscription | undefined;
   private homePageSubscription: Subscription | undefined;
+  private authSubscription: Subscription | undefined;
+  private routerSubscription: Subscription | undefined;
   
   constructor(
     private navService: NavVerticalService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private authService: AuthService,
+    private router: Router
   ) {}
   
   ngOnInit() {
-    // Suscribirse al servicio de tema (estado día/noche)
     this.themeSubscription = this.themeService.modoNoche$.subscribe(modo => {
       this.modoNoche = modo;
     });
-    
-    // Suscribirse al tipo de tema (noche, día, ártico, bosque, atardecer)
     this.themeTypeSubscription = this.themeService.temaActual$.subscribe(tema => {
       this.currentTheme = tema;
     });
     
-    // Suscribirse al estado de los links
     this.linksSubscription = this.navService.linksInHorizontalNav$.subscribe(visible => {
       this.showLinks = visible;
     });
     
-    // Suscribirse al estado de la página de inicio
     this.homePageSubscription = this.navService.isHomePage$.subscribe(isHome => {
       this.isHomePage = isHome;
     });
+
+    this.authSubscription = this.authService.currentUser.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.isAdmin = user?.role === 'admin';
+    });
+
+    this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      const user = this.authService.currentUserValue;
+      this.isAdmin = user?.role === 'admin';
+    }
+
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.isLoginPage = event.urlAfterRedirects === '/login';
+      });
+
+    this.isLoginPage = this.router.url === '/login';
   }
   
   toggleNav() {
@@ -119,6 +143,9 @@ export class NavHorizontalComponent implements OnInit, OnDestroy {
       default: return 'Personalizado';
     }
   }
+  shouldShowMenuButton(): boolean {
+    return this.isLoggedIn && !this.isLoginPage;
+  }
   
   ngOnDestroy() {
     // Limpiar suscripciones
@@ -133,6 +160,12 @@ export class NavHorizontalComponent implements OnInit, OnDestroy {
     }
     if (this.homePageSubscription) {
       this.homePageSubscription.unsubscribe();
+    }
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 }

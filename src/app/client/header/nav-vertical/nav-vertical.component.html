@@ -1,121 +1,124 @@
-<nav *ngIf="!isHomePage || menuVisible" 
+<!-- Sólo mostrar el nav si no estamos en la página de login -->
+<ng-container *ngIf="shouldShowNavVertical()">
+  <nav *ngIf="!isHomePage || menuVisible"
       [ngClass]="{'only-icon': onlyIcon, 'menu-visible': menuVisible, 'homepage-menu': isHomePage}">
-  <!-- Navegación principal -->
-  <div class="nav-content">
-    <div
-      [ngClass]="{ 'only-icon': onlyIcon }"
-      class="user-profile d-flex flex-column align-items-center py-2 justify-content-center"
-      [routerLink]="isMobile ? '/user' : null"
-      [class.clickable]="isMobile"
-    >
-      <i class="bi bi-person-circle"></i>
-      <p class="fs-5 mb-0 fw-bold">Nombre</p>
-      <p class="fs-6 mb-0">Apellido</p>
-    </div>
-    
-    <!-- Enlaces principales que aparecen en modo responsive -->
-    <ng-container *ngIf="showMainLinks">
+    <!-- Navegación principal -->
+    <div class="nav-content">
+      <div
+        [ngClass]="{ 'only-icon': onlyIcon }"
+        class="user-profile d-flex flex-column align-items-center py-2 justify-content-center"
+        [routerLink]="isMobile ? '/user' : null"
+        [class.clickable]="isMobile"
+      >
+        <i class="bi bi-person-circle"></i>
+        <p class="fs-5 mb-0 fw-bold">Nombre</p>
+        <p class="fs-6 mb-0">Apellido</p>
+      </div>
+        
+      <!-- Enlaces principales que aparecen en modo responsive -->
+      <ng-container *ngIf="showMainLinks">
+        <a
+          [ngClass]="{ 'only-icon': onlyIcon }"
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="bi bi-house"></i>
+          <p class="fs-6 link">Inicio</p>
+        </a>
+      </ng-container>
+      
       <a
         [ngClass]="{ 'only-icon': onlyIcon }"
-        routerLink="/"
+        routerLink="/library"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <i class="bi bi-house"></i>
-        <p class="fs-6 link">Inicio</p>
+        <i class="bi bi-collection"></i>
+        <p class="fs-6 link">Biblioteca</p>
       </a>
-    </ng-container>
-    
-    <a
-      [ngClass]="{ 'only-icon': onlyIcon }"
-      routerLink="/library"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <i class="bi bi-collection"></i>
-      <p class="fs-6 link">Biblioteca</p>
-    </a>
-    
-    <a
-      [ngClass]="{ 'only-icon': onlyIcon }"
-      routerLink="/current-book"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <i class="bi bi-book"></i>
-      <p class="fs-6 link">Lectura actual</p>
-    </a>
       
-    <a
+      <a
+        [ngClass]="{ 'only-icon': onlyIcon }"
+        routerLink="/current-book"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="bi bi-book"></i>
+        <p class="fs-6 link">Lectura actual</p>
+      </a>
+        
+      <a
+        [ngClass]="{ 'only-icon': onlyIcon }"
+        routerLink="/statistics"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="bi bi-graph-up-arrow"></i>
+        <p class="fs-6 link">Estadísticas</p>
+      </a>
+      <a
+        [ngClass]="{ 'only-icon': onlyIcon }"
+        routerLink="/wishlist"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="bi bi-bookmark-heart"></i>
+        <p class="fs-6 link">Pendientes</p>
+      </a>
+      <a
       [ngClass]="{ 'only-icon': onlyIcon }"
-      routerLink="/statistics"
+      (click)="toggleSearchMenu()"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
+      id="search-button"
     >
-      <i class="bi bi-graph-up-arrow"></i>
-      <p class="fs-6 link">Estadísticas</p>
+      <i class="bi bi-search"></i>
+      <p class="fs-6 link">Buscador</p>
     </a>
-    <a
-      [ngClass]="{ 'only-icon': onlyIcon }"
-      routerLink="/wishlist"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <i class="bi bi-bookmark-heart"></i>
-      <p class="fs-6 link">Pendientes</p>
+    </div>
+
+    <a class="my-md my-2" [ngClass]="{ 'only-icon': onlyIcon }" (click)="logout()" style="cursor: pointer;">
+      <i class="bi bi-box-arrow-right"></i>
+      <p class="fs-6 link">Cerrar Sesión</p>
     </a>
-    <a
-    [ngClass]="{ 'only-icon': onlyIcon }"
-    (click)="toggleSearchMenu()"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }"
-    id="search-button"
-  >
-    <i class="bi bi-search"></i>
-    <p class="fs-6 link">Buscador</p>
-  </a>
-  </div>
+  </nav>
 
-  <a class="my-md my-2" [ngClass]="{ 'only-icon': onlyIcon }">
-    <i class="bi bi-box-arrow-right"></i>
-    <p class="fs-6 link">Cerrar Sesión</p>
-  </a>
-</nav>
+  <!-- Overlay para móvil -->
+  <div class="mobile-overlay" [ngClass]="{'active': menuVisible || searchMenuVisible}" (click)="closeAllMenus()"></div>
 
-<!-- Overlay para móvil -->
-<div class="mobile-overlay" [ngClass]="{'active': menuVisible || searchMenuVisible}" (click)="closeAllMenus()"></div>
-
-<!-- Menu del buscador (fuera del nav para permitir superposición correcta) -->
-<div #searchMenuWrapper class="search-menu-wrapper" [ngClass]="{'search-visible': searchMenuVisible}">
-  <div class="search-container">
-    <div class="search-header">
-      <h5 class="mb-3">Buscador</h5>
-      <i
-        class="bi bi-x text-danger"
-        (click)="toggleSearchMenu()"
-        style="cursor: pointer;"
-      ></i>
+  <!-- Menu del buscador (fuera del nav para permitir superposición correcta) -->
+  <div #searchMenuWrapper class="search-menu-wrapper" [ngClass]="{'search-visible': searchMenuVisible}">
+    <div class="search-container">
+      <div class="search-header">
+        <h5 class="mb-3">Buscador</h5>
+        <i
+          class="bi bi-x text-danger"
+          (click)="toggleSearchMenu()"
+          style="cursor: pointer;"
+        ></i>
+      </div>
+      <input
+        type="text"
+        placeholder="Buscar..."
+        [(ngModel)]="searchQuery"
+        class="form-control"
+      />
+      <hr />
+      <div class="recent-header">
+        <p class="mb-2">Recientes</p>
+        <small class="text-btn fw-bold cursor-pointer">Borrar todo</small>
+      </div>
+      <ul class="search-results">
+        <li *ngFor="let result of searchResults">
+          <img
+            class="rounded-circle me-3"
+            src="https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U="
+            alt=""
+          />
+          <span>{{ result }}</span>
+        </li>
+      </ul>
     </div>
-    <input
-      type="text"
-      placeholder="Buscar..."
-      [(ngModel)]="searchQuery"
-      class="form-control"
-    />
-    <hr />
-    <div class="recent-header">
-      <p class="mb-2">Recientes</p>
-      <small class="text-btn fw-bold cursor-pointer">Borrar todo</small>
-    </div>
-    <ul class="search-results">
-      <li *ngFor="let result of searchResults">
-        <img
-          class="rounded-circle me-3"
-          src="https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U="
-          alt=""
-        />
-        <span>{{ result }}</span>
-      </li>
-    </ul>
   </div>
-</div>
+</ng-container>

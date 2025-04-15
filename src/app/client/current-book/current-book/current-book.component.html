@@ -1,192 +1,228 @@
 <section class="section d-flex align-items-center justify-content-center">
-<div class="reading-dashboard">
-        <!-- Header con título y navegación -->
-        <div class="dashboard-header">
-        <h2 class="section-title">Lectura Actual</h2>
-        <div class="book-navigation">
-            <button class="nav-btn " [disabled]="!hasPrevBook()" (click)="prevBook()">
-                <i class="bi bi-caret-left-fill"></i>
-            </button>
-            <span class="book-counter" *ngIf="booksInProgress.length > 0">
-            {{ currentBookIndex + 1 }} / {{ booksInProgress.length }}
-            </span>
-            <button class="nav-btn " [disabled]="!hasNextBook()" (click)="nextBook()">
-                <i class="bi bi-caret-right-fill"></i>
-            </button>
-        </div>
-        </div>
-    
-        <!-- Contenido principal -->
-        <div class="dashboard-content" *ngIf="currentBook">
-        <!-- Layout principal: portada a la izquierda, datos y tabs a la derecha -->
-        <div class="main-layout">
-            <!-- Columna de la portada (más grande) -->
-            <div class="book-cover-container">
-            <div class="book-cover">
-                <img [src]="currentBook.imagen" [alt]="currentBook.titulo" 
-                    onerror="this.src='/assets/images/default-cover.png'">
-                <div class="status-badge" [ngClass]="getEstadoClass(currentBook.estado)">
-                {{ getEstadoLabel(currentBook.estado) }}
-                </div>
-            </div>
-            
-            <div class="progress-indicator">
-                <div class="progress-chart">
-                <svg viewBox="0 0 36 36" class="progress-circle">
-                    <path class="progress-bg"
-                        d="M18 2.0845
-                            a 15.9155 15.9155 0 0 1 0 31.831
-                            a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                    <path class="progress-fill"
-                        [attr.stroke-dasharray]="getProgressStrokeDasharray(currentBook.progreso || 0)"
-                        d="M18 2.0845
-                            a 15.9155 15.9155 0 0 1 0 31.831
-                            a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                    <text x="18" y="20.35" class="progress-text">{{ currentBook.progreso || 0 }}%</text>
-                </svg>
-                </div>
-                <div class="pages-info">
-                <span class="pages-read">{{ currentBook.paginasLeidas || 0 }}</span> / 
-                <span class="pages-total">{{ currentBook.paginasTotales || 0 }}</span> páginas
-                </div>
-            </div>
-            </div>
-            
-            <!-- Columna de información y pestañas -->
-            <div class="book-info-container">
-            <!-- Info del libro -->
-            <div class="book-details">
-                <div class="book-title-section">
-                <h3 class="book-title">{{ currentBook.titulo }}</h3>
-                <div class="book-subtitle">
-                    <span class="book-author">{{ currentBook.autor }}</span>
-                    <span class="book-saga" *ngIf="currentBook.saga">· {{ currentBook.saga }}</span>
-                </div>
-                </div>
-                
-                <div class="book-genres">
-                <span class="genre-tag" *ngFor="let genero of currentBook.generos">{{ genero }}</span>
-                </div>
-                
-                <div class="synopsis-container">
-                <p class="book-synopsis">{{ currentBook.sinopsis }}</p>
-                </div>
-                
-                <div class="reading-dates">
-                <div class="date-item" *ngIf="currentBook.fechaInicio">
-                    <span class="date-label">Inicio:</span>
-                    <span class="date-value">{{ getFormattedDate(currentBook.fechaInicio) }}</span>
-                </div>
-                <div class="date-item" *ngIf="currentBook.fechaFin">
-                    <span class="date-label">Finalización:</span>
-                    <span class="date-value">{{ getFormattedDate(currentBook.fechaFin) }}</span>
-                </div>
-                </div>
-            </div>
-            
-            <!-- Contenido de pestañas -->
-            <div class="book-tabs">
-                <div class="tabs-header">
-                    <button class="tab-button" [class.active]="activeTab === 'log'" (click)="setActiveTab('log')">
-                        <i class="fas fa-book-reader"></i> Registro
-                    </button>
-                <button class="tab-button" [class.active]="activeTab === 'notes'" (click)="setActiveTab('notes')">
-                    <i class="fas fa-sticky-note"></i> Notas
+    <div class="reading-dashboard">
+        <div class="dashboard-header d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+            <h2 class="section-title fs-5 fw-semibold m-0">Lectura Actual</h2>
+            <div class="book-navigation d-flex align-items-center gap-3">
+                <button class="nav-btn d-flex align-items-center justify-content-center" [disabled]="!hasPrevBook()" (click)="prevBook()">
+                    <i class="bi bi-caret-left-fill"></i>
                 </button>
-                <button class="tab-button" [class.active]="activeTab === 'quotes'" (click)="setActiveTab('quotes')">
-                    <i class="fas fa-quote-right"></i> Frases
+                <span class="book-counter small " *ngIf="booksInProgress.length > 0">
+                    {{ currentBookIndex + 1 }} / {{ booksInProgress.length }}
+                </span>
+                <button class="nav-btn d-flex align-items-center justify-content-center" [disabled]="!hasNextBook()" (click)="nextBook()">
+                    <i class="bi bi-caret-right-fill"></i>
                 </button>
-           
-                </div>
-                
-                <div class="tab-content">
-                <!-- Tab Notas -->
-                <div class="tab-pane" [style.display]="activeTab === 'notes' ? 'block' : 'none'">
-                    <div class="notes-content scrollable" *ngIf="currentBook.anotaciones && currentBook.anotaciones.length > 0">
-                    <ul class="notes-list">
-                        <li *ngFor="let nota of currentBook.anotaciones; let i = index" [style.animation-delay]="i * 0.1 + 's'">
-                        {{ nota }}
-                        </li>
-                    </ul>
-                    </div>
-                    <div class="empty-content" *ngIf="!currentBook.anotaciones || currentBook.anotaciones.length === 0">
-                    <p>No hay notas para este libro</p>
-                    </div>
-                </div>
-                
-                <!-- Tab Frases -->
-                <div class="tab-pane" [style.display]="activeTab === 'quotes' ? 'block' : 'none'">
-                    <div class="quotes-content scrollable" *ngIf="currentBook.frases && currentBook.frases.length > 0">
-                    <div class="quotes-list">
-                        <blockquote class="book-quote" *ngFor="let frase of currentBook.frases">
-                        <p>"{{ frase }}"</p>
-                        </blockquote>
-                    </div>
-                    </div>
-                    <div class="empty-content" *ngIf="!currentBook.frases || currentBook.frases.length === 0">
-                    <p>No hay frases destacadas para este libro</p>
-                    </div>
-                </div>
-                
-                <!-- Tab Registro -->
-                <div class="tab-pane" [style.display]="activeTab === 'log' ? 'block' : 'none'">
-                    <div class="log-content scrollable" *ngIf="currentBook.registroLectura && currentBook.registroLectura.length > 0">
-                    <div class="reading-stats">
-                        <div class="stat-item">
-                        <div class="stat-label">Total leído</div>
-                        <div class="stat-value">{{ getTotalPagesRead() }} páginas</div>
-                        </div>
-                        <div class="stat-item">
-                        <div class="stat-label">Tiempo total</div>
-                        <div class="stat-value">{{ getTotalReadingTime() }} min</div>
-                        </div>
-                        <div class="stat-item">
-                        <div class="stat-label">Sesiones</div>
-                        <div class="stat-value">{{ currentBook.registroLectura.length || 0 }}</div>
-                        </div>
-                        <div class="stat-item">
-                        <div class="stat-label">Promedio</div>
-                        <div class="stat-value">{{ getAveragePagesPerSession() }} pág/sesión</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-content d-flex flex-column h-100" *ngIf="currentBook">
+            <div class="main-layout d-flex h-100">
+                <div class="book-cover-container d-flex flex-column align-items-center border-end p-4">
+                    <div class="book-cover position-relative overflow-hidden rounded-3 mb-4 shadow">
+                        <img *ngIf="currentBook" class="w-100 h-100 object-fit-cover" [src]="'libros/' + currentBook.saga + '/covers/' + currentBook.titulo + '.png'" [alt]="currentBook.titulo"
+                             onerror="this.src='/assets/images/default-cover.png'">
+                        <div class="status-badge position-absolute top-0 end-0 px-3 py-1 small text-uppercase fw-semibold" [ngClass]="getEstadoClass(currentBook.estado)">
+                            {{ getEstadoLabel(currentBook.estado) }}
                         </div>
                     </div>
                     
-                    <div class="recent-sessions">
-                        <h4>Últimas sesiones</h4>
-                        <table class="sessions-table">
-                        <thead>
-                            <tr>
-                            <th>Fecha</th>
-                            <th>Páginas</th>
-                            <th>Tiempo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let registro of getRecentSessions()">
-                            <td>{{ getShortDate(registro.fecha) }}</td>
-                            <td>{{ registro.paginasLeidas }}</td>
-                            <td>{{ registro.tiempo }} min</td>
-                            </tr>
-                        </tbody>
-                        </table>
+                    <div class="progress-indicator w-100 d-flex flex-column align-items-center">
+                        <div class="progress-chart mb-3">
+                            <svg viewBox="0 0 36 36" class="progress-circle">
+                                <path class="progress-bg"
+                                      d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                <path class="progress-fill"
+                                      [attr.stroke-dasharray]="getProgressStrokeDasharray(currentBook.progreso || 0)"
+                                      d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                <text x="18" y="20.35" class="progress-text">{{ currentBook.progreso || 0 }}%</text>
+                            </svg>
+                        </div>
+                        <div class="pages-info small ">
+                            <span class="pages-read fw-semibold">{{ currentBook.paginasLeidas || 0 }}</span> / 
+                            <span class="pages-total fw-semibold">{{ currentBook.paginasTotales || 0 }}</span> páginas
+                        </div>
                     </div>
-                    </div>
-                    <div class="empty-content" *ngIf="!currentBook.registroLectura || currentBook.registroLectura.length === 0">
-                    <p>No hay registro de lectura para este libro</p>
+        
+                    <div class="action-buttons d-flex flex-column w-100 mt-3 gap-2">
+                        <button class="action-btn update-progress fw-semibold rounded-2 py-2 d-flex align-items-center justify-content-center gap-2" data-bs-toggle="modal" data-bs-target="#progressModal">
+                            <i class="fas fa-book-reader"></i> Actualizar Progreso
+                        </button>
+                        <button class="action-btn mark-completed fw-semibold rounded-2 py-2 d-flex align-items-center justify-content-center gap-2" *ngIf="currentBook.estado === 'en-progreso'" (click)="markAsCompleted()">
+                            <i class="fas fa-check-circle"></i> Marcar como Terminado
+                        </button>
                     </div>
                 </div>
+                
+                <div class="book-info-container flex-grow-1 d-flex flex-column overflow-hidden">
+                    <div class="book-details border-bottom p-4">
+                        <div class="book-title-section mb-3">
+                            <h3 class="book-title fw-bold mb-1">{{ currentBook.titulo }}</h3>
+                            <div class="book-subtitle d-flex align-items-center gap-2 fs-5">
+                                <span class="book-author fw-medium">{{ currentBook.autor }}</span>
+                                <span class="book-saga " *ngIf="currentBook.saga">· {{ currentBook.saga }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="book-genres d-flex flex-wrap gap-2 mb-3">
+                            <span class="genre-tag small fw-medium px-3 py-1 rounded-pill" *ngFor="let genero of currentBook.generos">{{ genero }}</span>
+                        </div>
+                        
+                        <div class="synopsis-container mb-3 overflow-auto pe-2">
+                            <p class="book-synopsis small mb-0 lh-base">{{ currentBook.sinopsis }}</p>
+                            <p class="personal-description small  fst-italic mt-2" *ngIf="currentBook.descripcionPersonal">
+                                <strong>Mi descripción:</strong> {{ currentBook.descripcionPersonal }}
+                            </p>
+                        </div>
+                        
+                        <div class="reading-dates d-flex flex-wrap gap-3">
+                            <div class="date-item d-flex align-items-center bg-light bg-opacity-10 px-3 py-2 rounded small" *ngIf="currentBook.fechaInicio">
+                                <span class="date-label fw-semibold me-2">Inicio:</span>
+                                <span class="date-value">{{ getFormattedDate(currentBook.fechaInicio) }}</span>
+                            </div>
+                            <div class="date-item d-flex align-items-center bg-light bg-opacity-10 px-3 py-2 rounded small" *ngIf="currentBook.fechaFin">
+                                <span class="date-label fw-semibold me-2">Finalización:</span>
+                                <span class="date-value">{{ getFormattedDate(currentBook.fechaFin) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="book-tabs flex-grow-1 d-flex flex-column overflow-hidden ">
+                        <div class="tabs-header d-flex">
+                            <button class="tab-button flex-grow-1 border-0 position-relative p-2" [class.active]="activeTab === 'log'" (click)="setActiveTab('log')">
+                                <i class="fas fa-book-reader opacity-75 me-1"></i> Registro
+                            </button>
+                            <button class="tab-button flex-grow-1 border-0 position-relative" [class.active]="activeTab === 'notes'" (click)="setActiveTab('notes')">
+                                <i class="fas fa-sticky-note opacity-75 me-1"></i> Notas
+                            </button>
+                            <button class="tab-button flex-grow-1 border-0 position-relative" [class.active]="activeTab === 'quotes'" (click)="setActiveTab('quotes')">
+                                <i class="fas fa-quote-right opacity-75 me-1"></i> Frases
+                            </button>
+                        </div>
+                        
+                        <div class="tab-content flex-grow-1 overflow-hidden">
+                            <div class="tab-pane p-3 overflow-auto" [style.display]="activeTab === 'notes' ? 'block' : 'none'">
+                                <div class="add-note-form d-flex gap-2 mb-3">
+                                    <textarea class="flex-grow-1 p-3 rounded-2 border" placeholder="Añade una nueva nota..." #newNote></textarea>
+                                    <button class="align-self-end px-3 py-2 rounded-2 text-white fw-semibold" (click)="addNote(newNote.value); newNote.value = ''">Añadir</button>
+                                </div>
+                                <div class="notes-content p-2 overflow-auto" *ngIf="currentBook.anotaciones && currentBook.anotaciones.length > 0">
+                                    <ul class="notes-list d-flex flex-column gap-3 m-0 p-0">
+                                        <li class="position-relative rounded-2 p-3 shadow-sm small lh-base" *ngFor="let nota of currentBook.anotaciones; let i = index" [style.animation-delay]="i * 0.1 + 's'">
+                                            {{ nota }}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="empty-content h-100 d-flex align-items-center justify-content-center  fst-italic small" *ngIf="!currentBook.anotaciones || currentBook.anotaciones.length === 0">
+                                    <p>No hay notas para este libro</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-pane p-3 overflow-auto" [style.display]="activeTab === 'quotes' ? 'block' : 'none'">
+                                <div class="add-quote-form d-flex gap-2 mb-3">
+                                    <textarea class="flex-grow-1 p-3 rounded-2 border" placeholder="Añade una nueva frase destacada..." #newQuote></textarea>
+                                    <button class="align-self-end px-3 py-2 rounded-2 text-white fw-semibold" (click)="addQuote(newQuote.value); newQuote.value = ''">Añadir</button>
+                                </div>
+                                <div class="quotes-content p-2 overflow-auto" *ngIf="currentBook.frases && currentBook.frases.length > 0">
+                                    <div class="quotes-list">
+                                        <blockquote class="book-quote rounded-end p-3 mb-3 small lh-base fst-italic" *ngFor="let frase of currentBook.frases">
+                                            <p class="m-0">"{{ frase }}"</p>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                                <div class="empty-content h-100 d-flex align-items-center justify-content-center  fst-italic small" *ngIf="!currentBook.frases || currentBook.frases.length === 0">
+                                    <p>No hay frases destacadas para este libro</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-pane p-3 overflow-auto" [style.display]="activeTab === 'log' ? 'block' : 'none'">
+                                <div class="log-content p-2 overflow-auto" *ngIf="currentBook.registroLectura && currentBook.registroLectura.length > 0">
+                                    <div class="reading-stats d-grid gap-3 mb-4">
+                                        <div class="stat-item text-center p-3 rounded-2 bg-light bg-opacity-10">
+                                            <div class="stat-label small  mb-1">Total leído</div>
+                                            <div class="stat-value fs-5 fw-semibold">{{ getTotalPagesRead() }} páginas</div>
+                                        </div>
+                                        <div class="stat-item text-center p-3 rounded-2 bg-light bg-opacity-10">
+                                            <div class="stat-label small  mb-1">Tiempo total</div>
+                                            <div class="stat-value fs-5 fw-semibold">{{ getTotalReadingTime() }} min</div>
+                                        </div>
+                                        <div class="stat-item text-center p-3 rounded-2 bg-light bg-opacity-10">
+                                            <div class="stat-label small  mb-1">Sesiones</div>
+                                            <div class="stat-value fs-5 fw-semibold">{{ currentBook.registroLectura.length || 0 }}</div>
+                                        </div>
+                                        <div class="stat-item text-center p-3 rounded-2 bg-light bg-opacity-10">
+                                            <div class="stat-label small  mb-1">Promedio</div>
+                                            <div class="stat-value fs-5 fw-semibold">{{ getAveragePagesPerSession() }} pág/sesión</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="recent-sessions">
+                                        <h4 class="fs-6 mb-3">Últimas sesiones</h4>
+                                        <table class="sessions-table w-100 small">
+                                            <thead>
+                                                <tr>
+                                                    <th class="p-2 text-start fw-semibold bg-light bg-opacity-10">Fecha</th>
+                                                    <th class="p-2 text-start fw-semibold bg-light bg-opacity-10">Páginas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let registro of getRecentSessions()">
+                                                    <td class="p-2 border-bottom">{{ getShortDate(registro.fecha) }}</td>
+                                                    <td class="p-2 border-bottom">{{ registro.paginasLeidas }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="empty-content h-100 d-flex align-items-center justify-content-center  fst-italic small" *ngIf="!currentBook.registroLectura || currentBook.registroLectura.length === 0">
+                                    <p>No hay registro de lectura para este libro</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="no-book-message flex-grow-1 d-flex align-items-center justify-content-center p-4" *ngIf="!currentBook">
+            <div class="message-content text-center">
+                <i class="fas fa-book-open empty-icon fs-1 mb-3  opacity-75"></i>
+                <h3 class="fs-4 mb-2">No hay libros en progreso</h3>
+                <p class="small ">Selecciona un libro de tu biblioteca para comenzar a leer</p>
             </div>
         </div>
-        </div>
-    
-        <!-- Mensaje cuando no hay libros en progreso -->
-        <div class="no-book-message" *ngIf="!currentBook">
-        <div class="message-content">
-            <i class="fas fa-book-open empty-icon"></i>
-            <h3>No hay libros en progreso</h3>
-            <p>Selecciona un libro de tu biblioteca para comenzar a leer</p>
-        </div>
+    </div>
+
+    <!-- Modal para actualizar progreso -->
+    <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-semibold" id="progressModalLabel">Actualizar Progreso de Lectura</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="pagesRead" class="form-label fw-medium">Páginas leídas</label>
+                            <input type="number" class="form-control rounded-2" id="pagesRead" #pagesInput
+                                min="1" [max]="currentBook?.paginasTotales || 1000">
+                            <div class="form-text ">
+                                Has leído {{ currentBook?.paginasLeidas || 0 }} de {{ currentBook?.paginasTotales || 0 }} páginas totales.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fw-semibold rounded-2" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary fw-semibold rounded-2" 
+                            (click)="updateReadingProgress(+pagesInput.value)" 
+                            data-bs-dismiss="modal">Guardar</button>
+                </div>
+            </div>
         </div>
     </div>
 </section>

@@ -2,66 +2,57 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-import { Book, ReadingRecord } from '../../../core/models/book-model';
-import { BookService } from '../../../core/services/book/book.service';
-
+import { Books, ReadingRecord } from '../../../core/models/books.model';
+import { CurrentBookService } from '../../../core/services/currentBook/current-book.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-current-book',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './current-book.component.html',
   styleUrl: './current-book.component.scss',
 })
 export class CurrentBookComponent implements OnInit, OnDestroy {
-  currentBook: Book | null = null;
-  booksInProgress: Book[] = [];
+  currentBook: Books | null = null;
+  booksInProgress: Books[] = [];
   currentBookIndex: number = 0;
   activeTab: string = 'log';
   
-  private subscription: Subscription = new Subscription();
+  private bookSubscription: Subscription = new Subscription();
+  private booksListSubscription: Subscription = new Subscription();
 
-  constructor(private bookService: BookService) {}
+  constructor(private currentBookService: CurrentBookService) {}
 
-  ngOnInit(): void {
-    console.log('Inicializando CurrentBookComponent');
-    
-    // Obtener todos los libros en progreso
-    this.loadBooksInProgress();
-    
-    // Suscribirse a cambios en el libro actual
-    this.subscription = this.bookService.bookActual$.subscribe(book => {
-      console.log('Libro actual actualizado:', book);
-      if (book) {
-        this.currentBook = book;
-        this.updateCurrentBookIndex();
-        
-        // Debug info
-        console.log('Anotaciones:', this.currentBook.anotaciones);
-        console.log('Frases:', this.currentBook.frases);
-        console.log('Registro de lectura:', this.currentBook.registroLectura);
-      }
-    });
 
-    // Si no hay libro seleccionado, seleccionar el primero en progreso
-    if (!this.currentBook && this.booksInProgress.length > 0) {
-      console.log('Seleccionando primer libro en progreso:', this.booksInProgress[0]);
-      this.bookService.actualizarBookActual(this.booksInProgress[0]);
+ngOnInit(): void {
+
+  this.booksListSubscription = this.currentBookService.booksInProgress$.subscribe(books => {
+
+    this.booksInProgress = books;
+    this.updateCurrentBookIndex();
+  });
+
+  this.bookSubscription = this.currentBookService.currentBook$.subscribe(book => {
+
+    if (book) {
+      this.currentBook = book;
+      this.updateCurrentBookIndex();
     }
-  }
+  });
+
+  this.currentBookService.loadBooksInProgress();
+}
+
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  loadBooksInProgress(): void {
-    this.booksInProgress = this.bookService.getBooksByStatus('en-progreso');
-    console.log('Libros en progreso cargados:', this.booksInProgress);
+    this.bookSubscription.unsubscribe();
+    this.booksListSubscription.unsubscribe();
   }
 
   updateCurrentBookIndex(): void {
-    if (this.currentBook) {
-      const index = this.booksInProgress.findIndex(book => book.titulo === this.currentBook?.titulo);
+    if (this.currentBook && this.booksInProgress.length > 0) {
+      const index = this.booksInProgress.findIndex(book => book.id === this.currentBook?.id);
       if (index !== -1) {
         this.currentBookIndex = index;
       }
@@ -71,14 +62,14 @@ export class CurrentBookComponent implements OnInit, OnDestroy {
   nextBook(): void {
     if (this.hasNextBook()) {
       this.currentBookIndex++;
-      this.bookService.actualizarBookActual(this.booksInProgress[this.currentBookIndex]);
+      this.currentBookService.setCurrentBook(this.booksInProgress[this.currentBookIndex]);
     }
   }
 
   prevBook(): void {
     if (this.hasPrevBook()) {
       this.currentBookIndex--;
-      this.bookService.actualizarBookActual(this.booksInProgress[this.currentBookIndex]);
+      this.currentBookService.setCurrentBook(this.booksInProgress[this.currentBookIndex]);
     }
   }
 
@@ -91,12 +82,11 @@ export class CurrentBookComponent implements OnInit, OnDestroy {
   }
 
   setActiveTab(tab: string): void {
-    console.log('Cambiando a pestaña:', tab);
+
     this.activeTab = tab;
   }
 
   getProgressStrokeDasharray(progress: number): string {
-    // Para un círculo SVG con pathLength="100"
     return `${progress}, 100`;
   }
 
@@ -141,7 +131,6 @@ export class CurrentBookComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Métodos para estadísticas del registro de lectura
   getTotalPagesRead(): number {
     if (!this.currentBook?.registroLectura) return 0;
     return this.currentBook.registroLectura.reduce((total, record) => total + record.paginasLeidas, 0);
@@ -160,9 +149,73 @@ export class CurrentBookComponent implements OnInit, OnDestroy {
 
   getRecentSessions(): ReadingRecord[] {
     if (!this.currentBook?.registroLectura) return [];
-    // Ordenar por fecha descendente y tomar las últimas 5 sesiones
     return [...this.currentBook.registroLectura]
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(0, 5);
+      .slice(0, 10);
+  }
+
+  // Método para actualizar el progreso de lectura
+  updateReadingProgress(pages: number): void {
+    if (!this.currentBook) return;
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    this.currentBookService.updateReadingProgress(
+      this.currentBook.id, 
+      pages,
+      today
+    ).subscribe({
+      next: (response) => {
+        console.log('Progreso actualizado correctamente:', response);
+      },
+      error: (error) => {
+        console.error('Error al actualizar progreso:', error);
+      }
+    });
+  }
+
+  // Método para añadir una nota
+  addNote(text: string): void {
+    if (!text.trim()) return;
+    
+    this.currentBookService.addOrUpdateNote(text).subscribe({
+      next: (response) => {
+        console.log('Nota añadida correctamente:', response);
+      },
+      error: (error) => {
+        console.error('Error al añadir nota:', error);
+      }
+    });
+  }
+
+  // Método para añadir una frase destacada
+  addQuote(text: string): void {
+    if (!text.trim()) return;
+    
+    this.currentBookService.addQuote(text).subscribe({
+      next: (response) => {
+        console.log('Frase añadida correctamente:', response);
+      },
+      error: (error) => {
+        console.error('Error al añadir frase:', error);
+      }
+    });
+  }
+
+  // Método para marcar un libro como completado
+  markAsCompleted(): void {
+    if (!this.currentBook) return;
+    
+    this.currentBookService.updateBookStatus(
+      this.currentBook.id,
+      'finalizado'
+    ).subscribe({
+      next: (response) => {
+        console.log('Libro marcado como completado:', response);
+      },
+      error: (error) => {
+        console.error('Error al actualizar estado del libro:', error);
+      }
+    });
   }
 }

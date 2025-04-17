@@ -20,7 +20,7 @@
                 <div class="book-cover-container d-flex flex-column align-items-center border-end p-4">
                     <div class="book-cover position-relative overflow-hidden rounded-3 mb-4 shadow">
                         <img *ngIf="currentBook" class="w-100 h-100 object-fit-cover" [src]="'libros/' + currentBook.saga + '/covers/' + currentBook.titulo + '.png'" [alt]="currentBook.titulo"
-                             onerror="this.src='/assets/images/default-cover.png'">
+                                onerror="this.src='/assets/images/default-cover.png'">
                         <div class="status-badge position-absolute top-0 end-0 px-3 py-1 small text-uppercase fw-semibold" [ngClass]="getEstadoClass(currentBook.estado)">
                             {{ getEstadoLabel(currentBook.estado) }}
                         </div>
@@ -30,12 +30,12 @@
                         <div class="progress-chart mb-3">
                             <svg viewBox="0 0 36 36" class="progress-circle">
                                 <path class="progress-bg"
-                                      d="M18 2.0845
+                                        d="M18 2.0845
                                         a 15.9155 15.9155 0 0 1 0 31.831
                                         a 15.9155 15.9155 0 0 1 0 -31.831"/>
                                 <path class="progress-fill"
-                                      [attr.stroke-dasharray]="getProgressStrokeDasharray(currentBook.progreso || 0)"
-                                      d="M18 2.0845
+                                        [attr.stroke-dasharray]="getProgressStrokeDasharray(currentBook.progreso || 0)"
+                                        d="M18 2.0845
                                         a 15.9155 15.9155 0 0 1 0 31.831
                                         a 15.9155 15.9155 0 0 1 0 -31.831"/>
                                 <text x="18" y="20.35" class="progress-text">{{ currentBook.progreso || 0 }}%</text>
@@ -146,10 +146,6 @@
                                             <div class="stat-value fs-5 fw-semibold">{{ getTotalPagesRead() }} páginas</div>
                                         </div>
                                         <div class="stat-item text-center p-3 rounded-2 bg-light bg-opacity-10">
-                                            <div class="stat-label small  mb-1">Tiempo total</div>
-                                            <div class="stat-value fs-5 fw-semibold">{{ getTotalReadingTime() }} min</div>
-                                        </div>
-                                        <div class="stat-item text-center p-3 rounded-2 bg-light bg-opacity-10">
                                             <div class="stat-label small  mb-1">Sesiones</div>
                                             <div class="stat-value fs-5 fw-semibold">{{ currentBook.registroLectura.length || 0 }}</div>
                                         </div>
@@ -207,10 +203,15 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
+                            <label for="readingDate" class="form-label fw-medium">Fecha de lectura</label>
+                            <input type="date" class="form-control rounded-2" id="readingDate" #dateInput 
+                                [max]="getCurrentDate()" [value]="getCurrentDate()">
+                        </div>
+                        <div class="mb-3">
                             <label for="pagesRead" class="form-label fw-medium">Páginas leídas</label>
                             <input type="number" class="form-control rounded-2" id="pagesRead" #pagesInput
                                 min="1" [max]="currentBook?.paginasTotales || 1000">
-                            <div class="form-text ">
+                            <div class="form-text">
                                 Has leído {{ currentBook?.paginasLeidas || 0 }} de {{ currentBook?.paginasTotales || 0 }} páginas totales.
                             </div>
                         </div>
@@ -219,7 +220,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fw-semibold rounded-2" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary fw-semibold rounded-2" 
-                            (click)="updateReadingProgress(+pagesInput.value)" 
+                            (click)="updateReadingProgress(+pagesInput.value, dateInput.value)" 
                             data-bs-dismiss="modal">Guardar</button>
                 </div>
             </div>

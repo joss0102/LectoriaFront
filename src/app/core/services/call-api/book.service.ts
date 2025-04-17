@@ -10,7 +10,7 @@ import {
   BookRequest, 
   BookUpdateRequest,
   UserBookUpdateRequest
-} from '../../models/book.model';
+} from '../../models/call-api/book.model';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../../environments/environment';
 

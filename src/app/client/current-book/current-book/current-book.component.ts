@@ -1,15 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 
 import { Books, ReadingRecord } from '../../../core/models/books.model';
-import { CurrentBookService } from '../../../core/services/currentBook/current-book.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { BookService } from '../../../core/services/call-api/book.service';
+
+
+import { ReadingService } from '../../../core/services/call-api/reading.service';
+
+import { AuthService } from '../../../core/services/auth/auth.service';
+
+import { UserBook } from '../../../core/models/call-api/book.model';
+
+
 
 @Component({
   selector: 'app-current-book',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule],
   templateUrl: './current-book.component.html',
   styleUrl: './current-book.component.scss',
 })
@@ -22,32 +31,135 @@ export class CurrentBookComponent implements OnInit, OnDestroy {
   private bookSubscription: Subscription = new Subscription();
   private booksListSubscription: Subscription = new Subscription();
 
-  constructor(private currentBookService: CurrentBookService) {}
+  constructor(
+    private bookService: BookService,
+    private readingService: ReadingService,
+    private authService: AuthService
+  ) {}
 
+  ngOnInit(): void {
+    const user = this.authService.currentUserValue;
+    if (!user) return;
 
-ngOnInit(): void {
-
-  this.booksListSubscription = this.currentBookService.booksInProgress$.subscribe(books => {
-
-    this.booksInProgress = books;
-    this.updateCurrentBookIndex();
-  });
-
-  this.bookSubscription = this.currentBookService.currentBook$.subscribe(book => {
-
-    if (book) {
-      this.currentBook = book;
+    this.booksListSubscription = this.bookService.getUserBooks(user.nickname, 'reading').subscribe(response => {
+      this.booksInProgress = response.data.map(book => this.transformUserBookToBooks(book));
       this.updateCurrentBookIndex();
-    }
-  });
 
-  this.currentBookService.loadBooksInProgress();
-}
-
+      if (this.booksInProgress.length > 0) {
+        this.loadBookDetails(this.booksInProgress[0]);
+      }
+    });
+  }
 
   ngOnDestroy(): void {
     this.bookSubscription.unsubscribe();
     this.booksListSubscription.unsubscribe();
+  }
+
+  private transformUserBookToBooks(userBook: UserBook): Books {
+    return {
+      id: userBook.book_id,
+      titulo: userBook.book_title,
+      autor: userBook.authors || '',
+      generos: userBook.genres ? userBook.genres.split(',').map((g: string) => g.trim()) : [],
+      paginasTotales: userBook.book_pages || 0,
+      paginasLeidas: userBook.pages_read || 0,
+      progreso: userBook.progress_percentage || 0,
+      sinopsis: userBook.synopsis || '',
+      estado: this.mapStatusToFrontend(userBook.reading_status),
+      fechaInicio: userBook.date_start ? new Date(userBook.date_start) : null,
+      fechaFin: userBook.date_ending ? new Date(userBook.date_ending) : null,
+      anotaciones: [],
+      frases: [],
+      saga: userBook.sagas || '',
+      registroLectura: [],
+      descripcionPersonal: userBook.custom_description || ''
+    };
+  }
+
+  private mapStatusToFrontend(status: string): string {
+    switch (status) {
+      case 'plan_to_read': return 'no-iniciado';
+      case 'reading': return 'en-progreso';
+      case 'completed': return 'finalizado';
+      case 'dropped': return 'abandonado';
+      case 'on_hold': return 'pausado';
+      default: return status;
+    }
+  }
+
+  private loadBookDetails(book: Books): void {
+    const user = this.authService.currentUserValue;
+    if (!user) return;
+
+    // Primero, obtener los detalles completos del libro
+    this.bookService.getBookById(book.id).subscribe(bookDetails => {
+      console.log('Detalles completos del libro:', bookDetails);
+
+      // Actualizar los detalles básicos del libro
+      const updatedBook: Books = {
+        ...book,
+        autor: bookDetails.authors || book.autor,
+        sinopsis: bookDetails.synopsis || book.sinopsis,
+        saga: bookDetails.sagas || book.saga,
+        paginasTotales: bookDetails.book_pages || book.paginasTotales,
+        generos: bookDetails.genres ? bookDetails.genres.split(',').map((g: string) => g.trim()) : book.generos
+      };
+
+      // Luego, obtener el progreso, notas y frases
+      const progressObs = this.readingService.getReadingProgress(user.nickname, book.titulo);
+      const notesObs = this.readingService.getNotes(book.titulo, user.nickname);
+      const phrasesObs = this.readingService.getPhrases(book.titulo, user.nickname);
+
+      forkJoin({
+        progress: progressObs,
+        notes: notesObs,
+        phrases: phrasesObs
+      }).subscribe(results => {
+        console.log('Resultados de progreso:', results.progress);
+        console.log('Resultados de notas:', results.notes);
+        console.log('Resultados de frases:', results.phrases);
+
+        const finalBook: Books = {
+          ...updatedBook,
+          registroLectura: this.transformProgressData(results.progress.data),
+          anotaciones: results.notes.data.map(note => note.text),
+          frases: results.phrases.data.map(phrase => phrase.text)
+        };
+        
+        this.currentBook = finalBook;
+        this.updateCurrentBookIndex();
+      });
+    }, error => {
+      console.error('Error al obtener detalles del libro:', error);
+      
+      // Incluso si falla la obtención de detalles, continuar con el progreso, notas y frases
+      const progressObs = this.readingService.getReadingProgress(user.nickname, book.titulo);
+      const notesObs = this.readingService.getNotes(book.titulo, user.nickname);
+      const phrasesObs = this.readingService.getPhrases(book.titulo, user.nickname);
+
+      forkJoin({
+        progress: progressObs,
+        notes: notesObs,
+        phrases: phrasesObs
+      }).subscribe(results => {
+        this.currentBook = {
+          ...book,
+          registroLectura: this.transformProgressData(results.progress.data),
+          anotaciones: results.notes.data.map(note => note.text),
+          frases: results.phrases.data.map(phrase => phrase.text)
+        };
+        this.updateCurrentBookIndex();
+      });
+    });
+  }
+
+  private transformProgressData(progressData: any[]): ReadingRecord[] {
+    return progressData.map(progress => ({
+      id: progress.progress_id,
+      fecha: new Date(progress.reading_date),
+      paginasLeidas: progress.pages_read_session
+    }));
   }
 
   updateCurrentBookIndex(): void {
@@ -62,14 +174,14 @@ ngOnInit(): void {
   nextBook(): void {
     if (this.hasNextBook()) {
       this.currentBookIndex++;
-      this.currentBookService.setCurrentBook(this.booksInProgress[this.currentBookIndex]);
+      this.loadBookDetails(this.booksInProgress[this.currentBookIndex]);
     }
   }
 
   prevBook(): void {
     if (this.hasPrevBook()) {
       this.currentBookIndex--;
-      this.currentBookService.setCurrentBook(this.booksInProgress[this.currentBookIndex]);
+      this.loadBookDetails(this.booksInProgress[this.currentBookIndex]);
     }
   }
 
@@ -82,7 +194,6 @@ ngOnInit(): void {
   }
 
   setActiveTab(tab: string): void {
-
     this.activeTab = tab;
   }
 
@@ -153,20 +264,22 @@ ngOnInit(): void {
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, 10);
   }
+  getCurrentDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+  updateReadingProgress(pages: number, date: string): void {
+    if (!this.currentBook || !this.authService.currentUserValue) return;
+    
+    const progressData = {
+      nickname: this.authService.currentUserValue.nickname,
+      book_title: this.currentBook.titulo,
+      pages_read_list: pages.toString(),
+      dates_list: date
+    };
 
-  // Método para actualizar el progreso de lectura
-  updateReadingProgress(pages: number): void {
-    if (!this.currentBook) return;
-    
-    const today = new Date().toISOString().split('T')[0];
-    
-    this.currentBookService.updateReadingProgress(
-      this.currentBook.id, 
-      pages,
-      today
-    ).subscribe({
-      next: (response) => {
-        console.log('Progreso actualizado correctamente:', response);
+    this.readingService.addReadingProgress(progressData).subscribe({
+      next: () => {
+        this.loadBookDetails(this.currentBook!);
       },
       error: (error) => {
         console.error('Error al actualizar progreso:', error);
@@ -174,13 +287,18 @@ ngOnInit(): void {
     });
   }
 
-  // Método para añadir una nota
   addNote(text: string): void {
-    if (!text.trim()) return;
+    if (!text.trim() || !this.authService.currentUserValue) return;
     
-    this.currentBookService.addOrUpdateNote(text).subscribe({
-      next: (response) => {
-        console.log('Nota añadida correctamente:', response);
+    const noteData = {
+      user_nickname: this.authService.currentUserValue.nickname,
+      book_title: this.currentBook!.titulo,
+      text: text
+    };
+
+    this.readingService.addNote(noteData).subscribe({
+      next: () => {
+        this.loadBookDetails(this.currentBook!);
       },
       error: (error) => {
         console.error('Error al añadir nota:', error);
@@ -188,13 +306,18 @@ ngOnInit(): void {
     });
   }
 
-  // Método para añadir una frase destacada
   addQuote(text: string): void {
-    if (!text.trim()) return;
+    if (!text.trim() || !this.authService.currentUserValue) return;
     
-    this.currentBookService.addQuote(text).subscribe({
-      next: (response) => {
-        console.log('Frase añadida correctamente:', response);
+    const phraseData = {
+      user_nickname: this.authService.currentUserValue.nickname,
+      book_title: this.currentBook!.titulo,
+      text: text
+    };
+
+    this.readingService.addPhrase(phraseData).subscribe({
+      next: () => {
+        this.loadBookDetails(this.currentBook!);
       },
       error: (error) => {
         console.error('Error al añadir frase:', error);
@@ -202,20 +325,25 @@ ngOnInit(): void {
     });
   }
 
-  // Método para marcar un libro como completado
   markAsCompleted(): void {
-    if (!this.currentBook) return;
+    if (!this.currentBook || !this.authService.currentUserValue) return;
     
-    this.currentBookService.updateBookStatus(
-      this.currentBook.id,
-      'finalizado'
+    const updateData = {
+      status: 'completed'
+    };
+
+    this.bookService.updateUserBookRelationship(
+      this.authService.currentUserValue.nickname, 
+      this.currentBook.id, 
+      updateData
     ).subscribe({
-      next: (response) => {
-        console.log('Libro marcado como completado:', response);
+      next: () => {
+        this.loadBookDetails(this.currentBook!);
       },
       error: (error) => {
         console.error('Error al actualizar estado del libro:', error);
       }
     });
   }
+
 }

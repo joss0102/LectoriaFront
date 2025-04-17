@@ -10,7 +10,7 @@ import {
   UserRequest,
   UserUpdateRequest,
   PasswordChangeRequest
-} from '../../models/user.model';
+} from '../../models/call-api/user.model';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../../environments/environment';
 

@@ -10,7 +10,7 @@ import {
   AuthorSearchResponse,
   AuthorRequest,
   AuthorUpdateRequest
-} from '../../models/author.model';
+} from '../../models/call-api/author.model';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../../environments/environment';
 

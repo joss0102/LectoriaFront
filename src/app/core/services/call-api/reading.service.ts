@@ -14,7 +14,7 @@ import {
   ReviewUpdateRequest,
   PhraseRequest,
   NoteRequest
-} from '../../models/reading.model';
+} from '../../models/call-api/reading.model';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../../environments/environment';
 

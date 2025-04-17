@@ -9,6 +9,9 @@ export interface Book {
 }
 
 export interface UserBook extends Book {
+    readingProgress: any;
+    phrases: any;
+    notes: any;
     reading_status: string;
     date_added: string;
     date_start?: string;
@@ -16,6 +19,7 @@ export interface UserBook extends Book {
     custom_description?: string;
     pages_read?: number;
     progress_percentage?: number;
+
 }
 
 export interface BookResponse {

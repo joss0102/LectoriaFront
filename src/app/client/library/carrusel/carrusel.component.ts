@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Book } from '../../../core/models/book-model';
-import { BookService } from '../../../core/services/book/book.service';
+import { Books } from '../../../core/models/books-model';
+import { BooksService } from '../../../core/services/book/books.service';
 
 @Component({
   selector: 'app-carrusel',
@@ -11,7 +11,7 @@ import { BookService } from '../../../core/services/book/book.service';
   styleUrls: ['./carrusel.component.scss'],
 })
 export class CarruselComponent implements OnInit {
-  finishedBooks: Book[] = [];
+  finishedBooks: Books[] = [];
   currentIndex = 0;
   itemsToShow = 3;
   
@@ -26,11 +26,11 @@ export class CarruselComponent implements OnInit {
   // Soporte táctil
   touchStartX = 0;
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener libros finalizados
-    this.finishedBooks = this.bookService.getBooksByStatus('finalizado');
+    this.finishedBooks = this.booksService.getBooksByStatus('finalizado');
     
     // Calcular libros a mostrar basado en tamaño de pantalla
     this.calculateItemsToShow();
@@ -179,7 +179,7 @@ export class CarruselComponent implements OnInit {
    */
   updateSelectedBook() {
     if (this.currentIndex >= 0 && this.currentIndex < this.finishedBooks.length) {
-      this.bookService.actualizarBookActual(this.finishedBooks[this.currentIndex]);
+      this.booksService.actualizarBookActual(this.finishedBooks[this.currentIndex]);
     }
   }
 

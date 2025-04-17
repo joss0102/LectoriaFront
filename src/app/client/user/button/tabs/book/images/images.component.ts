@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService } from '../../../../../../core/services/book/book.service';
-import { Book } from '../../../../../../core/models/book-model';
+import { BooksService } from '../../../../../../core/services/book/books.service';
+import { Books } from '../../../../../../core/models/books-model';
 
 interface Saga {
   nombre: string;
@@ -10,7 +10,7 @@ interface Saga {
 
 interface Autor {
   nombre: string;
-  libros: Book[];
+  libros: Books[];
   banners: string[];
 }
 
@@ -23,7 +23,7 @@ interface Autor {
 })
 export class ImagesComponent implements OnInit {
   // Lista de todos los libros
-  libros: Book[] = [];
+  libros: Books[] = [];
   
   // Lista de sagas y sus imágenes
   sagas: Saga[] = [];
@@ -34,11 +34,11 @@ export class ImagesComponent implements OnInit {
   // Vista activa (libros, sagas, autores o banners)
   vistaActiva: 'libros' | 'sagas' | 'autores' | 'banners' = 'libros';
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    this.libros = this.bookService.getAllBooks();
+    this.libros = this.booksService.getAllBooks();
     
     // Extraer las sagas únicas de los libros
     this.extraerSagas();
@@ -71,7 +71,7 @@ export class ImagesComponent implements OnInit {
   
   // Extraer autores únicos y sus libros
   private extraerAutores(): void {
-    const autoresMap = new Map<string, Book[]>();
+    const autoresMap = new Map<string, Books[]>();
     
     this.libros.forEach(libro => {
       if (!autoresMap.has(libro.autor)) {

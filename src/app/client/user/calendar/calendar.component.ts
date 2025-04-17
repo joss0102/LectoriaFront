@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { BookService } from '../../../core/services/book/book.service';
-import { Book, ReadingRecord } from '../../../core/models/book-model';
+import { BooksService } from '../../../core/services/book/books.service';
+import { Books, ReadingRecord } from '../../../core/models/books-model';
 
 // Declarar la variable global para acceder a Bootstrap
 declare var bootstrap: any;
@@ -34,21 +34,21 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   weekdays: string[] = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
   
   // Libros y usuario
-  books: Book[] = [];
+  books: Books[] = [];
   
   // Variables para el modal
   modal: any;
   selectedDate: Date | null = null;
   selectedDay: number | null = null;
-  selectedBook: Book | null = null;
+  selectedBook: Books | null = null;
   pagesRead: number = 0;
   timeSpent: number = 0;
   
-  constructor(private bookService: BookService) { }
+  constructor(private booksService: BooksService) { }
   
   ngOnInit(): void {
     // Obtener los libros del servicio
-    this.books = this.bookService.getAllBooks();
+    this.books = this.booksService.getAllBooks();
     
     // Actualizar estadísticas
     this.updateMonthStats();
@@ -89,7 +89,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
   
   // Obtener libros disponibles para seleccionar en el modal
-  getAvailableBooks(): Book[] {
+  getAvailableBooks(): Books[] {
     // Devuelve libros que están en progreso o que aún no se han comenzado
     return this.books.filter(book => 
       book.estado === 'en-progreso' || book.estado === 'no-iniciado'
@@ -151,7 +151,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     const registryDate = new Date(this.selectedDate);
     
     // Usar el servicio para actualizar el progreso, pasando la fecha personalizada
-    this.bookService.updateReadingProgress(
+    this.booksService.updateReadingProgress(
       this.selectedBook.titulo,
       this.pagesRead,
       this.timeSpent,

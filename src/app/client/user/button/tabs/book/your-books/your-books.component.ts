@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BookService } from '../../../../../../core/services/book/book.service';
-import { Book } from '../../../../../../core/models/book-model';
+import { BooksService } from '../../../../../../core/services/book/books.service';
+import { Books } from '../../../../../../core/models/books-model';
 
 @Component({
   selector: 'app-your-books',
@@ -13,13 +13,13 @@ import { Book } from '../../../../../../core/models/book-model';
 })
 export class YourBooksComponent implements OnInit {
   // Todos los libros
-  allBooks: Book[] = [];
+  allBooks: Books[] = [];
   
   // Libros filtrados para mostrar (según búsqueda)
-  filteredBooks: Book[] = [];
+  filteredBooks: Books[] = [];
   
   // Libro seleccionado para ver en el modal
-  selectedBook: Book | null = null;
+  selectedBook: Books | null = null;
   
   // Estado del modal
   isModalOpen: boolean = false;
@@ -29,16 +29,16 @@ export class YourBooksComponent implements OnInit {
   filterStatus: 'all' | 'reading' | 'completed' | 'not-started' | 'abandoned' = 'all';
   searchQuery: string = '';
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    this.allBooks = this.bookService.getAllBooks();
+    this.allBooks = this.booksService.getAllBooks();
     this.filteredBooks = [...this.allBooks];
   }
 
   // Mostrar modal con detalles del libro
-  openBookDetails(book: Book): void {
+  openBookDetails(book: Books): void {
     this.selectedBook = book;
     this.isModalOpen = true;
     // Evitar scroll en el cuerpo cuando el modal está abierto
@@ -116,7 +116,7 @@ export class YourBooksComponent implements OnInit {
   }
   
   // Calcular días de lectura
-  calculateReadingDays(book: Book): number {
+  calculateReadingDays(book: Books): number {
     if (!book.fechaInicio || !book.fechaFin) return 0;
     
     const start = new Date(book.fechaInicio);

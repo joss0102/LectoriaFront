@@ -24,6 +24,11 @@
     }
   }
 }
+@media screen and (max-width: 1600px) {
+  .library-container {
+    height: 100%;
+  }
+}
 @media screen and (max-width: 840px) {
   .data-container {
     flex-direction: column;

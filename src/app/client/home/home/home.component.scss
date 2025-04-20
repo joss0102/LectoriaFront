@@ -45,7 +45,7 @@
 // Media queries
 @media screen and (max-width: 1600px) {
   .parent {
-
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,4 +123,3 @@
     }
   }
 }
-

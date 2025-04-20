@@ -90,83 +90,158 @@
   </ng-container>
 
   <!-- Modal para registro de lectura (sin NgModel) -->
+
+  <!-- Modal para registro de lectura (con diseño mejorado) -->
   <div class="modal fade" id="readingModal" tabindex="-1" aria-labelledby="readingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="readingModalLabel">Registro de lectura</h5>
+          <h5 class="modal-title fw-bold" id="readingModalLabel">
+            <i class="bi bi-book me-2"></i>Registro de lectura
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Libros leídos anteriormente en este día:</label>
-          <ul class="list-group" *ngIf="booksReadToday.length > 0">
-            <li class="list-group-item" *ngFor="let book of booksReadToday">
-              {{ book.title }} - {{ book.pagesRead }} páginas
-            </li>
-          </ul>
-          <p *ngIf="booksReadToday.length === 0" class="text-muted">
-            No se han leído libros en este día anteriormente.
-          </p>
-        </div>
+        
         <div class="modal-body">
+          <!-- Resumen de libros leídos en el día -->
+          <div class="mb-3" *ngIf="selectedDate">
+            <h6 class="mb-3 d-flex align-items-center">
+              <i class="bi bi-calendar-check me-2"></i>
+              <span>{{ selectedDate | date:'dd MMM yyyy' }}</span>
+            </h6>
+            
+            <div class="books-read-section" *ngIf="booksReadToday.length > 0">
+              <h6 class="mb-2">Lecturas previas este día:</h6>
+              <div class="list-group mb-3">
+                <div class="list-group-item d-flex justify-content-between align-items-center" 
+                    *ngFor="let book of booksReadToday">
+                  <div>
+                    <i class="bi bi-bookmark-fill me-2"></i>
+                    {{ book.title }}
+                  </div>
+                  <span class="badge rounded-pill" style="background-color: var(--bs-btn)">
+                    {{ book.pagesRead }} páginas
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <p *ngIf="booksReadToday.length === 0" class="">
+              <i class="bi bi-info-circle me-1"></i>
+              No se han registrado lecturas para este día.
+            </p>
+          </div>
+          
+          <!-- Formulario de registro -->
           <form>
-            <div class="mb-2">
-              <label for="bookSelect" class="form-label">Libro</label>
-              <select class="form-select form-select-sm" id="bookSelect" (change)="onBookSelect($event)">
-                <option value="">Selecciona un libro</option>
+            <!-- Selector de libro con estilo mejorado -->
+            <div class="mb-3">
+              <label for="bookSelect" class="form-label fw-medium">
+                <i class="bi bi-book-half me-1"></i>Selecciona un libro
+              </label>
+              <select class="form-select" id="bookSelect" (change)="onBookSelect($event)">
+                <option value="" selected disabled>Elige un libro para registrar tu lectura</option>
                 <option *ngFor="let book of getAvailableBooks()" [value]="book.book_title">
-                  {{ book.book_title }} 
+                  {{ book.book_title }}
                   <ng-container *ngIf="book.reading_status !== 'reading'">
                     ({{ getStatusText(book.reading_status) }})
                   </ng-container>
                 </option>
               </select>
             </div>
-            <div class="mb-2">
-              <label for="readingDate" class="form-label">Fecha</label>
-              <input type="date" class="form-control form-control-sm" id="readingDate" 
-                     [value]="selectedDate | date:'yyyy-MM-dd'" 
-                     (change)="onDateChange($event)">
-              <small class="form-text">Puedes seleccionar fechas pasadas</small>
+            
+            <!-- Selector de fecha mejorado -->
+            <div class="mb-3">
+              <label for="readingDate" class="form-label fw-medium">
+                <i class="bi bi-calendar me-1"></i>Fecha de lectura
+              </label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="readingDate" 
+                [value]="selectedDate | date:'yyyy-MM-dd'" 
+                (change)="onDateChange($event)"
+              >
+              <div class="form-text mt-1">
+                <i class="bi bi-info-circle me-1"></i>
+                Puedes seleccionar fechas pasadas para registrar lecturas anteriores
+              </div>
             </div>
-            <div class="mb-2">
-              <label for="pagesRead" class="form-label">Páginas</label>
-              <input type="number" class="form-control form-control-sm" id="pagesRead" 
-                     [value]="pagesRead" (input)="onPagesChange($event)" 
-                     min="1" [max]="getMaxPages()">
+            
+            <!-- Input para páginas leídas -->
+            <div class="mb-3">
+              <label for="pagesRead" class="form-label fw-medium">
+                <i class="bi bi-file-text me-1"></i>Páginas leídas
+              </label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="pagesRead" [value]="pagesRead" (input)="onPagesChange($event)" min="1" [max]="getMaxPages()"placeholder="Número de páginas">
+              </div>
+              <div class="form-text mt-1" *ngIf="selectedBook">
+                Quedan {{ getMaxPages() }} páginas por leer
+              </div>
             </div>
-            <div class="mb-2">
-              <label for="timeSpent" class="form-label">Tiempo (min)</label>
-              <input type="number" class="form-control form-control-sm" id="timeSpent" 
-                     [value]="timeSpent" (input)="onTimeChange($event)" 
-                     min="1">
+            
+            <!-- Input para tiempo dedicado -->
+            <div class="mb-3">
+              <label for="timeSpent" class="form-label fw-medium">
+                <i class="bi bi-clock me-1"></i>Tiempo dedicado
+              </label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="timeSpent" [value]="timeSpent" (input)="onTimeChange($event)" min="1"placeholder="Tiempo de lectura">
+              </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-sm btn-primary" (click)="saveReading()" 
-                  [disabled]="!isReadingFormValid()">Guardar</button>
+          <button type="button" class="btn btn-secondary btn-cancel" data-bs-dismiss="modal">
+            <span class="d-flex align-items-center gap-2">
+              <i class="bi bi-x-circle"></i>Cancelar
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary btn-save" (click)="saveReading()" [disabled]="!isReadingFormValid()">
+            <span class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle"></i>Guardar registro
+            </span>
+          </button>
         </div>
       </div>
     </div>
   </div>
-  
+
   <!-- Modal de confirmación para cambio de estado -->
   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="confirmationModalLabel">Confirmar cambio de estado</h5>
+          <h5 class="modal-title fw-bold" id="confirmationModalLabel">
+            <i class="bi bi-exclamation-triangle me-2"></i>Confirmar cambio de estado
+          </h5>
           <button type="button" class="btn-close" (click)="cancelStatusChange()" aria-label="Close"></button>
         </div>
+        
         <div class="modal-body" *ngIf="bookToUpdate">
-          <p>El libro "{{ bookToUpdate.book_title }}" está actualmente marcado como "{{ getStatusText(bookToUpdate.reading_status) }}".</p>
-          <p>¿Deseas cambiar su estado a "Leyendo" y registrar la lectura?</p>
+          <div class="alert alert-warning">
+            <i class="bi bi-info-circle me-2"></i>
+            <span>El libro seleccionado no está en estado "Leyendo"</span>
+          </div>
+          
+          <p class="mb-2">
+            El libro <strong>"{{ bookToUpdate.book_title }}"</strong> está actualmente marcado como 
+            <span class="badge rounded-pill" [ngStyle]="{backgroundColor: 'var(--bs-btn)'}">
+              {{ getStatusText(bookToUpdate.reading_status) }}
+            </span>
+          </p>
+          
+          <p>¿Deseas cambiar su estado a <span class="badge rounded-pill bg-success">Leyendo</span> y registrar esta sesión de lectura?</p>
         </div>
+        
         <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-secondary" (click)="cancelStatusChange()">Cancelar</button>
-          <button type="button" class="btn btn-sm btn-primary" (click)="confirmStatusChange()">Confirmar</button>
+          <button type="button" class="btn btn-secondary" (click)="cancelStatusChange()">
+            <i class="bi bi-x-circle me-1"></i>Cancelar
+          </button>
+          <button type="button" class="btn btn-primary" (click)="confirmStatusChange()">
+            <i class="bi bi-check-circle me-1"></i>Confirmar cambio
+          </button>
         </div>
       </div>
     </div>

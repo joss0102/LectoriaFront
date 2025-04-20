@@ -287,7 +287,7 @@ booksReadToday: { title: string, pagesRead: number }[] = [];
       'completed': 'Completado',
       'dropped': 'Abandonado',
       'on_hold': 'En pausa',
-      'plan_to_read': 'Planificado'
+      'plan_to_read': 'Sin empezar'
     };
     return statusMap[status] || status;
   }

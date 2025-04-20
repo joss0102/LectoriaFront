@@ -160,49 +160,167 @@
   }
 }
 
-// Estilos para el modal
+// Estilos mejorados para el modal
 .modal-content {
   background-color: var(--main-bg);
   color: var(--text-color);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 
   .modal-header {
-    border-bottom-color: var(--background-color);
-    padding: 0.75rem 1rem; // Reducido
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
+    background-color: var(--background-color);
+
+    .modal-title {
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 1.2rem;
+    }
+
+    .btn-close {
+      color: var(--text-color);
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      filter: var(--text-filter);
+      
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   .modal-body {
-    padding: 1rem; // Reducido
+    padding: 1.25rem;
+    
+    .form-label {
+      font-weight: 500;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .list-group {
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      
+      .list-group-item {
+        background-color: var(--component-bg);
+        color: var(--text-color);
+        border-color: var(--border-color);
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        &:first-child {
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+        
+        &:last-child {
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+    }
+    
+    .text-muted {
+      color: var(--border-color) !important;
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+    
+    .form-text {
+      color: var(--border-color);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
   }
 
   .modal-footer {
-    border-top-color: var(--background-color);
-    padding: 0.75rem 1rem; // Reducido
-  }
-
-  .form-control,
-  .form-select {
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
     background-color: var(--component-bg);
-    border-color: var(--border-color);
-    color: var(--text-color);
-
-    &:focus {
-      box-shadow: 0 0 0 0.25rem rgba(255, 136, 0, 0.25);
+    justify-content: flex-end;
+    gap: 0.75rem;
+    .btn-cancel {
+      padding: 0.75rem 1.5rem !important;
+      min-width: 140px;
+    }
+    .btn-save {
+      padding: 5rem 5rem !important;
+      min-width: 140px;
+    }
+    .btn {
+      font-weight: 500;
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 6px;
+      transition: all 0.2s;
+      
+      &.btn-primary {
+        background-color: var(--bs-btn);
+        border-color: var(--bs-btn);
+        
+        &:hover:not(:disabled) {
+          background-color: var(--bs-btn-hover);
+          border-color: var(--bs-btn-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+      
+      &.btn-secondary {
+        background-color: transparent;
+        border-color: var(--border-color);
+        color: var(--text-color);
+        
+        &:hover {
+          background-color: var(--border-color);
+          transform: translateY(-2px);
+        }
+      }
     }
   }
+}
 
-  .form-text {
-    color: var(--border-color);
-    font-size: 0.75rem; // Reducido
-  }
-
-  .btn-primary {
-    background-color: var(--bs-btn);
+// Estilos para inputs y select en el modal
+.form-control, 
+.form-select {
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: var(--component-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  
+  &:focus {
     border-color: var(--bs-btn);
+    box-shadow: 0 0 0 0.25rem rgba(255, 136, 0, 0.2);
+    background-color: var(--component-bg);
+  }
+  
+  &::placeholder {
+    color: var(--border-color);
+  }
+}
 
-    &:hover {
-      background-color: var(--bs-btn-hover);
-      border-color: var(--bs-btn-hover);
-    }
+// Estilos específicos para inputs numéricos
+input[type="number"].form-control {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 0.5;
+    height: 1.5em;
+    margin-right: 0.5rem;
   }
 }
 
@@ -489,11 +607,27 @@
   .reading-calendar-container {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
+  
+  .modal-content {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  --text-filter: invert(0);
 }
 
 // Ajustes específicos para tema noche
 .tema-noche {
   .reading-calendar-container {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .modal-content {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  --text-filter: invert(1);
+  
+  .btn-close {
+    filter: invert(1);
   }
 }

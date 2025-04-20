@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService } from '../../../../../../core/services/book/book.service';
+import { BooksService } from '../../../../../../core/services/book/books.service';
 
-import { Book } from '../../../../../../core/models/book-model';
+import { Books } from '../../../../../../core/models/books-model';
 
 @Component({
   selector: 'app-notes',
@@ -13,22 +13,22 @@ import { Book } from '../../../../../../core/models/book-model';
 })
 export class NotesComponent implements OnInit {
   // Todos los libros
-  allBooks: Book[] = [];
+  allBooks: Books[] = [];
   
   // Libros filtrados que tienen anotaciones
-  booksWithNotes: Book[] = [];
+  booksWithNotes: Books[] = [];
   
   // Libro seleccionado para ver detalle completo
-  selectedBook: Book | null = null;
+  selectedBook: Books | null = null;
   
   // Estado para saber si estamos en vista detalle
   detailView: boolean = false;
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    this.allBooks = this.bookService.getAllBooks();
+    this.allBooks = this.booksService.getAllBooks();
     
     // Filtrar libros que tienen anotaciones
     this.booksWithNotes = this.allBooks.filter(book => 
@@ -37,7 +37,7 @@ export class NotesComponent implements OnInit {
   }
 
   // Seleccionar un libro para ver sus anotaciones en detalle
-  selectBook(book: Book): void {
+  selectBook(book: Books): void {
     this.selectedBook = book;
     this.detailView = true;
   }
@@ -49,7 +49,7 @@ export class NotesComponent implements OnInit {
   }
   
   // Método para comprobar si un libro tiene anotaciones
-  hasNotesAndCover(book: Book): boolean {
+  hasNotesAndCover(book: Books): boolean {
     return !!book.anotaciones && book.anotaciones.length > 0 && !!book.imagen;
   }
   

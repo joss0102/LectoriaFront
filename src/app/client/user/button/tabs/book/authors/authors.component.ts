@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BookService } from '../../../../../../core/services/book/book.service';
-import { Book } from '../../../../../../core/models/book-model';
+import { BooksService } from '../../../../../../core/services/book/books.service';
+import { Books } from '../../../../../../core/models/books-model';
 
 // Interfaz para representar un autor con sus libros
 interface Author {
   name: string;
-  books: Book[];
+  books: Books[];
 }
 
 @Component({
@@ -19,7 +19,7 @@ interface Author {
 })
 export class AuthorsComponent implements OnInit {
   // Todos los libros
-  allBooks: Book[] = [];
+  allBooks: Books[] = [];
   
   // Todos los autores extraídos de los libros
   allAuthors: Author[] = [];
@@ -36,11 +36,11 @@ export class AuthorsComponent implements OnInit {
   // Búsqueda
   searchQuery: string = '';
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    this.allBooks = this.bookService.getAllBooks();
+    this.allBooks = this.booksService.getAllBooks();
     
     // Extraer autores únicos y agrupar sus libros
     this.extractAuthors();
@@ -52,7 +52,7 @@ export class AuthorsComponent implements OnInit {
   // Método para extraer autores únicos de los libros
   private extractAuthors(): void {
     // Crear un mapa para agrupar los libros por autor
-    const authorsMap = new Map<string, Book[]>();
+    const authorsMap = new Map<string, Books[]>();
     
     // Agrupar los libros por autor
     this.allBooks.forEach(book => {
@@ -143,7 +143,7 @@ export class AuthorsComponent implements OnInit {
   }
   
   // Obtener libros finalizados de un autor
-  getFinishedBooks(author: Author): Book[] {
+  getFinishedBooks(author: Author): Books[] {
     return author.books.filter(book => book.estado === 'finalizado');
   }
   

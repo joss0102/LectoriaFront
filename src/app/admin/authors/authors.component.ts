@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BookService } from '../../core/services/book/book.service';
+import { BooksService } from '../../core/services/book/books.service';
 import { Subscription } from 'rxjs';
-import { Book } from '../../core/models/book-model';
+import { Books } from '../../core/models/books-model';
 
 interface AuthorBook {
   id: number;
@@ -64,7 +64,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
   // Subscripciones
   private subscriptions: Subscription[] = [];
   
-  constructor(private bookService: BookService) { }
+  constructor(private booksService: BooksService) { }
 
   ngOnInit(): void {
     this.loadAuthors();
@@ -76,8 +76,8 @@ export class AuthorsComponent implements OnInit, OnDestroy {
 
   // Método para extraer autores únicos de los libros
   loadAuthors(): void {
-    const books = this.bookService.getAllBooks();
-    const authorsMap = new Map<string, Book[]>();
+    const books = this.booksService.getAllBooks();
+    const authorsMap = new Map<string, Books[]>();
     
     // Agrupar libros por autor
     books.forEach(book => {

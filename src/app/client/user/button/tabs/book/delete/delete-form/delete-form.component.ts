@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BookService } from '../../../../../../../core/services/book/book.service';
-import { Book } from '../../../../../../../core/models/book-model';
+import { BooksService } from '../../../../../../../core/services/book/books.service';
+import { Books } from '../../../../../../../core/models/books-model';
 
 @Component({
   selector: 'app-delete-form',
@@ -13,13 +13,13 @@ import { Book } from '../../../../../../../core/models/book-model';
 })
 export class DeleteFormComponent implements OnInit {
   // Todos los libros
-  allBooks: Book[] = [];
+  allBooks: Books[] = [];
   
   // Libros filtrados para mostrar
-  filteredBooks: Book[] = [];
+  filteredBooks: Books[] = [];
   
   // Libro seleccionado para eliminar
-  selectedBookToDelete: Book | null = null;
+  selectedBookToDelete: Books | null = null;
   
   // Estado del modal de confirmación
   isDeleteModalOpen: boolean = false;
@@ -27,11 +27,11 @@ export class DeleteFormComponent implements OnInit {
   // Término de búsqueda
   searchQuery: string = '';
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    this.allBooks = this.bookService.getAllBooks();
+    this.allBooks = this.booksService.getAllBooks();
     this.filteredBooks = [...this.allBooks];
   }
 
@@ -57,7 +57,7 @@ export class DeleteFormComponent implements OnInit {
   }
 
   // Abrir modal de confirmación de eliminación
-  openDeleteModal(book: Book): void {
+  openDeleteModal(book: Books): void {
     this.selectedBookToDelete = book;
     this.isDeleteModalOpen = true;
     // Evitar scroll en el cuerpo cuando el modal está abierto

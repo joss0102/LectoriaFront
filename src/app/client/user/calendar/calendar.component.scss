@@ -6,75 +6,52 @@
   background-color: var(--main-bg);
   transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 
-  .btn {
-    border-radius: 20px;
-    width: 70px;
-    background-color: var(--bs-btn);
-    &:hover {
-      background-color: var(--bs-btn-hover);
-    }
-  }
   .month-title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
     color: var(--text-color);
   }
 
   .stats-container {
     background-color: var(--component-bg);
-    border-radius: 8px;
-
+    
     .stat-value {
-      font-size: 1.3rem; // Reducido
       color: var(--text-color);
     }
 
     .stat-label {
       color: var(--border-color);
-      font-size: 0.85rem; // Reducido
     }
+  }
+  .btn{
+    background-color: var(--bs-btn);
   }
 }
 
-// Calendario horizontal compacto
+// Calendario
 .calendar-horizontal {
-  display: flex;
-  flex-direction: column;
-
   .weekdays-row {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 3px; // Reducido
-
+    
     .weekday {
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.5rem; // Reducido
       color: var(--border-color);
-      padding: 2px 0; // Reducido
     }
   }
 
   .days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 3px; // Reducido
+    gap: 3px;
 
     .day {
-      aspect-ratio: 1.5; // Más horizontal
+      aspect-ratio: 1.5;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem; // Reducido
       color: var(--text-color);
       background-color: var(--component-bg);
-      border-radius: 6px; // Reducido
       cursor: pointer;
       transition: all 0.2s;
-      padding: 5px; // Reducido
-      height: 60px; // Altura fija más pequeña
 
       &:hover {
         background-color: var(--border-color);
@@ -97,8 +74,6 @@
           position: absolute;
           bottom: 2px;
           right: 2px;
-          width: 20px; // Reducido
-          height: 20px; // Reducido
           border-radius: 50%;
           background-color: var(--bs-btn);
           display: flex;
@@ -106,7 +81,6 @@
           justify-content: center;
 
           .pages-count {
-            font-size: 0.7rem; // Reducido
             color: var(--text-color);
           }
         }
@@ -119,7 +93,6 @@
           position: absolute;
           top: 2px;
           right: 2px;
-          font-size: 0.7rem; // Reducido
           color: var(--border-color);
         }
       }
@@ -127,237 +100,175 @@
   }
 }
 
-// Estilos para la meta anual - más compacta
+// Estilos para la meta anual
 .goal-container {
   background-color: var(--component-bg);
-  border-radius: 8px;
-  padding: 10px !important; // Reducido
 
   h3 {
     color: var(--text-color);
-    font-size: 1rem; // Reducido
-    margin-bottom: 5px; // Reducido
   }
 
   p {
     color: var(--border-color);
-    font-size: 0.85rem; // Reducido
-    margin-bottom: 5px; // Reducido
   }
 
   .progress {
     background-color: var(--background-color);
-    height: 6px !important; // Reducido
-    margin-bottom: 5px !important; // Reducido
 
     .progress-bar {
       background-color: var(--bs-btn);
     }
   }
-
-  .progress-text {
-    font-size: 0.8rem; // Reducido
-  }
 }
 
-// Estilos para el modal
+// Estilos básicos del modal
 .modal-content {
   background-color: var(--main-bg);
   color: var(--text-color);
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 
   .modal-header {
-    border-bottom-color: var(--background-color);
-    padding: 0.75rem 1rem; // Reducido
-  }
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-color);
 
-  .modal-body {
-    padding: 1rem; // Reducido
-  }
+    .modal-title {
+      color: var(--text-color);
+    }
 
-  .modal-footer {
-    border-top-color: var(--background-color);
-    padding: 0.75rem 1rem; // Reducido
-  }
-
-  .form-control,
-  .form-select {
-    background-color: var(--component-bg);
-    border-color: var(--border-color);
-    color: var(--text-color);
-
-    &:focus {
-      box-shadow: 0 0 0 0.25rem rgba(255, 136, 0, 0.25);
+    .btn-close {
+      color: var(--text-color);
+      filter: var(--text-filter);
     }
   }
 
-  .form-text {
-    color: var(--border-color);
-    font-size: 0.75rem; // Reducido
+  .modal-body {
+    .form-label {
+      color: var(--text-color);
+    }
+    
+    .list-group-item {
+      background-color: var(--component-bg);
+      color: var(--text-color);
+      border-color: var(--border-color);
+    }
+    
+    .text-muted {
+      color: var(--border-color) !important;
+    }
+    
+    .form-text {
+      color: var(--border-color);
+    }
   }
 
-  .btn-primary {
-    background-color: var(--bs-btn);
-    border-color: var(--bs-btn);
-
-    &:hover {
-      background-color: var(--bs-btn-hover);
-      border-color: var(--bs-btn-hover);
+  .modal-footer {
+    border-top: 1px solid var(--border-color);
+    background-color: var(--component-bg);
+    
+    .btn-primary {
+      background-color: var(--bs-btn);
+      border-color: var(--bs-btn);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--bs-btn-hover);
+        border-color: var(--bs-btn-hover);
+      }
+    }
+    
+    .btn-secondary {
+      background-color: transparent;
+      border-color: var(--border-color);
+      color: var(--text-color);
+      
+      &:hover {
+        background-color: var(--border-color);
+      }
     }
   }
 }
 
-// Responsive Breakpoints
+// Estilos básicos para formularios que no se pueden lograr con Bootstrap
+.form-control, 
+.form-select {
+  background-color: var(--component-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+  
+  &:focus {
+    border-color: var(--bs-btn);
+    box-shadow: 0 0 0 0.25rem rgba(255, 136, 0, 0.2);
+    background-color: var(--component-bg);
+  }
+  
+  &::placeholder {
+    color: var(--border-color);
+  }
+}
+
+// Clases de utilidad personalizadas
+.btn-action {
+  min-width: 130px;
+  transition: all 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Ajustes específicos para tema día/noche
+.tema-dia {
+  .reading-calendar-container {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal-content {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  --text-filter: invert(0);
+}
+
+.tema-noche {
+  .reading-calendar-container {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .modal-content {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  --text-filter: invert(1);
+  
+  .btn-close {
+    filter: invert(1);
+  }
+}
+
+// Responsive breakpoints - solo ajustes esenciales
 @media screen and (max-width: 1024px) {
   .reading-calendar-container {
     width: 700px;
-    padding: 10px;
-
-    .month-title {
-      font-size: 1.8rem;
-    }
-
-    .stats-container {
-      .stat-value {
-        font-size: 1.2rem;
-      }
-
-      .stat-label {
-        font-size: 0.8rem;
-      }
-    }
-  }
-
-  .calendar-horizontal {
-    .weekdays-row {
-      .weekday {
-        font-size: 1.3rem;
-      }
-    }
-
-    .days-grid {
-      .day {
-        font-size: 0.8rem;
-        height: 50px;
-
-        .day-marker {
-          width: 18px;
-          height: 18px;
-
-          .pages-count {
-            font-size: 0.6rem;
-          }
-        }
-      }
-    }
   }
 }
 
 @media screen and (max-width: 900px) {
   .reading-calendar-container {
     width: 600px;
-    .month-title {
-      font-size: 1.6rem;
-    }
-
-    .stats-container {
-      .stat-value {
-        font-size: 1.1rem;
-      }
-
-      .stat-label {
-        font-size: 0.75rem;
-      }
-    }
-  }
-
-  .calendar-horizontal {
-    .weekdays-row {
-      .weekday {
-        font-size: 1.2rem;
-      }
-    }
-
-    .days-grid {
-      .day {
-        font-size: 0.7rem;
-        height: 45px;
-
-        .day-marker {
-          width: 16px;
-          height: 16px;
-
-          .pages-count {
-            font-size: 0.5rem;
-          }
-        }
-      }
-    }
-  }
-  .goal-container {
-    h3,
-    p,
-    span {
-      font-size: 0.8rem !important;
-    }
-
-    .progress-text {
-      font-size: 3rem !important;
-    }
   }
 }
 
 @media screen and (max-width: 750px) {
   .reading-calendar-container {
     width: 550px;
+    
     .month-title {
-      font-size: 1.4rem;
       width: 350px;
     }
-
+    
     .stats-container {
       width: 500px;
-      .stat-value {
-        font-size: 1rem;
-      }
-
-      .stat-label {
-        font-size: 0.7rem;
-      }
-    }
-  }
-
-  .calendar-horizontal {
-    .weekdays-row {
-      .weekday {
-        font-size: 1rem;
-      }
-    }
-
-    .days-grid {
-      .day {
-        font-size: 0.6rem;
-        height: 40px;
-
-        .day-marker {
-          width: 14px;
-          height: 14px;
-
-          .pages-count {
-            font-size: 0.4rem;
-          }
-        }
-      }
-    }
-  }
-  .goal-container {
-    h3,
-    p,
-    span {
-      font-size: 0.8rem !important;
-    }
-
-    .progress-text {
-      font-size: 3rem !important;
     }
   }
 }
@@ -365,55 +276,13 @@
 @media screen and (max-width: 640px) {
   .reading-calendar-container {
     width: 400px;
+    
     .month-title {
       width: 200px;
-      font-size: 1.2rem;
     }
-
+    
     .stats-container {
       width: 350px;
-      .stat-value {
-        font-size: 0.9rem;
-      }
-
-      .stat-label {
-        font-size: 0.65rem;
-      }
-    }
-  }
-
-  .calendar-horizontal {
-    .weekdays-row {
-      .weekday {
-        font-size: 0.9rem;
-      }
-    }
-
-    .days-grid {
-      .day {
-        font-size: 0.5rem;
-        height: 35px;
-
-        .day-marker {
-          width: 12px;
-          height: 12px;
-
-          .pages-count {
-            font-size: 0.3rem;
-          }
-        }
-      }
-    }
-  }
-  .goal-container {
-    h3,
-    p,
-    span {
-      font-size: 0.7rem !important;
-    }
-
-    .progress-text {
-      font-size: 0.2rem !important;
     }
   }
 }
@@ -421,79 +290,13 @@
 @media screen and (max-width: 480px) {
   .reading-calendar-container {
     width: 300px;
+    
     .month-title {
-      font-size: 1rem;
       width: 15%;
     }
-
+    
     .stats-container {
       width: 250px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-
-      .col-3 {
-        flex-basis: 50%;
-        margin-bottom: 5px;
-      }
-
-      .stat-value {
-        font-size: 0.8rem;
-      }
-
-      .stat-label {
-        font-size: 0.6rem;
-      }
     }
-  }
-
-  .calendar-horizontal {
-    .weekdays-row {
-      .weekday {
-        font-size: 0.8rem;
-      }
-    }
-
-    .days-grid {
-      .day {
-        font-size: 0.5rem;
-        height: 20px;
-
-        .day-marker {
-          width: 10px !important;
-          height: 10px !important;
-
-          .pages-count {
-            font-size: 0.4rem !important;
-          }
-        }
-      }
-    }
-  }
-
-  .goal-container {
-    h3,
-    p,
-    span {
-      font-size: 0.7rem !important;
-    }
-
-    .progress-text {
-      font-size: 0.2rem !important;
-    }
-  }
-}
-
-// Ajustes específicos para tema día
-.tema-dia {
-  .reading-calendar-container {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-}
-
-// Ajustes específicos para tema noche
-.tema-noche {
-  .reading-calendar-container {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   }
 }

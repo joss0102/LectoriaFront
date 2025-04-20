@@ -3,41 +3,66 @@
   padding: 0 40px;
   max-width: 1300px;
   margin: 0 auto;
-
+  overflow: hidden;
   .carousel-control-prev,
   .carousel-control-next {
     width: 40px;
     height: 40px;
     background-color: var(--bs-btn);
     border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
     opacity: 0.8;
     transition: all 0.3s ease;
-
+    z-index: 10;
+    position: absolute;
+    top: auto;
+    bottom: 20px;
+    transform: none;
     &:hover {
       opacity: 1;
       background-color: var(--bs-btn-hover);
-    }
-  }
-  .info-btn {
-    background-color: var(--bs-btn);
-    &:hover {
-      background-color: var(--bs-btn-hover);
+      transform: scale(1.1);
     }
   }
   .carousel-control-prev {
-    left: 0;
+    right: 120px; 
+    left: auto;
   }
-
   .carousel-control-next {
-    right: 0;
+    right: 70px;
   }
-
   .carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
     min-height: 300px;
   }
-
+  .carousel-item {
+    min-height: 400px;
+    height: 280px;
+    position: relative;
+    width: 100%;
+    display: none;
+    overflow: hidden;
+    float: left;
+    margin-right: -100%;
+    
+    &.active {
+      display: block;
+    }
+    &.sliding {
+      display: block;
+      transition: transform 0.8s ease;
+    }
+}
+    > div {
+      height: 100%;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+  }
   .background-img {
     border-radius: 20px;
     position: absolute;
@@ -47,149 +72,149 @@
     height: 100%;
     object-fit: cover;
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.3;
+    filter: brightness(0.6) contrast(1.5) saturate(1.9);
   }
-
-  .carousel-item {
-    min-height: 400px;
-    height: 280px;
-    position: relative;
-    overflow: hidden;
-
-    > div {
-      height: 100%;
-      position: relative;
-      z-index: 1;
-      overflow: hidden;
-    }
-  }
-
   .slide-content {
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
-
   .text-content {
     flex: 1;
     overflow: hidden;
+    .description{
+      font-size: 16px;
+    }
   }
-
   .book-cover {
     width: 200px;
     object-fit: contain;
-    transition: max-height 0.3s ease-in-out;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
   }
-}
+  .badge {
+    transition: transform 0.3s ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  .info-btn {
+    background-color: var(--bs-btn);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    &:hover {
+      background-color: var(--bs-btn-hover);
+      transform: scale(1.05);
+    }
+  }
 
 @media (max-width: 992px) {
   #bookCarousel {
     padding: 0 25px;
-
     .carousel-item {
       height: 300px;
     }
-
-    .slide-content {
-      padding: 1.2rem;
-    }
-
     .book-cover {
       width: 190px;
       max-height: 380px;
     }
-
     .text-content h2 {
       font-size: 1.4rem;
     }
-
     .text-content p {
       font-size: 0.95rem;
       max-height: 120px;
     }
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 36px;
+      height: 36px;
+      bottom: 15px;
+    }
   }
 }
+
 @media (max-width: 768px) {
   #bookCarousel {
     padding: 0 15px;
-
     .carousel-inner {
       min-height: 500px;
     }
-
     .carousel-item {
       min-height: 550px;
     }
-
     .slide-content {
-      flex-direction: column;
       padding-bottom: 2rem;
     }
-
-    .row {
-      flex-direction: column;
-    }
-
     .col-md-7,
     .col-md-5 {
       width: 100%;
     }
-
     .text-content h2 {
       font-size: 1.2rem;
     }
-
     .text-content p {
       font-size: 0.9rem;
       max-height: 160px;
     }
-
     .book-cover {
-      width: 160px;
-      max-height: 165px;
+      width: 170px;
       margin: 0 auto;
     }
-
     .d-flex.gap-2 {
-      flex-direction: column;
       gap: 0.5rem;
-      align-items: center;
     }
-
     .btn {
       width: auto;
       padding: 0.5rem 1rem;
       font-size: 0.9rem;
     }
-
     .carousel-control-prev,
     .carousel-control-next {
       width: 32px;
       height: 32px;
+      bottom: 15px;
     }
-    .book-cover {
-      max-height: 210px !important;
+    .carousel-control-prev {
+      right: 70px;
+    }
+    .carousel-control-next {
+      right: 30px;
     }
   }
 }
+
 @media (max-width: 480px) {
   #bookCarousel {
     .text-content h2 {
       font-size: 1rem;
     }
-
     .text-content p {
       font-size: 0.85rem;
     }
-
     .book-cover {
-      max-height: 140px !important;
+      max-height: 240px !important;
       margin-bottom: 2px;
     }
-
     .btn {
       font-size: 0.85rem;
+    }
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 28px;
+      height: 28px;
+      bottom: 10px;
+    }
+    .carousel-control-prev {
+      right: 55px;
+    }
+    .carousel-control-next {
+      right: 20px;
     }
   }
 }

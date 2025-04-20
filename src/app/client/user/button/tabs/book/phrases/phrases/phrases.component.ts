@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService } from '../../../../../../../core/services/book/book.service';
-import { Book } from '../../../../../../../core/models/book-model';
+import { BooksService } from '../../../../../../../core/services/book/books.service';
+import { Books } from '../../../../../../../core/models/books-model';
 
 @Component({
   selector: 'app-phrases',
@@ -12,22 +12,22 @@ import { Book } from '../../../../../../../core/models/book-model';
 })
 export class PhrasesComponent implements OnInit {
   // Todos los libros
-  allBooks: Book[] = [];
+  allBooks: Books[] = [];
   
   // Libros filtrados que tienen frases
-  booksWithPhrases: Book[] = [];
+  booksWithPhrases: Books[] = [];
   
   // Libro seleccionado para ver detalle completo
-  selectedBook: Book | null = null;
+  selectedBook: Books | null = null;
   
   // Estado para saber si estamos en vista detalle
   detailView: boolean = false;
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    this.allBooks = this.bookService.getAllBooks();
+    this.allBooks = this.booksService.getAllBooks();
     
     // Filtrar libros que tienen frases
     this.booksWithPhrases = this.allBooks.filter(book => 
@@ -36,7 +36,7 @@ export class PhrasesComponent implements OnInit {
   }
 
   // Seleccionar un libro para ver sus frases en detalle
-  selectBook(book: Book): void {
+  selectBook(book: Books): void {
     this.selectedBook = book;
     this.detailView = true;
     
@@ -53,7 +53,7 @@ export class PhrasesComponent implements OnInit {
   }
   
   // Método para comprobar si un libro tiene frases
-  hasPhrasesAndCover(book: Book): boolean {
+  hasPhrasesAndCover(book: Books): boolean {
     return !!book.frases && book.frases.length > 0 && !!book.imagen;
   }
   

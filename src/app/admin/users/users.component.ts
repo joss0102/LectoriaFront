@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService, User } from '../../core/services/user/user.service';
-import { BookService } from '../../core/services/book/book.service';
+import { BooksService } from '../../core/services/book/books.service';
 import { Subscription } from 'rxjs';
 
 // Interface para libro en la UI del usuario
@@ -77,7 +77,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   
   constructor(
     private userService: UserService,
-    private bookService: BookService
+    private booksService: BooksService
   ) { }
 
   ngOnInit(): void {
@@ -115,7 +115,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     
     // Obtener libros asociados (simulado)
     // En una implementación real, esto vendría de una relación usuario-libro en el backend
-    const allBooks = this.bookService.getAllBooks();
+    const allBooks = this.booksService.getAllBooks();
     const userBooks: UserBook[] = [];
     const userAuthors: {[key: string]: UserAuthor} = {};
     

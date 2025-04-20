@@ -1,5 +1,5 @@
 // Modelo de libro extendido con propiedades de seguimiento de lectura
-export interface Book {
+export interface Books {
   // Propiedades básicas
   autor: string;
   saga: string;

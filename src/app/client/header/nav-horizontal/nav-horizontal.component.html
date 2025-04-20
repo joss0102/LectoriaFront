@@ -1,7 +1,8 @@
-<!-- nav-horizontal.component.html -->
 <nav class="nav-horizontal">
   <div class="menu d-flex gap-3">
-    <i class="bi bi-list" (click)="toggleNav()"></i>
+    <!-- Solo mostrar el botón de menú si el usuario está autenticado Y no está en login -->
+    <i *ngIf="shouldShowMenuButton()" class="bi bi-list" (click)="toggleNav()"></i>
+    
     <div class="links" *ngIf="showLinks">
       <a
         routerLink="/"
@@ -9,13 +10,21 @@
         [routerLinkActiveOptions]="{ exact: true }"
         >Inicio</a
       >
-      <a routerLink="/user" routerLinkActive="active">Perfil</a>
+      
+      <!-- En página de login, no mostrar estos enlaces -->
+      <ng-container *ngIf="!isLoginPage">
+        <!-- Enlace de Perfil (si está autenticado) o Iniciar sesión (si no está autenticado) -->
+        <a *ngIf="isLoggedIn" routerLink="/user" routerLinkActive="active">Perfil</a>
+        <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">Iniciar sesión</a>
+        
+        <!-- Enlace a Administración (solo si es admin) -->
+        <a *ngIf="isLoggedIn && isAdmin" routerLink="/app" routerLinkActive="active">Ir a administración</a>
+      </ng-container>
     </div>
   </div>
   <div class="imagen">
     <!--
-    <div class="theme-toggle">
-      
+    <div class="theme-toggle">        
       <div (click)="toggleTema()" class="theme-switch" [ngClass]="themeToggleClasses" [title]="getThemeToggleTitle()">
         <div class="switch-track">
           <i class="bi bi-moon-fill moon-icon"></i>

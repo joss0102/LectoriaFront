@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 interface MenuItem {
   icon: string;
@@ -75,7 +76,10 @@ export class SidebarComponent implements OnInit {
 
   expandedItem: MenuItem | null = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.setActiveMenuItem(this.router.url);
@@ -133,5 +137,18 @@ export class SidebarComponent implements OnInit {
   
   onOpenThemeModal(): void {
     this.openThemeModal.emit();
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error al cerrar sesión:', error);
+        // Incluso si hay un error, intentamos navegar al login
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }

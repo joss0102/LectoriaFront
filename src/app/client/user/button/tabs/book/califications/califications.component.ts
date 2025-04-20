@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookService } from '../../../../../../core/services/book/book.service';
+import { BooksService } from '../../../../../../core/services/book/books.service';
 
-import { Book } from '../../../../../../core/models/book-model';
+import { Books } from '../../../../../../core/models/books-model';
 
 @Component({
   selector: 'app-califications',
@@ -13,16 +13,16 @@ import { Book } from '../../../../../../core/models/book-model';
 })
 export class CalificationsComponent implements OnInit {
   // Libros valorados (con valoración)
-  librosValorados: Book[] = [];
+  librosValorados: Books[] = [];
   
   // Top 3 libros (para el podio)
-  topLibros: Book[] = [];
+  topLibros: Books[] = [];
 
-  constructor(private bookService: BookService) {}
+  constructor(private booksService: BooksService) {}
 
   ngOnInit(): void {
     // Obtener todos los libros
-    const todosLosLibros = this.bookService.getAllBooks();
+    const todosLosLibros = this.booksService.getAllBooks();
     
     // Filtrar solo los que tienen valoración
     this.librosValorados = todosLosLibros.filter(libro => libro.valoracion !== undefined)

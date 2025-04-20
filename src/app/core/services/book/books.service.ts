@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Book, ReadingRecord } from '../../models/book-model';
+import { Books, ReadingRecord } from '../../models/books-model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BookService {
+export class BooksService {
   // Array de todos los libros con datos extendidos
-  private books: Book[] = [
+  private books: Books[] = [
     {
       autor: 'Sarah J. Maas',
       saga: 'Trono de cristal',
@@ -440,16 +440,16 @@ export class BookService {
   ];
 
   // BehaviorSubject que mantiene el book actual
-  private bookActualSubject: BehaviorSubject<Book | null> = new BehaviorSubject<Book | null>(null);
+  private bookActualSubject: BehaviorSubject<Books | null> = new BehaviorSubject<Books | null>(null);
   
   // Observable público que otros componentes pueden suscribirse
-  public bookActual$: Observable<Book | null> = this.bookActualSubject.asObservable();
+  public bookActual$: Observable<Books | null> = this.bookActualSubject.asObservable();
   
   // BehaviorSubject para la lista completa de libros
-  private booksSubject: BehaviorSubject<Book[]> = new BehaviorSubject<Book[]>(this.books);
+  private booksSubject: BehaviorSubject<Books[]> = new BehaviorSubject<Books[]>(this.books);
   
   // Observable público para la lista de libros
-  public books$: Observable<Book[]> = this.booksSubject.asObservable();
+  public books$: Observable<Books[]> = this.booksSubject.asObservable();
 
   constructor() {
     // Si quieres cargar un libro por defecto
@@ -457,27 +457,27 @@ export class BookService {
   }
 
   // Método para actualizar el book actual
-  actualizarBookActual(book: Book): void {
+  actualizarBookActual(book: Books): void {
     this.bookActualSubject.next(book);
   }
 
   // Método para obtener el libro actual directamente
-  getBookActual(): Book | null {
+  getBookActual(): Books | null {
     return this.bookActualSubject.getValue();
   }
   
   // Método para obtener todos los libros
-  getAllBooks(): Book[] {
+  getAllBooks(): Books[] {
     return this.books;
   }
   
   // Método para obtener libros por estado
-  getBooksByStatus(estado: 'no-iniciado' | 'en-progreso' | 'finalizado' | 'abandonado'): Book[] {
+  getBooksByStatus(estado: 'no-iniciado' | 'en-progreso' | 'finalizado' | 'abandonado'): Books[] {
     return this.books.filter(book => book.estado === estado);
   }
   
   // Método para obtener el libro que se está leyendo actualmente
-  getCurrentlyReading(): Book | null {
+  getCurrentlyReading(): Books | null {
     const librosEnProgreso = this.getBooksByStatus('en-progreso');
     return librosEnProgreso.length > 0 ? librosEnProgreso[0] : null;
   }

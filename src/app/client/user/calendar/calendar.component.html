@@ -1,123 +1,234 @@
-  <div class="d-flex justify-content-center"><h1>Registra tu lectura</h1></div>
+
 <div class="reading-calendar-container">
-  <!-- Header y estadísticas en fila para ahorrar espacio -->
-  <div class="col-12 d-flex flex-column align-items-center justify-content-center text-center">
-    <div class="col-md-12">
-      <!-- Encabezado del calendario -->
-      <div class="d-flex justify-content-between align-items-center">
-        <button class="btn btn-sm px-2" (click)="previousMonth()"><i class="bi bi-caret-left-fill"></i></button>
-        <h2 class="month-title">{{ currentMonthName }} {{ currentYear }}</h2>
-          <button class="btn btn-sm px-2" (click)="nextMonth()"><i class="bi bi-caret-right-fill"></i></button>
-
-      </div>
+  <!-- Loader -->
+  <div *ngIf="loading" class="text-center p-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
-    
-    <div class="col-md-12">
-      <!-- Estadísticas de lectura -->
-      <div class="stats-container p-2 rounded">
-        <div class="row text-center g-1">
-          <div class="col-3">
-            <span class="stat-value fw-bold d-block">{{ daysReadThisMonth }}</span>
-            <span class="stat-label d-block">Días</span>
-          </div>
-          <div class="col-3">
-            <span class="stat-value fw-bold d-block">{{ pagesReadThisMonth }}</span>
-            <span class="stat-label d-block">Páginas</span>
-          </div>
-          <div class="col-3">
-            <span class="stat-value fw-bold d-block">{{ formatMinutes(totalReadingTimeThisMonth) }}</span>
-            <span class="stat-label d-block">Tiempo</span>
-          </div>
-          <div class="col-3">
-            <span class="stat-value fw-bold d-block">{{ booksCompletedThisMonth }}</span>
-            <span class="stat-label d-block">Libros</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <p class="mt-2">Cargando datos de lectura...</p>
   </div>
 
-  <!-- Calendario horizontal más compacto -->
-  <div class="calendar-horizontal">
-    <!-- Días de la semana -->
-    <div class="weekdays-row">
-      <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
-    </div>
-    
-    <!-- Días del mes -->
-    <div class="days-grid">
-      <!-- Espacios vacíos para los días previos al inicio del mes -->
-      <div class="day empty" *ngFor="let _ of getDaysOffset()"></div>
+  <!-- Error message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+    <!-- Header y estadísticas -->
+    <div class="col-12 d-flex flex-column align-items-center justify-content-center text-center">
+      <div class="col-md-12">
+        <!-- Encabezado del calendario -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <button class="btn btn-sm rounded-pill px-3 " (click)="previousMonth()">
+            <i class="bi bi-caret-left-fill"></i>
+          </button>
+          <h2 class="month-title fs-1 fw-bold m-0">{{ currentMonthName }} {{ currentYear }}</h2>
+          <button class="btn btn-sm rounded-pill px-3" (click)="nextMonth()">
+            <i class="bi bi-caret-right-fill"></i>
+          </button>
+        </div>
+      </div>
       
-      <!-- Días del mes actual -->
-      <div 
-        *ngFor="let day of getDaysInMonth()" 
-        class="day" 
-        [class.today]="isToday(day)"
-        [class.read-day]="hasReadOnDay(day)"
-        [class.goal-achieved]="hasAchievedGoalOnDay(day)"
-        (click)="openReadingModal(day)">
-        {{ day }}
-        <div class="day-marker" *ngIf="hasReadOnDay(day)">
-          <span class="pages-count" *ngIf="getPagesForDay(day) > 0">{{ getPagesForDay(day) }}</span>
+      <div class="col-md-12">
+        <!-- Estadísticas de lectura -->
+        <div class="stats-container rounded-3 mb-3 shadow-sm">
+          <div class="row text-center g-2">
+            <div class="col-3">
+              <span class="stat-value fs-4 fw-bold d-block">{{ daysReadThisMonth }}</span>
+              <span class="stat-label fs-6 d-block">Días</span>
+            </div>
+            <div class="col-3">
+              <span class="stat-value fs-4 fw-bold d-block">{{ pagesReadThisMonth }}</span>
+              <span class="stat-label fs-6 d-block">Páginas</span>
+            </div>
+            <div class="col-3">
+              <span class="stat-value fs-4 fw-bold d-block">{{ formatMinutes(totalReadingTimeThisMonth) }}</span>
+              <span class="stat-label fs-6 d-block">Tiempo</span>
+            </div>
+            <div class="col-3">
+              <span class="stat-value fs-4 fw-bold d-block">{{ booksCompletedThisMonth }}</span>
+              <span class="stat-label fs-6 d-block">Libros</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Meta anual en fila con las estadísticas para ahorrar espacio vertical -->
-  <div class="mt-2 p-2 goal-container rounded">
-    <div class="d-flex justify-content-between align-items-center mb-1">
-      <h3 class="fs-6 mb-0 ">Meta anual: {{ currentGoal }}</h3>
-      <span class="small  fs-6">{{ goalProgressText }}</span>
+    <!-- Calendario horizontal -->
+    <div class="calendar-horizontal">
+      <!-- Días de la semana -->
+      <div class="weekdays-row mb-2">
+        <div class="weekday fw-bold fs-5 text-center py-1" *ngFor="let day of weekdays">{{ day }}</div>
+      </div>
+      
+      <!-- Días del mes -->
+      <div class="days-grid">
+        <!-- Espacios vacíos para los días previos al inicio del mes -->
+        <div class="day empty" *ngFor="let _ of getDaysOffset()"></div>
+        
+        <!-- Días del mes actual -->
+        <div *ngFor="let day of getDaysInMonth()" class="day rounded-2 fs-6 p-2 h-60px" [class.today]="isToday(day)" [class.read-day]="hasReadOnDay(day)"
+          [class.goal-achieved]="hasAchievedGoalOnDay(day)" (click)="openReadingModal(day)">
+          {{ day }}
+          <div class="day-marker w-20px h-20px" *ngIf="hasReadOnDay(day)">
+            <span class="pages-count fs-7">{{ getPagesForDay(day) }}</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="progress">
-      <div class="progress-bar" [style.width.%]="goalProgressPercentage"></div>
-    </div>
-  </div>
 
-  <!-- Modal para registro de lectura (sin NgModel) -->
+    <!-- Meta anual -->
+    <div class="mt-3 p-3 goal-container rounded-3 shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="fs-6 fw-bold m-0">Meta anual: {{ currentGoal }}</h3>
+        <span class="small">{{ goalProgressText }}</span>
+      </div>
+      <div class="progress rounded-pill" style="height: 6px;">
+        <div class="progress-bar" [style.width.%]="goalProgressPercentage"></div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Modal para registro de lectura -->
   <div class="modal fade" id="readingModal" tabindex="-1" aria-labelledby="readingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="readingModalLabel">Registro de lectura</h5>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header p-4">
+          <h5 class="modal-title fw-bold" id="readingModalLabel">
+            <i class="bi bi-book me-2"></i>Registro de lectura
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        
+        <div class="modal-body p-4">
+          <!-- Resumen de libros leídos en el día -->
+          <div class="mb-4" *ngIf="selectedDate">
+            <h6 class="mb-3 d-flex align-items-center">
+              <span>{{ selectedDate | date:'dd MMM yyyy' }}</span>
+            </h6>
+            
+            <div class="books-read-section" *ngIf="booksReadToday.length > 0">
+              <h6 class="mb-2 fw-medium">Lecturas previas este día:</h6>
+              <div class="list-group mb-3 shadow-sm rounded-3 overflow-hidden">
+                <div class="list-group-item d-flex justify-content-between align-items-center border-start border-0 border-end-0 border-top-0 py-3" *ngFor="let book of booksReadToday">
+                  <div>
+                    <i class="bi bi-bookmark-fill me-2" style="color: var(--bs-btn);"></i> {{ book.title }}
+                  </div>
+                  <span class="badge rounded-pill" style="background-color: var(--bs-btn)">
+                    {{ book.pagesRead }} páginas
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <p *ngIf="booksReadToday.length === 0" class="text-opacity-75 fst-italic">
+              <i class="bi bi-info-circle me-1"></i>
+              No se han registrado lecturas para este día.
+            </p>
+          </div>
+          
+          <!-- Formulario de registro -->
           <form>
-            <div class="mb-2">
-              <label for="bookSelect" class="form-label">Libro</label>
-              <select class="form-select form-select-sm" id="bookSelect" (change)="onBookSelect($event)">
-                <option value="">Selecciona un libro</option>
-                <option *ngFor="let book of getAvailableBooks()" [value]="book.titulo">{{ book.titulo }}</option>
+            <!-- Selector de libro -->
+            <div class="mb-3">
+              <label for="bookSelect" class="form-label fw-medium mb-2">
+                <i class="bi bi-book-half me-1" style="color: var(--bs-btn);"></i>Selecciona un libro
+              </label>
+              <select class="form-select py-3 shadow-sm rounded-3" id="bookSelect" (change)="onBookSelect($event)">
+                <option value="" selected disabled>Elige un libro para registrar tu lectura</option>
+                <option *ngFor="let book of getAvailableBooks()" [value]="book.book_title">
+                  {{ book.book_title }}
+                  <ng-container *ngIf="book.reading_status !== 'reading'">
+                    ({{ getStatusText(book.reading_status) }})
+                  </ng-container>
+                </option>
               </select>
             </div>
-            <div class="mb-2">
-              <label for="readingDate" class="form-label">Fecha</label>
-              <input type="date" class="form-control form-control-sm" id="readingDate" 
-                     [value]="selectedDate | date:'yyyy-MM-dd'" 
-                     (change)="onDateChange($event)">
-              <small class="form-text">Puedes seleccionar fechas pasadas</small>
+            
+            <!-- Selector de fecha -->
+            <div class="mb-3">
+              <label for="readingDate" class="form-label fw-medium mb-2">
+                <i class="bi bi-calendar me-1" style="color: var(--bs-btn);"></i>Fecha de lectura
+              </label>
+              <input type="date" class="form-control py-3 shadow-sm rounded-3" id="readingDate" [value]="selectedDate | date:'yyyy-MM-dd'" (change)="onDateChange($event)">
+              <div class="form-text mt-1 small">
+                <i class="bi bi-info-circle me-1"></i>
+                Puedes seleccionar fechas pasadas para registrar lecturas anteriores
+              </div>
             </div>
-            <div class="mb-2">
-              <label for="pagesRead" class="form-label">Páginas</label>
-              <input type="number" class="form-control form-control-sm" id="pagesRead" 
-                     [value]="pagesRead" (input)="onPagesChange($event)" 
-                     min="1" [max]="getMaxPages()">
+            
+            <!-- Input para páginas leídas -->
+            <div class="mb-3">
+              <label for="pagesRead" class="form-label fw-medium mb-2">
+                <i class="bi bi-file-text me-1" style="color: var(--bs-btn);"></i>Páginas leídas
+              </label>
+              <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                <input type="number" class="form-control py-3 border-end-0" id="pagesRead" [value]="pagesRead" 
+                  (input)="onPagesChange($event)" min="1" [max]="getMaxPages()"placeholder="Número de páginas">
+              </div>
+              <div class="form-text mt-1 small" *ngIf="selectedBook">
+                Quedan {{ getMaxPages() }} páginas por leer
+              </div>
             </div>
-            <div class="mb-2">
-              <label for="timeSpent" class="form-label">Tiempo (min)</label>
-              <input type="number" class="form-control form-control-sm" id="timeSpent" 
-                     [value]="timeSpent" (input)="onTimeChange($event)" 
-                     min="1">
+            
+            <!-- Input para tiempo dedicado -->
+            <div class="mb-3">
+              <label for="timeSpent" class="form-label fw-medium mb-2">
+                <i class="bi bi-clock me-1" style="color: var(--bs-btn);"></i>Tiempo dedicado
+              </label>
+              <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                <input type="number" class="form-control py-3 border-end-0" id="timeSpent" [value]="timeSpent" (input)="onTimeChange($event)" min="1"placeholder="Tiempo de lectura">
+              </div>
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-sm btn-primary" (click)="saveReading()" 
-                  [disabled]="!isReadingFormValid()">Guardar</button>
+        
+        <div class="modal-footer p-4">
+          <button type="button" class="btn btn-secondary btn-action py-2 px-4 rounded-3 d-flex align-items-center gap-2" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle"></i>Cancelar
+          </button>
+          <button type="button" class="btn btn-primary btn-action py-2 px-4 rounded-3 d-flex align-items-center gap-2" (click)="saveReading()" [disabled]="!isReadingFormValid()">
+            <i class="bi bi-check-circle"></i>Guardar registro
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para cambio de estado -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header p-4">
+          <h5 class="modal-title fw-bold" id="confirmationModalLabel">
+            <i class="bi bi-exclamation-triangle me-2 text-warning"></i>Confirmar cambio de estado
+          </h5>
+          <button type="button" class="btn-close" (click)="cancelStatusChange()" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body p-4" *ngIf="bookToUpdate">
+          <div class="alert alert-warning rounded-3 d-flex align-items-center">
+            <i class="bi bi-info-circle me-2 fs-5"></i>
+            <span>El libro seleccionado no está en estado "Leyendo"</span>
+          </div>
+          
+          <p class="mb-3 mt-4">
+            El libro <strong>"{{ bookToUpdate.book_title }}"</strong> está actualmente marcado como 
+            <span class="badge rounded-pill px-3 py-2" [ngStyle]="{backgroundColor: 'var(--bs-btn)'}">
+              {{ getStatusText(bookToUpdate.reading_status) }}
+            </span>
+          </p>
+          
+          <p>¿Deseas cambiar su estado a <span class="badge rounded-pill bg-success px-3 py-2">Leyendo</span> y registrar esta sesión de lectura?</p>
+        </div>
+        
+        <div class="modal-footer p-4">
+          <button type="button" class="btn btn-secondary btn-action py-2 px-4 rounded-3 d-flex align-items-center gap-2" (click)="cancelStatusChange()">
+            <i class="bi bi-x-circle"></i>Cancelar
+          </button>
+          <button type="button" class="btn btn-primary btn-action py-2 px-4 rounded-3 d-flex align-items-center gap-2" (click)="confirmStatusChange()">
+            <i class="bi bi-check-circle"></i>Confirmar cambio
+          </button>
         </div>
       </div>
     </div>

@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { BookService } from '../../core/services/book/book.service';
+import { BooksService } from '../../core/services/book/books.service';
 import { UserService,User } from '../../core/services/user/user.service';
-import { Book } from '../../core/models/book-model';
+import { Books } from '../../core/models/books-model';
 
 // Definición de User para el modal de detalles
 interface BookUser {
@@ -63,7 +63,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   
   constructor(
-    private bookService: BookService,
+    private booksService: BooksService,
     private userService: UserService
   ) { }
 
@@ -85,7 +85,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   loadBooks(): void {
     // Podríamos suscribirnos al observable books$ del servicio
     // pero para simplicidad, usaremos getAllBooks
-    const serviceBooks = this.bookService.getAllBooks();
+    const serviceBooks = this.booksService.getAllBooks();
     
     // Convertir los libros del servicio al formato que espera la UI
     this.books = serviceBooks.map(book => this.mapBookToDisplay(book));
@@ -95,7 +95,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   }
 
   // Método para convertir el modelo Book del servicio al modelo que usa la UI
-  private mapBookToDisplay(book: Book): BookDisplay {
+  private mapBookToDisplay(book: Books): BookDisplay {
     const randomId = Math.floor(Math.random() * 1000) + 1; // ID aleatorio para ejemplo
     
     // Crear usuarios registrados basados en los usuarios reales
@@ -123,7 +123,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   }
 
   // Método para asignar usuarios a libros de manera pseudo-aleatoria pero consistente
-  private getRegisteredUsersForBook(book: Book): BookUser[] {
+  private getRegisteredUsersForBook(book: Books): BookUser[] {
     const registeredUsers: BookUser[] = [];
     
     // Determinar cuántos usuarios tendrán este libro basado en su estado

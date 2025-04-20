@@ -9,10 +9,10 @@
   <div class="sidebar-content">
     <ul class="menu-list">
       <li *ngFor="let item of menuItems" 
-          class="menu-item" 
-          [class.active]="item.active" 
-          [class.has-submenu]="hasSubItems(item)">
-        
+            class="menu-item"
+            [class.active]="item.active"
+            [class.has-submenu]="hasSubItems(item)">
+          
         <a *ngIf="!hasSubItems(item)" [routerLink]="item.link" class="menu-link">
           <span class="material-icons menu-icon">{{ item.icon }}</span>
           <span class="menu-label">{{ item.label }}</span>
@@ -44,9 +44,9 @@
 
   <div class="sidebar-footer">
     <div class="version-info">v2.0.0</div>
-    <div class="logout-button">
+    <button class="logout-button" (click)="logout()">
       <span class="material-icons">exit_to_app</span>
       <span class="logout-text">Cerrar sesión</span>
-    </div>
+    </button>
   </div>
 </aside>

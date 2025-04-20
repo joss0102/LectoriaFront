@@ -1,18 +1,15 @@
-// your-books.component.scss ultra reducido
-
-// Variables y utilidades
 :root {
   --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
-// Utilidades personalizadas
 .bg-theme { background-color: var(--background-color); }
 .bg-component { background-color: var(--component-bg); }
 .bg-main { background-color: var(--main-bg); }
 .text-theme { color: var(--border-color); }
 .text-theme-text { color: var(--text-color); }
+.text-theme-secondary { color: var(--border-color); opacity: 0.8; }
 .text-btn { color: var(--bs-btn); }
 .bg-btn { background-color: var(--bs-btn); }
 .bg-dark-blur { background-color: rgba(0, 0, 0, 0.8); }
@@ -20,6 +17,7 @@
 .border-subtle { border-color: rgba(255, 255, 255, 0.1) !important; }
 .backdrop-blur { backdrop-filter: blur(5px); }
 .fs-7 { font-size: 0.9rem; }
+.fs-8 { font-size: 0.8rem; }
 .min-w-100 { min-width: 100px; }
 .top-10 { top: 10px; }
 .end-10 { right: 10px; }
@@ -122,6 +120,9 @@
 }
 
 .reset-search {
+  color: var(--bs-btn);
+  cursor: pointer;
+  
   &:hover {
     color: var(--bs-btn-hover);
   }
@@ -193,6 +194,7 @@
   height: 36px;
   font-size: 1.5rem;
   z-index: 10;
+  transition: transform 0.3s ease, background-color 0.3s ease;
   
   &:hover {
     background-color: var(--danger);
@@ -206,14 +208,21 @@
   height: 270px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
-.action-btn-success{
+
+.action-btn-success {
   background-color: var(--bs-btn-hover);
 }
+
 .action-btn {
   transition: all 0.3s ease;
-  background-color: var(--bs-btn);
-  &.edit-btn:hover {
-    background-color: var(--bs-btn-hover);
+  
+  &.edit-btn {
+    background-color: var(--component-bg);
+    
+    &:hover {
+      background-color: var(--bs-btn-hover);
+      color: white !important;
+    }
   }
   
   &.add-progress:hover {
@@ -221,7 +230,101 @@
   }
 }
 
-// Media queries
+// Estilos para formulario
+.form-control, .form-select {
+  &:focus {
+    border-color: var(--bs-btn);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-rgb), 0.25);
+  }
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+}
+
+.form-text {
+  font-size: 0.75rem;
+}
+
+// Estilos para frases y notas
+.phrase-item, .note-item {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.star {
+  color: gold;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+// Estilos para paginación
+.modern-pagination {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  .page-nav, .page-number {
+    margin: 0 2px;
+    
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    &.active .btn-pagination {
+      background-color: var(--bs-btn);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+  }
+  
+  .btn-pagination {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background-color: var(--component-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    
+    &:hover:not([disabled]) {
+      background-color: var(--bs-btn-hover);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+  
+  .page-arrow {
+    font-style: normal;
+    font-weight: bold;
+  }
+  
+  .page-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--border-color);
+    padding: 0 5px;
+    
+    .ellipsis {
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .main-title {
     font-size: 2rem;

@@ -13,11 +13,13 @@ import { SearchAuthorComponent } from './client/features/search/search-author/se
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { AuthorsComponent } from './admin/authors/authors.component';
 import { BooksComponent } from './admin/books/books.component';
-
 import { UsersComponent } from './admin/users/users.component';
-
 import { LayoutComponentAdmin } from './admin/layout/layout.component';
 
+// Importar los guards
+import { AuthGuard } from './core/guards/auth.guard.service';
+import { AdminGuard } from './core/guards/admin.guard.service';
+import { NoAuthGuard } from './core/guards/no-auth.guard.service';
 
 export const routes: Routes = [
   {
@@ -25,21 +27,22 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: 'library', component: LibraryComponent },
-      { path: 'login', component: LoginComponent },
-      { path: 'current-book', component: CurrentBookComponent },
-      { path: 'statistics', component: StadisticsComponent },
-      { path: 'wishlist', component: WishlistComponent },
-      { path: 'user', component: UserComponent },
+      { path: 'library', component: LibraryComponent,canActivate: [AuthGuard]},
+      { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard]},
+      { path: 'current-book', component: CurrentBookComponent,canActivate: [AuthGuard]},
+      { path: 'statistics', component: StadisticsComponent,canActivate: [AuthGuard]},
+      { path: 'wishlist',  component: WishlistComponent, canActivate: [AuthGuard]},
+      { path: 'user', component: UserComponent,canActivate: [AuthGuard]},
       { path: 'searchAuthor', component: SearchAuthorComponent },
       { path: 'searchBook', component: SearchBookComponent },
     ],
   },
 
-  // Nueva sección /app con layout propio
+  // Sección /app con layout propio y protección para admins
   {
     path: 'app',
     component: LayoutComponentAdmin,
+    canActivate: [AdminGuard], // Proteger toda la sección de admin
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
@@ -49,5 +52,6 @@ export const routes: Routes = [
     ],
   },
 
+  // Redirección para rutas no encontradas
   { path: '**', component: PageNotFoundComponent },
 ];

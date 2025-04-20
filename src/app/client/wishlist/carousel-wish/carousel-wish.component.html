@@ -1,29 +1,26 @@
-<div id="bookCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+<div *ngIf="books.length > 0" id="bookCarousel" class="carousel slide mt-4">
   <div class="carousel-inner">
     <div
       *ngFor="let book of books; let i = index"
       class="carousel-item"
       [class.active]="i === currentIndex"
+      #carouselItem
     >
       <div>
         <div>
-          <img src="{{ book.backgroundImage }}" alt="" class="background-img" />
+          <img [src]="book.backgroundImage" alt="" class="background-img" />
         </div>
         <div class="slide-content p-3 p-md-4 text-white">
           <div class="row h-100 g-3">
             <div class="col-md-7 d-flex flex-column">
               <div class="text-content">
                 <div class="mb-2 mb-md-3">
-                  <ng-container
-                    *ngFor="let genre of book.genres; let j = index"
-                  >
-                    <span class="badge {{ book.genresColors[j] }} mx-1">{{
-                      genre
-                    }}</span>
+                  <ng-container *ngFor="let genre of book.genres; let j = index">
+                    <span class="badge {{ book.genreColors[j] }} mx-1">{{ genre }}</span>
                   </ng-container>
                 </div>
                 <h2 class="fw-bold mb-2 mb-md-3">{{ book.title }}</h2>
-                <p class="mb-3 mb-md-4 fw-light">{{ book.description }}</p>
+                <p class="mb-3 mb-md-4 fw-light fw-bold description">{{ book.description }}</p>
               </div>
               <div class="d-none d-md-flex gap-2 mt-auto">
                 <button class="info-btn btn fw-bold text-dark">
@@ -32,9 +29,7 @@
                 <button class="btn btn-dark">...</button>
               </div>
             </div>
-            <div
-              class="col-md-5 d-flex align-items-center justify-content-center"
-            >
+            <div class="col-md-5 d-flex align-items-center justify-content-center">
               <img
                 [src]="book.coverImage"
                 class="book-cover rounded"
@@ -51,10 +46,23 @@
     </div>
   </div>
 
-  <button class="carousel-control-prev" type="button" (click)="prevSlide()">
-    <i class="bi bi-caret-left-fill"></i>
-  </button>
-  <button class="carousel-control-next" (click)="nextSlide()">
-    <i class="bi bi-caret-right-fill"></i>
-  </button>
+    <button 
+      class="carousel-control-prev" 
+      type="button" 
+      (click)="prevSlide()"
+    >
+      <i class="bi bi-caret-left-fill"></i>
+    </button>
+    <button 
+      class="carousel-control-next" 
+      type="button"
+      (click)="nextSlide()"
+    >
+      <i class="bi bi-caret-right-fill"></i>
+    </button>
+ 
+</div>
+
+<div *ngIf="books.length === 0" class="text-center mt-4">
+  <p>No tienes libros en estado "En pausa" o "Planificados".</p>
 </div>

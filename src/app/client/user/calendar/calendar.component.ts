@@ -75,7 +75,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
       const now = new Date();
       this.currentMonth = now.getMonth();
       this.currentYear = now.getFullYear();
-      console.log(`Inicialmente mostrando el mes actual: ${this.currentMonthName} ${this.currentYear}`);
+
       
       this.loadUserBooks();
       
@@ -178,7 +178,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.readingService.getReadingProgress(this.userNickname, undefined, 1, 200)
       .subscribe({
         next: (response) => {
-          console.log('Registros de lectura obtenidos:', response);
+
           
           if (response && response.data) {
             this.allReadingRecords = response.data;
@@ -425,7 +425,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
    * Actualiza las estadísticas del mes
    */
   updateMonthStats(): void {
-    console.log(`Actualizando estadísticas para: ${this.currentMonthName} ${this.currentYear}`);
+
     
     const recordsThisMonth = this.allReadingRecords.filter(record => {
       const recordDate = this.parseApiDate(record.reading_date);
@@ -433,7 +433,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
               recordDate.getFullYear() === this.currentYear;
     });
     
-    console.log(`Registros para ${this.currentMonthName} ${this.currentYear}:`, recordsThisMonth);
+
     
     const uniqueDays = new Set();
     let totalPages = 0;

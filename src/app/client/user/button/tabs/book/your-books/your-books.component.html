@@ -1,4 +1,3 @@
-<!-- your-books.component.html -->
 <div class="your-books-container bg-theme p-3 p-md-4">
   <div class="header-section mb-5">
     <h1 class="main-title position-relative d-inline-block mb-2 fw-bold text-theme-text">Tu Biblioteca</h1>
@@ -25,28 +24,100 @@
     </div>
   </div>
   
+  <!-- Mensaje de carga -->
+  <div class="loading-message text-center py-5" *ngIf="isLoading">
+    <div class="spinner-border text-theme" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 text-theme">Cargando tus libros...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div class="error-message bg-component rounded-4 p-4 text-center" *ngIf="error && !isLoading">
+    <div class="alert-icon fs-1 mb-3 text-danger">⚠️</div>
+    <h2 class="fs-4 mb-3 text-theme-text">Ocurrió un error</h2>
+    <p class="text-theme mb-3">{{ error }}</p>
+    <button class="btn bg-theme text-theme-text px-4 py-2 rounded-pill" (click)="loadUserBooks()">
+      Intentar de nuevo
+    </button>
+  </div>
+  
   <!-- Libros grid -->
-  <div class="books-grid">
+  <div class="books-grid" *ngIf="!isLoading && filteredBooks.length > 0">
     <div class="book-card bg-component rounded-3 shadow overflow-hidden h-100 card-hover" 
          *ngFor="let book of filteredBooks" 
          (click)="openBookDetails(book)">
       <div class="book-cover position-relative">
-        <img [src]="book.imagen" [alt]="book.titulo" class="w-100 h-100 object-fit-cover">
+        <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover">
         <div class="book-status position-absolute top-10 end-10 rounded-pill fw-semibold shadow-sm" 
-             [ngClass]="getStatusClass(book.estado)">
-          {{ getStatusText(book.estado) }}
+             [ngClass]="getStatusClass(book.reading_status)">
+          {{ getStatusText(book.reading_status) }}
         </div>
       </div>
       <div class="book-info p-3">
-        <h3 class="book-title fw-semibold mb-1 text-truncate text-theme-text">{{ book.titulo }}</h3>
-        <p class="book-author fs-7 text-theme text-truncate mb-0">{{ book.autor }}</p>
+        <h3 class="book-title fw-semibold mb-1 text-truncate text-theme-text">{{ book.book_title || 'Título desconocido' }}</h3>
+        <p class="book-author fs-7 text-theme text-truncate mb-0">{{ book.authors || 'Autor desconocido' }}</p>
+        <p class="book-meta fs-8 text-theme-secondary text-truncate mb-0" *ngIf="book.sagas">{{ book.sagas }}</p>
       </div>
     </div>
   </div>
   
+  <!-- Paginación -->
+  <div class="pagination-container d-flex justify-content-center mt-4" *ngIf="totalPages > 1 && !isLoading">
+    <nav aria-label="Navegación de páginas">
+      <ul class="modern-pagination d-flex align-items-center gap-2">
+        <li class="page-nav" [class.disabled]="currentPage === 1">
+          <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                  (click)="changePage(currentPage - 1)" 
+                  [disabled]="currentPage === 1"
+                  aria-label="Anterior">
+            <i class="page-arrow">&laquo;</i>
+          </button>
+        </li>
+        
+        <!-- Primera página siempre visible -->
+        <li class="page-number" [class.active]="currentPage === 1">
+          <button class="btn btn-pagination rounded-pill" (click)="changePage(1)">1</button>
+        </li>
+        
+        <!-- Puntos suspensivos izquierda -->
+        <li class="page-ellipsis" *ngIf="currentPage > 3">
+          <span class="ellipsis">...</span>
+        </li>
+        
+        <!-- Páginas dinámicas -->
+        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+          <li class="page-number" *ngIf="i+1 > 1 && i+1 < totalPages && (i+1 >= currentPage-1 && i+1 <= currentPage+1)" 
+              [class.active]="currentPage === i + 1">
+            <button class="btn btn-pagination rounded-pill" (click)="changePage(i + 1)">{{ i + 1 }}</button>
+          </li>
+        </ng-container>
+        
+        <!-- Puntos suspensivos derecha -->
+        <li class="page-ellipsis" *ngIf="currentPage < totalPages - 2">
+          <span class="ellipsis">...</span>
+        </li>
+        
+        <!-- Última página siempre visible -->
+        <li class="page-number" *ngIf="totalPages > 1" [class.active]="currentPage === totalPages">
+          <button class="btn btn-pagination rounded-pill" (click)="changePage(totalPages)">{{ totalPages }}</button>
+        </li>
+        
+        <li class="page-nav" [class.disabled]="currentPage === totalPages">
+          <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                  (click)="changePage(currentPage + 1)" 
+                  [disabled]="currentPage === totalPages"
+                  aria-label="Siguiente">
+            <i class="page-arrow">&raquo;</i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  
   <!-- Mensaje si no hay libros -->
   <div class="no-books empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
-       *ngIf="allBooks.length === 0">
+       *ngIf="allBooks.length === 0 && !isLoading && !error">
     <div class="empty-icon fs-1 mb-3 text-theme">📚</div>
     <h2 class="fs-4 mb-3 text-theme-text">No hay libros en tu biblioteca</h2>
     <p class="text-theme lh-base mb-0">¡Comienza a añadir libros para crear tu biblioteca personal!</p>
@@ -54,54 +125,63 @@
   
   <!-- Mensaje si no hay resultados de búsqueda -->
   <div class="no-search-results empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
-       *ngIf="allBooks.length > 0 && filteredBooks.length === 0">
+       *ngIf="allBooks.length > 0 && filteredBooks.length === 0 && !isLoading">
     <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
     <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
     <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
-      <button class="reset-search bg-transparent border-0  fw-semibold text-decoration-underline" 
+      <button class="reset-search bg-transparent border-0 fw-semibold text-decoration-underline" 
               (click)="clearSearch()">ver todos los libros</button>
     </p>
   </div>
   
   <!-- Modal de detalles del libro -->
   <div class="modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center p-3 bg-dark-blur backdrop-blur z-1000" 
-       *ngIf="isModalOpen" 
+       *ngIf="isModalOpen && selectedBook" 
        (click)="closeModal()">
     <div class="modal-content bg-main rounded-4 w-100 shadow-lg position-relative" 
-         (click)="preventClose($event)" 
-         *ngIf="selectedBook">
+         (click)="preventClose($event)">
       <button class="close-btn position-absolute d-flex align-items-center justify-content-center rounded-circle border-0 bg-theme text-theme-text" 
               (click)="closeModal()">×</button>
       
       <div class="modal-header gradient-header d-flex gap-4 p-4 rounded-top-4">
         <div class="book-cover-detail rounded-3 shadow overflow-hidden">
-          <img [src]="selectedBook.imagen" [alt]="selectedBook.titulo" class="w-100 h-100 object-fit-cover">
+          <img [src]="getBookImageUrl(selectedBook)" [alt]="selectedBook.book_title" class="w-100 h-100 object-fit-cover">
         </div>
         <div class="book-details flex-grow-1">
-          <h2 class="book-title fw-bold mb-2 text-theme-text">{{ selectedBook.titulo }}</h2>
-          <p class="book-author fs-5 text-theme mb-4">{{ selectedBook.autor }}</p>
+          <h2 class="book-title fw-bold mb-2 text-theme-text">{{ selectedBook.book_title || 'Título desconocido' }}</h2>
+          <p class="book-author fs-5 text-theme mb-4">{{ selectedBook.authors || 'Autor desconocido' }}</p>
           
           <div class="book-meta d-flex flex-column gap-3">
-            <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.saga">
+            <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.sagas">
               <span class="meta-label fs-7 text-theme min-w-100">Saga:</span>
-              <span class="meta-value fs-6 text-theme-text">{{ selectedBook.saga }}</span>
+              <span class="meta-value fs-6 text-theme-text">{{ selectedBook.sagas }}</span>
+            </div>
+            
+            <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.genres">
+              <span class="meta-label fs-7 text-theme min-w-100">Géneros:</span>
+              <span class="meta-value fs-6 text-theme-text">{{ selectedBook.genres }}</span>
+            </div>
+            
+            <div class="meta-item d-flex align-items-center">
+              <span class="meta-label fs-7 text-theme min-w-100">Páginas:</span>
+              <span class="meta-value fs-6 text-theme-text">{{ selectedBook.book_pages || 'Desconocido' }}</span>
             </div>
             
             <div class="meta-item d-flex align-items-center">
               <span class="meta-label fs-7 text-theme min-w-100">Estado:</span>
               <span class="meta-value status-badge rounded-pill px-3 py-1 fs-7 fw-semibold" 
-                    [ngClass]="getStatusClass(selectedBook.estado)">
-                {{ getStatusText(selectedBook.estado) }}
+                    [ngClass]="getStatusClass(selectedBook.reading_status)">
+                {{ getStatusText(selectedBook.reading_status) }}
               </span>
             </div>
             
-            <div class="meta-item d-flex align-items-center" *ngIf="selectedBook.valoracion">
+            <div class="meta-item d-flex align-items-center" *ngIf="selectedBookReview && selectedBookReview.rating">
               <span class="meta-label fs-7 text-theme min-w-100">Valoración:</span>
               <span class="meta-value rating d-flex align-items-center">
-                <span class="star " *ngFor="let star of [1,2,3,4,5]">
-                  {{ (star <= selectedBook.valoracion!) ? '★' : '☆' }}
+                <span class="star" *ngFor="let star of [1,2,3,4,5]">
+                  {{ (star <= selectedBookReview.rating) ? '★' : '☆' }}
                 </span>
-                <span class="rating-number ms-2 text-theme">({{ selectedBook.valoracion }})</span>
+                <span class="rating-number ms-2 text-theme">({{ selectedBookReview.rating }})</span>
               </span>
             </div>
           </div>
@@ -109,46 +189,46 @@
       </div>
       
       <div class="book-stats bg-component p-4" 
-           *ngIf="selectedBook.estado === 'finalizado' || selectedBook.estado === 'en-progreso'">
+           *ngIf="selectedBook.reading_status === 'completed' || selectedBook.reading_status === 'reading'">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           <div class="col">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold  mb-1">{{ selectedBook.paginasTotales }}</div>
+              <div class="stat-value fs-4 fw-bold mb-1">{{ selectedBook.book_pages }}</div>
               <div class="stat-label fs-7 text-theme">Páginas totales</div>
             </div>
           </div>
           
           <div class="col">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold  mb-1">{{ selectedBook.paginasLeidas }}</div>
+              <div class="stat-value fs-4 fw-bold mb-1">{{ selectedBook.pages_read || 0 }}</div>
               <div class="stat-label fs-7 text-theme">Páginas leídas</div>
             </div>
           </div>
           
-          <div class="col" *ngIf="selectedBook.progreso !== undefined">
+          <div class="col" *ngIf="selectedBook.progress_percentage !== undefined">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold  mb-1">{{ selectedBook.progreso }}%</div>
+              <div class="stat-value fs-4 fw-bold mb-1">{{ selectedBook.progress_percentage }}%</div>
               <div class="stat-label fs-7 text-theme">Progreso</div>
             </div>
           </div>
           
-          <div class="col" *ngIf="selectedBook.fechaInicio">
+          <div class="col" *ngIf="selectedBook.date_start">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold  mb-1">{{ formatDate(selectedBook.fechaInicio) }}</div>
+              <div class="stat-value fs-4 fw-bold mb-1">{{ formatDate(selectedBook.date_start) }}</div>
               <div class="stat-label fs-7 text-theme">Fecha inicio</div>
             </div>
           </div>
           
-          <div class="col" *ngIf="selectedBook.fechaFin">
+          <div class="col" *ngIf="selectedBook.date_ending">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold  mb-1">{{ formatDate(selectedBook.fechaFin) }}</div>
+              <div class="stat-value fs-4 fw-bold mb-1">{{ formatDate(selectedBook.date_ending) }}</div>
               <div class="stat-label fs-7 text-theme">Fecha fin</div>
             </div>
           </div>
           
-          <div class="col" *ngIf="selectedBook.fechaInicio && selectedBook.fechaFin">
+          <div class="col" *ngIf="selectedBook.date_start && selectedBook.date_ending">
             <div class="stat-item text-center">
-              <div class="stat-value fs-4 fw-bold  mb-1">{{ calculateReadingDays(selectedBook) }}</div>
+              <div class="stat-value fs-4 fw-bold mb-1">{{ calculateReadingDays(selectedBook.date_start, selectedBook.date_ending) }}</div>
               <div class="stat-label fs-7 text-theme">Días de lectura</div>
             </div>
           </div>
@@ -158,62 +238,176 @@
       <div class="book-content p-4">
         <div class="content-section mb-4">
           <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Sinopsis</h3>
-          <p class="book-synopsis text-theme-text lh-base">{{ selectedBook.sinopsis }}</p>
+          <p class="book-synopsis text-theme-text lh-base">{{ selectedBook.synopsis || 'No hay sinopsis disponible.' }}</p>
         </div>
         
-        <div class="content-section mb-4" *ngIf="selectedBook.frases && selectedBook.frases.length > 0">
+        <div class="content-section mb-4" *ngIf="selectedBookPhrases && selectedBookPhrases.length > 0">
           <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Frases destacadas</h3>
           <div class="phrases-list">
             <div class="phrase-item bg-theme rounded-3 p-4 mb-3 position-relative" 
-                 *ngFor="let phrase of selectedBook.frases">
-              <div class="quote-marks position-absolute top-n10 start-10 fs-1  opacity-50 font-serif">&#8220;</div>
-              <p class="fst-italic text-theme-text position-relative z-1 lh-base mb-0">{{ phrase }}</p>
+                 *ngFor="let phrase of selectedBookPhrases">
+              <div class="quote-marks position-absolute top-n10 start-10 fs-1 opacity-50 font-serif">&#8220;</div>
+              <p class="fst-italic text-theme-text position-relative z-1 lh-base mb-0">{{ phrase.text }}</p>
             </div>
           </div>
         </div>
         
-        <div class="content-section mb-4" *ngIf="selectedBook.anotaciones && selectedBook.anotaciones.length > 0">
+        <div class="content-section mb-4" *ngIf="selectedBookNotes && selectedBookNotes.length > 0">
           <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Anotaciones</h3>
           <div class="notes-list">
             <div class="note-item bg-theme rounded-3 p-4 mb-3 position-relative" 
-                 *ngFor="let note of selectedBook.anotaciones">
+                 *ngFor="let note of selectedBookNotes">
               <div class="note-pin position-absolute top-5 start-5 fs-5 opacity-70">📌</div>
-              <p class="text-theme-text lh-base ms-5 mb-0 position-relative z-1">{{ note }}</p>
+              <p class="text-theme-text lh-base ms-5 mb-0 position-relative z-1">{{ note.text }}</p>
             </div>
           </div>
         </div>
         
-        <div class="content-section" *ngIf="selectedBook.registroLectura && selectedBook.registroLectura.length > 0">
+        <div class="content-section" *ngIf="selectedBookReadingProgress && selectedBookReadingProgress.length > 0">
           <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Registro de lectura</h3>
           <div class="reading-log bg-theme rounded-3 overflow-hidden">
             <div class="log-header d-grid bg-component p-3 fw-semibold text-theme-text" style="grid-template-columns: 1fr 1fr 1fr;">
               <span class="log-cell">Fecha</span>
               <span class="log-cell">Páginas</span>
-              <span class="log-cell">Tiempo (min)</span>
+              <span class="log-cell">Progreso</span>
             </div>
             <div class="log-row d-grid p-3 border-bottom border-subtle" 
-                 style="grid-template-columns: 1fr 1fr 1fr;"
-                 *ngFor="let record of selectedBook.registroLectura; let isOdd = odd"
-                 [class.bg-light-dark]="isOdd">
-              <span class="log-cell text-theme">{{ formatDate(record.fecha) }}</span>
-              <span class="log-cell text-theme">{{ record.paginasLeidas }}</span>
-              <span class="log-cell text-theme">{{ record.tiempo || 'N/A' }}</span>
+                  style="grid-template-columns: 1fr 1fr 1fr;"
+                  *ngFor="let record of selectedBookReadingProgress; let isOdd = odd"
+                  [class.bg-light-dark]="isOdd">
+              <span class="log-cell text-theme">{{ formatDate(record.reading_date) }}</span>
+              <span class="log-cell text-theme">{{ record.pages_read_session }}</span>
+              <span class="log-cell text-theme">{{ record.cumulative_progress_percentage }}%</span>
             </div>
+          </div>
+        </div>
+
+        <div class="content-section mb-4" *ngIf="selectedBookReview && selectedBookReview.review_text">
+          <h3 class="section-title position-relative d-inline-block mb-3 text-theme-text">Mi reseña</h3>
+          <div class="review-content bg-theme rounded-3 p-4">
+            <p class="text-theme-text lh-base mb-0">{{ selectedBookReview.review_text }}</p>
           </div>
         </div>
       </div>
       
       <div class="modal-actions d-flex justify-content-end gap-3 p-4 ">
-        <button class="action-btn edit-btn btn bg-component text-theme-text d-flex align-items-center gap-2 fw-semibold rounded-pill px-4 py-3 border-0">
+        <button class="action-btn edit-btn btn bg-component text-theme-text d-flex align-items-center gap-2 fw-semibold rounded-pill px-4 py-3 border-0"
+                (click)="openEditForm()">
           <span class="action-icon">✎</span>
           Editar libro
         </button>
         <button class="action-btn-success rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-3 border-0" 
-                [ngClass]="{'add-progress text-white': selectedBook.estado !== 'finalizado', 'finalizar text-white': selectedBook.estado === 'en-progreso'}">
-          <span class="action-icon">{{ selectedBook.estado === 'en-progreso' ? '✓' : '+' }}</span>
-          {{ selectedBook.estado === 'en-progreso' ? 'Marcar como finalizado' : 'Añadir progreso' }}
+                [ngClass]="{'add-progress text-white': selectedBook.reading_status !== 'completed', 'finalizar text-white': selectedBook.reading_status === 'reading'}"
+                (click)="selectedBook.reading_status === 'reading' ? updateBookStatus(selectedBook.book_id, 'completed') : ''">
+          <span class="action-icon">{{ selectedBook.reading_status === 'reading' ? '✓' : '+' }}</span>
+          {{ selectedBook.reading_status === 'reading' ? 'Marcar como finalizado' : 'Añadir progreso' }}
         </button>
       </div>
+    </div>
+  </div>
+  
+  <!-- Modal para editar libro -->
+  <div class="modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center p-3 bg-dark-blur backdrop-blur z-1000" 
+        *ngIf="isEditModalOpen && selectedBook" 
+        (click)="closeEditForm()">
+    <div class="modal-content bg-main rounded-4 w-100 shadow-lg position-relative" 
+          (click)="preventClose($event)">
+      <button class="close-btn position-absolute d-flex align-items-center justify-content-center rounded-circle border-0 bg-theme text-theme-text" 
+              (click)="closeEditForm()">×</button>
+      
+      <div class="modal-header gradient-header p-4 rounded-top-4">
+        <h2 class="fw-bold mb-0 text-theme-text">Editar Libro</h2>
+      </div>
+      
+      <form [formGroup]="editBookForm" (ngSubmit)="saveBookChanges()" class="p-4">
+        <!-- Alerta de error -->
+        <div class="alert alert-danger" *ngIf="formError">{{ formError }}</div>
+        
+        <div class="row g-4">
+          <!-- Título del libro -->
+          <div class="col-12">
+            <label for="book_title" class="form-label fw-semibold text-theme-text">Título *</label>
+            <input type="text" id="book_title" formControlName="book_title" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" placeholder="Título del libro"
+                  [class.is-invalid]="editBookForm.controls['book_title'].invalid && editBookForm.controls['book_title'].touched">
+            <div class="invalid-feedback" *ngIf="editBookForm.controls['book_title'].errors?.['required']">
+              El título es obligatorio.
+            </div>
+          </div>
+          
+          <!-- Autor -->
+          <div class="col-md-6">
+            <label for="authors" class="form-label fw-semibold text-theme-text">Autor *</label>
+            <input type="text" id="authors" formControlName="authors" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" 
+                  placeholder="Nombre del autor"
+                  [class.is-invalid]="editBookForm.controls['authors'].invalid && editBookForm.controls['authors'].touched">
+            <div class="invalid-feedback" *ngIf="editBookForm.controls['authors'].errors?.['required']">
+              El autor es obligatorio.
+            </div>
+          </div>
+          
+          <!-- Páginas -->
+          <div class="col-md-6">
+            <label for="book_pages" class="form-label fw-semibold text-theme-text">Páginas *</label>
+            <input type="number" id="book_pages" formControlName="book_pages" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" placeholder="Número de páginas"
+                  [class.is-invalid]="editBookForm.controls['book_pages'].invalid && editBookForm.controls['book_pages'].touched">
+            <div class="invalid-feedback" *ngIf="editBookForm.controls['book_pages'].errors?.['required']">
+              El número de páginas es obligatorio.
+            </div>
+            <div class="invalid-feedback" *ngIf="editBookForm.controls['book_pages'].errors?.['min']">
+              El número de páginas debe ser mayor que cero.
+            </div>
+          </div>
+          
+          <!-- Saga -->
+          <div class="col-md-6">
+            <label for="sagas" class="form-label fw-semibold text-theme-text">Saga</label>
+            <input type="text" id="sagas" formControlName="sagas" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" placeholder="Nombre de la saga (opcional)">
+          </div>
+          
+          <!-- Géneros -->
+          <div class="col-md-6">
+            <label for="genres" class="form-label fw-semibold text-theme-text">Géneros</label>
+            <input type="text" id="genres"  formControlName="genres" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" placeholder="Géneros separados por comas">
+            <small class="form-text text-theme">Ejemplo: Fantasía, Aventura, Romance</small>
+          </div>
+          
+          <!-- Estado de lectura -->
+          <div class="col-12">
+            <label for="reading_status" class="form-label fw-semibold text-theme-text">Estado</label>
+            <select id="reading_status" formControlName="reading_status" class="form-select bg-component border-0 p-3 shadow-sm text-theme-text">
+              <option value="planned">No iniciado</option>
+              <option value="reading">Leyendo</option>
+              <option value="completed">Completado</option>
+              <option value="dropped">Abandonado</option>
+              <option value="on_hold">En espera</option>
+            </select>
+          </div>
+          
+          <!-- Descripción personalizada -->
+          <div class="col-12">
+            <label for="custom_description" class="form-label fw-semibold text-theme-text">Descripción personalizada</label>
+            <textarea id="custom_description" formControlName="custom_description" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" placeholder="Tus propias notas sobre este libro" rows="3"></textarea>
+          </div>
+          
+          <!-- Sinopsis -->
+          <div class="col-12">
+            <label for="synopsis" class="form-label fw-semibold text-theme-text">Sinopsis</label>
+            <textarea id="synopsis" formControlName="synopsis" class="form-control bg-component border-0 p-3 shadow-sm text-theme-text" placeholder="Sinopsis del libro" rows="5"></textarea>
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <button type="button" 
+                  class="btn bg-component text-theme-text rounded-pill px-4 py-2" 
+                  (click)="closeEditForm()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary action-btn-success text-white rounded-pill px-4 py-2"[disabled]="editBookForm.invalid || isSubmitting">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Guardar cambios
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -40,12 +40,12 @@ export class ReadingService {
     if (bookTitle) {
       params = params.set('book_title', bookTitle);
     }
-
-    return this.http.get<ReadingProgressResponse>(`${this.apiUrl}/progress/${userNickname}`, { params })
-      .pipe(
-        retry(1),
-        catchError(this.handleError)
-      );
+    const headers = this.authService.getAuthHeaders();
+    return this.http.get<ReadingProgressResponse>(`${this.apiUrl}/progress/${userNickname}`, { params, headers })
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
   }
 
   /**
@@ -178,12 +178,12 @@ export class ReadingService {
     if (userNickname) {
       params = params.set('user_nickname', userNickname);
     }
-
-    return this.http.get<PhraseResponse>(`${this.apiUrl}/phrases`, { params })
-      .pipe(
-        retry(1),
-        catchError(this.handleError)
-      );
+    const headers = this.authService.getAuthHeaders();
+    return this.http.get<PhraseResponse>(`${this.apiUrl}/phrases`, { params, headers })
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
   }
 
   /**
@@ -236,12 +236,12 @@ export class ReadingService {
     if (userNickname) {
       params = params.set('user_nickname', userNickname);
     }
-
-    return this.http.get<NoteResponse>(`${this.apiUrl}/notes`, { params })
-      .pipe(
-        retry(1),
-        catchError(this.handleError)
-      );
+    const headers = this.authService.getAuthHeaders();
+    return this.http.get<NoteResponse>(`${this.apiUrl}/notes`, { params, headers })
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
   }
 
   /**

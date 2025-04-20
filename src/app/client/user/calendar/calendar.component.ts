@@ -2,8 +2,6 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../../core/services/call-api/book.service';
-import { AuthorService } from '../../../core/services/call-api/author.service';
-import { UserService } from '../../../core/services/call-api/user.service';
 import { ReadingService } from '../../../core/services/call-api/reading.service';
 import { UserBook } from '../../../core/models/call-api/book.model';
 import { AuthService } from '../../../core/services/auth/auth.service';

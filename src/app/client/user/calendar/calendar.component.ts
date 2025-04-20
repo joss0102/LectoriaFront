@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../../core/services/call-api/book.service';
@@ -6,6 +6,9 @@ import { ReadingService } from '../../../core/services/call-api/reading.service'
 import { UserBook } from '../../../core/models/call-api/book.model';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { ReadingProgress } from '../../../core/models/call-api/reading.model';
+
+import { ReadingGoalsService } from '../../../core/services/ReadingGoals/reading-goals.service';
+import { Subscription } from 'rxjs';
 
 declare var bootstrap: any;
 
@@ -16,7 +19,7 @@ declare var bootstrap: any;
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
-export class CalendarComponent implements OnInit, AfterViewInit {
+export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   currentDate: Date = new Date();
   currentMonth: number = this.currentDate.getMonth();
   currentYear: number = this.currentDate.getFullYear();
@@ -50,14 +53,20 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   loading: boolean = true;
   error: string | null = null;
   
+  // Suscripción a las metas de lectura
+  private readingGoalsSubscription: Subscription = new Subscription();
+  
+  // Metas diarias para verificar logros
+  dailyPagesGoal: number = 30;
+  
   constructor(
     private bookService: BookService,
     private readingService: ReadingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private readingGoalsService: ReadingGoalsService
   ) { }
   
   ngOnInit(): void {
-
     const currentUser = this.authService.currentUserValue;
     
     if (currentUser) {
@@ -69,6 +78,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       console.log(`Inicialmente mostrando el mes actual: ${this.currentMonthName} ${this.currentYear}`);
       
       this.loadUserBooks();
+      
+      // Suscribirse a cambios en las metas de lectura
+      this.subscribeToReadingGoals();
     } else {
       this.error = 'No hay usuario autenticado';
       console.error('Error: No hay usuario autenticado');
@@ -79,6 +91,42 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.initModal();
     this.initConfirmationModal();
+  }
+  
+  ngOnDestroy(): void {
+    // Limpiar suscripciones
+    if (this.readingGoalsSubscription) {
+      this.readingGoalsSubscription.unsubscribe();
+    }
+  }
+  
+  /**
+   * Suscribirse a cambios en las metas de lectura
+   */
+  private subscribeToReadingGoals(): void {
+    // Cargar metas desde el servidor
+    this.readingGoalsService.loadUserGoals(this.userNickname).subscribe();
+    
+    // Obtener metas iniciales
+    const initialGoals = this.readingGoalsService.getCurrentGoals();
+    this.updateGoals(initialGoals);
+    
+    // Suscribirse a cambios futuros
+    this.readingGoalsSubscription = this.readingGoalsService.readingGoals$
+      .subscribe(goals => {
+        this.updateGoals(goals);
+        
+        // Recalcular el progreso cuando cambien las metas
+        this.calculateYearlyProgress();
+      });
+  }
+  
+  /**
+   * Actualizar las metas locales con las nuevas
+   */
+  private updateGoals(goals: any): void {
+    this.dailyPagesGoal = goals.daily_pages;
+    this.currentGoal = this.readingGoalsService.formatYearlyGoal(this.currentYear);
   }
 
   initModal(): void {
@@ -151,7 +199,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         }
       });
   }
-booksReadToday: { title: string, pagesRead: number }[] = [];
+  
+  booksReadToday: { title: string, pagesRead: number }[] = [];
+  
   openReadingModal(day: number): void {
     this.selectedDay = day;
     this.selectedDate = new Date(this.currentYear, this.currentMonth, day);
@@ -411,167 +461,172 @@ booksReadToday: { title: string, pagesRead: number }[] = [];
     }).length;
   }
   
-  /**
+/**
    * Calcula el progreso anual hacia la meta
    */
-  calculateYearlyProgress(): void {
-    const booksReadThisYear = this.books.filter(book => {
-      if (book.reading_status === 'completed' && book.date_ending) {
-        const endingDate = this.parseApiDate(book.date_ending);
-        return endingDate.getFullYear() === this.currentYear;
-      }
+calculateYearlyProgress(): void {
+  const booksReadThisYear = this.books.filter(book => {
+    if (book.reading_status === 'completed' && book.date_ending) {
+      const endingDate = this.parseApiDate(book.date_ending);
+      return endingDate.getFullYear() === this.currentYear;
+    }
+    return false;
+  }).length;
+  
+  // Obtener la meta anual actual del servicio
+  const currentGoals = this.readingGoalsService.getCurrentGoals();
+  const yearlyGoal = currentGoals.yearly;
+  
+  this.goalProgressPercentage = Math.min(100, (booksReadThisYear / yearlyGoal) * 100);
+  
+  if (this.goalProgressPercentage < 25) {
+    this.goalProgressText = `${booksReadThisYear}/${yearlyGoal} - ¡Sigue así, aún queda mucho año!`;
+  } else if (this.goalProgressPercentage < 50) {
+    this.goalProgressText = `${booksReadThisYear}/${yearlyGoal} - ¡Buen progreso, vas por buen camino!`;
+  } else if (this.goalProgressPercentage < 75) {
+    this.goalProgressText = `${booksReadThisYear}/${yearlyGoal} - ¡Impresionante, estás avanzando rápido!`;
+  } else if (this.goalProgressPercentage < 100) {
+    this.goalProgressText = `${booksReadThisYear}/${yearlyGoal} - ¡Casi ahí, solo unos pocos más!`;
+  } else {
+    this.goalProgressText = `${booksReadThisYear}/${yearlyGoal} - ¡Meta completada! ¿Por qué no aumentarla?`;
+  }
+}
+
+/**
+ * Obtiene el número de días en el mes actual
+ */
+getDaysInMonth(): number[] {
+  const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+  return Array.from({ length: daysInMonth }, (_, i) => i + 1);
+}
+
+/**
+ * Obtiene el offset de días para el comienzo del mes
+ */
+getDaysOffset(): number[] {
+  const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
+  
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  
+  return Array(offset).fill(0);
+}
+
+/**
+ * Verifica si un día es el día actual
+ */
+isToday(day: number): boolean {
+  const today = new Date();
+  return day === today.getDate() && 
+         this.currentMonth === today.getMonth() && 
+         this.currentYear === today.getFullYear();
+}
+
+/**
+ * Verifica si se ha leído en un día específico
+ */
+hasReadOnDay(day: number): boolean {
+  const records = this.getReadingRecordsForDay(day);
+  return records.length > 0;
+}
+
+/**
+ * Verifica si se ha alcanzado la meta diaria en un día específico
+ */
+hasAchievedGoalOnDay(day: number): boolean {
+  const totalPagesOnDay = this.getPagesForDay(day);
+  
+  // Usar la meta diaria configurada en preferencias
+  return totalPagesOnDay >= this.dailyPagesGoal;
+}
+
+getReadingRecordsForDay(day: number): ReadingProgress[] {
+  return this.allReadingRecords.filter(record => {
+    try {
+      const recordDate = this.parseApiDate(record.reading_date);
+      
+      const recordDateOnly = new Date(
+        recordDate.getFullYear(), 
+        recordDate.getMonth(), 
+        recordDate.getDate()
+      );
+      
+      const targetDate = new Date(
+        this.currentYear,
+        this.currentMonth,
+        day
+      );
+      
+      const recordDateStr = recordDateOnly.toISOString().split('T')[0];
+      const targetDateStr = targetDate.toISOString().split('T')[0];
+      
+      return recordDateStr === targetDateStr;
+    } catch (error) {
+      console.error('Error al procesar fecha:', record.reading_date, error);
       return false;
-    }).length;
-    
-    this.goalProgressPercentage = Math.min(100, (booksReadThisYear / 15) * 100);
-    
-    if (this.goalProgressPercentage < 25) {
-      this.goalProgressText = `${booksReadThisYear}/15 - ¡Sigue así, aún queda mucho año!`;
-    } else if (this.goalProgressPercentage < 50) {
-      this.goalProgressText = `${booksReadThisYear}/15 - ¡Buen progreso, vas por buen camino!`;
-    } else if (this.goalProgressPercentage < 75) {
-      this.goalProgressText = `${booksReadThisYear}/15 - ¡Impresionante, estás avanzando rápido!`;
-    } else if (this.goalProgressPercentage < 100) {
-      this.goalProgressText = `${booksReadThisYear}/15 - ¡Casi ahí, solo unos pocos más!`;
-    } else {
-      this.goalProgressText = `${booksReadThisYear}/15 - ¡Meta completada! ¿Por qué no aumentarla?`;
     }
+  });
+}
+
+/**
+ * Obtiene el número de páginas leídas en un día específico
+ */
+getPagesForDay(day: number): number {
+  const records = this.getReadingRecordsForDay(day);
+  const totalPages = records.reduce(
+    (sum, record) => sum + record.pages_read_session, 0);
+  return totalPages;
+}
+
+/**
+ * Navega al mes anterior
+ */
+previousMonth(): void {
+  if (this.currentMonth === 0) {
+    this.currentMonth = 11;
+    this.currentYear--;
+  } else {
+    this.currentMonth--;
   }
+  console.log(`Cambiando a mes anterior: ${this.currentMonthName} ${this.currentYear}`);
+  this.updateMonthStats();
   
-  /**
-   * Obtiene el número de días en el mes actual
-   */
-  getDaysInMonth(): number[] {
-    const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
-    return Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  this.forceViewRefresh();
+}
+
+nextMonth(): void {
+  if (this.currentMonth === 11) {
+    this.currentMonth = 0;
+    this.currentYear++;
+  } else {
+    this.currentMonth++;
   }
+  console.log(`Cambiando a mes siguiente: ${this.currentMonthName} ${this.currentYear}`);
+  this.updateMonthStats();
   
-  /**
-   * Obtiene el offset de días para el comienzo del mes
-   */
-  getDaysOffset(): number[] {
-    const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
-    
-    const offset = firstDay === 0 ? 6 : firstDay - 1;
-    
-    return Array(offset).fill(0);
-  }
-  
-  /**
-   * Verifica si un día es el día actual
-   */
-  isToday(day: number): boolean {
-    const today = new Date();
-    return day === today.getDate() && 
-           this.currentMonth === today.getMonth() && 
-           this.currentYear === today.getFullYear();
-  }
-  
-  /**
-   * Verifica si se ha leído en un día específico
-   */
-  hasReadOnDay(day: number): boolean {
-    const records = this.getReadingRecordsForDay(day);
-    return records.length > 0;
-  }
-  
-  /**
-   * Verifica si se ha alcanzado la meta diaria en un día específico
-   */
-  hasAchievedGoalOnDay(day: number): boolean {
-    const totalPagesOnDay = this.getPagesForDay(day);
-    
-    return totalPagesOnDay >= 30;
-  }
-  
-  getReadingRecordsForDay(day: number): ReadingProgress[] {
-    return this.allReadingRecords.filter(record => {
-      try {
-        const recordDate = this.parseApiDate(record.reading_date);
-        
-        const recordDateOnly = new Date(
-          recordDate.getFullYear(), 
-          recordDate.getMonth(), 
-          recordDate.getDate()
-        );
-        
-        const targetDate = new Date(
-          this.currentYear,
-          this.currentMonth,
-          day
-        );
-        
-        const recordDateStr = recordDateOnly.toISOString().split('T')[0];
-        const targetDateStr = targetDate.toISOString().split('T')[0];
-        
-        return recordDateStr === targetDateStr;
-      } catch (error) {
-        console.error('Error al procesar fecha:', record.reading_date, error);
-        return false;
-      }
-    });
-  }
-  
-  /**
-   * Obtiene el número de páginas leídas en un día específico
-   */
-  getPagesForDay(day: number): number {
-    const records = this.getReadingRecordsForDay(day);
-    const totalPages = records.reduce(
-      (sum, record) => sum + record.pages_read_session, 0);
-    return totalPages;
-  }
-  
-  /**
-   * Navega al mes anterior
-   */
-  previousMonth(): void {
-    if (this.currentMonth === 0) {
-      this.currentMonth = 11;
-      this.currentYear--;
-    } else {
-      this.currentMonth--;
-    }
-    console.log(`Cambiando a mes anterior: ${this.currentMonthName} ${this.currentYear}`);
-    this.updateMonthStats();
-    
-    this.forceViewRefresh();
-  }
-  
-  nextMonth(): void {
-    if (this.currentMonth === 11) {
-      this.currentMonth = 0;
-      this.currentYear++;
-    } else {
-      this.currentMonth++;
-    }
-    console.log(`Cambiando a mes siguiente: ${this.currentMonthName} ${this.currentYear}`);
-    this.updateMonthStats();
-    
-    this.forceViewRefresh();
-  }
-  
-  /**
-   * Fuerza un refresco de la vista para solucionar problemas de actualización
-   */
-  forceViewRefresh(): void {
+  this.forceViewRefresh();
+}
+
+/**
+ * Fuerza un refresco de la vista para solucionar problemas de actualización
+ */
+forceViewRefresh(): void {
+  setTimeout(() => {
+    const temp = this.currentMonth;
+    this.currentMonth = -1;
     setTimeout(() => {
-      const temp = this.currentMonth;
-      this.currentMonth = -1;
-      setTimeout(() => {
-        this.currentMonth = temp;
-      }, 0);
+      this.currentMonth = temp;
     }, 0);
-  }
+  }, 0);
+}
+
+formatMinutes(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
   
-  formatMinutes(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    
-    if (hours > 0) {
-      return `${hours}h ${mins}m`;
-    } else {
-      return `${mins}m`;
-    }
+  if (hours > 0) {
+    return `${hours}h ${mins}m`;
+  } else {
+    return `${mins}m`;
   }
+}
 }

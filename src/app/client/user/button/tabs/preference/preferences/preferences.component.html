@@ -45,7 +45,7 @@
 </section>
 <!-- Modal Tema -->
 <div class="modal fade" [class.show]="showThemeModal" [style.display]="showThemeModal ? 'block' : 'none'" 
-     tabindex="-1" aria-labelledby="themeModalLabel" aria-hidden="true" 
+      tabindex="-1" aria-labelledby="themeModalLabel" aria-hidden="true" 
      *ngIf="showThemeModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -133,7 +133,7 @@
 
 <!-- Modal Idioma -->
 <div class="modal fade" [class.show]="showLanguageModal" [style.display]="showLanguageModal ? 'block' : 'none'" 
-     tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true" 
+      tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true" 
      *ngIf="showLanguageModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -196,7 +196,7 @@
 
 <!-- Modal Colores de Acento -->
 <div class="modal fade" [class.show]="showAccentColorsModal" [style.display]="showAccentColorsModal ? 'block' : 'none'" 
-     tabindex="-1" aria-labelledby="accentColorsModalLabel" aria-hidden="true" 
+      tabindex="-1" aria-labelledby="accentColorsModalLabel" aria-hidden="true" 
      *ngIf="showAccentColorsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -225,7 +225,7 @@
 
               <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
               <button type="button" class="btn btn-primary custom-btn" (click)="saveAccentColors()">Guardar</button>
- 
+
           </div>
         </form>
       </div>
@@ -235,7 +235,7 @@
 
 <!-- Modal Metas de Lectura -->
 <div class="modal fade" [class.show]="showReadingGoalsModal" [style.display]="showReadingGoalsModal ? 'block' : 'none'" 
-     tabindex="-1" aria-labelledby="readingGoalsModalLabel" aria-hidden="true" 
+      tabindex="-1" aria-labelledby="readingGoalsModalLabel" aria-hidden="true" 
      *ngIf="showReadingGoalsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -246,54 +246,29 @@
       <div class="modal-body">
         <form #readingGoalsForm="ngForm">
           <div class="mb-4">
-            <label class="form-label fw-bold">Meta diaria</label>
-            <div class="input-group mb-3">
-              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.daily" name="dailyPages" min="1" max="1000">
-              <span class="input-group-text">páginas por día</span>
-            </div>
-          </div>
-          
-          <div class="mb-4">
-            <label class="form-label fw-bold">Meta semanal</label>
-            <div class="input-group mb-3">
-              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.weekly" name="weeklyBooks" min="1" max="10">
-              <span class="input-group-text">libros por semana</span>
-            </div>
-          </div>
-
-          <div class="mb-4">
             <label class="form-label fw-bold">Meta anual</label>
             <div class="input-group mb-3">
               <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.yearly" name="yearlyBooks" min="1" max="500">
               <span class="input-group-text">libros por año</span>
             </div>
           </div>
-
+          
           <div class="mb-4">
-            <label class="form-label fw-bold">Recordatorios</label>
-            <div class="form-check form-switch mb-3">
-              <input class="form-check-input" type="checkbox" id="enableReminders" [(ngModel)]="preferences.readingGoals.remindersEnabled" name="remindersEnabled">
-              <label class="form-check-label" for="enableReminders">Activar recordatorios</label>
-            </div>
-            
-            <div *ngIf="preferences.readingGoals.remindersEnabled" class="reminder-settings">
-              <div class="mb-3">
-                <label for="reminderTime" class="form-label">Hora del recordatorio</label>
-                <input type="time" class="form-control" id="reminderTime" [(ngModel)]="preferences.readingGoals.reminderTime" name="reminderTime">
-              </div>
-              
-              <div class="mb-3">
-                <label class="form-label">Días de la semana</label>
-                <div class="d-flex flex-wrap gap-2">
-                  <div class="form-check form-check-inline" *ngFor="let day of weekdays; let i = index">
-                    <input class="form-check-input" type="checkbox" id="day{{i}}" [(ngModel)]="preferences.readingGoals.reminderDays[i]" name="day{{i}}">
-                    <label class="form-check-label" for="day{{i}}">{{day}}</label>
-                  </div>
-                </div>
-              </div>
+            <label class="form-label fw-bold">Meta mensual</label>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.monthly" name="monthlyBooks" min="1" max="50">
+              <span class="input-group-text">libros por mes</span>
             </div>
           </div>
-
+      
+          <div class="mb-4">
+            <label class="form-label fw-bold">Meta diaria</label>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" [(ngModel)]="preferences.readingGoals.daily_pages" name="dailyPages" min="1" max="1000">
+              <span class="input-group-text">páginas por día</span>
+            </div>
+          </div>
+      
           <div class="d-flex justify-content-end">
             <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
             <button type="button" class="btn btn-primary custom-btn" (click)="saveReadingGoals()">Guardar</button>

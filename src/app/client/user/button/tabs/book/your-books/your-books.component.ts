@@ -35,8 +35,6 @@ export class YourBooksComponent implements OnInit, OnDestroy {
   isSubmitting: boolean = false;
   formError: string = '';
 
-  sortBy: 'title' | 'author' | 'rating' | 'date' = 'title';
-  filterStatus: 'all' | 'reading' | 'completed' | 'not-started' | 'abandoned' = 'all';
   searchQuery: string = '';
 
   currentPage: number = 1;

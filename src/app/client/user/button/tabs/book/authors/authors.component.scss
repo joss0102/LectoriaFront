@@ -276,6 +276,74 @@
   }
 }
 
+// Estilos para paginación
+.pagination-container {
+  margin-top: 2rem;
+}
+
+.modern-pagination {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  .page-nav, .page-number {
+    margin: 0 2px;
+    
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    &.active .btn-pagination {
+      background-color: var(--bs-btn);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+  }
+  
+  .btn-pagination {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background-color: var(--component-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    
+    &:hover:not([disabled]) {
+      background-color: var(--bs-btn-hover);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+  
+  .page-arrow {
+    font-style: normal;
+    font-weight: bold;
+  }
+  
+  .page-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--border-color);
+    padding: 0 5px;
+    
+    .ellipsis {
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+  }
+}
+
 // Media queries
 @media (max-width: 768px) {
   .main-title {
@@ -350,5 +418,30 @@
   .books-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+  }
+}
+
+// Elemento de carga progresiva
+#progressive-loading-trigger {
+  opacity: 0.8;
+  padding: 15px 0;
+  transition: opacity 0.3s ease;
+  
+  &:hover {
+    opacity: 1;
+  }
+  
+  button {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+  
+  .spinner-border {
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
   }
 }

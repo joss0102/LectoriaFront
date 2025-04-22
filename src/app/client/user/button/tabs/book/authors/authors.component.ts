@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { of } from 'rxjs';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { catchError, finalize, takeUntil } from 'rxjs/operators';
 
 import { AuthorService } from '../../../../../../core/services/call-api/author.service';
 import { BookService } from '../../../../../../core/services/call-api/book.service';
@@ -25,7 +25,7 @@ interface AuthorWithBooks extends Author {
   templateUrl: './authors.component.html',
   styleUrl: './authors.component.scss'
 })
-export class AuthorsComponent implements OnInit {
+export class AuthorsComponent implements OnInit, OnDestroy {
   allAuthors: AuthorWithBooks[] = [];
   filteredAuthors: AuthorWithBooks[] = [];
   selectedAuthor: AuthorWithBooks | null = null;
@@ -36,9 +36,8 @@ export class AuthorsComponent implements OnInit {
   errorMessage: string = '';
   
   currentUserNickname: string = '';
-
-  userBooks: UserBook[] = [];
-
+  private destroy$ = new Subject<void>();
+  
   constructor(
     private authorService: AuthorService,
     private bookService: BookService,
@@ -48,149 +47,163 @@ export class AuthorsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-
+    this.allAuthors = [];
+    
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
       this.currentUserNickname = currentUser.nickname;
-      this.loadAuthorsAndUserBooks();
+      this.loadUserBooksAndAuthors();
     } else {
       this.errorMessage = 'Usuario no autenticado';
       this.isLoading = false;
     }
   }
   
-  // Cargar autores y libros del usuario
-  loadAuthorsAndUserBooks(): void {
-    this.isLoading = true;
-    this.errorMessage = '';
-    
-    console.log('Cargando datos del usuario:', this.currentUserNickname);
-
-    this.bookService.getUserBooks(this.currentUserNickname, undefined, 1, 100).pipe(
-      catchError(error => {
-        console.error('Error al obtener libros del usuario:', error);
-        return of({ data: [] });
-      }),
-      switchMap(userBooksResponse => {
-        this.userBooks = userBooksResponse.data || [];
-        console.log('Libros del usuario cargados:', this.userBooks.length);
-        
-        if (this.userBooks.length === 0) {
-          return of({ data: [] });
-        }
-        return this.authorService.getAllAuthors().pipe(
-          catchError(error => {
-            console.error('Error al obtener autores:', error);
-            return of({ data: [] });
-          })
-        );
-      }),
-      finalize(() => {
-        this.isLoading = false;
-      })
-    ).subscribe(authorsResponse => {
-      const authors = authorsResponse.data || [];
-      console.log('Autores cargados:', authors.length);
-      
-      if (authors.length === 0) {
-        this.errorMessage = 'No se pudieron cargar los autores';
-        return;
-      }
-      
-      this.processAuthors(authors);
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   
-  // Procesar los autores y obtener sus libros
-  private processAuthors(authors: Author[]): void {
-    const authorsWithBooks: AuthorWithBooks[] = [];
-    let processedCount = 0;
+  // Cargar libros y autores de forma simplificada
+  loadUserBooksAndAuthors(): void {
+    this.isLoading = true;
     
-    authors.forEach(author => {
-      this.authorService.getAuthorBooks(author.id).pipe(
+    // 1. Cargar todos los libros del usuario
+    this.bookService.getUserBooks(this.currentUserNickname, undefined, 1, 1000)
+      .pipe(
         catchError(error => {
-          console.error(`Error al obtener libros del autor ${author.name}:`, error);
+          console.error('Error al cargar libros:', error);
           return of({ data: [] });
-        })
-      ).subscribe(authorBooksResponse => {
-        processedCount++;
-        const authorBooks = authorBooksResponse.data || [];
-        console.log(`Autor ${author.name}: ${authorBooks.length} libros encontrados`);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(response => {
+        const userBooks = response.data || [];
         
-        const userAuthorBooks = this.filterUserBooks(authorBooks);
-        
-        if (userAuthorBooks.length > 0) {
-          const authorWithBooks: AuthorWithBooks = {
-            ...author,
-            books: userAuthorBooks,
-            bookReviews: {}
-          };
-          
-          authorsWithBooks.push(authorWithBooks);
-          console.log(`Autor añadido: ${author.name} con ${userAuthorBooks.length} libros del usuario`);
+        if (userBooks.length === 0) {
+          this.errorMessage = 'No se encontraron libros en tu biblioteca';
+          this.isLoading = false;
+          return;
         }
         
-        if (processedCount === authors.length) {
-          this.updateAuthorsList(authorsWithBooks);
+        // 2. Obtener detalles completos de los libros
+        const bookDetailsRequests = userBooks.map(book => 
+          this.bookService.getBookById(book.book_id).pipe(
+            catchError(() => of(null))
+          )
+        );
+        
+        forkJoin(bookDetailsRequests)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(detailsResults => {
+            // Combinar detalles con libros originales
+            const enrichedBooks = userBooks.map((book, i) => {
+              const details = detailsResults[i];
+              if (details) {
+                return {
+                  ...book,
+                  sagas: details.sagas || book.sagas || '',
+                  authors: details.authors || book.authors || ''
+                };
+              }
+              return book;
+            });
+            
+            // 3. Cargar autores
+            this.authorService.getAllAuthors()
+              .pipe(
+                catchError(() => of({ data: [] })),
+                takeUntil(this.destroy$),
+                finalize(() => this.isLoading = false)
+              )
+              .subscribe(authorsResponse => {
+                const authors = authorsResponse.data || [];
+                
+                if (authors.length === 0) {
+                  this.errorMessage = 'No se pudieron cargar los autores';
+                  return;
+                }
+                
+                this.processAuthorsWithBooks(authors, enrichedBooks);
+              });
+          });
+      });
+  }
+  
+  // Relacionar autores con libros
+  private processAuthorsWithBooks(authors: Author[], books: UserBook[]): void {
+    // Agrupar libros por autor
+    const booksByAuthor = new Map<string, UserBook[]>();
+    
+    books.forEach(book => {
+      if (!book.authors) return;
+      
+      // Separar en caso de múltiples autores
+      const authorNames = book.authors.split(',').map(name => name.trim().toLowerCase());
+      
+      authorNames.forEach(name => {
+        if (!booksByAuthor.has(name)) {
+          booksByAuthor.set(name, []);
         }
+        booksByAuthor.get(name)?.push(book);
       });
     });
-  }
-  
-  private filterUserBooks(authorBooks: AuthorBook[]): UserBook[] {
-    const userAuthorBooks: UserBook[] = [];
     
-    authorBooks.forEach(authorBook => {
-      const matchingUserBooks = this.userBooks.filter(userBook => 
-        userBook.book_id === authorBook.id || 
-        userBook.book_title.toLowerCase() === authorBook.title.toLowerCase()
-      );
+    // Crear lista de autores con sus libros
+    const authorsWithBooks: AuthorWithBooks[] = [];
+    
+    authors.forEach(author => {
+      const fullName = this.getAuthorFullName(author).toLowerCase();
+      const authorBooks = booksByAuthor.get(fullName) || [];
       
-      userAuthorBooks.push(...matchingUserBooks);
+      if (authorBooks.length > 0) {
+        authorsWithBooks.push({
+          ...author,
+          books: authorBooks,
+          bookReviews: {}
+        });
+      }
     });
     
-    return userAuthorBooks;
-  }
-  
-  // Actualizar la lista de autores
-  private updateAuthorsList(authorsWithBooks: AuthorWithBooks[]): void {
     if (authorsWithBooks.length === 0) {
       this.errorMessage = 'No se encontraron autores para tus libros';
       return;
     }
-    authorsWithBooks.sort((a, b) => this.getAuthorFullName(a).localeCompare(this.getAuthorFullName(b)));
+    
+    // Ordenar y guardar
+    authorsWithBooks.sort((a, b) => 
+      this.getAuthorFullName(a).localeCompare(this.getAuthorFullName(b))
+    );
     
     this.allAuthors = authorsWithBooks;
     this.filteredAuthors = [...this.allAuthors];
     
-    console.log('Total de autores procesados:', this.allAuthors.length);
-    
-    this.loadReviewsForTopAuthors();
+    // Cargar reseñas para los principales autores
+    this.loadTopAuthorsReviews();
   }
   
-  // Cargar reseñas para los autores principales
-  private loadReviewsForTopAuthors(): void {
+  // Cargar reseñas solo para autores principales
+  private loadTopAuthorsReviews(): void {
     if (this.allAuthors.length === 0) return;
     
+    // Solo los 5 autores con más libros
     const topAuthors = [...this.allAuthors]
       .sort((a, b) => b.books.length - a.books.length)
       .slice(0, 5);
-    
-    topAuthors.forEach(author => this.loadReviewsForAuthor(author));
+      
+    topAuthors.forEach(author => this.loadAuthorReviews(author));
   }
   
   // Cargar reseñas para un autor específico
-  private loadReviewsForAuthor(author: AuthorWithBooks): void {
+  private loadAuthorReviews(author: AuthorWithBooks): void {
     if (!author.books || author.books.length === 0) return;
     
-    if (!author.bookReviews) {
-      author.bookReviews = {};
-    }
-    const booksToLoad = author.books.slice(0, 5);
+    author.bookReviews = author.bookReviews || {};
     
-    booksToLoad.forEach(book => {
-      if (author.bookReviews![book.book_id]) return;
-      
+    // Solo primeros 3 libros
+    const topBooks = author.books.slice(0, 3);
+    
+    topBooks.forEach(book => {
       this.readingService.getBookReviews(book.book_title, this.currentUserNickname)
         .pipe(catchError(() => of({ data: [] })))
         .subscribe(response => {
@@ -207,7 +220,8 @@ export class AuthorsComponent implements OnInit {
     this.isModalOpen = true;
     document.body.style.overflow = 'hidden';
     
-    this.loadReviewsForAuthor(author);
+    // Cargar reseñas si no están cargadas
+    this.loadAuthorReviews(author);
   }
 
   // Cerrar modal
@@ -257,34 +271,22 @@ export class AuthorsComponent implements OnInit {
   // Método para obtener la clase CSS según el estado del libro
   getStatusClass(status?: string): string {
     switch(status) {
-      case 'reading':
-        return 'status-reading';
-      case 'completed':
-        return 'status-completed';
-      case 'dropped':
-        return 'status-abandoned';
-      case 'on_hold':
-        return 'status-not-started';
-      case 'planned':
-      default:
-        return 'status-not-started';
+      case 'reading': return 'status-reading';
+      case 'completed': return 'status-completed';
+      case 'dropped': return 'status-abandoned';
+      case 'on_hold': return 'status-not-started';
+      default: return 'status-not-started';
     }
   }
   
   // Método para obtener el texto del estado
   getStatusText(status?: string): string {
     switch(status) {
-      case 'reading':
-        return 'Leyendo';
-      case 'completed':
-        return 'Completado';
-      case 'dropped':
-        return 'Abandonado';
-      case 'on_hold':
-        return 'En pausa';
-      case 'planned':
-      default:
-        return 'No iniciado';
+      case 'reading': return 'Leyendo';
+      case 'completed': return 'Completado';
+      case 'dropped': return 'Abandonado';
+      case 'on_hold': return 'En pausa';
+      default: return 'No iniciado';
     }
   }
   
@@ -302,9 +304,7 @@ export class AuthorsComponent implements OnInit {
   
   // Obtener páginas totales de todos los libros de un autor
   getTotalPages(author: AuthorWithBooks): number {
-    if (!author || !author.books || !author.books.length) {
-      return 0;
-    }
+    if (!author?.books?.length) return 0;
     
     return author.books.reduce((total, book) => {
       const pages = book.book_pages ? parseInt(String(book.book_pages), 10) : 0;
@@ -314,9 +314,7 @@ export class AuthorsComponent implements OnInit {
   
   // Obtener páginas leídas de todos los libros de un autor
   getReadPages(author: AuthorWithBooks): number {
-    if (!author || !author.books || !author.books.length) {
-      return 0;
-    }
+    if (!author?.books?.length) return 0;
     
     return author.books.reduce((total, book) => {
       const pagesRead = book.pages_read ? parseInt(String(book.pages_read), 10) : 0;
@@ -326,12 +324,11 @@ export class AuthorsComponent implements OnInit {
   
   // Obtener valoración media de los libros de un autor
   getAverageRating(author: AuthorWithBooks): string {
-    if (!author || !author.books || !author.books.length) {
-      return 'N/A';
-    }
+    if (!author?.books?.length) return 'N/A';
     
     let totalRating = 0;
     let ratingCount = 0;
+    
     if (author.bookReviews) {
       Object.values(author.bookReviews).forEach(reviews => {
         reviews.forEach(review => {
@@ -343,42 +340,34 @@ export class AuthorsComponent implements OnInit {
       });
     }
     
-    if (ratingCount === 0) {
-      return 'N/A';
-    }
-    return (totalRating / ratingCount).toFixed(1);
+    return ratingCount === 0 ? 'N/A' : (totalRating / ratingCount).toFixed(1);
   }
   
   // Obtener la URL de la imagen del autor
   getAuthorImageUrl(author: Author | AuthorWithBooks): string {
-    if (!author || !author.name) {
-      return '/assets/images/default-author.jpg';
-    }
-    const fullName = this.getAuthorFullName(author);
+    if (!author?.name) return '/assets/images/default-author.jpg';
     
+    const fullName = this.getAuthorFullName(author);
     return `/autores/${fullName}/autor/${fullName}.jpg`;
   }
   
   // Obtener la URL de la imagen de portada del libro
   getBookCoverUrl(book: UserBook | null): string {
-    if (!book || !book.book_title) {
-      return '/assets/images/default-book.jpg';
+    if (!book?.book_title) return '/assets/images/default-book.jpg';
+    
+    // Verificar si el libro tiene saga
+    if (book.sagas && book.sagas.trim() !== '') {
+      return `/libros/${book.sagas}/covers/${book.book_title}.png`;
     }
     
-    if (book.sagas) {
-      return `/libros/${book.sagas}/covers/${book.book_title}.png`;
-    } else {
-      return `/libros/covers/${book.book_title}.png`;
-    }
+    return `/libros/covers/${book.book_title}.png`;
   }
   
   // Obtener la URL del banner del autor
   getAuthorBannerUrl(author: Author | AuthorWithBooks): string {
-    if (!author) {
-      return '/assets/images/default-banner.jpg';
-    }
-    const fullName = this.getAuthorFullName(author);
+    if (!author) return '/assets/images/default-banner.jpg';
     
+    const fullName = this.getAuthorFullName(author);
     return `/autores/${fullName}/banner/fondo1.jpg`;
   }
   

@@ -1,164 +1,201 @@
 <!-- authors.component.html -->
 <div class="authors-container bg-theme p-3 p-md-4">
-    <div class="header-section mb-5">
-      <h1 class="main-title position-relative d-inline-block mb-2 fw-bold text-theme-text">Autores</h1>
-      <p class="main-description text-theme fs-6 mb-4 mw-600">Explora todos los autores de tu biblioteca. Haz clic en cualquier autor para ver sus libros.</p>
+  <div class="header-section mb-5">
+    <h1 class="main-title position-relative d-inline-block mb-2 fw-bold text-theme-text">Autores</h1>
+    <p class="main-description text-theme fs-6 mb-4 mw-600">Explora todos los autores de tu biblioteca. Haz clic en cualquier autor para ver sus libros.</p>
+    
+    <!-- Buscador -->
+    <div class="search-container mw-600 mb-4">
+      <div class="search-box position-relative w-100">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (input)="searchAuthors()"
+          placeholder="Buscar por nombre de autor..." 
+          class="search-input form-control rounded-pill border-0 py-3 px-4 shadow-sm bg-component"
+        >
+        <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn btn-icon border-0 bg-transparent position-absolute">×</button>
+        <div class="search-icon position-absolute">🔍</div>
+      </div>
+      <div class="search-results ps-3 mt-2 fs-7 text-theme" *ngIf="searchQuery">
+        <span *ngIf="filteredAuthors.length === 0">No se encontraron resultados</span>
+        <span *ngIf="filteredAuthors.length === 1">1 autor encontrado</span>
+        <span *ngIf="filteredAuthors.length > 1">{{filteredAuthors.length}} autores encontrados</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mensaje de carga -->
+  <div class="loading-message text-center py-5" *ngIf="isLoading">
+    <div class="spinner-border text-theme mb-3" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="text-theme">Cargando autores...</p>
+  </div>
+  
+  <!-- Mensaje de error -->
+  <div class="error-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="errorMessage && !isLoading">
+    <div class="error-icon fs-1 mb-3 text-danger">⚠️</div>
+    <h2 class="fs-4 mb-3 text-theme-text">Error</h2>
+    <p class="text-theme lh-base mb-3">{{ errorMessage }}</p>
+    <button class="btn btn-primary" (click)="ngOnInit()">Reintentar</button>
+  </div>
+  
+  <!-- Autores grid -->
+  <div class="authors-grid" *ngIf="!isLoading && !errorMessage">
+    <div class="author-card bg-component rounded-3 shadow overflow-hidden h-100 card-hover" 
+         *ngFor="let author of filteredAuthors" 
+          (click)="openAuthorDetails(author)">
+      <div class="author-avatar mx-auto mt-4">
+        <img [src]="getAuthorImageUrl(author)" 
+              [alt]="author.name" 
+              class="rounded-circle w-100 h-100 object-fit-cover author-img"
+              (error)="handleImageError($event)">
+      </div>
+      <div class="author-info text-center p-3">
+        <h3 class="author-name fw-semibold mb-2 text-theme-text">
+          {{ author.name }} {{ author.last_name1 || '' }} {{ author.last_name2 || '' }}
+        </h3>
+        <p class="book-count fs-7 text-theme mb-0">
+          <span class="book-icon me-1">📚</span>
+          {{ author.books.length }} {{ author.books.length === 1 ? 'libro' : 'libros' }}
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mensaje si no hay autores -->
+  <div class="no-authors empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="allAuthors.length === 0 && !isLoading && !errorMessage">
+    <div class="empty-icon fs-1 mb-3 text-theme">👤</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No hay autores en tu biblioteca</h2>
+    <p class="text-theme lh-base mb-0">¡Comienza a añadir libros para ver autores en tu biblioteca!</p>
+  </div>
+  
+  <!-- Mensaje si no hay resultados de búsqueda -->
+  <div class="no-search-results empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="allAuthors.length > 0 && filteredAuthors.length === 0 && !isLoading">
+    <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
+    <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
+      <button class="reset-search bg-transparent border-0 text-btn fw-semibold text-decoration-underline" 
+              (click)="clearSearch()">ver todos los autores</button>
+    </p>
+  </div>
+  
+  <!-- Modal de detalles del autor -->
+  <div class="modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-start justify-content-center p-3 bg-dark-blur backdrop-blur z-1000 overflow-auto" 
+       *ngIf="isModalOpen" 
+        (click)="closeModal()">
+    <div class="modal-content bg-main rounded-4 w-100 shadow-lg position-relative overflow-hidden" 
+          (click)="preventClose($event)" 
+         *ngIf="selectedAuthor">
+      <button class="close-btn position-absolute d-flex align-items-center justify-content-center rounded-circle border-0 bg-theme text-theme-text z-index-1" 
+              (click)="closeModal()">×</button>
       
-      <!-- Buscador -->
-      <div class="search-container mw-600 mb-4">
-        <div class="search-box position-relative w-100">
-          <input 
-            type="text" 
-            [(ngModel)]="searchQuery" 
-            (input)="searchAuthors()"
-            placeholder="Buscar por nombre de autor..." 
-            class="search-input form-control rounded-pill border-0 py-3 px-4 shadow-sm bg-component"
-          >
-          <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn btn-icon border-0 bg-transparent position-absolute">×</button>
-          <div class="search-icon position-absolute">🔍</div>
+      <!-- Cabecera de perfil estilo Facebook -->
+      <div class="author-profile-header position-relative">
+        <!-- Banner del autor -->
+        <div class="author-banner overflow-hidden">
+          <img [src]="getAuthorBannerUrl(selectedAuthor)" 
+                [alt]="'Banner de ' + getAuthorFullName(selectedAuthor)" 
+                class="w-100 object-fit-cover banner-img"
+                (error)="handleImageError($event)">
+          <div class="banner-gradient position-absolute inset-0"></div>
         </div>
-        <div class="search-results ps-3 mt-2 fs-7 text-theme" *ngIf="searchQuery">
-          <span *ngIf="filteredAuthors.length === 0">No se encontraron resultados</span>
-          <span *ngIf="filteredAuthors.length === 1">1 autor encontrado</span>
-          <span *ngIf="filteredAuthors.length > 1">{{filteredAuthors.length}} autores encontrados</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Autores grid -->
-    <div class="authors-grid">
-      <div class="author-card bg-component rounded-3 shadow overflow-hidden h-100 card-hover" 
-           *ngFor="let author of filteredAuthors" 
-           (click)="openAuthorDetails(author)">
-        <div class="author-avatar mx-auto mt-4">
-          <img [src]="'/autores/' +author.name+ '/autor/' +author.name+'.jpg'" alt="{{author.name}}" class="rounded-circle w-100 h-100 object-fit-cover">
-        </div>
-        <div class="author-info text-center p-3">
-          <h3 class="author-name fw-semibold mb-2 text-theme-text">{{ author.name }}</h3>
-          <p class="book-count fs-7 text-theme mb-0">
-            <span class="book-icon me-1">📚</span>
-            {{ author.books.length }} {{ author.books.length === 1 ? 'libro' : 'libros' }}
-          </p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Mensaje si no hay autores -->
-    <div class="no-authors empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
-         *ngIf="allAuthors.length === 0">
-      <div class="empty-icon fs-1 mb-3 text-theme">👤</div>
-      <h2 class="fs-4 mb-3 text-theme-text">No hay autores en tu biblioteca</h2>
-      <p class="text-theme lh-base mb-0">¡Comienza a añadir libros para ver autores en tu biblioteca!</p>
-    </div>
-    
-    <!-- Mensaje si no hay resultados de búsqueda -->
-    <div class="no-search-results empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
-         *ngIf="allAuthors.length > 0 && filteredAuthors.length === 0">
-      <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
-      <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
-      <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
-        <button class="reset-search bg-transparent border-0 text-btn fw-semibold text-decoration-underline" 
-                (click)="clearSearch()">ver todos los autores</button>
-      </p>
-    </div>
-    
-    <!-- Modal de detalles del autor -->
-    <div class="modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center p-3 bg-dark-blur backdrop-blur z-1000" 
-         *ngIf="isModalOpen" 
-         (click)="closeModal()">
-      <div class="modal-content bg-main rounded-4 w-100 shadow-lg position-relative overflow-hidden" 
-           (click)="preventClose($event)" 
-           *ngIf="selectedAuthor">
-        <button class="close-btn position-absolute d-flex align-items-center justify-content-center rounded-circle border-0 bg-theme text-theme-text" 
-                (click)="closeModal()">×</button>
         
-        <!-- Cabecera de perfil estilo Facebook -->
-        <div class="author-profile-header position-relative">
-          <!-- Banner del autor -->
-          <div class="author-banner overflow-hidden">
-            <img [src]="'/autores/' + selectedAuthor.name + '/banner/fondo1.jpg'" 
-                 [alt]="'Banner de ' + selectedAuthor.name" 
-                 class="w-100 object-fit-cover"
-                 onerror="this.src='/assets/images/default-banner.jpg'">
-            <div class="banner-gradient position-absolute inset-0"></div>
+        <!-- Información del autor con avatar superpuesto -->
+        <div class="author-profile-info d-flex align-items-end position-absolute bottom-0 start-0 w-100 p-3 p-md-4 ">
+          <div class="author-avatar-large rounded-circle overflow-hidden">
+            <img [src]="getAuthorImageUrl(selectedAuthor)" 
+                  [alt]="selectedAuthor.name" 
+                  class="w-100 h-100 object-fit-cover"
+                  onerror="this.src='/assets/images/default-author.jpg'">
           </div>
-          
-          <!-- Información del autor con avatar superpuesto -->
-          <div class="author-profile-info d-flex align-items-end position-absolute bottom-0 start-0 w-100 p-3 p-md-4 ">
-            <div class="author-avatar-large rounded-circle overflow-hidden">
-              <img [src]="'/autores/' +selectedAuthor.name+ '/autor/'+selectedAuthor.name+'.jpg'" 
-                   [alt]="selectedAuthor.name" 
-                   class="w-100 h-100 object-fit-cover">
+          <div class="author-details ms-3 ms-md-4 ">
+            <h2 class="author-title fw-bold mb-1 text-white text-shadow bg-transparent">
+              {{ getAuthorFullName(selectedAuthor) }}
+            </h2>
+            <div class="author-stats d-flex gap-3 text-white text-shadow-sm bg-transparent">
+              <span class="book-count bg-transparent">
+                <span class="stat-value fw-semibold">{{ selectedAuthor.books.length }}</span>
+                <span class="stat-label"> {{ selectedAuthor.books.length === 1 ? 'libro' : 'libros' }}</span>
+              </span>
+              <span class="book-status-count" *ngIf="getFinishedBooks(selectedAuthor).length > 0">
+                <span class="stat-value fw-semibold">{{ getFinishedBooks(selectedAuthor).length }}</span>
+                <span class="stat-label"> completados</span>
+              </span>
             </div>
-            <div class="author-details ms-3 ms-md-4 ">
-              <h2 class="author-title fw-bold mb-1 text-white text-shadow  bg-transparent">{{ selectedAuthor.name }}</h2>
-              <div class="author-stats d-flex gap-3 text-white text-shadow-sm  bg-transparent">
-                <span class="book-count  bg-transparent">
-                  <span class="stat-value fw-semibold">{{ selectedAuthor.books.length }}</span>
-                  <span class="stat-label"> {{ selectedAuthor.books.length === 1 ? 'libro' : 'libros' }}</span>
-                </span>
-                <span class="book-status-count" *ngIf="getFinishedBooks(selectedAuthor).length > 0">
-                  <span class="stat-value fw-semibold">{{ getFinishedBooks(selectedAuthor).length }}</span>
-                  <span class="stat-label"> completados</span>
-                </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="book-list p-4">
+        <h3 class="section-title position-relative d-inline-block mb-4 text-theme-text">Libros del autor</h3>
+        
+        <div class="books-grid">
+          <div class="book-card bg-theme rounded-3 shadow overflow-hidden card-hover" 
+               *ngFor="let book of selectedAuthor.books">
+            <div class="book-cover position-relative">
+              <img [src]="getBookCoverUrl(book)" 
+                    [alt]="book.book_title" 
+                    class="w-100 h-100 object-fit-cover book-img"
+                    (error)="handleImageError($event)">
+              <div class="book-status position-absolute top-10 end-10 rounded-pill fw-semibold shadow-sm" 
+                    [ngClass]="getStatusClass(book.reading_status)">
+                {{ getStatusText(book.reading_status) }}
+              </div>
+            </div>
+            <div class="book-info p-3">
+              <h4 class="book-title fw-semibold mb-1 text-truncate text-theme-text">{{ book.book_title }}</h4>
+              <div class="book-meta d-flex justify-content-between align-items-center">
+                <p class="book-pages fs-7 text-theme mb-0" *ngIf="book.book_pages">
+                  {{ book.book_pages }} páginas
+                </p>
+                <!-- Solo mostrar valoración si tiene reviews -->
+                <div class="book-rating" *ngIf="selectedAuthor.bookReviews && selectedAuthor.bookReviews[book.book_id] && selectedAuthor.bookReviews[book.book_id].length > 0">
+                  <span class="star text-btn">★</span>
+                  <span class="rating-value fs-7 text-theme">{{ selectedAuthor.bookReviews[book.book_id][0].rating }}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
         
-        <div class="book-list p-4">
-          <h3 class="section-title position-relative d-inline-block mb-4 text-theme-text">Libros del autor</h3>
-          
-          <div class="books-grid">
-            <div class="book-card bg-theme rounded-3 shadow overflow-hidden card-hover" 
-                 *ngFor="let book of selectedAuthor.books">
-              <div class="book-cover position-relative">
-                <img [src]="book.imagen" [alt]="book.titulo+'.jpg'" class="w-100 h-100 object-fit-cover">
-                <div class="book-status position-absolute top-10 end-10 rounded-pill fw-semibold shadow-sm" 
-                     [ngClass]="getStatusClass(book.estado)">
-                  {{ getStatusText(book.estado) }}
-                </div>
+        <!-- Estadísticas del autor -->
+        <div class="author-stats bg-component rounded-3 p-4 mt-4" *ngIf="hasReadBooks(selectedAuthor)">
+          <h4 class="stats-title fw-semibold mb-3 text-theme-text">Estadísticas de lectura</h4>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            <div class="col">
+              <div class="stat-item text-center">
+                <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ getTotalPages(selectedAuthor) }}</div>
+                <div class="stat-label fs-7 text-theme">Páginas totales</div>
               </div>
-              <div class="book-info p-3">
-                <h4 class="book-title fw-semibold mb-1 text-truncate text-theme-text">{{ book.titulo }}</h4>
-                <div class="book-meta d-flex justify-content-between align-items-center">
-                  <p class="book-pages fs-7 text-theme mb-0" *ngIf="book.paginasTotales">{{ book.paginasTotales }} páginas</p>
-                  <div class="book-rating" *ngIf="book.valoracion">
-                    <span class="star text-btn">★</span>
-                    <span class="rating-value fs-7 text-theme">{{ book.valoracion }}</span>
-                  </div>
-                </div>
+            </div>
+            
+            <div class="col">
+              <div class="stat-item text-center">
+                <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ getReadPages(selectedAuthor) }}</div>
+                <div class="stat-label fs-7 text-theme">Páginas leídas</div>
+              </div>
+            </div>
+            
+            <div class="col">
+              <div class="stat-item text-center">
+                <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ getAverageRating(selectedAuthor) }}</div>
+                <div class="stat-label fs-7 text-theme">Valoración media</div>
               </div>
             </div>
           </div>
-          
-          <!-- Estadísticas del autor -->
-          <div class="author-stats bg-component rounded-3 p-4 mt-4" *ngIf="hasReadBooks(selectedAuthor)">
-            <h4 class="stats-title fw-semibold mb-3 text-theme-text">Estadísticas de lectura</h4>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-              <div class="col">
-                <div class="stat-item text-center">
-                  <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ getTotalPages(selectedAuthor) }}</div>
-                  <div class="stat-label fs-7 text-theme">Páginas totales</div>
-                </div>
-              </div>
-              
-              <div class="col">
-                <div class="stat-item text-center">
-                  <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ getReadPages(selectedAuthor) }}</div>
-                  <div class="stat-label fs-7 text-theme">Páginas leídas</div>
-                </div>
-              </div>
-              
-              <div class="col">
-                <div class="stat-item text-center">
-                  <div class="stat-value fs-4 fw-bold text-btn mb-1">{{ getAverageRating(selectedAuthor) }}</div>
-                  <div class="stat-label fs-7 text-theme">Valoración media</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        </div>
+        
+        <!-- Descripción del autor si existe -->
+        <div class="author-description bg-component rounded-3 p-4 mt-4" *ngIf="selectedAuthor.description">
+          <h4 class="description-title fw-semibold mb-3 text-theme-text">Sobre el autor</h4>
+          <p class="text-theme">{{ selectedAuthor.description }}</p>
         </div>
       </div>
     </div>
   </div>
+</div>

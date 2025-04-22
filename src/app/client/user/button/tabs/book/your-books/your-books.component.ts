@@ -35,8 +35,6 @@ export class YourBooksComponent implements OnInit, OnDestroy {
   isSubmitting: boolean = false;
   formError: string = '';
 
-  sortBy: 'title' | 'author' | 'rating' | 'date' = 'title';
-  filterStatus: 'all' | 'reading' | 'completed' | 'not-started' | 'abandoned' = 'all';
   searchQuery: string = '';
 
   currentPage: number = 1;
@@ -96,11 +94,9 @@ export class YourBooksComponent implements OnInit, OnDestroy {
   // Cargar libros del usuario
   loadUserBooks(status?: string): void {
     this.isLoading = true;
-    console.log('Cargando libros para el usuario:', this.currentUser, 'con página:', this.currentPage);
     const subscription = this.bookService.getUserBooks(this.currentUser, status, this.currentPage, this.pageSize)
       .subscribe({
         next: (response) => {
-          console.log('Respuesta completa de getUserBooks:', response);
           if (response && response.data) {
             const bookDetailsRequests = response.data.map(book => {
               return this.bookService.getBookById(book.book_id).pipe(
@@ -112,9 +108,7 @@ export class YourBooksComponent implements OnInit, OnDestroy {
             });
             
             forkJoin(bookDetailsRequests).subscribe(detailedBooks => {
-              console.log('Libros con detalles completos:', detailedBooks);
               
-
               this.allBooks = response.data.map((book, index) => {
                 const detailedBook = detailedBooks[index];
                 
@@ -153,7 +147,7 @@ export class YourBooksComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.selectedBook = book;
     
-    console.log('Detalles del libro seleccionado:', book);
+
 
     if (!book.synopsis || !book.authors || !book.genres) {
       this.bookService.getBookById(book.book_id)
@@ -179,7 +173,6 @@ export class YourBooksComponent implements OnInit, OnDestroy {
     const progressSub = this.readingService.getReadingProgress(this.currentUser, book.book_title)
       .subscribe({
         next: (response) => {
-          console.log('Progreso de lectura:', response);
           this.selectedBookReadingProgress = response.data;
           if (response.data && response.data.length > 0 && this.selectedBook) {
             const latestProgress = response.data[response.data.length - 1];
@@ -206,7 +199,6 @@ export class YourBooksComponent implements OnInit, OnDestroy {
     const notesSub = this.readingService.getNotes(book.book_title, this.currentUser)
       .subscribe({
         next: (response) => {
-          console.log('Notas:', response);
           this.selectedBookNotes = response.data;
         },
         error: (err) => {
@@ -217,7 +209,6 @@ export class YourBooksComponent implements OnInit, OnDestroy {
     const reviewSub = this.readingService.getBookReviews(book.book_title, this.currentUser)
       .subscribe({
         next: (response) => {
-          console.log('Reseñas:', response);
           if (response.data.length > 0) {
             this.selectedBookReview = response.data[0];
           } else {

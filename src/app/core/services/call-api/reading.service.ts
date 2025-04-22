@@ -91,7 +91,7 @@ export class ReadingService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
-
+      const headers = this.authService.getAuthHeaders();
     if (bookTitle) {
       params = params.set('book_title', bookTitle);
     }
@@ -99,7 +99,7 @@ export class ReadingService {
       params = params.set('user_nickname', userNickname);
     }
 
-    return this.http.get<ReviewResponse>(`${this.apiUrl}/reviews`, { params })
+    return this.http.get<ReviewResponse>(`${this.apiUrl}/reviews`, { params, headers })
       .pipe(
         retry(1),
         catchError(this.handleError)

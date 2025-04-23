@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
-import { catchError, finalize, takeUntil } from 'rxjs/operators';
+import { catchError, finalize, map, takeUntil } from 'rxjs/operators';
 
 import { AuthorService } from '../../../../../../core/services/call-api/author.service';
 import { BookService } from '../../../../../../core/services/call-api/book.service';
@@ -64,7 +64,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   
-  // Cargar libros y autores de forma simplificada
+  // Cargar libros y autores de forma optimizada
   loadUserBooksAndAuthors(): void {
     this.isLoading = true;
     
@@ -86,19 +86,27 @@ export class AuthorsComponent implements OnInit, OnDestroy {
           return;
         }
         
-        // 2. Obtener detalles completos de los libros
-        const bookDetailsRequests = userBooks.map(book => 
-          this.bookService.getBookById(book.book_id).pipe(
-            catchError(() => of(null))
-          )
-        );
+        // 2. Extraer IDs de libros y obtener detalles en batch
+        const bookIds = userBooks.map(book => book.book_id);
         
-        forkJoin(bookDetailsRequests)
-          .pipe(takeUntil(this.destroy$))
+        // Usar el nuevo método de caché para obtener detalles de múltiples libros
+        this.bookService.getBooksWithCache(bookIds)
+          .pipe(
+            catchError(error => {
+              console.error('Error al obtener detalles de libros:', error);
+              return of([]);
+            }),
+            takeUntil(this.destroy$)
+          )
           .subscribe(detailsResults => {
+            // Crear un mapa de detalles de libros por ID para consulta rápida
+            const detailsMap = new Map(
+              detailsResults.map(details => [details.book_id, details])
+            );
+            
             // Combinar detalles con libros originales
-            const enrichedBooks = userBooks.map((book, i) => {
-              const details = detailsResults[i];
+            const enrichedBooks = userBooks.map(book => {
+              const details = detailsMap.get(book.book_id);
               if (details) {
                 return {
                   ...book,
@@ -191,10 +199,11 @@ export class AuthorsComponent implements OnInit, OnDestroy {
       .sort((a, b) => b.books.length - a.books.length)
       .slice(0, 5);
       
+    // Cargar las reseñas en paralelo en lugar de secuencialmente
     topAuthors.forEach(author => this.loadAuthorReviews(author));
   }
   
-  // Cargar reseñas para un autor específico
+  // Cargar reseñas para un autor específico de manera más eficiente
   private loadAuthorReviews(author: AuthorWithBooks): void {
     if (!author.books || author.books.length === 0) return;
     
@@ -203,15 +212,26 @@ export class AuthorsComponent implements OnInit, OnDestroy {
     // Solo primeros 3 libros
     const topBooks = author.books.slice(0, 3);
     
-    topBooks.forEach(book => {
-      this.readingService.getBookReviews(book.book_title, this.currentUserNickname)
-        .pipe(catchError(() => of({ data: [] })))
-        .subscribe(response => {
-          if (response && response.data && response.data.length > 0) {
-            author.bookReviews![book.book_id] = response.data;
-          }
+    // Crear una solicitud para cada libro
+    const reviewRequests = topBooks.map(book => 
+      this.readingService.getBookReviews(book.book_title, this.currentUserNickname).pipe(
+        map(response => ({ bookId: book.book_id, reviews: response.data || [] })),
+        catchError(() => of({ bookId: book.book_id, reviews: [] }))
+      )
+    );
+    
+    // Ejecutar todas las solicitudes en paralelo
+    if (reviewRequests.length > 0) {
+      forkJoin(reviewRequests)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(results => {
+          results.forEach(result => {
+            if (result.reviews.length > 0) {
+              author.bookReviews![result.bookId] = result.reviews;
+            }
+          });
         });
-    });
+    }
   }
 
   // Mostrar modal con detalles del autor
@@ -221,7 +241,9 @@ export class AuthorsComponent implements OnInit, OnDestroy {
     document.body.style.overflow = 'hidden';
     
     // Cargar reseñas si no están cargadas
-    this.loadAuthorReviews(author);
+    if (!author.bookReviews || Object.keys(author.bookReviews).length === 0) {
+      this.loadAuthorReviews(author);
+    }
   }
 
   // Cerrar modal

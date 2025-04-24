@@ -1,4 +1,3 @@
-<!-- delete-form.component.html ultra optimizado -->
 <div class="delete-books-container bg-theme p-3 p-md-4">
   <div class="header-section mb-5">
     <p class="text-theme main-description fs-6 mb-4 mw-600">Gestiona tu biblioteca. Haz clic en un libro para eliminarlo de tu colección.</p>
@@ -27,39 +26,55 @@
   <!-- Libros grid -->
   <div class="books-grid">
     <div class="book-card card-hover shadow rounded-3 overflow-hidden h-100 bg-component position-relative" 
-         *ngFor="let book of filteredBooks" 
+         *ngFor="let book of displayedBooks" 
          (click)="openDeleteModal(book)">
       <div class="book-cover position-relative overflow-hidden">
-        <img [src]="book.imagen" [alt]="book.titulo" class="w-100 h-100 object-fit-cover">
+        <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover">
         <div class="book-status badge status-badge position-absolute top-10 end-10 shadow-sm" 
-             [ngClass]="getStatusClass(book.estado)">
-          {{ getStatusText(book.estado) }}
+             [ngClass]="getStatusClass(book.reading_status)">
+          {{ getStatusText(book.reading_status) }}
         </div>
        
         <div class="delete-hover-icon delete-btn position-absolute top-50 start-50 z-10 translate-middle text-white">
           🗑️
         </div>
        
-       
       </div>
       <div class="book-info p-3">
-        <h3 class="book-title text-truncate fw-semibold mb-1 text-theme-text">{{ book.titulo }}</h3>
-        <p class="book-author text-truncate mb-0 text-theme">{{ book.autor }}</p>
+        <h3 class="book-title text-truncate fw-semibold mb-1 text-theme-text">{{ book.book_title }}</h3>
+        <p class="book-author text-truncate mb-0 text-theme">{{ getAuthorName(book) }}</p>
       </div>
     </div>
   </div>
   
+  <!-- Botón Ver más -->
+  <div class="text-center mt-4 mb-4" *ngIf="hasMoreBooks">
+    <button class="btn btn-primary rounded-pill px-4 py-2" (click)="loadMoreBooks()" [disabled]="loading">
+      <span *ngIf="!loading">Ver más</span>
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <span *ngIf="loading">Cargando...</span>
+    </button>
+  </div>
+  
   <!-- Mensaje si no hay libros -->
   <div class="empty-message no-books text-center shadow rounded-4 py-5 px-4 mx-auto bg-component mw-600" 
-       *ngIf="allBooks.length === 0">
+       *ngIf="allBooks.length === 0 && !loading">
     <div class="empty-icon fs-1 mb-3 text-theme">📚</div>
     <h2 class="fs-4 mb-3 text-theme-text">No hay libros en tu biblioteca</h2>
     <p class="mb-0 lh-base text-theme">¡Comienza a añadir libros para crear tu biblioteca personal!</p>
   </div>
   
+  <!-- Loading indicator -->
+  <div class="text-center py-5" *ngIf="loading && allBooks.length === 0">
+    <div class="spinner-border text-theme" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-theme">Cargando tus libros...</p>
+  </div>
+  
   <!-- Mensaje si no hay resultados de búsqueda -->
   <div class="empty-message no-search-results text-center shadow rounded-4 py-5 px-4 mx-auto bg-component mw-600" 
-       *ngIf="allBooks.length > 0 && filteredBooks.length === 0">
+       *ngIf="allBooks.length > 0 && filteredBooks.length === 0 && !loading">
     <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
     <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
     <p class="mb-0 lh-base text-theme">
@@ -83,15 +98,15 @@
         
         <div class="book-details d-flex align-items-center rounded-3 p-4 mb-4 bg-component">
           <div class="book-cover-delete rounded shadow overflow-hidden" style="width:120px;height:180px;">
-            <img [src]="selectedBookToDelete.imagen" [alt]="selectedBookToDelete.titulo" 
+            <img [src]="getBookImageUrl(selectedBookToDelete)" [alt]="selectedBookToDelete.book_title" 
                  class="w-100 h-100 object-fit-cover">
           </div>
           <div class="book-info-delete flex-grow-1 text-start ms-4">
-            <h3 class="book-title fs-5 mb-2 text-theme-text">{{ selectedBookToDelete.titulo }}</h3>
-            <p class="book-author mb-3 text-theme">{{ selectedBookToDelete.autor }}</p>
+            <h3 class="book-title fs-5 mb-2 text-theme-text">{{ selectedBookToDelete.book_title }}</h3>
+            <p class="book-author mb-3 text-theme">{{ getAuthorName(selectedBookToDelete) }}</p>
             <div class="book-status-delete badge status-badge" 
-                 [ngClass]="getStatusClass(selectedBookToDelete.estado)">
-              {{ getStatusText(selectedBookToDelete.estado) }}
+                 [ngClass]="getStatusClass(selectedBookToDelete.reading_status)">
+              {{ getStatusText(selectedBookToDelete.reading_status) }}
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, forkJoin, of, catchError } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { BookService } from '../../../../../../core/services/call-api/book.service';
 import { ReadingService } from '../../../../../../core/services/call-api/reading.service';
@@ -98,35 +99,39 @@ export class YourBooksComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response && response.data) {
-            const bookDetailsRequests = response.data.map(book => {
-              return this.bookService.getBookById(book.book_id).pipe(
-                catchError(error => {
-                  console.error(`Error al obtener detalles del libro ${book.book_id}:`, error);
-                  return of(book);
-                })
-              );
-            });
+            // Extraer los IDs de los libros para obtenerlos en batch
+            const bookIds = response.data.map(book => book.book_id);
             
-            forkJoin(bookDetailsRequests).subscribe(detailedBooks => {
-              
-              this.allBooks = response.data.map((book, index) => {
-                const detailedBook = detailedBooks[index];
+            this.bookService.getBooksWithCache(bookIds)
+              .pipe(
+                catchError(error => {
+                  console.error('Error al obtener detalles de libros en batch:', error);
+                  return of([]);
+                }),
+                finalize(() => this.isLoading = false)
+              )
+              .subscribe(detailedBooks => {
+                const detailsMap = new Map(
+                  detailedBooks.map(book => [book.book_id, book])
+                );
                 
-                return {
-                  ...book,
-                  authors: detailedBook.authors || book.authors || 'Autor desconocido',
-                  sagas: detailedBook.sagas || book.sagas || '',
-                  synopsis: detailedBook.synopsis || book.synopsis || 'No hay sinopsis disponible',
-                  book_pages: detailedBook.book_pages || book.book_pages || 0,
-                  genres: detailedBook.genres || book.genres || ''
-                } as UserBook;
+                this.allBooks = response.data.map(book => {
+                  const details = detailsMap.get(book.book_id);
+                  
+                  return {
+                    ...book,
+                    authors: details?.authors || book.authors || 'Autor desconocido',
+                    sagas: details?.sagas || book.sagas || '',
+                    synopsis: details?.synopsis || book.synopsis || 'No hay sinopsis disponible',
+                    book_pages: details?.book_pages || book.book_pages || 0,
+                    genres: details?.genres || book.genres || ''
+                  } as UserBook;
+                });
+                
+                this.filteredBooks = [...this.allBooks];
+                this.totalItems = response.pagination.total_items;
+                this.totalPages = response.pagination.total_pages;
               });
-              
-              this.filteredBooks = [...this.allBooks];
-              this.totalItems = response.pagination.total_items;
-              this.totalPages = response.pagination.total_pages;
-              this.isLoading = false;
-            });
           } else {
             console.error('Formato de respuesta inesperado:', response);
             this.error = 'Los datos recibidos no tienen el formato esperado.';
@@ -147,13 +152,10 @@ export class YourBooksComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.selectedBook = book;
     
-
-
     if (!book.synopsis || !book.authors || !book.genres) {
-      this.bookService.getBookById(book.book_id)
+      this.bookService.getBookByIdWithCache(book.book_id)
         .subscribe({
           next: (completeBook) => {
-            console.log('Datos completos del libro:', completeBook);
             if (completeBook && this.selectedBook) {
               this.selectedBook = {
                 ...this.selectedBook,
@@ -170,58 +172,60 @@ export class YourBooksComponent implements OnInit, OnDestroy {
           }
         });
     }
-    const progressSub = this.readingService.getReadingProgress(this.currentUser, book.book_title)
+
+    const requests = {
+      progress: this.readingService.getReadingProgress(this.currentUser, book.book_title).pipe(
+        map(response => response.data || []),
+        catchError(err => {
+          console.error('Error al cargar el progreso de lectura:', err);
+          return of([]);
+        })
+      ),
+      
+      phrases: this.readingService.getPhrases(book.book_title, this.currentUser).pipe(
+        map(response => response.data || []),
+        catchError(err => {
+          console.error('Error al cargar las frases destacadas:', err);
+          return of([]);
+        })
+      ),
+      
+      notes: this.readingService.getNotes(book.book_title, this.currentUser).pipe(
+        map(response => response.data || []),
+        catchError(err => {
+          console.error('Error al cargar las notas:', err);
+          return of([]);
+        })
+      ),
+      
+      reviews: this.readingService.getBookReviews(book.book_title, this.currentUser).pipe(
+        map(response => response.data || []),
+        catchError(err => {
+          console.error('Error al cargar las reseñas:', err);
+          return of([]);
+        })
+      )
+    };
+
+    const detailsSub = forkJoin(requests)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: (response) => {
-          this.selectedBookReadingProgress = response.data;
-          if (response.data && response.data.length > 0 && this.selectedBook) {
-            const latestProgress = response.data[response.data.length - 1];
+        next: (results) => {
+          this.selectedBookReadingProgress = results.progress;
+          
+          if (results.progress.length > 0 && this.selectedBook) {
+            const latestProgress = results.progress[results.progress.length - 1];
             this.selectedBook.pages_read = latestProgress.cumulative_pages_read;
             this.selectedBook.progress_percentage = latestProgress.cumulative_progress_percentage;
           }
-        },
-        error: (err) => {
-          console.error('Error al cargar el progreso de lectura:', err);
+          
+          this.selectedBookPhrases = results.phrases;
+          this.selectedBookNotes = results.notes;
+          this.selectedBookReview = results.reviews.length > 0 ? results.reviews[0] : null;
         }
       });
-    this.subscriptions.push(progressSub);
-
-    const phrasesSub = this.readingService.getPhrases(book.book_title, this.currentUser)
-      .subscribe({
-        next: (response) => {
-          this.selectedBookPhrases = response.data;
-        },
-        error: (err) => {
-          console.error('Error al cargar las frases destacadas:', err);
-        }
-      });
-    this.subscriptions.push(phrasesSub);
-    const notesSub = this.readingService.getNotes(book.book_title, this.currentUser)
-      .subscribe({
-        next: (response) => {
-          this.selectedBookNotes = response.data;
-        },
-        error: (err) => {
-          console.error('Error al cargar las notas:', err);
-        }
-      });
-    this.subscriptions.push(notesSub);
-    const reviewSub = this.readingService.getBookReviews(book.book_title, this.currentUser)
-      .subscribe({
-        next: (response) => {
-          if (response.data.length > 0) {
-            this.selectedBookReview = response.data[0];
-          } else {
-            this.selectedBookReview = null;
-          }
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error al cargar las reseñas:', err);
-          this.isLoading = false;
-        }
-      });
-    this.subscriptions.push(reviewSub);
+      
+    this.subscriptions.push(detailsSub);
   }
 
   // Mostrar modal con detalles del libro
@@ -327,6 +331,9 @@ export class YourBooksComponent implements OnInit, OnDestroy {
     this.bookService.updateUserBookRelationship(this.currentUser, bookId, updateData)
       .subscribe({
         next: () => {
+          // Invalidar caché para este libro
+          this.bookService.clearCache(); 
+          
           this.loadUserBooks();
           if (this.selectedBook && this.selectedBook.book_id === bookId) {
             this.selectedBook.reading_status = status;
@@ -351,128 +358,128 @@ export class YourBooksComponent implements OnInit, OnDestroy {
       }
     }
   }
-// Abrir formulario de edición
-openEditForm(): void {
-  if (!this.selectedBook) return;
-  // Rellenar el formulario con los datos actuales
-  this.editBookForm.patchValue({
-    book_title: this.selectedBook.book_title || '',
-    book_pages: this.selectedBook.book_pages || 0,
-    synopsis: this.selectedBook.synopsis || '',
-    authors: this.selectedBook.authors || '',
-    genres: this.selectedBook.genres || '',
-    sagas: this.selectedBook.sagas || '',
-    custom_description: this.selectedBook.custom_description || '',
-    reading_status: this.selectedBook.reading_status || 'planned'
-  });
   
-  this.isEditModalOpen = true;
-}
-
-// Cerrar formulario de edición
-closeEditForm(): void {
-  this.isEditModalOpen = false;
-  this.formError = '';
-}
-
-// Guardar cambios del libro
-saveBookChanges(): void {
-  if (this.editBookForm.invalid) {
-    this.formError = 'Por favor, completa todos los campos requeridos correctamente.';
-    return;
-  }
-  if (!this.selectedBook) {
-    this.formError = 'No se ha seleccionado ningún libro para editar.';
-    return;
-  }
-  this.isSubmitting = true;
-  this.formError = '';
-  const bookData = {
-    title: this.editBookForm.value.book_title,
-    pages: this.editBookForm.value.book_pages,
-    synopsis: this.editBookForm.value.synopsis,
-    // Separar el nombre del autor y apellidos
-    author_name: this.getAuthorParts(this.editBookForm.value.authors).name,
-    author_last_name1: this.getAuthorParts(this.editBookForm.value.authors).lastName1,
-    author_last_name2: this.getAuthorParts(this.editBookForm.value.authors).lastName2,
-    // Si hay múltiples géneros, dividirlos
-    genre1: this.getGenreParts(this.editBookForm.value.genres)[0] || '',
-    genre2: this.getGenreParts(this.editBookForm.value.genres)[1] || '',
-    genre3: this.getGenreParts(this.editBookForm.value.genres)[2] || '',
-    genre4: this.getGenreParts(this.editBookForm.value.genres)[3] || '',
-    genre5: this.getGenreParts(this.editBookForm.value.genres)[4] || '',
-    saga_name: this.editBookForm.value.sagas
-  };
-  const updateBookSub = this.bookService.updateBook(this.selectedBook.book_id, bookData)
-    .subscribe({
-      next: () => {
-        const userBookData = {
-          status: this.editBookForm.value.reading_status,
-          custom_description: this.editBookForm.value.custom_description
-        };
-        
-        const updateUserBookSub = this.bookService.updateUserBookRelationship(
-          this.currentUser, 
-          this.selectedBook!.book_id, 
-          userBookData
-        ).subscribe({
-          next: () => {
-            console.log('Libro actualizado correctamente');
-            this.isSubmitting = false;
-            this.isEditModalOpen = false;
-            
-            if (this.selectedBook) {
-              this.selectedBook = {
-                ...this.selectedBook,
-                book_title: bookData.title,
-                book_pages: bookData.pages,
-                synopsis: bookData.synopsis,
-                authors: this.editBookForm.value.authors,
-                genres: this.editBookForm.value.genres,
-                sagas: bookData.saga_name,
-                custom_description: userBookData.custom_description,
-                reading_status: userBookData.status
-              } as UserBook;
-            }
-            
-            this.loadUserBooks();
-          },
-          error: (err) => {
-            console.error('Error al actualizar la relación usuario-libro:', err);
-            this.formError = 'Ocurrió un error al actualizar el estado del libro.';
-            this.isSubmitting = false;
-          }
-        });
-        
-        this.subscriptions.push(updateUserBookSub);
-      },
-      error: (err) => {
-        console.error('Error al actualizar el libro:', err);
-        this.formError = 'Ocurrió un error al actualizar el libro. Por favor, intenta de nuevo.';
-        this.isSubmitting = false;
-      }
+  openEditForm(): void {
+    if (!this.selectedBook) return;
+    this.editBookForm.patchValue({
+      book_title: this.selectedBook.book_title || '',
+      book_pages: this.selectedBook.book_pages || 0,
+      synopsis: this.selectedBook.synopsis || '',
+      authors: this.selectedBook.authors || '',
+      genres: this.selectedBook.genres || '',
+      sagas: this.selectedBook.sagas || '',
+      custom_description: this.selectedBook.custom_description || '',
+      reading_status: this.selectedBook.reading_status || 'planned'
     });
-  
-  this.subscriptions.push(updateBookSub);
-}
-
-// Método auxiliar para separar el nombre y apellidos del autor
-private getAuthorParts(fullName: string): { name: string, lastName1: string, lastName2: string } {
-  const parts = fullName.trim().split(' ');
-  
-  if (parts.length === 1) {
-    return { name: parts[0], lastName1: '', lastName2: '' };
-  } else if (parts.length === 2) {
-    return { name: parts[0], lastName1: parts[1], lastName2: '' };
-  } else if (parts.length >= 3) {
-    return { name: parts[0], lastName1: parts[1], lastName2: parts.slice(2).join(' ') };
-  } else {
-    return { name: '', lastName1: '', lastName2: '' };
+    
+    this.isEditModalOpen = true;
   }
-}
-// Método auxiliar para separar géneros
-private getGenreParts(genres: string): string[] {
-  if (!genres) return [];
-  return genres.split(',').map(g => g.trim()).filter(g => g !== '');
-}
+
+  closeEditForm(): void {
+    this.isEditModalOpen = false;
+    this.formError = '';
+  }
+
+  saveBookChanges(): void {
+    if (this.editBookForm.invalid) {
+      this.formError = 'Por favor, completa todos los campos requeridos correctamente.';
+      return;
+    }
+    if (!this.selectedBook) {
+      this.formError = 'No se ha seleccionado ningún libro para editar.';
+      return;
+    }
+    this.isSubmitting = true;
+    this.formError = '';
+    const bookData = {
+      title: this.editBookForm.value.book_title,
+      pages: this.editBookForm.value.book_pages,
+      synopsis: this.editBookForm.value.synopsis,
+      // Separar el nombre del autor y apellidos
+      author_name: this.getAuthorParts(this.editBookForm.value.authors).name,
+      author_last_name1: this.getAuthorParts(this.editBookForm.value.authors).lastName1,
+      author_last_name2: this.getAuthorParts(this.editBookForm.value.authors).lastName2,
+      // Si hay múltiples géneros, dividirlos
+      genre1: this.getGenreParts(this.editBookForm.value.genres)[0] || '',
+      genre2: this.getGenreParts(this.editBookForm.value.genres)[1] || '',
+      genre3: this.getGenreParts(this.editBookForm.value.genres)[2] || '',
+      genre4: this.getGenreParts(this.editBookForm.value.genres)[3] || '',
+      genre5: this.getGenreParts(this.editBookForm.value.genres)[4] || '',
+      saga_name: this.editBookForm.value.sagas
+    };
+    const updateBookSub = this.bookService.updateBook(this.selectedBook.book_id, bookData)
+      .subscribe({
+        next: () => {
+          const userBookData = {
+            status: this.editBookForm.value.reading_status,
+            custom_description: this.editBookForm.value.custom_description
+          };
+          
+          const updateUserBookSub = this.bookService.updateUserBookRelationship(
+            this.currentUser, 
+            this.selectedBook!.book_id, 
+            userBookData
+          ).subscribe({
+            next: () => {
+              console.log('Libro actualizado correctamente');
+              this.isSubmitting = false;
+              this.isEditModalOpen = false;
+              
+              if (this.selectedBook) {
+                this.selectedBook = {
+                  ...this.selectedBook,
+                  book_title: bookData.title,
+                  book_pages: bookData.pages,
+                  synopsis: bookData.synopsis,
+                  authors: this.editBookForm.value.authors,
+                  genres: this.editBookForm.value.genres,
+                  sagas: bookData.saga_name,
+                  custom_description: userBookData.custom_description,
+                  reading_status: userBookData.status
+                } as UserBook;
+              }
+              
+              // Invalidar caché después de actualizar
+              this.bookService.clearCache();
+              this.loadUserBooks();
+            },
+            error: (err) => {
+              console.error('Error al actualizar la relación usuario-libro:', err);
+              this.formError = 'Ocurrió un error al actualizar el estado del libro.';
+              this.isSubmitting = false;
+            }
+          });
+          
+          this.subscriptions.push(updateUserBookSub);
+        },
+        error: (err) => {
+          console.error('Error al actualizar el libro:', err);
+          this.formError = 'Ocurrió un error al actualizar el libro. Por favor, intenta de nuevo.';
+          this.isSubmitting = false;
+        }
+      });
+    
+    this.subscriptions.push(updateBookSub);
+  }
+
+  // Método auxiliar para separar el nombre y apellidos del autor
+  private getAuthorParts(fullName: string): { name: string, lastName1: string, lastName2: string } {
+    const parts = fullName.trim().split(' ');
+    
+    if (parts.length === 1) {
+      return { name: parts[0], lastName1: '', lastName2: '' };
+    } else if (parts.length === 2) {
+      return { name: parts[0], lastName1: parts[1], lastName2: '' };
+    } else if (parts.length >= 3) {
+      return { name: parts[0], lastName1: parts[1], lastName2: parts.slice(2).join(' ') };
+    } else {
+      return { name: '', lastName1: '', lastName2: '' };
+    }
+  }
+
+  // Método auxiliar para separar géneros
+  private getGenreParts(genres: string): string[] {
+    if (!genres) return [];
+    return genres.split(',').map(g => g.trim()).filter(g => g !== '');
+  }
 }

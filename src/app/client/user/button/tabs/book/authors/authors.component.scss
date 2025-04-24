@@ -1,3 +1,4 @@
+// Variables de sombra
 :root {
   --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -11,7 +12,7 @@
 .text-theme { color: var(--border-color); }
 .text-theme-text { color: var(--text-color); }
 .text-btn { color: var(--bs-btn); }
-.bg-btn {     background-color: var(--bs-btn); }
+.bg-btn { background-color: var(--bs-btn); }
 .bg-dark-blur { background-color: rgba(0, 0, 0, 0.8); }
 .backdrop-blur { backdrop-filter: blur(5px); }
 .fs-7 { font-size: 0.9rem; }
@@ -66,7 +67,7 @@
   }
 }
 
-// Estilos para elementos de búsqueda
+// Estilos para búsqueda
 .search-input {
   color: var(--text-color);
   box-shadow: var(--shadow-sm);
@@ -103,28 +104,13 @@
   }
 }
 
-// Mensaje vacío
-.empty-message {
-  max-width: 600px;
-  box-shadow: var(--shadow-md);
-}
-
-.reset-search {
-  cursor: pointer;
-  
-  &:hover {
-    color: var(--btn-hover);
-  }
-}
-
-// Grid de autores
+// Estilos para autores
 .authors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 2rem;
 }
 
-// Estilos para autores
 .author-avatar {
   width: 120px;
   height: 120px;
@@ -148,7 +134,126 @@
   }
 }
 
-// Estilos para el modal
+// Estilos para perfil de autor en modal
+.author-profile-header {
+  position: relative;
+  margin-bottom: 4rem;
+
+  .author-banner {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+
+    }
+
+    .banner-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  }
+
+  .author-profile-info {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 2rem;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    .author-avatar-large {
+      width: 150px;
+      height: 150px;
+      min-width: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      margin-right: 1.5rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .author-details {
+      flex-grow: 1;
+      .author-title {
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--text-color);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+      }
+
+      .author-stats {
+        display: flex;
+        gap: 1rem;
+        color: var(--border-color);
+        font-size: 0.9rem;
+
+        .stat-value {
+          font-weight: bold;
+          margin-right: 0.25rem;
+        }
+      }
+    }
+  }
+}
+
+// Libro de autor
+.book-list {
+  padding-top: 4rem;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+  
+  .book-cover {
+    height: 260px;
+  }
+}
+
+.book-status {
+  padding: 0.25rem 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  &.status-reading {
+    background-color: var(--bs-btn);
+    color: white;
+  }
+  
+  &.status-completed {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  &.status-abandoned {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  &.status-not-started {
+    background-color: var(--border-color);
+    color: white;
+  }
+}
+
+// Modal
 .modal-overlay {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
@@ -209,142 +314,20 @@
   }
 }
 
-// Estilos para la cabecera de perfil estilo Facebook
-.author-profile-header {
-  height: 320px;
+// Mensajes varios
+.empty-message {
+  max-width: 600px;
+  box-shadow: var(--shadow-md);
+}
+
+.reset-search {
+  cursor: pointer;
   
-  .author-banner {
-    height: 220px;
-    
-    img {
-      height: 100%;
-      object-position: center 25%;
-    }
-    
-    .banner-gradient {
-      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
-      pointer-events: none;
-    }
-  }
-  
-  .author-avatar-large {
-    width: 140px;
-    height: 140px;
-    min-width: 140px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .author-profile-info {
-    height: 100px;
+  &:hover {
+    color: var(--btn-hover);
   }
 }
 
-// Grid de libros en el modal
-.books-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1.5rem;
-  
-  .book-cover {
-    height: 260px;
-  }
-}
-
-// Estilos para estados de los libros
-.book-status {
-  padding: 0.25rem 0.75rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  
-  &.status-reading {
-    background-color: var(--bs-btn);
-    color: white;
-  }
-  
-  &.status-completed {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  &.status-abandoned {
-    background-color: var(--danger);
-    color: white;
-  }
-  
-  &.status-not-started {
-    background-color: var(--border-color);
-    color: white;
-  }
-}
-
-// Estilos para paginación
-.pagination-container {
-  margin-top: 2rem;
-}
-
-.modern-pagination {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  
-  .page-nav, .page-number {
-    margin: 0 2px;
-    
-    &.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    
-    &.active .btn-pagination {
-      background-color: var(--bs-btn);
-      color: white;
-      font-weight: 600;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      transform: scale(1.05);
-    }
-  }
-  
-  .btn-pagination {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border: none;
-    background-color: var(--component-bg);
-    color: var(--text-color);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    
-    &:hover:not([disabled]) {
-      background-color: var(--bs-btn-hover);
-      color: white;
-      transform: translateY(-2px);
-    }
-    
-    &:focus {
-      box-shadow: none;
-      outline: none;
-    }
-  }
-  
-  .page-arrow {
-    font-style: normal;
-    font-weight: bold;
-  }
-  
-  .page-ellipsis {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--border-color);
-    padding: 0 5px;
-    
-    .ellipsis {
-      letter-spacing: 2px;
-      font-weight: bold;
-    }
-  }
-}
-
-// Media queries
 @media (max-width: 768px) {
   .main-title {
     font-size: 2rem;
@@ -361,24 +344,35 @@
   }
   
   .author-profile-header {
-    height: auto;
-    
+    margin-bottom: 5rem;
+
     .author-banner {
       height: 180px;
     }
-    
-    .author-avatar-large {
-      width: 100px;
-      height: 100px;
-      min-width: 100px;
-    }
-    
+
     .author-profile-info {
-      padding-bottom: 0 !important;
-    }
-    
-    .author-title {
-      font-size: 1.5rem;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 1rem;
+
+      .author-avatar-large {
+        width: 100px;
+        height: 100px;
+        min-width: 100px;
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+
+      .author-details {
+        .author-title {
+          font-size: 1.25rem;
+        }
+
+        .author-stats {
+          justify-content: center;
+        }
+      }
     }
   }
   
@@ -421,7 +415,7 @@
   }
 }
 
-// Elemento de carga progresiva
+// Componentes adicionales
 #progressive-loading-trigger {
   opacity: 0.8;
   padding: 15px 0;

@@ -8,8 +8,8 @@ import { CurrentBookComponent } from './client/current-book/current-book/current
 import { StadisticsComponent } from './client/stadistics/stadistics/stadistics.component';
 import { WishlistComponent } from './client/wishlist/wishlist/wishlist.component';
 import { UserComponent } from './client/user/user/user.component';
-import { SearchBookComponent } from './client/features/search/search-book/search-book.component';
-import { SearchAuthorComponent } from './client/features/search/search-author/search-author.component';
+
+import { SearchComponent } from './client/features/search/search.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { AuthorsComponent } from './admin/authors/authors.component';
 import { BooksComponent } from './admin/books/books.component';
@@ -33,8 +33,7 @@ export const routes: Routes = [
       { path: 'statistics', component: StadisticsComponent,canActivate: [AuthGuard]},
       { path: 'wishlist',  component: WishlistComponent, canActivate: [AuthGuard]},
       { path: 'user', component: UserComponent,canActivate: [AuthGuard]},
-      { path: 'searchAuthor', component: SearchAuthorComponent },
-      { path: 'searchBook', component: SearchBookComponent },
+      { path: 'search', component: SearchComponent },
     ],
   },
 

@@ -67,15 +67,15 @@
         <p class="fs-6 link">Pendientes</p>
       </a>
       <a
-      [ngClass]="{ 'only-icon': onlyIcon }"
-      (click)="toggleSearchMenu()"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      id="search-button"
-    >
-      <i class="bi bi-search"></i>
-      <p class="fs-6 link">Buscador</p>
-    </a>
+        [ngClass]="{ 'only-icon': onlyIcon }"
+        (click)="toggleSearchMenu()"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        id="search-button"
+      >
+        <i class="bi bi-search"></i>
+        <p class="fs-6 link">Buscador</p>
+      </a>
     </div>
 
     <a class="my-md my-2" [ngClass]="{ 'only-icon': onlyIcon }" (click)="logout()" style="cursor: pointer;">
@@ -99,26 +99,71 @@
         ></i>
       </div>
       <input
+        #searchInput
         type="text"
-        placeholder="Buscar..."
+        placeholder="Buscar libros y autores..."
         [(ngModel)]="searchQuery"
         class="form-control"
       />
-      <hr />
-      <div class="recent-header">
-        <p class="mb-2">Recientes</p>
-        <small class="text-btn fw-bold cursor-pointer">Borrar todo</small>
+      
+      <!-- Loader para indicar búsqueda en proceso -->
+      <div *ngIf="isSearching" class="text-center mt-3">
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Buscando...</span>
+        </div>
       </div>
-      <ul class="search-results">
-        <li *ngFor="let result of searchResults">
-          <img
-            class="rounded-circle me-3"
-            src="https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U="
-            alt=""
-          />
-          <span>{{ result }}</span>
-        </li>
-      </ul>
+
+      <!-- Resultados de la búsqueda -->
+      <div *ngIf="searchQuery.length >= 2 && !isSearching && searchResults.length > 0">
+        <hr />
+        <p class="mb-2">Resultados</p>
+        <ul class="search-results">
+          <li *ngFor="let result of searchResults" (click)="selectSearchResult(result)">
+            <!-- Para autores: imagen circular -->
+            <div *ngIf="result.type === 'author'" class="img-container author">
+              <img class="rounded-circle" [src]="result.imageUrl" alt="Imagen de autor"/>
+            </div>
+            <!-- Para libros: imagen rectangular -->
+            <div *ngIf="result.type === 'book'" class="img-container book">
+              <img [src]="result.imageUrl" alt="Imagen de libro"/>
+            </div>
+            <div class="result-info">
+              <span class="result-name">{{ result.name }}</span>
+              <span class="result-type">{{ result.type === 'book' ? 'Libro' : 'Autor' }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Mensaje cuando no hay resultados -->
+      <div *ngIf="searchQuery.length >= 2 && !isSearching && searchResults.length === 0" class="no-results mt-3">
+        <p>No se encontraron resultados para "{{ searchQuery }}"</p>
+      </div>
+
+      <!-- Búsquedas recientes -->
+      <div *ngIf="(!searchQuery || searchQuery.length < 2) && recentSearches.length > 0">
+        <hr />
+        <div class="recent-header">
+          <p class="mb-2">Recientes</p>
+          <small class="text-btn fw-bold cursor-pointer" (click)="clearRecentSearches()">Borrar todo</small>
+        </div>
+        
+        <ul class="search-results">
+          <li *ngFor="let result of recentSearches" (click)="selectSearchResult(result)">
+            <div *ngIf="result.type === 'author'" class="img-container author">
+              <img class="rounded-circle" [src]="result.imageUrl" alt="Imagen de autor"/>
+            </div>
+
+            <div *ngIf="result.type === 'book'" class="img-container book">
+              <img [src]="result.imageUrl" alt="Imagen de libro"/>
+            </div>
+            <div class="result-info">
+              <span class="result-name">{{ result.name }}</span>
+              <span class="result-type">{{ result.type === 'book' ? 'Libro' : 'Autor' }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </ng-container>

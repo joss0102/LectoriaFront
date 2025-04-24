@@ -177,12 +177,6 @@ nav {
       overflow-y: auto;
       flex: 1;
       z-index: 100;
-      img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
       
       li {
         display: flex;
@@ -192,12 +186,61 @@ nav {
         border-radius: 8px;
         color: var(--text-color);
         transition: background-color 0.2s ease, transform 0.2s ease;
+        cursor: pointer;
+        
+        .img-container {
+          flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          margin-right: 12px;
+          overflow: hidden;
+          
+          &.author img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+          
+          &.book {
+            border-radius: 4px;
+            height: 50px;
+            
+            img {
+              width: 36px;
+              height: 50px;
+              object-fit: cover;
+              border-radius: 4px;
+            }
+          }
+        }
+        
+        .result-info {
+          display: flex;
+          flex-direction: column;
+          
+          .result-name {
+            font-weight: 500;
+          }
+          
+          .result-type {
+            font-size: 0.8rem;
+            opacity: 0.8;
+          }
+        }
         
         &:hover {
           background-color: var(--component-bg);
           transform: translateX(4px);
         }
       }
+    }
+    
+    .no-results {
+      text-align: center;
+      color: var(--text-color);
+      opacity: 0.8;
+      font-style: italic;
     }
   }
 }

@@ -49,7 +49,6 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
     this.homeService.actualizarBookActual(libro);
   }
   ngOnInit(): void {
-    console.log('Initializing carousel component');
     
     // Añadimos valores de prueba en caso de error
     const dummyBooks: HomeModel[] = [

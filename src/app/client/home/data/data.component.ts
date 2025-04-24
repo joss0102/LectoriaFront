@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { HomeService } from '../../../core/services/HomeService/home.service';
 import { HomeModel } from '../../../core/models/home.model';
+
+import { SearchService } from '../../../core/services/SearchService/search.service';
 
 @Component({
   selector: 'app-data',
@@ -16,18 +18,19 @@ export class DataComponent implements OnInit, OnDestroy {
   book: HomeModel | null = null;
   showData: boolean = true;
   private subscription: Subscription = new Subscription();
-
+  
   constructor(
     private homeService: HomeService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private searchService: SearchService
   ) {}
-
+  
   ngOnInit(): void {
     this.subscription = this.homeService.currentBook$.subscribe(book => {
       if (book) {
         this.showData = false;
         this.cdr.detectChanges();
-
         setTimeout(() => {
           this.book = book;
           this.showData = true;
@@ -37,7 +40,7 @@ export class DataComponent implements OnInit, OnDestroy {
         console.log("El libro recibido es null");
       }
     });
-
+    
     setTimeout(() => {
       const currentBook = this.homeService.getBookActual();
       if (currentBook) {
@@ -47,7 +50,25 @@ export class DataComponent implements OnInit, OnDestroy {
       }
     }, 100);
   }
-
+  
+  /**
+   * Navega al componente Search para mostrar detalles completos del libro
+   */
+  showBookDetails(): void {
+    if (this.book && this.book.book_id) {
+      // Seleccionar el libro en el servicio de búsqueda
+      this.searchService.selectItemById(this.book.book_id, 'book');
+      
+      // Navegar al componente Search
+      this.router.navigate(['/search'], { 
+        queryParams: { 
+          id: this.book.book_id, 
+          type: 'book' 
+        } 
+      });
+    }
+  }
+  
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

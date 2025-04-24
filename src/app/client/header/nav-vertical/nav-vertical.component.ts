@@ -3,11 +3,12 @@ import { NavVerticalService } from '../../../core/services/NavVerticalService/Na
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, debounceTime, distinctUntilChanged, filter, of, switchMap } from 'rxjs';
 import { ThemeService } from '../../../core/services/ThemeService/theme.service';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth/auth.service';
+
+import { SearchService,SearchResult } from '../../../core/services/SearchService/search.service';
 
 @Component({
   selector: 'app-nav-vertical',
@@ -18,12 +19,15 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 })
 export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('searchMenuWrapper') searchMenuWrapper: ElementRef | undefined;
+  @ViewChild('searchInput') searchInput: ElementRef | undefined;
 
   onlyIcon: boolean = true;
   menuVisible: boolean = false;
   searchMenuVisible = false;
   searchQuery = '';
-  searchResults = ['Resultado 1', 'Resultado 2', 'Resultado 3'];
+  searchResults: SearchResult[] = [];
+  recentSearches: SearchResult[] = [];
+  isSearching = false;
   isMobile: boolean = false;
   modoNoche: boolean = true;
   showMainLinks: boolean = false;
@@ -36,6 +40,7 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   private linksSubscription: Subscription;
   private responsiveSubscription: Subscription;
   private routerSubscription: Subscription;
+  private searchSubscription: Subscription | null = null;
   
   constructor(
     private verticalService: NavVerticalService,
@@ -43,7 +48,8 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private el: ElementRef,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private searchService: SearchService
   ) {
     // Detectar si es dispositivo móvil al inicio
     this.checkIsMobile();
@@ -122,11 +128,50 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
       this.verticalService.setMenuVisible(false);
     }
     this.verticalService.setIsHomePage(this.isHomePage);
+    
+    // Cargar búsquedas recientes
+    this.loadRecentSearches();
   }
   
   ngAfterViewInit() {
     // Actualizar posición inicial del buscador
     this.updateSearchMenuPosition();
+    
+    // Configurar búsqueda reactiva
+    if (this.searchInput && this.searchInput.nativeElement) {
+      const searchInput = this.searchInput.nativeElement;
+      
+      this.searchSubscription = of(searchInput).pipe(
+        switchMap(input => {
+          const valueChanges = new Observable<Event>(observer => {
+            const handler = (e: Event) => observer.next(e);
+            input.addEventListener('input', handler);
+            return () => input.removeEventListener('input', handler);
+          });
+          return valueChanges;
+        }),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(() => {
+          const query = this.searchQuery.trim();
+          if (query.length >= 2) {
+            this.isSearching = true;
+            return this.searchService.search(query);
+          } else {
+            return of([]);
+          }
+        })
+      ).subscribe(
+        results => {
+          this.searchResults = results;
+          this.isSearching = false;
+        },
+        error => {
+          console.error('Error en la búsqueda:', error);
+          this.isSearching = false;
+        }
+      );
+    }
   }
   
   // Escuchar cambios de tamaño de ventana
@@ -172,8 +217,39 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
       this.verticalService.setMenuVisible(true);
     }
     
+    // Cargar búsquedas recientes al abrir el buscador
+    if (this.searchMenuVisible) {
+      this.loadRecentSearches();
+    }
+    
     // Actualizar la posición del buscador después de cambiar la visibilidad
     setTimeout(() => this.updateSearchMenuPosition(), 0);
+  }
+  
+  // Cargar búsquedas recientes
+  loadRecentSearches() {
+    this.recentSearches = this.searchService.getRecentSearches();
+  }
+  
+  // Limpiar búsquedas recientes
+  clearRecentSearches() {
+    this.searchService.clearRecentSearches();
+    this.recentSearches = [];
+  }
+  
+  // Seleccionar un resultado de búsqueda o búsqueda reciente
+  selectSearchResult(result: SearchResult) {
+    this.searchService.selectItem(result);
+    this.navigateToSearch();
+  }
+  
+  // Navegar a la página de búsqueda
+  navigateToSearch() {
+    this.searchMenuVisible = false;
+    if (this.isMobile) {
+      this.verticalService.setMenuVisible(false);
+    }
+    this.router.navigate(['/search']);
   }
   
   // Cerrar todos los menús (para el overlay)
@@ -209,6 +285,7 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     this.linksSubscription?.unsubscribe();
     this.responsiveSubscription?.unsubscribe();
     this.routerSubscription?.unsubscribe();
+    this.searchSubscription?.unsubscribe();
     
     // Limpiar clases en el body
     this.renderer.removeClass(document.body, 'mobile-menu-open');

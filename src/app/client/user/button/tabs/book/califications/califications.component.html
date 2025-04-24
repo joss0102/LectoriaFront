@@ -1,100 +1,252 @@
-<!-- califications.component.html -->
 <div class="califications-container bg-theme p-3 p-md-4">
-  <!-- Sección del podio de los mejores valorados -->
-  <section class="top-books mb-5">
-    <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Libros Mejor Valorados</h2>
-    
-    <div class="podium-container d-flex justify-content-center align-items-end gap-4 mt-4 p-3 position-relative">
-      <!-- Segundo lugar -->
-      <div class="podium-item second-place transition-y" *ngIf="topLibros.length >= 2">
-
-        <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
-          <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
-            <img [src]="topLibros[1].imagen" [alt]="topLibros[1].titulo" class="w-100 h-100 object-fit-cover img-hover">
-          </div>
-          <div class="book-info">
-            <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[1].titulo }}</h3>
-            <div class="rating d-flex align-items-center">
-              <span class="rating-number fw-bold  me-2">{{ topLibros[1].valoracion }}</span>
-              <div class="stars d-flex">
-                <i class="star filled  me-1" *ngFor="let star of getEstrellas(topLibros[1].valoracion)">★</i>
-                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[1].valoracion)">☆</i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Primer lugar (más alto) -->
-      <div class="podium-item first-place transition-y mb-4 z-3" *ngIf="topLibros.length >= 1">
-
-        <div class="book-card gradient-card rounded-4 p-3 shadow  scale-110 position-relative">
-          <div class="crown-icon position-absolute end-n10 top-n10 fs-2 rotate-30">👑</div>
-          <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
-            <img [src]="topLibros[0].imagen" [alt]="topLibros[0].titulo" class="w-100 h-100 object-fit-cover img-hover">
-          </div>
-          <div class="book-info">
-            <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[0].titulo }}</h3>
-            <div class="rating d-flex align-items-center">
-              <span class="rating-number fw-bold me-2">{{ topLibros[0].valoracion }}</span>
-              <div class="stars d-flex">
-                <i class="star filled  me-1" *ngFor="let star of getEstrellas(topLibros[0].valoracion)">★</i>
-                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[0].valoracion)">☆</i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Tercer lugar -->
-      <div class="podium-item third-place transition-y z-1" *ngIf="topLibros.length >= 3">
-
-        <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
-          <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
-            <img [src]="topLibros[2].imagen" [alt]="topLibros[2].titulo" class="w-100 h-100 object-fit-cover img-hover">
-          </div>
-          <div class="book-info">
-            <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[2].titulo }}</h3>
-            <div class="rating d-flex align-items-center">
-              <span class="rating-number fw-bold  me-2">{{ topLibros[2].valoracion }}</span>
-              <div class="stars d-flex">
-                <i class="star filled  me-1" *ngFor="let star of getEstrellas(topLibros[2].valoracion)">★</i>
-                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[2].valoracion)">☆</i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Loading indicator -->
+  <div class="text-center py-5" *ngIf="loading">
+    <div class="spinner-border text-theme" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
-  </section>
-
-  <!-- Lista de todos los libros valorados -->
-  <section class="rated-books">
-    <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Tus Calificaciones</h2>
-    
-    <div class="books-grid">
-      <div class="book-item gradient-card rounded-3 shadow p-4 d-flex flex-column align-items-center transition-y" *ngFor="let libro of librosValorados">
-        <div class="book-cover rounded-3 shadow overflow-hidden mb-4">
-          <img [src]="libro.imagen" [alt]="libro.titulo" class="w-100 h-100 object-fit-cover img-hover">
-        </div>
-        <div class="book-info text-center w-100">
-          <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ libro.titulo }}</h3>
-          <p class="author fs-7 text-theme mb-2">{{ libro.autor }}</p>
-          <div class="rating d-flex align-items-center justify-content-center">
-            <span class="rating-number fw-bold  me-2">{{ libro.valoracion }}</span>
-            <div class="stars d-flex">
-              <i class="star filled  me-1" *ngFor="let star of getEstrellas(libro.valoracion)">★</i>
-              <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(libro.valoracion)">☆</i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mensaje si no hay libros valorados -->
-  <div class="no-books bg-component rounded-3 p-4 text-center shadow mt-4" *ngIf="librosValorados.length === 0">
-    <p class="fs-5 mb-3 text-theme-text">Aún no has valorado ningún libro.</p>
-    <p class="mb-0 text-theme">Cuando termines de leer un libro, podrás asignarle una valoración de 1 a 5 estrellas.</p>
+    <p class="mt-2 text-theme">Cargando tus valoraciones...</p>
   </div>
+
+  <div *ngIf="!loading">
+    <!-- Sección del podio de los mejores valorados -->
+    <section class="top-books mb-5" *ngIf="topLibros.length > 0">
+      <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Libros Mejor Valorados</h2>
+      
+      <div class="podium-container d-flex justify-content-center align-items-end gap-4 mt-4 p-3 position-relative">
+        <!-- Segundo lugar -->
+        <div class="podium-item second-place transition-y" *ngIf="topLibros.length >= 2" (click)="openBookDetails(topLibros[1])">
+          <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
+            <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
+              <img [src]="getBookImageUrl(topLibros[1])" [alt]="topLibros[1].book_title" class="w-100 h-100 object-fit-cover img-hover">
+            </div>
+            <div class="book-info">
+              <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[1].book_title }}</h3>
+              <div class="rating d-flex align-items-center">
+                <span class="rating-number fw-bold me-2">{{ formatRating(topLibros[1].rating) }}</span>
+                <div class="stars d-flex">
+                  <i class="star filled me-1" *ngFor="let star of getEstrellas(topLibros[1].rating)">★</i>
+                  <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[1].rating)">☆</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Primer lugar (más alto) -->
+        <div class="podium-item first-place transition-y mb-4 z-3" *ngIf="topLibros.length >= 1" (click)="openBookDetails(topLibros[0])">
+          <div class="book-card gradient-card rounded-4 p-3 shadow scale-110 position-relative">
+            <div class="crown-icon position-absolute end-n10 top-n10 fs-2 rotate-30">👑</div>
+            <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
+              <img [src]="getBookImageUrl(topLibros[0])" [alt]="topLibros[0].book_title" class="w-100 h-100 object-fit-cover img-hover">
+            </div>
+            <div class="book-info">
+              <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[0].book_title }}</h3>
+              <div class="rating d-flex align-items-center">
+                <span class="rating-number fw-bold me-2">{{ formatRating(topLibros[0].rating) }}</span>
+                <div class="stars d-flex">
+                  <i class="star filled me-1" *ngFor="let star of getEstrellas(topLibros[0].rating)">★</i>
+                  <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[0].rating)">☆</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tercer lugar -->
+        <div class="podium-item third-place transition-y z-1" *ngIf="topLibros.length >= 3" (click)="openBookDetails(topLibros[2])">
+          <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
+            <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
+              <img [src]="getBookImageUrl(topLibros[2])" [alt]="topLibros[2].book_title" class="w-100 h-100 object-fit-cover img-hover">
+            </div>
+            <div class="book-info">
+              <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[2].book_title }}</h3>
+              <div class="rating d-flex align-items-center">
+                <span class="rating-number fw-bold me-2">{{ formatRating(topLibros[2].rating) }}</span>
+                <div class="stars d-flex">
+                  <i class="star filled me-1" *ngFor="let star of getEstrellas(topLibros[2].rating)">★</i>
+                  <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(topLibros[2].rating)">☆</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de sagas -->
+    <section class="sagas-section mb-5" *ngIf="sagas.length > 0">
+      <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Tus Sagas</h2>
+      
+      <div class="sagas-grid">
+        <div class="saga-item gradient-card rounded-3 shadow p-4 d-flex flex-column align-items-center transition-y" 
+             *ngFor="let saga of sagas"
+             (click)="openSagaDetails(saga)">
+             <!--
+          <div class="saga-cover rounded-3 shadow overflow-hidden mb-4">
+            <img [src]="getSagaImageUrl(saga)" [alt]="saga.name" class="w-100 h-100 object-fit-cover img-hover">
+          </div>
+          -->
+          <div class="saga-info text-center w-100">
+            <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ saga.name }}</h3>
+            <p class="author fs-7 text-theme mb-2">{{ saga.author }}</p>
+            <div class="saga-stats d-flex align-items-center justify-content-between">
+              <span class="books-count">{{ saga.books.length }} libros</span>
+              <div class="rating d-flex align-items-center">
+                <span class="rating-number fw-bold me-2">{{ formatRating(saga.averageRating) }}</span>
+                <div class="stars d-flex">
+                  <i class="star filled me-1" *ngFor="let star of getEstrellas(saga.averageRating)">★</i>
+                  <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(saga.averageRating)">☆</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de todos los libros valorados -->
+    <section class="rated-books" *ngIf="librosValorados.length > 0">
+      <h2 class="section-title position-relative d-inline-block mb-4 pb-2 text-theme-text">Tus Calificaciones</h2>
+      
+      <div class="books-grid">
+        <div class="book-item gradient-card rounded-3 shadow p-4 d-flex flex-column align-items-center transition-y" 
+             *ngFor="let libro of librosValorados"
+             (click)="openBookDetails(libro)">
+          <div class="book-cover rounded-3 shadow overflow-hidden mb-4">
+            <img [src]="getBookImageUrl(libro)" [alt]="libro.book_title" class="w-100 h-100 object-fit-cover img-hover">
+          </div>
+          <div class="book-info text-center w-100">
+            <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ libro.book_title }}</h3>
+            <p class="author fs-7 text-theme mb-2">{{ libro.authors }}</p>
+            <div class="rating d-flex align-items-center justify-content-center">
+              <span class="rating-number fw-bold me-2">{{ formatRating(libro.rating) }}</span>
+              <div class="stars d-flex">
+                <i class="star filled me-1" *ngFor="let star of getEstrellas(libro.rating)">★</i>
+                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(libro.rating)">☆</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mensaje si no hay libros valorados -->
+    <div class="no-books bg-component rounded-3 p-4 text-center shadow mt-4" *ngIf="librosValorados.length === 0">
+      <p class="fs-5 mb-3 text-theme-text">Aún no has valorado ningún libro.</p>
+      <p class="mb-0 text-theme">Cuando termines de leer un libro, podrás asignarle una valoración de 1 a 5 estrellas.</p>
+    </div>
+  </div>
+
+  <!-- Modal de detalles del libro -->
+  <div class="modal-backdrop modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center p-3 bg-dark-overlay backdrop-blur" 
+       *ngIf="isModalOpen" 
+       (click)="closeModal()">
+    <div class="modal-content-custom rounded-4 bg-theme mw-600 shadow-lg" 
+         (click)="preventClose($event)" 
+         *ngIf="selectedBook">
+      <div class="book-details p-4 position-relative">
+        <button class="close-btn position-absolute top-3 end-3 bg-transparent border-0 text-theme-text fs-5" 
+                (click)="closeModal()">×</button>
+        
+        <div class="d-flex gap-4 mb-4">
+          <div class="book-cover-detail rounded-3 shadow overflow-hidden" style="width:150px;height:225px;">
+            <img [src]="getBookImageUrl(selectedBook)" [alt]="selectedBook.book_title" class="w-100 h-100 object-fit-cover">
+          </div>
+          <div class="book-info-detail flex-grow-1">
+            <h2 class="book-title fs-4 mb-2 text-theme-text">{{ selectedBook.book_title }}</h2>
+            <p class="book-author fs-6 mb-3 text-theme">{{ selectedBook.authors }}</p>
+            
+            <div class="rating-detail mb-3">
+              <span class="fw-bold me-2">Tu valoración: {{ formatRating(selectedBook.rating) }}/10</span>
+              <div class="stars d-flex">
+                <i class="star filled me-1" *ngFor="let star of getEstrellas(selectedBook.rating)">★</i>
+                <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(selectedBook.rating)">☆</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="review bg-component p-4 rounded-3 shadow-sm mb-3" *ngIf="selectedBook.review_text">
+          <h3 class="fs-5 mb-3 text-theme-text">Tu reseña</h3>
+          <p class="review-text mb-0 text-theme">{{ selectedBook.review_text }}</p>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-secondary rounded-pill px-4 py-2" (click)="closeModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de detalles de saga -->
+  <div class="modal-backdrop modal-overlay position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center p-3 bg-dark-overlay backdrop-blur" 
+       *ngIf="isSagaModalOpen" 
+       (click)="closeSagaModal()">
+    <div class="modal-content-custom rounded-4 bg-theme mw-800 shadow-lg" 
+         (click)="preventClose($event)" 
+         *ngIf="selectedSaga">
+      <div class="saga-details p-4 position-relative">
+        <button class="close-btn position-absolute top-3 end-3 bg-transparent border-0 text-theme-text fs-5" 
+                (click)="closeSagaModal()">×</button>
+        
+        <div class="saga-header d-flex align-items-center mb-4">
+          <!-- 
+          <div class="saga-cover-detail rounded-3 shadow overflow-hidden me-4" style="width:120px;height:180px;">
+            <img [src]="getSagaImageUrl(selectedSaga)" [alt]="selectedSaga.name" class="w-100 h-100 object-fit-cover">
+          </div>
+          -->
+          <div class="saga-info-detail">
+            <h2 class="saga-title fs-3 mb-2 text-theme-text">{{ selectedSaga.name }}</h2>
+            <p class="saga-author fs-5 mb-3 text-theme">{{ selectedSaga.author }}</p>
+            <div class="d-flex align-items-center">
+              <div class="rating-detail me-4">
+                <span class="fw-bold me-2">Valoración media: {{ formatRating(selectedSaga.averageRating) }}/10</span>
+                <div class="stars d-flex">
+                  <i class="star filled me-1" *ngFor="let star of getEstrellas(selectedSaga.averageRating)">★</i>
+                  <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(selectedSaga.averageRating)">☆</i>
+                </div>
+              </div>
+              <div class="book-count">
+                <span class="badge bg-primary rounded-pill">{{ selectedSaga.books.length }} libros</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <h3 class="fs-5 mb-3 text-theme-text">Libros de la saga</h3>
+        <div class="saga-books-list">
+          <div class="saga-book-item bg-component p-3 rounded-3 shadow-sm mb-3 d-flex" 
+               *ngFor="let book of selectedSaga.books">
+            <div class="saga-book-cover rounded-2 shadow overflow-hidden me-3" style="width:80px;height:120px;">
+              <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover">
+            </div>
+            <div class="saga-book-info flex-grow-1 d-flex flex-column justify-content-between">
+              <div>
+                <h4 class="fs-6 mb-1 text-theme-text">{{ book.book_title }}</h4>
+                <p class="text-theme mb-2 small">{{ book.authors }}</p>
+              </div>
+              <div class="d-flex justify-content-between align-items-end">
+                <div class="rating">
+                  <span class="rating-number fw-bold me-2">{{ formatRating(book.rating) }}</span>
+                  <div class="stars d-flex">
+                    <i class="star filled me-1" *ngFor="let star of getEstrellas(book.rating)">★</i>
+                    <i class="star empty text-theme me-1" *ngFor="let star of getEstrellasVacias(book.rating)">☆</i>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-outline-primary rounded-pill" (click)="openBookDetails(book); $event.stopPropagation();">
+                  Ver detalles
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-secondary rounded-pill px-4 py-2" (click)="closeSagaModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><div class="califications-container bg-theme p-3 p-md-4">
+ 
 </div>

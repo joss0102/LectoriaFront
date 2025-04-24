@@ -1,93 +1,186 @@
-<div class="container bg-secondary-night mt-5 rounded">
-  <div class="container py-5">
-    <div class="row align-items-center justify-content-center">
-      <div class="col-12 col-md-4 col-lg-3 text-center mb-4 mb-md-0">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/64/64572.png"
-          alt="Perfil"
-          class="rounded-circle img-fluid"
-          width="220"
-          height="220"
-        />
-      </div>
-      <div class="col-12 col-md-8 col-lg-9">
-        <h1 class="mb-3 mb-md-4 text-white">Nombre del autor / a</h1>
-        <p class="lead text-white">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae
-          aliquid, inventore quae ipsa ullam quidem eos architecto quasi?
-          Veritatis voluptatum aliquid iusto est nemo consectetur delectus fugit
-          iure saepe doloremque?
-        </p>
-      </div>
-    </div>
-    <section class="data-book mt-5">
-      <div class="container">
-        <h4 class="text-white mb-4 text-center">Libros más populares:</h4>
-        <div class="row g-4 justify-content-center">
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <article class="text-white text-center">
-              <img
-                src="/libros/Trono de cristal/covers/Trono de cristal.png"
-                class="img-fluid rounded shadow"
-                width="150"
-                alt="Trono de cristal"
-              />
-              <h5 class="mt-2 mb-1 fs-6">Trono de cristal</h5>
-              <p class="text-muted small">Sarah J. Maas</p>
-            </article>
-          </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <article class="text-white text-center">
-              <img
-                src="/libros/Trono de cristal/covers/Corona de medianoche.png"
-                class="img-fluid rounded shadow"
-                width="150"
-                alt="Corona de medianoche"
-              />
-              <h5 class="mt-2 mb-1 fs-6">Corona de medianoche</h5>
-              <p class="text-muted small">Sarah J. Maas</p>
-            </article>
-          </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <article class="text-white text-center">
-              <img
-                src="/libros/Trono de cristal/covers/Heredera de fuego.png"
-                class="img-fluid rounded shadow"
-                width="150"
-                alt="Heredera de fuego"
-              />
-              <h5 class="mt-2 mb-1 fs-6">Heredera de fuego</h5>
-              <p class="text-muted small">Sarah J. Maas</p>
-            </article>
-          </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <article class="text-white text-center">
-              <img
-                src="/libros/Trono de cristal/covers/Reina de sombras.png"
-                class="img-fluid rounded shadow"
-                alt="Reina de sombras"
-                width="150"
-              />
-              <h5 class="mt-2 mb-1 fs-6">Reina de sombras</h5>
-              <p class="text-muted small">Sarah J. Maas</p>
-            </article>
-          </div>
+<div class="search-page-container">
+  <!-- Botón de volver -->
+  <div class="back-button" (click)="goBack()">
+    <i class="bi bi-arrow-left"></i> Volver
+  </div>
 
-          <!-- Book 5 -->
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <article class="text-white text-center">
-              <img
-                src="/libros/Trono de cristal/covers/Imperio de tormentas.png"
-                class="img-fluid rounded shadow"
-                width="150"
-                alt="Imperio de tormentas"
-              />
-              <h5 class="mt-2 mb-1 fs-6">Imperio de tormentas</h5>
-              <p class="text-muted small">Sarah J. Maas</p>
-            </article>
-          </div>
+  <!-- Spinner de carga -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Cargando información...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="error-container">
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+  </div>
+
+  <!-- Si no hay nada seleccionado y no está cargando -->
+  <div *ngIf="!selectedItem && !loading && !error" class="empty-state">
+    <i class="bi bi-search fs-1"></i>
+    <h3>No se ha seleccionado ningún elemento</h3>
+    <p>Utiliza el buscador para encontrar libros o autores</p>
+  </div>
+
+  <!-- DETALLE DE LIBRO -->
+  <div *ngIf="selectedItem && selectedItem.type === 'book'" class="book-detail">
+    <div class="row">
+      <!-- Columna de la imagen -->
+      <div class="col-md-3 image-column">
+        <div class="book-image-container">
+          <img [src]="getBookImageUrl()" alt="Portada del libro" class="book-image">
         </div>
       </div>
-    </section>
+
+      <!-- Columna de la información -->
+      <div class="col-md-9 info-column">
+        <div class="book-header">
+          <h2 class="book-title">{{ getBook().book_title }}</h2>
+          <div class="book-authors" *ngIf="getBook().authors">{{ getBook().authors }}</div>
+        </div>
+
+        <!-- Información del libro en la biblioteca del usuario -->
+        <div *ngIf="isInUserLibrary()" class="user-book-info">
+          <div class="status-badge">
+            <span [ngClass]="getReadingStatusClass()">
+              {{ getReadingStatusText() }}
+            </span>
+          </div>
+
+          <!-- Progreso de lectura -->
+          <div *ngIf="getBook().pages_read !== undefined" class="reading-progress mt-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Progreso de lectura:</span>
+              <span>{{ getBook().progress_percentage || 0 }}%</span>
+            </div>
+            <div class="progress" style="height: 10px;">
+              <div class="progress-bar bg-success" 
+                  [style.width]="(getBook().progress_percentage || 0) + '%'"
+                  role="progressbar" 
+                  [attr.aria-valuenow]="getBook().progress_percentage || 0" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100"></div>
+            </div>
+            <small>{{ getBook().pages_read || 0 }} de {{ getBook().book_pages }} páginas</small>
+          </div>
+
+          <!-- Fechas -->
+          <div class="dates mt-3">
+            <div *ngIf="getBook().date_added" class="date-added">
+              <strong>Fecha de adición:</strong> {{ getBook().date_added | date:'dd/MM/yyyy' }}
+            </div>
+            <div *ngIf="getBook().date_start" class="date-start">
+              <strong>Fecha de inicio:</strong> {{ getBook().date_start | date:'dd/MM/yyyy' }}
+            </div>
+            <div *ngIf="getBook().date_ending" class="date-ending">
+              <strong>Fecha de finalización:</strong> {{ getBook().date_ending | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+
+          <!-- Descripción personalizada -->
+          <div *ngIf="getBook().custom_description" class="custom-description mt-3">
+            <h4>Mi descripción</h4>
+            <p>{{ getBook().custom_description }}</p>
+          </div>
+
+          <!-- Notas del usuario -->
+          <div *ngIf="getBook().notes" class="notes mt-3">
+            <h4>Mis notas</h4>
+            <p>{{ getBook().notes }}</p>
+          </div>
+
+          <!-- Frases marcadas por el usuario -->
+          <div *ngIf="getBook().phrases" class="phrases mt-3">
+            <h4>Frases destacadas</h4>
+            <p>{{ getBook().phrases }}</p>
+          </div>
+        </div>
+
+        <!-- Información general del libro -->
+        <div class="general-book-info">
+          <div class="book-details mt-3">
+            <div class="row">
+              <div class="col-md-4">
+                <strong>Páginas:</strong> {{ getBook().book_pages }}
+              </div>
+              <div class="col-md-8" *ngIf="getBook().genres">
+                <strong>Géneros:</strong> {{ getBook().genres }}
+              </div>
+            </div>
+            <div class="row mt-2" *ngIf="getBook().sagas">
+              <div class="col-12">
+                <strong>Saga:</strong> {{ getBook().sagas }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Sinopsis -->
+          <div *ngIf="getBook().synopsis" class="synopsis mt-4">
+            <h4>Sinopsis</h4>
+            <p>{{ getBook().synopsis }}</p>
+          </div>
+        </div>
+
+        <!-- Si no está en la biblioteca del usuario -->
+        <div *ngIf="!isInUserLibrary()" class="add-to-library mt-4">
+          <button class="btn btn-primary">Añadir a mi biblioteca</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETALLE DE AUTOR -->
+  <div *ngIf="selectedItem && selectedItem.type === 'author'" class="author-detail">
+    <div class="row">
+      <!-- Columna de la imagen -->
+      <div class="col-md-3 image-column">
+        <div class="author-image-container">
+          <img [src]="getAuthorImageUrl()" alt="Imagen del autor" class="author-image rounded-circle">
+        </div>
+      </div>
+
+      <!-- Columna de la información -->
+      <div class="col-md-9 info-column">
+        <div class="author-header">
+          <h2 class="author-name">
+            {{ getAuthor().name }} 
+            {{ getAuthor().last_name1 ? getAuthor().last_name1 : '' }} 
+            {{ getAuthor().last_name2 ? getAuthor().last_name2 : '' }}
+          </h2>
+        </div>
+
+        <!-- Descripción del autor -->
+        <div *ngIf="getAuthor().description" class="author-description mt-3">
+          <p>{{ getAuthor().description }}</p>
+        </div>
+
+        <!-- Libros del autor -->
+        <div class="author-books mt-4">
+          <h4>Libros del autor</h4>
+          <div *ngIf="authorBooks && authorBooks.length > 0; else noBooks">
+            <div class="row">
+              <div *ngFor="let book of authorBooks" class="col-md-4 col-sm-6 mb-3">
+                <div class="book-card" (click)="goToBookDetails(book.id)">
+                  <div class="book-thumbnail">
+                    <img [src]="getBookCoverUrl(book)" alt="Portada de {{ book.title }}">
+                  </div>
+                  <div class="book-info">
+                    <h5 class="book-title">{{ book.title }}</h5>
+                    <p class="book-pages">{{ book.pages }} páginas</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noBooks>
+            <p class="no-books">No se encontraron libros para este autor.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

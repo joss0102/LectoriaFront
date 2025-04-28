@@ -1,25 +1,19 @@
-<section class="d-flex flex-column authors align-items-center justify-content-center">
+<section
+  class="d-flex flex-column authors align-items-center justify-content-center"
+>
   <h4 class="text-white">Autores mas leidos:</h4>
-  <div class="d-flex gap-3 my-3 mx-1">
+  <div class="d-flex gap-3 my-3 mx-1" *ngFor="let item of topAuthors">
     <img
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQokVV9uDZbE162HNb06nj9ils9ck19LRCjMQ&s"width="60"height="60"class="rounded-circle"alt=""/>
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQokVV9uDZbE162HNb06nj9ils9ck19LRCjMQ&s"
+      width="60"
+      height="60"
+      class="rounded-circle"
+      alt=""
+    />
     <div>
-      <h5 class="text-white">Nombre de la autor / a</h5>
-      <p>Numero de libros</p>
-    </div>
-  </div>
-  <div class="d-flex gap-3 my-3 mx-1">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQokVV9uDZbE162HNb06nj9ils9ck19LRCjMQ&s"width="60"height="60"class="rounded-circle"alt=""/>
-    <div>
-      <h5 class="text-white">Nombre de la autor / a</h5>
-      <p>Numero de libros</p>
-    </div>
-  </div>
-  <div class="d-flex gap-3 my-3 mx-1">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQokVV9uDZbE162HNb06nj9ils9ck19LRCjMQ&s"width="60"height="60"class="rounded-circle"alt=""/>
-    <div>
-      <h5 class="text-white">Nombre de la autor / a</h5>
-      <p>Numero de libros</p>
+      <h5 class="text-white">{{ item.name }}</h5>
+      <!-- falta ver que poner aqui la descripcion? no hay numeros d libros en author service -->
+      <p></p>
     </div>
   </div>
 </section>

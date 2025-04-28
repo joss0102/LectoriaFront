@@ -2,7 +2,7 @@
   class="d-flex flex-column authors align-items-center justify-content-center"
 >
   <h4 class="text-white">Autores mas leidos:</h4>
-  <div class="d-flex gap-3 my-3 mx-1" *ngFor="let item of topAuthors">
+  <div class="d-flex gap-3 my-3 mx-1 w-50" *ngFor="let item of topAuthors">
     <img
       [src]="getAuthorImageUrl(item)"
       width="60"

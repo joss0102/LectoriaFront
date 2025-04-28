@@ -4,7 +4,7 @@
   <h4 class="text-white">Autores mas leidos:</h4>
   <div class="d-flex gap-3 my-3 mx-1" *ngFor="let item of topAuthors">
     <img
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQokVV9uDZbE162HNb06nj9ils9ck19LRCjMQ&s"
+      [src]="getAuthorImageUrl(item)"
       width="60"
       height="60"
       class="rounded-circle"

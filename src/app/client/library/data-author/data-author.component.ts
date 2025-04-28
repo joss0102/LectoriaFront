@@ -42,4 +42,21 @@ export class DataAuthorComponent implements OnInit {
     this.topAuthors = this.authors.slice(0, 5);
     console.log(this.topAuthors);
   }
+  getAuthorFullName(author: Author): string {
+    let fullName = author.name || '';
+    if (author.last_name1) {
+      fullName += ' ' + author.last_name1;
+    }
+    if (author.last_name2) {
+      fullName += ' ' + author.last_name2;
+    }
+    return fullName.trim();
+  }
+
+  getAuthorImageUrl(author: Author): string {
+    if (!author?.name) return '/assets/images/default-author.jpg';
+
+    const fullName = this.getAuthorFullName(author);
+    return `/autores/${fullName}/autor/${fullName}.jpg`;
+  }
 }

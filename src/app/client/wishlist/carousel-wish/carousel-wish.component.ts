@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, Renderer2, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Renderer2,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookService } from '../../../core/services/call-api/book.service';
 import { AuthorService } from '../../../core/services/call-api/author.service';
@@ -6,8 +14,10 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { UserBook, Book } from '../../../core/models/call-api/book.model';
 import { Subscription, forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 interface CarouselBook {
+  book_id: number;
   genres: string[];
   genreColors: string[];
   title: string;
@@ -29,19 +39,20 @@ export class CarouselWishComponent implements OnInit, OnDestroy {
   private booksSubscription: Subscription | null = null;
   private autoSlideInterval: any;
   private isAnimating = false;
-  
+
   @ViewChildren('carouselItem') carouselItems!: QueryList<ElementRef>;
 
   constructor(
     private bookService: BookService,
     private authorService: AuthorService,
     private authService: AuthService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     const currentUser = this.authService.currentUserValue;
-    
+
     if (currentUser && currentUser.nickname) {
       this.fetchUserBooks(currentUser.nickname);
     }
@@ -54,6 +65,21 @@ export class CarouselWishComponent implements OnInit, OnDestroy {
       this.booksSubscription.unsubscribe();
     }
     this.stopAutoSlide();
+  }
+
+  /**
+   * Navega al componente Search con los detalles del libro seleccionado.
+   * @param book El libro seleccionado (objeto completo)
+   */
+  showBookDetails(book: CarouselBook): void {
+    if (book?.book_id) {
+      this.router.navigate(['/search'], {
+        queryParams: {
+          id: book.book_id,
+          type: 'book',
+        },
+      });
+    }
   }
 
   private startAutoSlide(): void {
@@ -71,88 +97,100 @@ export class CarouselWishComponent implements OnInit, OnDestroy {
   private fetchUserBooks(nickname: string): void {
     this.booksSubscription = forkJoin({
       onHold: this.bookService.getUserBooks(nickname, 'on_hold'),
-      planToRead: this.bookService.getUserBooks(nickname, 'plan_to_read')
-    }).pipe(
-      map(response => {
-        return [...response.onHold.data, ...response.planToRead.data];
-      })
-    ).subscribe({
-      next: (books) => {
-        const bookDetailsObservables = books.map(book => 
-          this.fetchBookDetails(book)
-        );
+      planToRead: this.bookService.getUserBooks(nickname, 'plan_to_read'),
+    })
+      .pipe(
+        map((response) => {
+          return [...response.onHold.data, ...response.planToRead.data];
+        })
+      )
+      .subscribe({
+        next: (books) => {
+          const bookDetailsObservables = books.map((book) =>
+            this.fetchBookDetails(book)
+          );
 
-        forkJoin(bookDetailsObservables).subscribe({
-          next: (detailedBooks) => {
-            this.books = detailedBooks.map(book => 
-              this.transformBookToCarouselBook(book)
-            );
-            this.currentIndex = 0;
-          },
-          error: (error) => {
-            console.error('Error fetching book details:', error);
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error fetching user books:', error);
-      }
-    });
+          forkJoin(bookDetailsObservables).subscribe({
+            next: (detailedBooks) => {
+              this.books = detailedBooks.map((book) =>
+                this.transformBookToCarouselBook(book)
+              );
+              this.currentIndex = 0;
+            },
+            error: (error) => {
+              console.error('Error fetching book details:', error);
+            },
+          });
+        },
+        error: (error) => {
+          console.error('Error fetching user books:', error);
+        },
+      });
   }
 
   private fetchBookDetails(book: UserBook) {
     return this.bookService.getBookById(book.book_id).pipe(
-      map(bookDetails => {
-        return { 
-          ...bookDetails, 
+      map((bookDetails) => {
+        return {
+          ...bookDetails,
           book_title: book.book_title,
-          genres: bookDetails.genres ? bookDetails.genres.split(',').map(g => g.trim()) : []
+          genres: bookDetails.genres
+            ? bookDetails.genres.split(',').map((g) => g.trim())
+            : [],
         };
       }),
-      catchError(error => {
-        console.error(`Error fetching details for book ${book.book_title}:`, error);
+      catchError((error) => {
+        console.error(
+          `Error fetching details for book ${book.book_title}:`,
+          error
+        );
         return of({
           book_id: book.book_id,
           book_title: book.book_title,
           book_pages: book.book_pages,
           synopsis: 'No description available',
           genres: [],
-          sagas: book.sagas
+          sagas: book.sagas,
         });
       })
     );
   }
 
   private transformBookToCarouselBook(book: {
-    book_id: number, 
-    book_title: string, 
-    synopsis?: string, 
-    genres?: string[], 
-    sagas?: string
+    book_id: number;
+    book_title: string;
+    synopsis?: string;
+    genres?: string[];
+    sagas?: string;
   }): CarouselBook {
+    if (!book.book_id) {
+      throw new Error('Book ID is required for CarouselBook');
+    }
+
     const genres = book.genres || [];
-    
     const genreColors = genres.map((_, index) => {
       const colorClasses = [
-        'bg-info text-dark', 
-        'bg-primary', 
-        'bg-danger', 
-        'bg-success', 
-        'bg-warning'
+        'bg-info text-dark',
+        'bg-primary',
+        'bg-danger',
+        'bg-success',
+        'bg-warning',
       ];
       return colorClasses[index % colorClasses.length];
     });
+
     const sagaName = book.sagas || 'default-saga';
     const coverImage = `/libros/${sagaName}/covers/${book.book_title}.png`;
     const backgroundImage = `/libros/${sagaName}/fondos/fondo1.jpg`;
 
     return {
+      book_id: book.book_id, // Ahora es obligatorio
       genres,
       genreColors,
       title: book.book_title,
       description: book.synopsis || 'No description available',
       coverImage,
-      backgroundImage
+      backgroundImage,
     };
   }
 
@@ -160,52 +198,53 @@ export class CarouselWishComponent implements OnInit, OnDestroy {
     if (this.isAnimating || this.books.length <= 1) return;
     this.isAnimating = true;
     this.stopAutoSlide();
-    
+
     const items = this.carouselItems.toArray();
     if (items.length === 0) {
       this.isAnimating = false;
       return;
     }
-    
+
     // Elemento actual
     const currentElement = items[this.currentIndex].nativeElement;
-    
+
     // Calcular el índice anterior
-    const prevIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.books.length - 1;
+    const prevIndex =
+      this.currentIndex > 0 ? this.currentIndex - 1 : this.books.length - 1;
     const prevElement = items[prevIndex].nativeElement;
-    
+
     // 1. Primero establecer las posiciones iniciales (sin transición)
     this.renderer.removeClass(currentElement, 'sliding');
     this.renderer.removeClass(prevElement, 'sliding');
-    
+
     this.renderer.setStyle(currentElement, 'display', 'block');
     this.renderer.setStyle(currentElement, 'transform', 'translateX(0)');
-    
+
     this.renderer.setStyle(prevElement, 'display', 'block');
     this.renderer.setStyle(prevElement, 'transform', 'translateX(-100%)');
-    
+
     // Forzar un reflow para que los cambios de estilo se apliquen antes de las transiciones
     prevElement.offsetWidth;
-    
+
     // 2. Ahora activar la transición y mover ambos elementos
     setTimeout(() => {
       this.renderer.addClass(currentElement, 'sliding');
       this.renderer.addClass(prevElement, 'sliding');
-      
+
       this.renderer.setStyle(currentElement, 'transform', 'translateX(100%)');
       this.renderer.setStyle(prevElement, 'transform', 'translateX(0)');
-      
+
       // 3. Actualizar el índice actual
       this.currentIndex = prevIndex;
-      
+
       // 4. Limpiar después de que termine la animación
       setTimeout(() => {
-        items.forEach(item => {
+        items.forEach((item) => {
           const el = item.nativeElement;
           // Quitar todas las clases y estilos de animación
           this.renderer.removeClass(el, 'sliding');
           this.renderer.removeStyle(el, 'transform');
-          
+
           // Ocultar todos excepto el actual
           if (el !== items[this.currentIndex].nativeElement) {
             this.renderer.setStyle(el, 'display', 'none');
@@ -215,65 +254,65 @@ export class CarouselWishComponent implements OnInit, OnDestroy {
             this.renderer.setStyle(el, 'display', 'block');
           }
         });
-        
+
         this.isAnimating = false;
         this.startAutoSlide();
       }, 800); // Duración de la animación
     }, 20);
   }
-  
 
   nextSlide(): void {
     if (this.isAnimating || this.books.length <= 1) return;
     this.isAnimating = true;
     this.stopAutoSlide();
-    
+
     // Obtener los elementos actuales
     const items = this.carouselItems.toArray();
     if (items.length === 0) {
       this.isAnimating = false;
       return;
     }
-    
-    // Elemento actual 
+
+    // Elemento actual
     const currentElement = items[this.currentIndex].nativeElement;
-    
+
     // Calcular el índice siguiente
-    const nextIndex = this.currentIndex < this.books.length - 1 ? this.currentIndex + 1 : 0;
+    const nextIndex =
+      this.currentIndex < this.books.length - 1 ? this.currentIndex + 1 : 0;
     const nextElement = items[nextIndex].nativeElement;
-    
+
     // 1. Primero establecer las posiciones iniciales (sin transición)
     this.renderer.removeClass(currentElement, 'sliding');
     this.renderer.removeClass(nextElement, 'sliding');
-    
+
     this.renderer.setStyle(currentElement, 'display', 'block');
     this.renderer.setStyle(currentElement, 'transform', 'translateX(0)');
-    
+
     this.renderer.setStyle(nextElement, 'display', 'block');
     this.renderer.setStyle(nextElement, 'transform', 'translateX(100%)');
-    
+
     // Forzar un reflow para que los cambios de estilo se apliquen antes de las transiciones
     nextElement.offsetWidth;
-    
+
     // 2. Ahora activar la transición y mover ambos elementos
     setTimeout(() => {
       this.renderer.addClass(currentElement, 'sliding');
       this.renderer.addClass(nextElement, 'sliding');
-      
+
       this.renderer.setStyle(currentElement, 'transform', 'translateX(-100%)');
       this.renderer.setStyle(nextElement, 'transform', 'translateX(0)');
-      
+
       // 3. Actualizar el índice actual
       this.currentIndex = nextIndex;
-      
+
       // 4. Limpiar después de que termine la animación
       setTimeout(() => {
-        items.forEach(item => {
+        items.forEach((item) => {
           const el = item.nativeElement;
           // Quitar todas las clases y estilos de animación
           this.renderer.removeClass(el, 'sliding');
           this.renderer.removeStyle(el, 'transform');
-          
+
           // Ocultar todos excepto el actual
           if (el !== items[this.currentIndex].nativeElement) {
             this.renderer.setStyle(el, 'display', 'none');
@@ -283,17 +322,22 @@ export class CarouselWishComponent implements OnInit, OnDestroy {
             this.renderer.setStyle(el, 'display', 'block');
           }
         });
-        
+
         this.isAnimating = false;
         this.startAutoSlide();
       }, 800); // Duración de la animación
     }, 20);
   }
-  
-  
+
   goToSlide(index: number): void {
-    if (this.isAnimating || index === this.currentIndex || index < 0 || index >= this.books.length) return;
-    
+    if (
+      this.isAnimating ||
+      index === this.currentIndex ||
+      index < 0 ||
+      index >= this.books.length
+    )
+      return;
+
     // Usamos nextSlide o prevSlide para mantener la animación consistente
     if (index > this.currentIndex) {
       const steps = (index - this.currentIndex) % this.books.length;

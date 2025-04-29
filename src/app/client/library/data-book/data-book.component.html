@@ -1,28 +1,51 @@
 <div class="recent-books-container">
   <h3 class="section-title">Libros recientes</h3>
-  
+
+  <!-- Mensaje de carga mientras se obtienen los libros -->
   <div *ngIf="loading" class="loading-spinner mensaje">
     <span>Cargando libros recientes...</span>
   </div>
-  
+
+  <!-- Mensaje de error si ocurre algún problema al cargar los libros -->
   <div *ngIf="error" class="error-message mensaje">
-    <p>Ha ocurrido un error al cargar los libros. Por favor, inténtalo de nuevo más tarde.</p>
+    <p>
+      Ha ocurrido un error al cargar los libros. Por favor, inténtalo de nuevo
+      más tarde.
+    </p>
   </div>
-  
+
+  <!-- Mensaje si no se encuentran libros recientes -->
   <div *ngIf="noRecentBooks && !loading && !error" class="no-books-message">
     <p>No has añadido ningún libro en los últimos 3 meses.</p>
   </div>
-  
+
+  <!-- Mostrar los libros recientes cuando están disponibles y no hay errores -->
   <div *ngIf="!loading && !error && recentBooks.length > 0" class="books-grid">
-    <div *ngFor="let book of recentBooks" class="book-card">
+    <div
+      *ngFor="let book of recentBooks"
+      class="book-card"
+      (click)="showBookDetails(book)"
+      style="cursor: pointer"
+    >
       <div class="book-cover">
-        <img [src]="getCoverImage(book)" [alt]="book.book_title" class="cover-image"
-              onerror="this.src='/assets/images/default-book-cover.png'">
+        <!-- Imagen de la portada del libro, con imagen por defecto en caso de error -->
+        <img
+          [src]="getCoverImage(book)"
+          [alt]="book.book_title"
+          class="cover-image"
+          onerror="this.src='/assets/images/default-book-cover.png'"
+        />
       </div>
       <div class="book-info">
-        <h4 class="book-title" [title]="book.book_title">{{ book.book_title }}</h4>
-        <p class="book-author" [title]="book.authors">{{ book.authorName || book.authors || 'Autor desconocido' }}</p>
-        <p class="book-date">Añadido: {{ book.date_added | date:'dd/MM/yyyy' }}</p>
+        <h4 class="book-title" [title]="book.book_title">
+          {{ book.book_title }}
+        </h4>
+        <p class="book-author" [title]="book.authors">
+          {{ book.authorName || book.authors || "Autor desconocido" }}
+        </p>
+        <p class="book-date">
+          Añadido: {{ book.date_added | date : "dd/MM/yyyy" }}
+        </p>
       </div>
     </div>
   </div>

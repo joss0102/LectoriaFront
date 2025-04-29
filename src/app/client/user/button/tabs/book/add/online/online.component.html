@@ -1,24 +1,181 @@
-<section class="section">
-    <div class="content flex-grow-1 pb-4">
-        <!-- Formulario para subir PDF -->
-        <div class="upload-card mx-auto mb-5 rounded-4 p-4" style="max-width: 800px;">
-            <form id="uploadForm" class="d-flex flex-column gap-4">
-                <div class="position-relative">
-                    <label for="pdfFile" class="label d-flex flex-column align-items-center justify-content-center p-4 rounded-3 w-100 border border-2 border-dashed">
-                        <i class="bi bi-cloud-arrow-up fs-1 mb-3"></i>
-                        <span class="subtitle text-center fw-light py-4">Selecciona un archivo PDF</span>
-                        <input type="file" id="pdfFile" name="file" accept="application/pdf" required class="position-absolute top-0 start-0 w-100 h-100 opacity-0" style="cursor: pointer;"/>
-                    </label>
-                </div>
-                <div class="position-relative">
-                    <i class="bi bi-search position-absolute start-0 ms-3 top-50 translate-middle-y"></i>
-                    <input type="text" id="bookTitle" name="bookTitle" placeholder="Título del libro (opcional)"
-                    class="modern-input w-100 rounded-3 fs-6 py-3 px-2 ps-5" />
-                </div>
-                <button type="submit" class="primary-button border-0 rounded-3 fs-6 fw-medium d-flex align-items-center justify-content-center gap-2 py-3">
-                    <i class="bi bi-search"></i> Buscar Libros
-                </button>
-            </form>
-        </div>
+<div class="container mt-4">
+  <h3>Selector de PDF</h3>
+  
+  <!-- Zona de carga de archivos con ngx-dropzone -->
+  <ngx-dropzone 
+    (change)="onSelect($event)"
+    [accept]="'.pdf,application/pdf'"
+    [multiple]="false"
+    [maxFileSize]="20971520"
+    [expandable]="true">
+    
+    <ngx-dropzone-label>
+      <div class="dropzone-label">
+        <i class="bi bi-cloud-arrow-up fs-1 mb-3"></i>
+        <h5>Arrastra y suelta un archivo PDF aquí</h5>
+      </div>
+    </ngx-dropzone-label>
+    
+    <ngx-dropzone-preview *ngFor="let file of files" [removable]="true" (removed)="onRemove(file)">
+      <ngx-dropzone-label>
+        {{ file.name }} ({{ (file.size / 1024).toFixed(2) }} KB)
+      </ngx-dropzone-label>
+    </ngx-dropzone-preview>
+  </ngx-dropzone>
+  
+
+  
+  <!-- Campo de título opcional -->
+  <div class="mb-4">
+    <label for="bookTitle" class="form-label">Título del libro (opcional):</label>
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-book"></i>
+      </span>
+      <input type="text" 
+              class="form-control" 
+              id="bookTitle" 
+              [(ngModel)]="bookTitle"
+              placeholder="Escribe un título para buscar">
     </div>
-</section>
+  </div>
+  
+  <!-- Botón de búsqueda -->
+  <button class="btn btn-primary w-100 py-2" 
+          (click)="onSubmit()"
+          [disabled]="!selectedFile">
+    <i class="bi bi-search me-2"></i> Buscar libros
+  </button>
+
+  <!-- Indicador de carga -->
+  <div class="text-center mt-4 py-5" *ngIf="isLoading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3">Buscando información de libros...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div class="alert alert-danger mt-4" *ngIf="errorMessage">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Vista de detalle del libro seleccionado -->
+  <div class="mt-4" *ngIf="selectedBook && !isLoading">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="m-0">Detalles del libro</h4>
+        <button class="btn btn-sm btn-outline-light" (click)="backToResults()">
+          <i class="bi bi-arrow-left"></i> Volver
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <!-- Imagen y detalles principales -->
+          <div class="col-md-4 text-center mb-4 mb-md-0">
+            <img [src]="selectedBook.volumeInfo?.imageLinks?.thumbnail || 'assets/images/book-placeholder.png'" 
+                  [alt]="selectedBook.volumeInfo?.title || 'Portada del libro'"
+                  class="img-fluid rounded shadow-sm mb-3" 
+                  style="max-height: 300px;">
+                  
+            <div class="book-stats d-flex flex-wrap justify-content-center gap-3 my-3">
+              <span class="badge bg-light text-dark" *ngIf="selectedBook.volumeInfo?.pageCount">
+                <i class="bi bi-book"></i> {{ selectedBook.volumeInfo?.pageCount }} páginas
+              </span>
+              <span class="badge bg-light text-dark" *ngIf="selectedBook.volumeInfo?.publishedDate">
+                <i class="bi bi-calendar-event"></i> {{ selectedBook.volumeInfo?.publishedDate }}
+              </span>
+              <span class="badge bg-light text-dark" *ngIf="selectedBook.volumeInfo?.language">
+                <i class="bi bi-translate"></i> {{ selectedBook.volumeInfo?.language | uppercase }}
+              </span>
+            </div>
+            
+            <!-- Botón para seleccionar este libro -->
+            <button (click)="selectBook(selectedBook)" class="btn btn-primary mt-3 w-100">
+              <i class="bi bi-check-circle me-2"></i> Seleccionar este libro
+            </button>
+            
+            <a *ngIf="selectedBook.volumeInfo?.previewLink" 
+                [href]="selectedBook.volumeInfo?.previewLink" 
+                target="_blank" 
+                class="btn btn-outline-primary mt-2 w-100">
+              <i class="bi bi-eye"></i> Vista previa
+            </a>
+          </div>
+          
+          <!-- Información detallada -->
+          <div class="col-md-8">
+            <h3 class="mb-2">{{ selectedBook.volumeInfo?.title || 'Título desconocido' }}</h3>
+            <p class="text-secondary">{{ selectedBook.volumeInfo?.authors?.join(', ') || 'Autor desconocido' }}</p>
+            
+            <!-- Detalles adicionales -->
+            <div class="bg-light p-3 rounded mb-4">
+              <h5><i class="bi bi-info-circle"></i> Detalles</h5>
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>Editorial:</strong> {{ selectedBook.volumeInfo?.publisher || 'No disponible' }}</p>
+                  <p><strong>ISBN:</strong> {{ getISBN(selectedBook) }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p *ngIf="selectedBook.volumeInfo?.categories?.length">
+                    <strong>Categorías:</strong> {{ selectedBook.volumeInfo?.categories?.join(', ') || 'No disponible' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Descripción -->
+            <div class="bg-light p-3 rounded">
+              <h5><i class="bi bi-file-text"></i> Descripción</h5>
+              <p *ngIf="selectedBook.volumeInfo?.description">{{ selectedBook.volumeInfo?.description }}</p>
+              <p *ngIf="!selectedBook.volumeInfo?.description" class="text-muted">Descripción no disponible.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultados de la búsqueda -->
+  <div class="mt-4" *ngIf="bookResults.length > 0 && !selectedBook && !isLoading">
+    <h4 class="mb-3">
+      <i class="bi bi-book me-2"></i>
+      Se encontraron {{ bookResults.length }} libro(s)
+    </h4>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col" *ngFor="let book of bookResults">
+        <div class="card h-100 shadow-sm">
+          <div class="text-center pt-3">
+            <img [src]="book.volumeInfo?.imageLinks?.thumbnail || 'assets/images/book-placeholder.png'" 
+                class="card-img-top" 
+                alt="Portada"
+                style="height: 180px; width: auto;">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ book.volumeInfo?.title || 'Título desconocido' }}</h5>
+            <p class="card-text mb-1">
+              <i class="bi bi-person-fill me-1"></i>
+              {{ book.volumeInfo?.authors?.join(', ') || 'Autor desconocido' }}
+            </p>
+            <p class="card-text text-muted">
+              <i class="bi bi-building me-1"></i>
+              {{ book.volumeInfo?.publisher || 'Editorial desconocida' }}
+            </p>
+            <div class="mt-3 d-flex gap-2">
+              <button class="btn btn-sm btn-outline-primary flex-grow-1" 
+                      (click)="viewBookDetails(book)">
+                <i class="bi bi-info-circle me-1"></i> Ver detalles
+              </button>
+              <button class="btn btn-sm btn-primary flex-grow-1" 
+                      (click)="selectBook(book)">
+                <i class="bi bi-check-circle me-1"></i> Seleccionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

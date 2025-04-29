@@ -6,7 +6,7 @@ import { SearchService,DetailedSearchResult } from '../../../core/services/Searc
 
 import { BookService } from '../../../core/services/call-api/book.service';
 import { AuthorService } from '../../../core/services/call-api/author.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 
 import { Book } from '../../../core/models/call-api/book.model';
 import { Author } from '../../../core/models/call-api/author.model';
@@ -38,6 +38,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   error: string | null = null;
   
   private searchSubscription: Subscription | null = null;
+  private routerSubscription: Subscription | null = null;
   
   constructor(
     private searchService: SearchService,
@@ -48,12 +49,22 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {}
   
   ngOnInit() {
+    // Escuchar cambios de navegación para resetear el estado cuando se sale del componente
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart && !event.url.includes('/search')) {
+        // Si estamos navegando fuera de la página de búsqueda
+        this.searchService.resetSelectedItem();
+      }
+    });
+    
+    // Verificar si hay parámetros en la URL para cargar directamente
     this.route.queryParams.subscribe(params => {
       
       const id = params['id'];
       const type = params['type'];
       
       if (id && (type === 'book' || type === 'author')) {
+        // Siempre seleccionar explícitamente el ítem, incluso si venimos de otra página
         this.searchService.selectItemById(parseInt(id), type);
       }
     });
@@ -186,8 +197,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   getReadingStatusText(): string {
     const status = this.getBook()?.reading_status;
     if (status === 'reading') return 'Leyendo';
-    if (status === 'pending') return 'Pendiente';
-    if (status === 'finished') return 'Leído';
+    if (status === 'plan_to_read') return 'Pendiente';
+    if (status === 'completed') return 'Leído';
+    if (status === 'dropped') return 'Abandonado';
+    if (status === 'on_hold') return 'Pausado';
     return 'Estado desconocido';
   }
   
@@ -206,8 +219,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy() {
+    // Limpiar suscripciones
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
+    
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+    
+    // Asegurarse de limpiar el estado al salir del componente
+    this.searchService.resetSelectedItem();
   }
 }

@@ -227,6 +227,14 @@ export class SearchService {
   }
 
   /**
+   * Resetea el item seleccionado cuando se sale de la página de búsqueda
+   * para evitar mostrar resultados antiguos al volver a entrar
+   */
+  resetSelectedItem(): void {
+    this.selectedItemSubject.next(null);
+  }
+
+  /**
    * Comprueba si un libro está en la biblioteca del usuario actual
    * buscando en todas las páginas hasta encontrarlo
    * @param bookId ID del libro a comprobar

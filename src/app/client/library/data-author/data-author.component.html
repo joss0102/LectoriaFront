@@ -1,19 +1,22 @@
 <section
   class="d-flex flex-column authors align-items-center justify-content-center"
 >
-  <h4 class="text-white">Autores mas leidos:</h4>
-  <div class="d-flex gap-3 my-3 mx-1 w-50" *ngFor="let item of topAuthors">
+  <h4 class="text-white">Autores más leídos:</h4>
+  <div class="d-flex gap-3 my-1 mx-1 w-50" *ngFor="let item of topAuthors">
     <img
-      [src]="getAuthorImageUrl(item)"
+      [src]="getAuthorImageUrl(item.author)"
       width="60"
       height="60"
       class="rounded-circle"
-      alt=""
+      alt="{{ getAuthorFullName(item.author) }}"
     />
     <div>
-      <h5 class="text-white">{{ item.name }}</h5>
-      <!-- falta ver que poner aqui la descripcion? no hay numeros d libros en author service -->
-      <p></p>
+      <h5 class="text-white">{{ getAuthorFullName(item.author) }}</h5>
+      <p class="text-white">
+        {{ item.count }} libro{{ item.count > 1 ? "s" : "" }} leído{{
+          item.count > 1 ? "s" : ""
+        }}
+      </p>
     </div>
   </div>
 </section>

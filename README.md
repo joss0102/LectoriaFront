@@ -6,27 +6,22 @@ Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, propor
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
 
-# Trabajo pendientes
-
-### Trabajo pendiente o a revisar
-
-- Ninguno , seguir el cronograma.
-
 ### Funcionalidades
 
 - [x] Creacion carpetas
 - [x] Creacion componentes base
-- [ ] Modo dia/noche (default noche)
+- [x] Modo de colores (default noche)
 - [ ] Subir pdf y leerlo
   - [ ] Buscar en api el libro y enseñar los datos
 
-# 🏗️ Apartados de la Página Web ( ir ✅ a cada componente que vayamos terminando )
+# 🏗️ Apartados de la Página Web 
+> **Actualizar**
 
 - **Componentes generales**
 
-  - ✅ **Nav superior**: `Nav con elementos generales`
+  - **Nav superior**: `Nav con elementos generales`
     - Menu desplegable, inicio, biblioteca, buscador, notificaciones, modo noche/dia y logo
-  - ✅ **Nav Izquierdo**: `Nav con elementos mas concretos`
+  - **Nav Izquierdo**: `Nav con elementos mas concretos`
     - Logo usuario, nombre usuario, lectura actual, estadisticas, calificaciones, pendientes y ajustes
 
 - **Paginas generales con link**
@@ -42,23 +37,33 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
   - **Calificaciones**: `Página principal con información general y navegación hacia otras secciones.`
   - **Pendientes**: `Página principal con información general y navegación hacia otras secciones.`
   - **Ajustes**: `Página principal con información general y navegación hacia otras secciones.`
+
 # Dependencias
 - Dependencia de slider 
 > **Advertencia**: Esta libreria esta en desuso actualmente
+
 ```bash
 npm install swiper
-
 ```
+
 - Aunque no deberia dar error, si lo da, probamos con instalar los tipos de swiper
+> **Advertencia**: Esta libreria esta en desuso actualmente
 ```bash
 npm install --save-dev @types/swiper
 ```
-- Libreria de node-vibrant. Esta libreria nos sirve para sacar colores predominantes de una imagen
+
+- Libreria de node-vibrant. Esta libreria nos sirve para sacar colores predominantes de una imagen (Utilizada en /home)
+
 ```bash
 npm install node-vibrant@3
-
-
 ```
+
+- Libreria de ngx-dropzone. Esta libreria nos sirve para subir archivos (Utilizada en user/books/add)
+
+```bash
+npm install ngx-dropzone
+```
+
 # Trabajo en equipo (subir y actualizar código)
 
 - Pasos para mergear, orden:

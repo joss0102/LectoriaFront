@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HomeService } from '../../../core/services/HomeService/home.service';
 import { HomeModel } from '../../../core/models/home.model';
-
 import { SearchService } from '../../../core/services/SearchService/search.service';
 
 @Component({
@@ -56,16 +55,22 @@ export class DataComponent implements OnInit, OnDestroy {
    */
   showBookDetails(): void {
     if (this.book && this.book.book_id) {
-      // Seleccionar el libro en el servicio de búsqueda
-      this.searchService.selectItemById(this.book.book_id, 'book');
+      // Resetear el estado anterior para asegurar que se cargue el nuevo libro
+      this.searchService.resetSelectedItem();
       
-      // Navegar al componente Search
-      this.router.navigate(['/search'], { 
-        queryParams: { 
-          id: this.book.book_id, 
-          type: 'book' 
-        } 
-      });
+      // Pequeño delay para asegurar que el reseteo surta efecto
+      setTimeout(() => {
+        // Seleccionar el libro en el servicio de búsqueda
+        this.searchService.selectItemById(this.book!.book_id, 'book');
+        
+        // Navegar al componente Search
+        this.router.navigate(['/search'], {
+          queryParams: {
+            id: this.book!.book_id,
+            type: 'book'
+          }
+        });
+      }, 50);
     }
   }
   

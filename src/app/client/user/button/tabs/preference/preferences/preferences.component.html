@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <!-- Idioma -->
+  <!-- Idioma --><!--
   <div class="preference-card language" (click)="openLanguageModal()">
     <div class="icon-container">
       <i class="bi bi-translate"></i>
@@ -19,7 +19,7 @@
       <p class="title">Idioma</p>
       <p class="description">Cambia el idioma de la aplicación</p>
     </div>
-  </div>
+  </div>-->
 
   <!-- Colores de Acento -->
   <div class="preference-card accent-colors" (click)="openAccentColorsModal()">
@@ -107,7 +107,7 @@
                 Desactivar colores dinámicos en inicio
               </label>
             </div>
-            <small class="text-muted">Si activas esta opción, no se aplicarán colores de fondo dinámicos en la página de inicio.</small>
+            <small class="">Si activas esta opción, no se aplicarán colores de fondo dinámicos en la página de inicio.</small>
           </div>
 
           <div class="row mb-3" *ngIf="preferences.autoThemeEnabled">
@@ -131,7 +131,7 @@
   </div>
 </div>
 
-<!-- Modal Idioma -->
+<!-- Modal Idioma --><!-- 
 <div class="modal fade" [class.show]="showLanguageModal" [style.display]="showLanguageModal ? 'block' : 'none'" 
       tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true" 
      *ngIf="showLanguageModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
@@ -192,7 +192,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
 
 <!-- Modal Colores de Acento -->
 <div class="modal fade" [class.show]="showAccentColorsModal" [style.display]="showAccentColorsModal ? 'block' : 'none'" 

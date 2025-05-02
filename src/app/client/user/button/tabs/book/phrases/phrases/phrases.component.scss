@@ -4,24 +4,60 @@
 $transition-standard: all 0.3s ease;
 
 // Utilidades CSS personalizadas
-.bg-theme { background-color: var(--background-color); }
-.bg-component { background-color: var(--component-bg); }
-.text-theme { color: var(--border-color); }
-.text-theme-text { color: var(--text-color); }
-.text-btn { color: var(--btn); }
-.bg-btn { background-color: var(--btn); }
-.bg-dark-80 { background-color: rgba(0, 0, 0, 0.7); }
-.bg-dark-20 { background-color: rgba(0, 0, 0, 0.2); }
-.font-serif { font-family: Georgia, serif; }
-.border-dashed { border: 2px dashed var(--border-color); }
-.fs-7 { font-size: 0.9rem; }
-.top-n10 { top: -10px; }
-.bottom-10 { bottom: 10px; }
-.end-10 { right: 10px; }
-.start-10 { left: 10px; }
-.mw-400 { max-width: 400px; }
-.mw-900 { max-width: 900px; }
-.z-1 { z-index: 1; }
+.bg-theme {
+  background-color: var(--background-color);
+}
+.bg-component {
+  background-color: var(--component-bg);
+}
+.text-theme {
+  color: var(--border-color);
+}
+.text-theme-text {
+  color: var(--text-color);
+}
+.text-btn {
+  color: var(--btn);
+}
+.bg-btn {
+  background-color: var(--btn);
+}
+.bg-dark-80 {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.bg-dark-20 {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.font-serif {
+  font-family: Georgia, serif;
+}
+.border-dashed {
+  border: 2px dashed var(--border-color);
+}
+.fs-7 {
+  font-size: 0.9rem;
+}
+.top-n10 {
+  top: -10px;
+}
+.bottom-10 {
+  bottom: 10px;
+}
+.end-10 {
+  right: 10px;
+}
+.start-10 {
+  left: 10px;
+}
+.mw-400 {
+  max-width: 400px;
+}
+.mw-900 {
+  max-width: 900px;
+}
+.z-1 {
+  z-index: 1;
+}
 
 // Componentes compartidos
 .empty-message {
@@ -43,11 +79,11 @@ $transition-standard: all 0.3s ease;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
-  
+
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
@@ -58,7 +94,7 @@ $transition-standard: all 0.3s ease;
   .book-cover {
     width: 160px;
     height: 240px;
-    
+
     img {
       transition: transform 0.5s ease;
       &:hover {
@@ -66,14 +102,14 @@ $transition-standard: all 0.3s ease;
       }
     }
   }
-  
+
   .preview-phrase {
     .quote-mark {
       font-size: 3rem;
       color: var(--bs-btn);
     }
   }
-  
+
   .view-all-btn {
     transition: background-color 0.3s ease, transform 0.2s ease;
     background-color: var(--bs-btn);
@@ -88,23 +124,23 @@ $transition-standard: all 0.3s ease;
 .book-detail {
   .back-btn {
     transition: color 0.3s ease, background-color 0.3s ease;
-    
+
     &:hover {
       color: var(--text-color);
       background-color: rgba(255, 255, 255, 0.05);
     }
   }
-  
+
   .book-cover-detail {
     width: 180px;
     min-width: 180px;
     height: 270px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   }
-  
+
   .section-title {
     &:after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -0.5rem;
       left: 0;
@@ -114,55 +150,55 @@ $transition-standard: all 0.3s ease;
       border-radius: 2px;
     }
   }
-  
+
   .phrase-item {
     &:hover .phrase-actions {
       opacity: 1;
       transform: translateY(0);
     }
-    
+
     .phrase-number {
       background-color: var(--bs-btn);
       width: 32px;
       height: 32px;
       min-width: 32px;
     }
-    
+
     .quote-marks {
       top: -15px;
-      left: -5px;
+      left: -19px;
       font-size: 3rem;
     }
-    
+
     .phrase-actions {
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.3s ease, transform 0.3s ease;
-      
+
       .action-btn {
         width: 36px;
         height: 36px;
         cursor: pointer;
         transition: background-color 0.3s ease, transform 0.2s ease;
       }
-      
+
       .action-hover {
         &:hover {
           background-color: var(--border-color);
           transform: translateY(-3px);
         }
-        
+
         &.share:hover {
           background-color: var(--warning);
         }
       }
     }
   }
-  
+
   .add-phrase-btn {
     transition: all 0.3s ease;
     cursor: pointer;
-    
+
     &:hover {
       background-color: rgba(255, 136, 0, 0.1);
       border-color: var(--btn);
@@ -170,7 +206,7 @@ $transition-standard: all 0.3s ease;
     }
   }
 }
-.counter-number{
+.counter-number {
   color: var(--bs-btn);
 }
 // Media queries responsivos
@@ -180,20 +216,20 @@ $transition-standard: all 0.3s ease;
       flex-direction: column !important;
       align-items: center !important;
       text-align: center;
-      
+
       .book-cover-detail {
         margin-bottom: 1.5rem;
       }
-      
+
       .book-meta {
         justify-content: center !important;
       }
     }
-    
+
     .section-title {
       width: 100%;
       text-align: center;
-      
+
       &:after {
         left: 50%;
         transform: translateX(-50%);
@@ -205,7 +241,7 @@ $transition-standard: all 0.3s ease;
 @media (max-width: 480px) {
   .phrase-item {
     flex-direction: column !important;
-    
+
     .phrase-number {
       margin-bottom: 1rem;
     }

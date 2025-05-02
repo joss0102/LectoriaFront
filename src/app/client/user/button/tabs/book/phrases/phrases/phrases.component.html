@@ -1,40 +1,71 @@
-<!-- phrases.component.html -->
 <div class="phrases-container bg-theme p-3 p-md-4">
   <!-- Vista principal (lista de libros con frases) -->
   <div class="books-list" *ngIf="!detailView">
-    <p class="main-description text-theme mb-5">Explora las frases más destacadas de tus libros favoritos.</p>
-    
+    <p class="main-description text-theme mb-5">
+      Explora las frases más destacadas de tus libros favoritos.
+    </p>
+
     <!-- Mensaje cuando no hay frases -->
-    <div class="no-phrases empty-message text-center bg-component rounded-4 p-5 mx-auto shadow" *ngIf="booksWithPhrases.length === 0">
+    <div
+      class="no-phrases empty-message text-center bg-component rounded-4 p-5 mx-auto shadow"
+      *ngIf="booksWithPhrases.length === 0"
+    >
       <div class="empty-icon fs-1 mb-3 text-theme">📝</div>
       <h2 class="fs-4 mb-3 text-theme-text">No hay frases destacadas</h2>
-      <p class="text-theme mw-400 mx-auto lh-base">Aún no has guardado frases destacadas de tus libros. Cuando encuentres una frase que te guste durante la lectura, podrás guardarla aquí.</p>
+      <p class="text-theme mw-400 mx-auto lh-base">
+        Aún no has guardado frases destacadas de tus libros. Cuando encuentres
+        una frase que te guste durante la lectura, podrás guardarla aquí.
+      </p>
     </div>
-    
+
     <!-- Grid de libros con frases -->
     <div class="phrases-grid" *ngIf="booksWithPhrases.length > 0">
-      <div class="book-card bg-gradient rounded-4 p-4 d-flex flex-column align-items-center shadow card-hover" 
-           *ngFor="let book of booksWithPhrases" 
-           (click)="selectBook(book)">
-        <div class="book-cover position-relative rounded-3 shadow overflow-hidden mb-4">
-          <img [src]="book.imagen" [alt]="'Portada de ' + book.titulo" class="w-100 h-100 object-fit-cover">
-          <div class="phrases-count position-absolute bottom-10 end-10 badge bg-dark-80 text-white" 
-               *ngIf="book.frases && book.frases.length > 0">
+      <div
+        class="book-card bg-gradient rounded-4 p-4 d-flex flex-column align-items-center shadow card-hover"
+        *ngFor="let book of booksWithPhrases"
+        (click)="selectBook(book)"
+      >
+        <div
+          class="book-cover position-relative rounded-3 shadow overflow-hidden mb-4"
+        >
+          <img
+            [src]="getCoverImage(book)"
+            [alt]="'Portada de ' + book.titulo"
+            class="w-100 h-100 object-fit-cover"
+          />
+          <div
+            class="phrases-count position-absolute bottom-10 end-10 badge bg-dark-80 text-white"
+            *ngIf="book.frases && book.frases.length > 0"
+          >
             {{ book.frases.length }} frases
           </div>
         </div>
         <div class="book-info d-flex flex-column w-100 text-center">
-          <h3 class="book-title fw-semibold mb-1 text-theme-text">{{ book.titulo }}</h3>
+          <h3 class="book-title fw-semibold mb-1 text-theme-text">
+            {{ book.titulo }}
+          </h3>
           <p class="book-author fs-7 text-theme mb-3">{{ book.autor }}</p>
-          
+
           <!-- Vista previa de la primera frase -->
-          <div class="preview-phrase bg-dark-20 rounded-3 p-4 mb-4 position-relative text-start flex-grow-1" 
-               *ngIf="book.frases && book.frases.length > 0">
-            <div class="quote-mark position-absolute top-n10 start-10 fs-1  opacity-50 font-serif">&#8220;</div>
-            <p class="fst-italic text-theme-text fs-7 lh-base mb-0 position-relative z-1">{{ shortenPhrase(book.frases[0]) }}</p>
+          <div
+            class="preview-phrase bg-dark-20 rounded-3 p-4 mb-4 position-relative text-start flex-grow-1"
+            *ngIf="book.frases && book.frases.length > 0"
+          >
+            <div
+              class="quote-mark position-absolute top-n10 start-10 fs-1 opacity-50 font-serif"
+            >
+              &#8220;
+            </div>
+            <p
+              class="fst-italic text-theme-text fs-7 lh-base mb-0 position-relative z-1"
+            >
+              {{ shortenPhrase(book.frases[0]) }}
+            </p>
           </div>
-          
-          <button class="view-all-btn btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto">
+
+          <button
+            class="view-all-btn btn text-white rounded-pill fw-semibold px-4 py-2 d-flex align-items-center mt-auto mx-auto"
+          >
             Ver todas
             <span class="arrow-icon ms-2">→</span>
           </button>
@@ -42,63 +73,104 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Vista detalle de un libro y sus frases -->
   <div class="book-detail mw-900 mx-auto" *ngIf="detailView && selectedBook">
-    <button class="back-btn btn d-flex align-items-center gap-2 mb-4 text-theme fw-semibold border-0" (click)="backToList()">
+    <button
+      class="back-btn btn d-flex align-items-center gap-2 mb-4 text-theme fw-semibold border-0"
+      (click)="backToList()"
+    >
       <span class="back-arrow">←</span>
       Volver
     </button>
-    
+
     <div class="detail-header d-flex gap-4 mb-5">
       <div class="book-cover-detail rounded-3 shadow overflow-hidden">
-        <img [src]="selectedBook.imagen" [alt]="'Portada de ' + selectedBook.titulo" class="w-100 h-100 object-fit-cover">
+        <!-- Usando la función getCoverImage() para obtener la imagen -->
+        <img
+          [src]="getCoverImage(selectedBook)"
+          [alt]="'Portada de ' + selectedBook.titulo"
+          class="w-100 h-100 object-fit-cover"
+        />
       </div>
       <div class="book-info-detail d-flex flex-column justify-content-center">
-        <h2 class="detail-title fw-bold mb-2 text-theme-text">{{ selectedBook.titulo }}</h2>
-        <p class="detail-author fs-5 text-theme mb-3">{{ selectedBook.autor }}</p>
+        <h2 class="detail-title fw-bold mb-2 text-theme-text">
+          {{ selectedBook.titulo }}
+        </h2>
+        <p class="detail-author fs-5 text-theme mb-3">
+          {{ selectedBook.autor }}
+        </p>
         <div class="book-meta d-flex gap-3 mb-4" *ngIf="selectedBook.saga">
-          <span class="saga-badge bg-component rounded-pill px-3 py-2 fs-7 text-theme">{{ selectedBook.saga }}</span>
+          <span
+            class="saga-badge bg-component rounded-pill px-3 py-2 fs-7 text-theme"
+            >{{ selectedBook.saga }}</span
+          >
         </div>
         <p class="phrases-counter fs-6 text-theme">
-          <span class="counter-number fw-bold fs-5">{{ selectedBook.frases.length || 0 }}</span> 
+          <span class="counter-number fw-bold fs-5">{{
+            selectedBook.frases.length || 0
+          }}</span>
           frases destacadas
         </p>
       </div>
     </div>
-    
+
     <div class="phrases-list mb-5">
-      <h3 class="section-title position-relative d-inline-block mb-4 text-theme-text">Frases Destacadas</h3>
-      
+      <h3
+        class="section-title position-relative d-inline-block mb-4 text-theme-text"
+      >
+        Frases Destacadas
+      </h3>
+
       <!-- Lista de todas las frases del libro -->
-      <div class="phrase-item d-flex gap-4 mb-4 bg-component rounded-3 p-4 position-relative overflow-hidden" 
-           *ngFor="let phrase of selectedBook.frases; let i = index">
-        <div class="phrase-number  text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start">
+      <div
+        class="phrase-item d-flex gap-4 mb-4 bg-component rounded-3 p-4 position-relative overflow-hidden"
+        *ngFor="let phrase of selectedBook.frases; let i = index"
+      >
+        <div
+          class="phrase-number text-white rounded-circle d-flex align-items-center justify-content-center fw-semibold align-self-start"
+        >
           {{ i + 1 }}
         </div>
         <div class="phrase-content position-relative flex-grow-1">
-          <div class="quote-marks position-absolute font-serif text-theme opacity-30">&#8220;</div>
-          <p class="fs-5 lh-base mb-5 position-relative z-1 text-theme-text">{{ phrase }}</p>
-          <div class="phrase-actions position-absolute bottom-0 end-0 d-flex gap-2">
-            <button class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover" 
-                    title="Copiar frase">
+          <div
+            class="quote-marks position-absolute font-serif text-theme opacity-30"
+          >
+            &#8220;
+          </div>
+          <p class="fs-5 lh-base mb-5 position-relative z-1 text-theme-text">
+            {{ phrase }}
+          </p>
+          <div
+            class="phrase-actions position-absolute bottom-0 end-0 d-flex gap-2"
+          >
+            <button
+              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover"
+              title="Copiar frase"
+            >
               <span class="action-icon">📋</span>
             </button>
-            <button class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover share" 
-                    title="Compartir frase">
+            <button
+              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover share"
+              title="Compartir frase"
+            >
               <span class="action-icon">📤</span>
             </button>
-            <button class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit" 
-                    title="Editar frase">
+            <button
+              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit"
+              title="Editar frase"
+            >
               <span class="action-icon">✎</span>
             </button>
           </div>
         </div>
       </div>
     </div>
-    
+
     <!-- Botón para añadir nueva frase -->
-    <button class="add-phrase-btn bg-component border-dashed text-theme fw-semibold rounded-3 p-4 w-100 d-flex align-items-center justify-content-center gap-3">
+    <button
+      class="add-phrase-btn bg-component border-dashed text-theme fw-semibold rounded-3 p-4 w-100 d-flex align-items-center justify-content-center gap-3"
+    >
       <span class="add-icon fs-4">+</span>
       Añadir nueva frase
     </button>

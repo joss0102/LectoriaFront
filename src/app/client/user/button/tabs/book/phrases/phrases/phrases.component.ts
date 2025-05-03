@@ -21,10 +21,10 @@ interface BookWithPhrases {
   styleUrls: ['./phrases.component.scss'],
 })
 export class PhrasesComponent implements OnInit {
-  booksWithPhrases: BookWithPhrases[] = [];
-  selectedBook: BookWithPhrases | null = null;
-  detailView: boolean = false;
-  loading: boolean = false;
+  booksWithPhrases: BookWithPhrases[] = []; // Lista de libros con frases destacadas
+  selectedBook: BookWithPhrases | null = null; // Libro seleccionado para ver sus frases
+  detailView: boolean = false; // Controla la vista de detalle del libro
+  loading: boolean = false; // Indicador de carga de datos
 
   constructor(
     private readingService: ReadingService,
@@ -37,10 +37,10 @@ export class PhrasesComponent implements OnInit {
     if (user) {
       this.loading = true;
       this.readingService
-        .getPhrases(undefined, user.nickname, 1, 100)
+        .getPhrases(undefined, user.nickname, 1, 100) // Llama al servicio para obtener frases
         .subscribe({
           next: (response) => {
-            this.processPhrases(response.data);
+            this.processPhrases(response.data); // Procesa las frases obtenidas
             this.loading = false;
           },
           error: (error) => {
@@ -52,7 +52,7 @@ export class PhrasesComponent implements OnInit {
   }
 
   processPhrases(phrases: Phrase[]): void {
-    const grouped: { [title: string]: BookWithPhrases } = {};
+    const grouped: { [title: string]: BookWithPhrases } = {}; // Objeto para agrupar las frases por título de libro
 
     for (const phrase of phrases) {
       const title = phrase.book_title;
@@ -67,7 +67,7 @@ export class PhrasesComponent implements OnInit {
           frases: [],
         };
       }
-      grouped[title].frases.push(phrase.text);
+      grouped[title].frases.push(phrase.text); // Agrupa las frases por libro
     }
 
     // Ahora que hemos agrupado las frases, obtenemos los datos de los libros
@@ -75,23 +75,20 @@ export class PhrasesComponent implements OnInit {
   }
 
   getBooksData(books: BookWithPhrases[]): void {
-    // Aquí ahora extraemos los IDs de los libros en lugar de los títulos
-    const bookIds = books.map((book) => book.id);
+    const bookIds = books.map((book) => book.id); // Extrae los IDs de los libros
 
-    // Realiza la llamada para obtener los libros con caché usando los IDs
     this.bookService.getBooksWithCache(bookIds).subscribe({
       next: (bookDetails) => {
-        // Asociamos los detalles del libro con las frases
         books.forEach((book) => {
           const bookDetail = bookDetails.find(
             (detail) => detail.book_id === book.id
           );
           if (bookDetail) {
-            book.saga = bookDetail.sagas || 'default-saga'; // Asigna la saga
-            book.autor = bookDetail.authors || '';
+            book.saga = bookDetail.sagas || 'default-saga'; // Asigna la saga al libro
+            book.autor = bookDetail.authors || ''; // Asigna el autor al libro
           }
         });
-        this.booksWithPhrases = books;
+        this.booksWithPhrases = books; // Asigna los libros con sus frases
       },
       error: (error) => {
         console.error('Error al obtener detalles del libro:', error);
@@ -100,23 +97,34 @@ export class PhrasesComponent implements OnInit {
   }
 
   selectBook(book: BookWithPhrases): void {
-    this.selectedBook = book;
-    this.detailView = true;
+    this.selectedBook = book; // Establece el libro seleccionado
+    this.detailView = true; // Cambia la vista a detalle
   }
 
   backToList(): void {
-    this.selectedBook = null;
-    this.detailView = false;
+    this.selectedBook = null; // Restablece el libro seleccionado
+    this.detailView = false; // Vuelve a la vista principal
   }
 
   shortenPhrase(phrase: string): string {
-    return phrase.length > 100 ? phrase.substring(0, 100) + '...' : phrase;
+    return phrase.length > 100 ? phrase.substring(0, 100) + '...' : phrase; // Acorta la frase si es demasiado larga
   }
 
   getCoverImage(book: BookWithPhrases): string {
     const saga = book.saga || 'default-saga';
     const titulo = book.titulo || 'default-title';
-    const imageUrl = `/libros/${saga}/covers/${titulo}.png`;
+    const imageUrl = `/libros/${saga}/covers/${titulo}.png`; // Ruta de la imagen de portada
     return imageUrl;
+  }
+  // Funcion para copiar la frase al portapapeles.
+  copyToClipboard(phrase: string): void {
+    navigator.clipboard.writeText(phrase).then(
+      () => {
+        alert('Frase copiada al portapapeles');
+      },
+      (err) => {
+        console.error('Error al copiar la frase: ', err);
+      }
+    );
   }
 }

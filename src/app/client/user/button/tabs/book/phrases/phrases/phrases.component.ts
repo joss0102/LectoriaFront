@@ -10,7 +10,7 @@ interface BookWithPhrases {
   titulo: string;
   autor?: string;
   saga?: string;
-  frases: string[];
+  frases: Phrase[];
 }
 
 @Component({
@@ -67,7 +67,7 @@ export class PhrasesComponent implements OnInit {
           frases: [],
         };
       }
-      grouped[title].frases.push(phrase.text); // Agrupa las frases por libro
+      grouped[title].frases.push(phrase); // Agrupa las frases por libro
     }
 
     // Ahora que hemos agrupado las frases, obtenemos los datos de los libros
@@ -116,7 +116,24 @@ export class PhrasesComponent implements OnInit {
     const imageUrl = `/libros/${saga}/covers/${titulo}.png`; // Ruta de la imagen de portada
     return imageUrl;
   }
-  // Funcion para copiar la frase al portapapeles.
+
+  // Elimina una frase destacada
+  deletePhrase(phraseId: number, index: number): void {
+    if (phraseId) {
+      this.readingService.deletePhrase(phraseId).subscribe({
+        next: () => {
+          // Eliminar la frase del array de frases en `selectedBook`
+          this.selectedBook?.frases.splice(index, 1);
+          alert('Frase eliminada con éxito');
+        },
+        error: (error) => {
+          console.error('Error al eliminar la frase:', error);
+          alert('Error al eliminar la frase');
+        },
+      });
+    }
+  }
+
   copyToClipboard(phrase: string): void {
     navigator.clipboard.writeText(phrase).then(
       () => {

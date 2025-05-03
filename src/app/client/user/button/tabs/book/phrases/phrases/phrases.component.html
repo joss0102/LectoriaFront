@@ -59,7 +59,7 @@
             <p
               class="fst-italic text-theme-text fs-7 lh-base mb-0 position-relative z-1"
             >
-              {{ shortenPhrase(book.frases[0]) }}
+              {{ shortenPhrase(book.frases[0].text) }}
             </p>
           </div>
 
@@ -139,7 +139,7 @@
             &#8220;
           </div>
           <p class="fs-5 lh-base mb-5 position-relative z-1 text-theme-text">
-            {{ phrase }}
+            {{ phrase.text }}
           </p>
           <div
             class="phrase-actions position-absolute bottom-0 end-0 d-flex gap-2"
@@ -147,7 +147,7 @@
             <button
               class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover"
               title="Copiar frase"
-              (click)="copyToClipboard(phrase)"
+              (click)="copyToClipboard(phrase.text)"
             >
               <span class="action-icon">📋</span>
             </button>
@@ -159,7 +159,8 @@
             </button>
             <button
               class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit"
-              title="Editar frase"
+              title="Eliminar frase"
+              (click)="deletePhrase(phrase.id, i)"
             >
               <span class="action-icon">🗑️</span>
             </button>
@@ -167,13 +168,5 @@
         </div>
       </div>
     </div>
-
-    <!-- Botón para añadir nueva frase -->
-    <button
-      class="add-phrase-btn bg-component border-dashed text-theme fw-semibold rounded-3 p-4 w-100 d-flex align-items-center justify-content-center gap-3"
-    >
-      <span class="add-icon fs-4">+</span>
-      Añadir nueva frase
-    </button>
   </div>
 </div>

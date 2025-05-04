@@ -138,10 +138,42 @@
           >
             &#8220;
           </div>
-          <p class="fs-5 lh-base mb-5 position-relative z-1 text-theme-text">
+
+          <!-- Modo visualización -->
+          <p
+            *ngIf="editingPhraseId !== phrase.id"
+            class="fs-5 lh-base mb-5 position-relative z-1 text-theme-text"
+          >
             {{ phrase.text }}
           </p>
+          <!-- Modo edición -->
           <div
+            *ngIf="editingPhraseId === phrase.id"
+            class="edit-mode mb-2 position-relative z-1"
+          >
+            <textarea
+              [(ngModel)]="editedPhraseText"
+              class="form-control fs-5 lh-base mb-2 text-theme-text"
+              rows="3"
+            ></textarea>
+            <div class="edit-actions d-flex gap-2 justify-content-end">
+              <button
+                class="btn btn-secondary py-1 px-3 rounded-pill"
+                (click)="cancelEditing()"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-primary py-1 px-3 rounded-pill"
+                (click)="savePhrase(i)"
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+          <!-- Acciones de frase (visibles solo en modo visualización) -->
+          <div
+            *ngIf="editingPhraseId !== phrase.id"
             class="phrase-actions position-absolute bottom-0 end-0 d-flex gap-2"
           >
             <button
@@ -152,13 +184,14 @@
               <span class="action-icon">📋</span>
             </button>
             <button
-              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover share"
-              title="Compartir frase"
+              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit"
+              title="Editar frase"
+              (click)="startEditing(phrase)"
             >
               <span class="action-icon">✏️</span>
             </button>
             <button
-              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit"
+              class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover delete"
               title="Eliminar frase"
               (click)="deletePhrase(phrase.id, i)"
             >

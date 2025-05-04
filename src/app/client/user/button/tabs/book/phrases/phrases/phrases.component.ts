@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ReadingService } from '../../../../../../../core/services/call-api/reading.service';
 import { AuthService } from '../../../../../../../core/services/auth/auth.service';
 import { BookService } from '../../../../../../../core/services/call-api/book.service';
@@ -16,7 +17,7 @@ interface BookWithPhrases {
 @Component({
   selector: 'app-phrases',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './phrases.component.html',
   styleUrls: ['./phrases.component.scss'],
 })
@@ -25,6 +26,9 @@ export class PhrasesComponent implements OnInit {
   selectedBook: BookWithPhrases | null = null; // Libro seleccionado para ver sus frases
   detailView: boolean = false; // Controla la vista de detalle del libro
   loading: boolean = false; // Indicador de carga de datos
+  // Para la edición de frases
+  editingPhraseId: number | null = null;
+  editedPhraseText: string = '';
 
   constructor(
     private readingService: ReadingService,
@@ -104,6 +108,7 @@ export class PhrasesComponent implements OnInit {
   backToList(): void {
     this.selectedBook = null; // Restablece el libro seleccionado
     this.detailView = false; // Vuelve a la vista principal
+    this.cancelEditing(); // Cancela cualquier edición en curso
   }
 
   shortenPhrase(phrase: string): string {
@@ -143,5 +148,33 @@ export class PhrasesComponent implements OnInit {
         console.error('Error al copiar la frase: ', err);
       }
     );
+  }
+  startEditing(phrase: Phrase): void {
+    this.editingPhraseId = phrase.id;
+    this.editedPhraseText = phrase.text;
+  }
+  cancelEditing(): void {
+    this.editingPhraseId = null;
+    this.editedPhraseText = '';
+  }
+  savePhrase(index: number): void {
+    if (!this.editingPhraseId || !this.selectedBook) return;
+    const phraseData = { text: this.editedPhraseText };
+    this.readingService
+      .updatePhrase(this.editingPhraseId, phraseData)
+      .subscribe({
+        next: () => {
+          // Actualiza la frase en el array local
+          if (this.selectedBook && this.selectedBook.frases[index]) {
+            this.selectedBook.frases[index].text = this.editedPhraseText;
+          }
+          this.cancelEditing();
+          alert('Frase actualizada con éxito');
+        },
+        error: (error) => {
+          console.error('Error al actualizar la frase:', error);
+          alert('Error al actualizar la frase');
+        },
+      });
   }
 }

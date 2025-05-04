@@ -175,13 +175,6 @@ $transition-standard: all 0.3s ease;
       transform: translateY(10px);
       transition: opacity 0.3s ease, transform 0.3s ease;
 
-      .action-btn {
-        width: 36px;
-        height: 36px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-      }
-
       .action-hover {
         &:hover {
           background-color: var(--border-color);
@@ -246,4 +239,71 @@ $transition-standard: all 0.3s ease;
       margin-bottom: 1rem;
     }
   }
+}
+.edit-mode {
+  textarea {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: inherit;
+    padding: 10px;
+    border-radius: 8px;
+    resize: vertical;
+    min-height: 100px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--theme-color);
+      box-shadow: 0 0 0 2px rgba(var(--theme-color-rgb), 0.2);
+    }
+  }
+
+  .edit-actions {
+    margin-bottom: 16px;
+
+    button {
+      transition: all 0.2s ease;
+      font-weight: 500;
+
+      &.btn-primary {
+        background-color: var(--theme-color);
+        border-color: var(--theme-color);
+
+        &:hover {
+          background-color: green;
+        }
+      }
+
+      &.btn-secondary {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: transparent;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+}
+.action-btn {
+  width: 36px;
+  height: 36px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &.edit:hover {
+    background-color: #ffc107 !important;
+  }
+
+  &.delete:hover {
+    background-color: #dc3545 !important;
+  }
+}
+.phrase-content {
+  transition: all 0.3s ease;
 }

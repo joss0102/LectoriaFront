@@ -1,5 +1,3 @@
-// phrases.component.scss ultra reducido
-
 // Variables locales
 $transition-standard: all 0.3s ease;
 
@@ -58,13 +56,11 @@ $transition-standard: all 0.3s ease;
 .z-1 {
   z-index: 1;
 }
-
 // Componentes compartidos
 .empty-message {
   max-width: 600px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
-
 // Estilos para cards
 .card-hover {
   transition: $transition-standard;
@@ -73,7 +69,6 @@ $transition-standard: all 0.3s ease;
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25) !important;
   }
 }
-
 // Grid de libros
 .phrases-grid {
   display: grid;
@@ -102,14 +97,12 @@ $transition-standard: all 0.3s ease;
       }
     }
   }
-
   .preview-phrase {
     .quote-mark {
       font-size: 3rem;
       color: var(--bs-btn);
     }
   }
-
   .view-all-btn {
     transition: background-color 0.3s ease, transform 0.2s ease;
     background-color: var(--bs-btn);
@@ -119,7 +112,6 @@ $transition-standard: all 0.3s ease;
     }
   }
 }
-
 // Vista detallada del libro
 .book-detail {
   .back-btn {
@@ -130,7 +122,6 @@ $transition-standard: all 0.3s ease;
       background-color: rgba(255, 255, 255, 0.05);
     }
   }
-
   .book-cover-detail {
     width: 180px;
     min-width: 180px;

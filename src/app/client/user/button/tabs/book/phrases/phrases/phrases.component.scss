@@ -298,3 +298,13 @@ $transition-standard: all 0.3s ease;
 .phrase-content {
   transition: all 0.3s ease;
 }
+.add-note-btn {
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 136, 0, 0.1);
+    border-color: var(--bs-btn);
+    color: var(--btn);
+  }
+}

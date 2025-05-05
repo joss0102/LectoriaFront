@@ -4,26 +4,70 @@
 $transition-standard: all 0.3s ease;
 
 // Utilidades CSS personalizadas
-.bg-theme { background-color: var(--background-color); }
-.bg-component { background-color: var(--component-bg); }
-.text-theme { color: var(--border-color); }
-.text-theme-text { color: var(--text-color); }
-.text-btn { color: var(--bs-btn); }
-.bg-btn { background-color: var(--bs-btn); }
-.bg-dark-80 { background-color: rgba(0, 0, 0, 0.7); }
-.bg-dark-20 { background-color: rgba(0, 0, 0, 0.2); }
-.border-dashed { border: 2px dashed var(--border-color); }
-.fs-7 { font-size: 0.9rem; }
-.top-5 { top: 5px; }
-.start-5 { left: 5px; }
-.bottom-10 { bottom: 10px; }
-.end-10 { right: 10px; }
-.mw-400 { max-width: 400px; }
-.mw-600 { max-width: 600px; }
-.mw-900 { max-width: 900px; }
-.opacity-70 { opacity: 0.7; }
-.z-1 { z-index: 1; }
-.gradient-card { background: linear-gradient(to bottom, var(--component-bg), var(--background-color)); }
+.bg-theme {
+  background-color: var(--background-color);
+}
+.bg-component {
+  background-color: var(--component-bg);
+}
+.text-theme {
+  color: var(--border-color);
+}
+.text-theme-text {
+  color: var(--text-color);
+}
+.text-btn {
+  color: var(--bs-btn);
+}
+.bg-btn {
+  background-color: var(--bs-btn);
+}
+.bg-dark-80 {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.bg-dark-20 {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.border-dashed {
+  border: 2px dashed var(--border-color);
+}
+.fs-7 {
+  font-size: 0.9rem;
+}
+.top-5 {
+  top: 5px;
+}
+.start-5 {
+  left: 5px;
+}
+.bottom-10 {
+  bottom: 10px;
+}
+.end-10 {
+  right: 10px;
+}
+.mw-400 {
+  max-width: 400px;
+}
+.mw-600 {
+  max-width: 600px;
+}
+.mw-900 {
+  max-width: 900px;
+}
+.opacity-70 {
+  opacity: 0.7;
+}
+.z-1 {
+  z-index: 1;
+}
+.gradient-card {
+  background: linear-gradient(
+    to bottom,
+    var(--component-bg),
+    var(--background-color)
+  );
+}
 
 // Componentes compartidos
 .empty-message {
@@ -34,9 +78,9 @@ $transition-standard: all 0.3s ease;
 // Estilos para títulos con línea
 .main-title {
   font-size: 2.5rem;
-  
+
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -0.5rem;
     left: 0;
@@ -49,9 +93,9 @@ $transition-standard: all 0.3s ease;
 
 .section-title {
   font-size: 1.5rem;
-  
+
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -0.5rem;
     left: 0;
@@ -65,7 +109,7 @@ $transition-standard: all 0.3s ease;
 // Efectos para tarjetas
 .card-hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
@@ -89,10 +133,10 @@ $transition-standard: all 0.3s ease;
   width: 160px;
   height: 240px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  
+
   img {
     transition: transform 0.5s ease;
-    
+
     &:hover {
       transform: scale(1.05);
     }
@@ -110,7 +154,7 @@ $transition-standard: all 0.3s ease;
 .view-all-btn {
   transition: background-color 0.3s ease, transform 0.2s ease;
   background-color: var(--bs-btn);
-  
+
   &:hover {
     background-color: var(--bs-btn-hover);
     transform: translateX(5px);
@@ -120,7 +164,7 @@ $transition-standard: all 0.3s ease;
 // Vista detallada del libro
 .back-btn {
   transition: color 0.3s ease, background-color 0.3s ease;
-  
+
   &:hover {
     color: var(--text-color);
     background-color: rgba(255, 255, 255, 0.05);
@@ -139,24 +183,17 @@ $transition-standard: all 0.3s ease;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  
-  .action-btn {
-    width: 36px;
-    height: 36px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
+
   .action-hover {
     &:hover {
       background-color: var(--bs-btn);
       transform: translateY(-3px);
     }
-    
+
     &.edit:hover {
       background-color: var(--bs-btn);
     }
-    
+
     &.delete:hover {
       background-color: var(--bs-btn);
     }
@@ -172,7 +209,7 @@ $transition-standard: all 0.3s ease;
 .add-note-btn {
   transition: all 0.3s ease;
   cursor: pointer;
-  
+
   &:hover {
     background-color: rgba(255, 136, 0, 0.1);
     border-color: var(--bs-btn);
@@ -185,31 +222,31 @@ $transition-standard: all 0.3s ease;
   .notes-grid {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
-  
+
   .detail-header {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center;
-    
+
     .book-cover-detail {
       margin-bottom: 1.5rem;
     }
-    
+
     .book-meta {
       justify-content: center !important;
     }
   }
-  
+
   .section-title {
     width: 100%;
     text-align: center;
-    
+
     &:after {
       left: 50%;
       transform: translateX(-50%);
     }
   }
-  
+
   .main-title {
     font-size: 2rem;
   }
@@ -219,16 +256,35 @@ $transition-standard: all 0.3s ease;
   .notes-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .note-item {
     flex-direction: column !important;
-    
+
     .note-number {
       margin-bottom: 1rem;
     }
-    
+
     .note-content p {
       margin-left: 3rem !important;
     }
+  }
+}
+.action-btn {
+  width: 36px;
+  height: 36px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &.edit:hover {
+    background-color: #ffc107 !important;
+  }
+
+  &.delete:hover {
+    background-color: #dc3545 !important;
   }
 }

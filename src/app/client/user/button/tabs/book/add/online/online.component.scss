@@ -5,7 +5,6 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para ngx-dropzone */
 ngx-dropzone {
   min-height: 200px !important;
   background-color: var(--component-bg, #ffffff) !important;
@@ -23,7 +22,6 @@ ngx-dropzone {
   }
 }
 
-/* Estilos para la etiqueta dentro del dropzone */
 .dropzone-label {
   display: flex;
   flex-direction: column;
@@ -47,7 +45,6 @@ ngx-dropzone {
   }
 }
 
-/* Estilos para las vistas previas de archivos */
 ngx-dropzone-preview {
   background-color: rgba(13, 110, 253, 0.05) !important;
   border-color: var(--bs-btn, #0d6efd) !important;
@@ -61,7 +58,6 @@ ngx-dropzone-preview {
     color: var(--color-text, #212529);
   }
   
-  /* Botón de cierre (x) */
   ngx-dropzone-remove-badge {
     color: #dc3545 !important;
     opacity: 0.7;
@@ -72,7 +68,6 @@ ngx-dropzone-preview {
   }
 }
 
-/* Estilos para el botón de búsqueda */
 .btn-primary {
   background-color: var(--bs-btn, #0d6efd);
   border-color: var(--bs-btn, #0d6efd);
@@ -90,7 +85,6 @@ ngx-dropzone-preview {
   }
 }
 
-/* Estilos para los resultados */
 .card {
   background-color: var(--component-bg, #ffffff);
   border-color: var(--border-color, #dee2e6);
@@ -121,14 +115,12 @@ ngx-dropzone-preview {
   }
 }
 
-/* Estilos para el spinner de carga */
 .spinner-border {
   width: 3rem;
   height: 3rem;
   color: var(--bs-btn, #0d6efd);
 }
 
-/* Fix para el input de texto */
 .input-group-text {
   background-color: var(--component-bg, #ffffff);
   border-color: var(--border-color, #dee2e6);
@@ -146,14 +138,12 @@ ngx-dropzone-preview {
   }
 }
 
-/* Fix para el mensaje de error */
 .alert-danger {
   background-color: rgba(220, 53, 69, 0.1);
   color: #dc3545;
   border-color: rgba(220, 53, 69, 0.2);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   ngx-dropzone {
     min-height: 150px !important;

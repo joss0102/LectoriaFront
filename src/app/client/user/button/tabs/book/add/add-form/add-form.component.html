@@ -1,14 +1,13 @@
-<!-- add-form.component.html completo -->
 <!-- Sección inicial para elegir el método de añadir libro -->
 <section class="form-section d-flex justify-content-center align-items-center w-100" *ngIf="showInitialOptions">
   <div class="options-container d-flex gap-4">
-    <button class="btn btn-primary d-flex align-items-center justify-content-center gap-3 fw-semibold rounded-3" 
-            (click)="showSearchOnlineModal()">
+    <button class="btn btn-online d-flex align-items-center justify-content-center gap-3 fw-semibold rounded-3"
+              (click)="showSearchOnlineModal()">
       <i class="bi bi-search fs-5"></i>
       Buscar online
     </button>
-    <button class="btn btn-accent d-flex align-items-center justify-content-center gap-3 fw-semibold rounded-3" 
-            (click)="showAddManuallyModal()">
+    <button class="btn btn-accent d-flex align-items-center justify-content-center gap-3 fw-semibold rounded-3"
+              (click)="showAddManuallyModal()">
       <i class="bi bi-pencil-fill fs-5"></i>
       Añadir manualmente
     </button>
@@ -16,16 +15,18 @@
 </section>
 
 <!-- Modal de buscar online -->
-<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-         *ngIf="showSearchOnline">
+<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050"
+          *ngIf="showSearchOnline">
   <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
     <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-      <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Buscar libro online</h3>
-      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-              (click)="backToInitialOptions()">×</button>
+      <h3 class="m-0 fw-semibold position-relative ps-4"><span class="modal-title-line"></span>Buscar libro online</h3>
+      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center"
+                (click)="backToInitialOptions()">×</button>
     </div>
     <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-      <p class="empty-state text-center py-5 fs-6 fst-italic text-light-70"><app-online></app-online></p>
+      <p class="empty-state text-center py-5 fs-6 fst-italic text-light-70">
+        <app-online (bookSelected)="onBookSelectedFromOnline($event)"></app-online>
+      </p>
     </div>
     <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
       <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToInitialOptions()">Volver</button>
@@ -34,425 +35,256 @@
 </section>
 
 <!-- Modal de añadir manualmente -->
-<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-         *ngIf="showAddManually">
+<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050"
+          *ngIf="showAddManually">
   <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
     <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-      <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Añadir libro manualmente</h3>
-      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-              (click)="backToInitialOptions()">×</button>
+      <h3 class="m-0 fw-semibold position-relative ps-4">
+        <span class="modal-title-line"></span>
+        Añadir libro manualmente
+      </h3>
+      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center"
+                (click)="backToInitialOptions()">×</button>
     </div>
+
     <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-      <form [formGroup]="bookForm">
-        <div class="book-form-container d-flex flex-column gap-4">
-          <div class="book-info-header d-flex gap-4">
-            <div class="book-image position-relative rounded-3 overflow-hidden bg-theme-border">
-              <img src="assets/images/book-placeholder.png" alt="imagen libro" class="book-cover w-100 h-100 object-fit-cover">
-              <button class="image-upload-btn position-absolute bottom-0 start-0 w-100 bg-dark-60  border-0 py-2">
-                <i class="bi bi-cloud-upload"></i>
-              </button>
+      <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Progress indicator -->
+        <div class="progress-container d-flex justify-content-between mb-4">
+          <div *ngFor="let step of [1, 2, 3, 4]" class="progress-step d-flex flex-column align-items-center">
+            <div class="step-number d-flex align-items-center justify-content-center rounded-circle"
+                  [ngClass]="{'active': currentStep >= step, 'current': currentStep === step}">
+              {{ step }}
             </div>
-
-            <div class="book-details flex-grow-1 d-flex flex-column gap-3">
-              <div class="form-row d-flex gap-3">
-                <div class="form-group flex-grow-1">
-                  <input type="text" formControlName="title" placeholder="Título" 
-                         class="form-control bg-transparent-light  rounded-3" 
-                         [ngClass]="{'is-invalid': bookForm.get('title')?.invalid && bookForm.get('title')?.touched}">
-                  <div class="invalid-feedback" 
-                       *ngIf="bookForm.get('title')?.errors?.['required'] && bookForm.get('title')?.touched">
-                    El título es obligatorio
-                  </div>
-                </div>
-                <div class="form-group flex-grow-1">
-                  <input type="number" formControlName="pages" placeholder="Páginas" 
-                         class="form-control bg-transparent-light  rounded-3" 
-                         [ngClass]="{'is-invalid': bookForm.get('pages')?.invalid && bookForm.get('pages')?.touched}">
-                  <div class="invalid-feedback" 
-                       *ngIf="bookForm.get('pages')?.errors?.['min'] && bookForm.get('pages')?.touched">
-                    El número de páginas debe ser mayor que 0
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-row d-flex gap-3">
-                <div class="form-group select-group d-flex gap-2 flex-grow-1">
-                  <select formControlName="author" class="form-control bg-transparent-light  rounded-3 flex-grow-1">
-                    <option value="" disabled selected>Selecciona un autor o añade uno</option>
-                    <option value="autor1">Autor 1</option>
-                    <option value="autor2">Autor 2</option>
-                  </select>
-                  <button class="btn-icon d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0" 
-                          type="button" (click)="showAddAuthorModal()">
-                    <i class="bi bi-person-add"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="form-row d-flex gap-3">
-                <div class="form-group select-group d-flex gap-2 flex-grow-1">
-                  <select formControlName="saga" class="form-control bg-transparent-light  rounded-3 flex-grow-1">
-                    <option value="" disabled selected>Selecciona una saga o añade una</option>
-                    <option value="saga1">Saga 1</option>
-                    <option value="saga2">Saga 2</option>
-                  </select>
-                  <button class="btn-icon d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0" 
-                          type="button" (click)="showAddSagaModal()">
-                    <i class="bi bi-cloud-plus"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="form-row d-flex gap-3 cofigurar-estado">
-                <div class="form-group flex-grow-1 div1">
-                  <button class="btn-icon mt-2 d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0 button" type="button" (click)="showAddStatusModal()">Configurar estado  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="form-group synopsis-group my-3">
-            <textarea formControlName="synopsis" class="form-control bg-transparent-light  rounded-3" 
-                      placeholder="Sinopsis del libro" rows="4"></textarea>
-          </div>
-
-          <div class="form-row d-flex gap-3">
-            <div class="form-group select-group d-flex gap-2 flex-grow-1">
-              <select formControlName="genres" class="form-control bg-transparent-light rounded-3 flex-grow-1">
-                <option value="" disabled selected>Selecciona los géneros</option>
-                <option value="genero1">Género 1</option>
-                <option value="genero2">Género 2</option>
-                <option value="genero3">Género 3</option>
-              </select>
-              <button class="btn-icon d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0" 
-                      type="button" (click)="showAddGenresModal()">
-                <i class="bi bi-plus-circle"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Lista de géneros seleccionados -->
-          <div class="selected-items" *ngIf="selectedGenres.length > 0">
-            <div class="badge-container d-flex flex-wrap gap-2">
-              <span class="badge d-inline-flex align-items-center gap-2 py-1 px-3 rounded-pill -10" 
-                    *ngFor="let genre of selectedGenres; let i = index">
-                {{ genre }}
-                <button class="badge-remove bg-transparent border-0  d-flex align-items-center justify-content-center" 
-                        (click)="removeGenre(i)">×</button>
-              </span>
-            </div>
+            <span class="step-label mt-2 text-center" [ngClass]="{'active': currentStep >= step}">
+              {{ step === 1 ? 'Información básica' : 
+                  step === 2 ? 'Autor' : 
+                  step === 3 ? 'Géneros' : 'Detalles de lectura' }}
+            </span>
           </div>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-      <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToInitialOptions()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold " (click)="submitBook()">Guardar libro</button>
-    </div>
-  </div>
-</section>
 
-<!-- Modal de añadir autor -->
-<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-         *ngIf="showAddAuthor">
-  <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
-    <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-      <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Añadir autor</h3>
-      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-              (click)="backToAddManually()">×</button>
-    </div>
-    <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-      <form [formGroup]="authorForm">
-        <div class="author-form d-flex flex-column gap-3">
-          <div class="author-details d-flex flex-column gap-3">
-            <div class="form-group">
-              <input type="text" formControlName="name" placeholder="Nombre" 
-                     class="form-control bg-transparent-light  rounded-3" 
-                     [ngClass]="{'is-invalid': authorForm.get('name')?.invalid && authorForm.get('name')?.touched}">
-              <div class="invalid-feedback" 
-                   *ngIf="authorForm.get('name')?.errors?.['required'] && authorForm.get('name')?.touched">
-                El nombre es obligatorio
-              </div>
-            </div>
-            <div class="form-group">
-              <input type="text" formControlName="lastName1" placeholder="Primer apellido" 
-                     class="form-control bg-transparent-light  rounded-3">
-            </div>
-            <div class="form-group">
-              <input type="text" formControlName="lastName2" placeholder="Segundo apellido" 
-                     class="form-control bg-transparent-light  rounded-3">
-            </div>
-          </div>
-          <div class="form-group description-group my-3">
-            <textarea formControlName="description" class="form-control bg-transparent-light  rounded-3" 
-                      placeholder="Descripción del autor" rows="4"></textarea>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-      <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveAuthor()">Guardar autor</button>
-    </div>
-  </div>
-</section>
-
-<!-- Modal de añadir saga -->
-<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-         *ngIf="showAddSaga">
-  <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
-    <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-      <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Añadir saga</h3>
-      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-              (click)="backToAddManually()">×</button>
-    </div>
-    <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-      <form [formGroup]="sagaForm">
-        <div class="saga-form d-flex flex-column gap-3">
-          <div class="form-group">
-            <input type="text" formControlName="name" placeholder="Nombre de la saga" 
-                   class="form-control bg-transparent-light  rounded-3" 
-                   [ngClass]="{'is-invalid': sagaForm.get('name')?.invalid && sagaForm.get('name')?.touched}">
-            <div class="invalid-feedback" 
-                 *ngIf="sagaForm.get('name')?.errors?.['required'] && sagaForm.get('name')?.touched">
-              El nombre de la saga es obligatorio
+        <!-- 1. Informacion básica -->
+        <div *ngIf="currentStep === 1" formGroupName="basicInfo" class="step-content">
+          <h4 class="fw-bold mb-4">Información del libro</h4>
+          
+          <div class="mb-3">
+            <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="title" formControlName="title">
+            <div class="form-text text-danger" 
+                 *ngIf="bookForm.get('basicInfo.title')?.invalid && bookForm.get('basicInfo.title')?.touched">
+              El título es obligatorio
             </div>
           </div>
           
-          <!-- REEMPLAZADO: Botón para añadir imágenes en lugar de checkbox -->
-          <div class="form-group my-3">
-            <div class="info-container d-flex flex-column gap-2 mb-3">
-              <p class="fw-medium ">
-                Nuestra página proporciona una función de imágenes dinámicas referentes a las sagas
-              </p>
-              <p class="info-text m-0">Puedes añadir imágenes para mostrarlas en la página web</p>
+          <div class="mb-3">
+            <label for="pages" class="form-label">Número de páginas <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="pages" formControlName="pages" min="1">
+            <div class="form-text text-danger" 
+                 *ngIf="bookForm.get('basicInfo.pages')?.invalid && bookForm.get('basicInfo.pages')?.touched">
+              El número de páginas es obligatorio y debe ser mayor que 0
             </div>
-            <button type="button" class="btn btn-outline w-100 img-saga" (click)="showSagaImagesModal()">
-              <i class="bi bi-images me-2 img-saga"></i> Añadir imágenes para la saga
-            </button>
+          </div>
+          
+          <div class="mb-3">
+            <label for="synopsis" class="form-label">Sinopsis</label>
+            <textarea class="form-control" id="synopsis" rows="4" formControlName="synopsis"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="saga_id" class="form-label">Saga</label>
+            
+            <div *ngIf="isLoadingSagas" class="mb-2">
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Cargando sagas...</span>
+              </div>
+              <span class="ms-2">Cargando sagas...</span>
+            </div>
+            
+            <select *ngIf="!isLoadingSagas" class="form-select" id="saga_id" formControlName="saga_id">
+              <option value="">Sin saga</option>
+              <option *ngFor="let saga of sagas" [value]="saga.id">{{ saga.name }}</option>
+              <option value="custom">Añadir nueva saga</option>
+            </select>
+            
+            <div *ngIf="showCustomSaga" class="mt-2">
+              <input type="text" class="form-control" placeholder="Escribe el nombre de la nueva saga" 
+                     formControlName="custom_saga">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Autor -->
+        <div *ngIf="currentStep === 2" formGroupName="authorInfo" class="step-content">
+          <h4 class="fw-bold mb-4">Información del autor</h4>
+          
+          <div class="mb-3">
+            <label for="author_id" class="form-label">Seleccionar autor</label>
+            <div class="input-group mb-2">
+              <input type="text" class="form-control" placeholder="Buscar autor..." 
+                     formControlName="authorSearch">
+              <span class="input-group-text" *ngIf="isLoadingAuthors">
+                <i class="bi bi-hourglass-split"></i>
+              </span>
+            </div>
+            
+            <select class="form-select" id="author_id" formControlName="author_id">
+              <option value="">Seleccionar autor</option>
+              <option *ngFor="let author of authors" [value]="author.id">
+                {{ author.name }} {{ author.last_name1 || '' }} {{ author.last_name2 || '' }}
+              </option>
+              <option value="new">Añadir nuevo autor</option>
+            </select>
+          </div>
+          
+          <div *ngIf="!showSelectAuthor">
+            <div class="mb-3">
+              <label for="author_name" class="form-label">Nombre <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="author_name" formControlName="author_name">
+              <div class="form-text text-danger" 
+                   *ngIf="bookForm.get('authorInfo.author_name')?.invalid && bookForm.get('authorInfo.author_name')?.touched">
+                El nombre del autor es obligatorio
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="author_last_name1" class="form-label">Primer apellido</label>
+              <input type="text" class="form-control" id="author_last_name1" formControlName="author_last_name1">
+            </div>
+            
+            <div class="mb-3">
+              <label for="author_last_name2" class="form-label">Segundo apellido</label>
+              <input type="text" class="form-control" id="author_last_name2" formControlName="author_last_name2">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. generos -->
+        <div *ngIf="currentStep === 3" formGroupName="genreInfo" class="step-content">
+          <h4 class="fw-bold mb-4">Géneros (máximo 5)</h4>
+          
+          <div *ngIf="loadingGenres" class="mb-3">
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
+              <span class="visually-hidden">Cargando géneros...</span>
+            </div>
+            <span class="ms-2">Cargando géneros...</span>
+          </div>
+          
+          <div *ngFor="let _ of [1, 2, 3, 4, 5]; let i = index" class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <label [for]="'genre' + (i+1)" class="form-label mb-0">Género {{ i+1 }}</label>
+              <button type="button" class="btn btn-link ms-auto p-0 text-decoration-none" 
+                      (click)="toggleCustomGenre(i)">
+                {{ showCustomGenre[i] ? 'Seleccionar de la lista' : 'Añadir género personalizado' }}
+              </button>
+            </div>
+            
+            <ng-container *ngIf="!showCustomGenre[i]">
+              <select class="form-select" [id]="'genre' + (i+1)" 
+                      [formControlName]="'genre' + (i+1)">
+                <option value="">Seleccionar género</option>
+                <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+              </select>
+            </ng-container>
+            
+            <ng-container *ngIf="showCustomGenre[i]">
+              <input type="text" class="form-control" 
+                     [formControlName]="'custom_genre' + (i+1)" 
+                     [placeholder]="customGenrePlaceholders[i]">
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- 4. detalles de lectura -->
+        <div *ngIf="currentStep === 4" formGroupName="userInfo" class="step-content">
+          <h4 class="fw-bold mb-4">Detalles de lectura</h4>
+          
+          <div class="mb-3">
+            <label for="status" class="form-label">Estado de lectura</label>
+            <select class="form-select" id="status" formControlName="status">
+              <option *ngFor="let status of readingStatuses" [value]="status.value">
+                {{ status.label }}
+              </option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="date_added" class="form-label">Fecha de añadido</label>
+            <input type="date" class="form-control" id="date_added" formControlName="date_added">
+          </div>
+          
+          <div class="mb-3">
+            <label for="date_start" class="form-label">Fecha de inicio</label>
+            <input type="date" class="form-control" id="date_start" formControlName="date_start">
+          </div>
+          
+          <div class="mb-3">
+            <label for="date_ending" class="form-label">Fecha de finalización
+              <span class="text-danger" *ngIf="bookForm.get('userInfo.status')?.value === 'completed'">*</span>
+            </label>
+            <input type="date" class="form-control" id="date_ending" formControlName="date_ending">
+            <div class="form-text text-danger" 
+                 *ngIf="bookForm.get('userInfo.date_ending')?.invalid && 
+                        bookForm.get('userInfo.date_ending')?.touched &&
+                        bookForm.get('userInfo.status')?.value === 'completed'">
+              La fecha de finalización es obligatoria para libros completados
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="custom_description" class="form-label">Descripción personalizada</label>
+            <textarea class="form-control" id="custom_description" rows="3" 
+                      formControlName="custom_description"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="rating" class="form-label">Valoración (1-10)</label>
+            <input type="number" class="form-control" id="rating" formControlName="rating" min="1" max="10">
+            <div class="form-text text-danger" 
+                 *ngIf="bookForm.get('userInfo.rating')?.invalid && bookForm.get('userInfo.rating')?.touched">
+              La valoración debe estar entre 1 y 10
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="review" class="form-label">Reseña</label>
+            <textarea class="form-control" id="review" rows="4" formControlName="review"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="phrases" class="form-label">Frases destacadas</label>
+            <textarea class="form-control" id="phrases" rows="3" formControlName="phrases"
+                      placeholder="Separa las frases con saltos de línea"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notas personales</label>
+            <textarea class="form-control" id="notes" rows="3" formControlName="notes"></textarea>
           </div>
         </div>
       </form>
     </div>
-    <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-      <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveSaga()">Confirmar</button>
-    </div>
-  </div>
-</section>
-
-<!-- Modal de imágenes de saga -->
-<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-         *ngIf="showAddSagaImages">
-  <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
-    <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-      <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Imágenes de saga</h3>
-      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-              (click)="backToAddSaga()">×</button>
-    </div>
-    <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-      <div class="images-form d-flex flex-column gap-5">
-        <div class="image-section">
-          <h4 class="fs-5 mb-3 ">Imágenes de la página de inicio</h4>
-          <div class="image-upload-area d-flex gap-3 flex-wrap">
-            <div class="image-placeholder d-flex flex-column align-items-center justify-content-center rounded-3 border border-dashed border-light-20 bg-transparent-light" 
-                 style="width: 180px; height: 120px;">
-              <i class="bi bi-cloud-upload fs-4 mb-2 "></i>
-              <span class="fs-7">Haz clic para subir</span>
-            </div>
-            <div class="image-placeholder d-flex flex-column align-items-center justify-content-center rounded-3 border border-dashed border-light-20 bg-transparent-light" 
-                 style="width: 180px; height: 120px;">
-              <i class="bi bi-cloud-upload fs-4 mb-2"></i>
-              <span class="fs-7">Haz clic para subir</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="image-section">
-          <h4 class="fs-5 mb-3 ">Imágenes de la página de biblioteca</h4>
-          <div class="image-upload-area d-flex gap-3 flex-wrap">
-            <div class="image-placeholder d-flex flex-column align-items-center justify-content-center rounded-3 border border-dashed border-light-20 bg-transparent-light" 
-                 style="width: 180px; height: 120px;">
-              <i class="bi bi-cloud-upload fs-4 mb-2"></i>
-              <span class="fs-7">Haz clic para subir</span>
-            </div>
-          </div>
-        </div>
+    
+    <!-- footer -->
+    <div class="modal-footer d-flex justify-content-between p-3 border-top border-subtle">
+      <button *ngIf="currentStep > 1" type="button" class="btn btn-secondary rounded-3 fw-semibold"
+              (click)="previousStep()">
+        <i class="bi bi-arrow-left me-2"></i> Anterior
+      </button>
+      <div *ngIf="currentStep === 1"></div>
+      
+      <div>
+        <button *ngIf="currentStep < totalSteps" type="button" class="btn btn-accent rounded-3 fw-semibold"
+                (click)="nextStep()">
+          Siguiente <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+        <button *ngIf="currentStep === totalSteps" type="button" class="btn btn-accent rounded-3 fw-semibold"
+                (click)="onSubmit()" [disabled]="isLoading || !bookForm.valid">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Guardar libro
+        </button>
       </div>
     </div>
-    <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-      <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddSaga()">Cancelar</button>
-      <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveSagaImages()">Confirmar</button>
-    </div>
   </div>
 </section>
-
-<!-- Modal de añadir estado -->
-<section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-         *ngIf="showAddStatus">
-  <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
-    <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-      <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Estado del libro</h3>
-      <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-              (click)="backToAddManually()">×</button>
-    </div>
-    <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-      <form [formGroup]="statusForm">
-        <div class="status-form d-flex flex-column gap-3">
-          <div class="form-row d-flex gap-3">
-            <div class="form-group flex-grow-1">
-              <input type="date" formControlName="startDate" placeholder="Fecha de inicio" 
-                     class="form-control bg-transparent-light  rounded-3">
-            </div>
-            <div class="form-group flex-grow-1">
-              <input type="date" formControlName="endDate" placeholder="Fecha de finalización" 
-                     class="form-control bg-transparent-light  rounded-3">
-                    </div>
-                    <div class="form-group flex-grow-1">
-                      <input type="number" formControlName="rating" placeholder="Calificación (0-10)" 
-                             class="form-control bg-transparent-light  rounded-3" min="0" max="10">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group review-group my-3">
-                    <textarea formControlName="review" class="form-control bg-transparent-light  rounded-3" 
-                              placeholder="Reseña del libro" rows="4"></textarea>
-                  </div>
-                  
-                  <!-- REEMPLAZADO: Botón para añadir frases/notas en lugar de checkbox -->
-                  <div class="form-group my-4">
-                    <div class="info-container mb-3">
-                      <p class="fw-medium ">¿Quieres guardar frases destacadas o añadir notas personales sobre este libro?</p>
-                    </div>
-                    <button type="button" class="btn btn-outline-light w-100 img-saga" (click)="showAddPhrasesNotesModal()">
-                      <i class="bi bi-quote me-2 img-saga"></i> Añadir frases y notas personales
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-              <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-              <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveStatus()">Confirmar</button>
-            </div>
-          </div>
-        </section>
-        
-        <!-- Modal de añadir frases/notas -->
-        <section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-                 *ngIf="showAddPhrasesNotes">
-          <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
-            <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-              <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Frases y notas</h3>
-              <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-                      (click)="backToAddStatus()">×</button>
-            </div>
-            <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-              <form [formGroup]="phrasesNotesForm">
-                <div class="phrases-notes-form d-flex flex-column gap-3">
-                  <div class="form-group">
-                    <div class="input-with-button d-flex gap-2">
-                      <input type="text" formControlName="phrase" placeholder="Frase del libro" 
-                             class="form-control bg-transparent-light  rounded-3 flex-grow-1">
-                      <button class="btn-icon d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0" 
-                              type="button" (click)="addPhrase()">
-                        <i class="bi bi-plus-circle"></i>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <!-- Lista de frases añadidas -->
-                  <div class="items-list my-4" *ngIf="phrases.length > 0">
-                    <h4 class="fs-5 mb-3 -90">Frases añadidas</h4>
-                    <div class="list-item d-flex justify-content-between align-items-center p-3 mb-2 rounded-3 bg-transparent-light" 
-                         *ngFor="let phrase of phrases; let i = index">
-                      <div class="item-content flex-grow-1">{{ phrase }}</div>
-                      <div class="item-actions d-flex gap-2">
-                        <button class="btn-icon-small d-flex align-items-center justify-content-center rounded-2 bg-transparent-light border-0" 
-                                (click)="removePhrase(i)">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <div class="input-with-button d-flex gap-2">
-                      <input type="text" formControlName="note" placeholder="Nota sobre el libro" 
-                             class="form-control bg-transparent-light  rounded-3 flex-grow-1">
-                      <button class="btn-icon d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0" 
-                              type="button" (click)="addNote()">
-                        <i class="bi bi-plus-circle"></i>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <!-- Lista de notas añadidas -->
-                  <div class="items-list my-4" *ngIf="notes.length > 0">
-                    <h4 class="fs-5 mb-3 -90">Notas añadidas</h4>
-                    <div class="list-item d-flex justify-content-between align-items-center p-3 mb-2 rounded-3 bg-transparent-light" 
-                         *ngFor="let note of notes; let i = index">
-                      <div class="item-content flex-grow-1">{{ note }}</div>
-                      <div class="item-actions d-flex gap-2">
-                        <button class="btn-icon-small d-flex align-items-center justify-content-center rounded-2 bg-transparent-light border-0" 
-                                (click)="removeNote(i)">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-              <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddStatus()">Cancelar</button>
-              <button class="btn btn-primary rounded-3 fw-semibold " (click)="savePhrasesNotes()">Confirmar</button>
-            </div>
-          </div>
-        </section>
-        
-        <!-- Modal de añadir géneros completo -->
-        <section class="modal-section position-fixed w-100 h-100 top-0 start-0 d-flex justify-content-center align-items-center z-1050" 
-                 *ngIf="showAddGenres">
-          <div class="modal-container bg-theme rounded-4 d-flex flex-column shadow-lg">
-            <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-subtle">
-              <h3 class="m-0 fw-semibold  position-relative ps-4"><span class="modal-title-line"></span>Añadir géneros</h3>
-              <button class="close-button bg-transparent-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
-                      (click)="backToAddManually()">×</button>
-            </div>
-            <div class="modal-content flex-grow-1 overflow-auto p-4 bg-theme-dark">
-              <form [formGroup]="genresForm">
-                <div class="genres-form d-flex flex-column gap-3">
-                  <div class="form-group">
-                    <div class="input-with-button d-flex gap-2">
-                      <input type="text" formControlName="genre" placeholder="Nombre del género" 
-                             class="form-control bg-transparent-light  rounded-3 flex-grow-1">
-                      <button class="btn-icon d-flex align-items-center justify-content-center rounded-3 bg-transparent-light border-0" 
-                              type="button" (click)="addGenre()">
-                        <i class="bi bi-plus-circle"></i>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <!-- Lista de géneros añadidos -->
-                  <div class="items-list my-4" *ngIf="selectedGenres.length > 0">
-                    <h4 class="fs-5 mb-3 -90">Géneros añadidos</h4>
-                    <div class="genre-tags d-flex flex-wrap gap-2">
-                      <span class="badge d-inline-flex align-items-center gap-2 py-1 px-3 rounded-pill -10" 
-                            *ngFor="let genre of selectedGenres; let i = index">
-                        {{ genre }}
-                        <button class="badge-remove bg-transparent border-0  d-flex align-items-center justify-content-center" 
-                                (click)="removeGenre(i)">×</button>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer d-flex justify-content-end gap-3 p-3 border-top border-subtle">
-              <button class="btn btn-secondary rounded-3 fw-semibold" (click)="backToAddManually()">Cancelar</button>
-              <button class="btn btn-primary rounded-3 fw-semibold " (click)="saveGenres()">Confirmar</button>
-            </div>
-          </div>
-        </section>

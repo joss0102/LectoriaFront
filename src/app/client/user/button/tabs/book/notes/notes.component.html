@@ -109,8 +109,9 @@
         <div class="book-meta d-flex gap-3 mb-4" *ngIf="selectedBook.saga">
           <span
             class="saga-badge bg-component rounded-pill px-3 py-2 fs-7 text-theme"
-            >{{ selectedBook.saga }}</span
           >
+            {{ selectedBook.saga }}
+          </span>
         </div>
         <p class="notes-counter fs-6">
           <span class="counter-number fw-bold fs-5">{{
@@ -150,8 +151,34 @@
           >
             {{ note.text }}
           </p>
+          <!-- Formulario para editar la nota -->
+          <div
+            *ngIf="editingNoteId !== null"
+            class="edit-mode mb-2 position-relative z-1"
+          >
+            <textarea
+              [(ngModel)]="editedNoteText"
+              class="form-control fs-5 lh-base mb-2 text-theme-text"
+              rows="3"
+            ></textarea>
+            <div class="edit-actions d-flex gap-2 justify-content-end">
+              <button
+                class="btn btn-secondary py-1 px-3 rounded-pill"
+                (click)="cancelEditing()"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-primary py-1 px-3 rounded-pill"
+                (click)="saveNote()"
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
           <div
             class="note-actions position-absolute bottom-0 end-0 d-flex gap-2"
+            *ngIf="editingNoteId !== note.id"
           >
             <button
               class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover"
@@ -163,12 +190,14 @@
             <button
               class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover edit"
               title="Editar anotación"
+              (click)="startEditing(note)"
             >
               <span class="action-icon">✏️</span>
             </button>
             <button
               class="action-btn bg-theme border-0 rounded-circle d-flex align-items-center justify-content-center action-hover delete"
               title="Eliminar anotación"
+              (click)="deleteNote(note.id)"
             >
               <span class="action-icon">🗑️</span>
             </button>
@@ -176,6 +205,7 @@
         </div>
       </div>
     </div>
+
     <!-- Botón para añadir nueva anotación -->
     <button
       class="add-note-btn bg-component border-dashed text-theme fw-semibold rounded-3 p-4 w-100 d-flex align-items-center justify-content-center gap-3"

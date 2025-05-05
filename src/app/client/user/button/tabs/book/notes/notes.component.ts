@@ -5,11 +5,12 @@ import { AuthService } from '../../../../../../core/services/auth/auth.service';
 import { Note } from '../../../../../../core/models/call-api/reading.model';
 import { Book } from '../../../../../../core/models/call-api/book.model';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-notes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss'],
 })
@@ -28,6 +29,8 @@ export class NotesComponent implements OnInit {
 
   page = 1;
   pageSize = 100;
+  editingNoteId: number | null = null; // Para la edición de nota
+  editedNoteText: string = ''; // Texto de la nota cuando estamos en modo edición
 
   constructor(
     private readingService: ReadingService,
@@ -39,7 +42,6 @@ export class NotesComponent implements OnInit {
     const nickname = this.authService.currentUserValue?.nickname;
     if (!nickname) return;
 
-    // Página inicial y tamaño de página
     const page = 1;
     const pageSize = 100;
 
@@ -112,5 +114,64 @@ export class NotesComponent implements OnInit {
 
   shortenNote(note: string): string {
     return note.length > 100 ? note.slice(0, 100) + '...' : note;
+  }
+
+  // Inicia el modo de edición de la nota
+  startEditing(note: Note): void {
+    this.editingNoteId = note.id;
+    this.editedNoteText = note.text;
+  }
+  // Cancelar la edición de la nota
+  cancelEditing(): void {
+    this.editingNoteId = null;
+    this.editedNoteText = '';
+  }
+
+  // Guardar la nota editada
+  saveNote(): void {
+    if (this.editingNoteId !== null && this.editedNoteText.trim()) {
+      const updatedText = this.editedNoteText.trim();
+
+      this.readingService
+        .updateNote(this.editingNoteId, { text: updatedText })
+        .subscribe({
+          next: () => {
+            const noteIndex = this.selectedBook.notas.findIndex(
+              (n: Note) => n.id === this.editingNoteId
+            );
+            if (noteIndex !== -1) {
+              this.selectedBook.notas[noteIndex] = {
+                ...this.selectedBook.notas[noteIndex],
+                text: updatedText,
+              };
+              this.selectedBook = { ...this.selectedBook }; // Forzar el renderizado
+            }
+            this.cancelEditing();
+          },
+          error: (err) => {
+            console.error('Error al guardar la nota:', err);
+            alert('Hubo un error al guardar la nota.');
+          },
+        });
+    } else {
+      alert('No se puede guardar una nota vacía.');
+    }
+  }
+
+  // Eliminar nota
+  deleteNote(noteId: number): void {
+    this.readingService.deleteNote(noteId).subscribe({
+      next: () => {
+        alert('Nota eliminada correctamente');
+        // Elimina de la lista del libro actual
+        this.selectedBook.notas = this.selectedBook.notas.filter(
+          (note: Note) => note.id !== noteId
+        );
+        this.selectedBook = { ...this.selectedBook }; // Forzar detección de cambios
+      },
+      error: (err) => {
+        console.error('Error al eliminar la nota:', err);
+      },
+    });
   }
 }

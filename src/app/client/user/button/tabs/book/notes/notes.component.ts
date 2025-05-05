@@ -26,6 +26,9 @@ export class NotesComponent implements OnInit {
   selectedBook: any = null; // Propiedad para la vista de detalle
   detailView: boolean = false; // Controla la vista de detalles
 
+  page = 1;
+  pageSize = 100;
+
   constructor(
     private readingService: ReadingService,
     private bookService: BookService,
@@ -36,34 +39,39 @@ export class NotesComponent implements OnInit {
     const nickname = this.authService.currentUserValue?.nickname;
     if (!nickname) return;
 
-    this.readingService.getNotes(undefined, nickname).subscribe({
-      next: (response) => {
-        const grouped = this.groupNotesByBook(response.data);
-        const bookIds = grouped.map((group) => group.book_id);
+    // Página inicial y tamaño de página
+    const page = 1;
+    const pageSize = 100;
 
-        this.bookService.getBooksWithCache(bookIds).subscribe({
-          next: (books) => {
-            this.booksWithNotes = grouped.map((group) => {
-              const book = books.find((b) => b.book_id === group.book_id);
-              const imagen = book ? this.getCoverImage(book) : '';
-              return {
-                ...group,
-                titulo: book?.book_title || 'Libro sin título',
-                saga: book?.sagas,
-                autor: book?.authors || 'Autor desconocido',
-                imagen,
-              };
-            });
-          },
-          error: (error) => {
-            console.error('Error al obtener libros con caché:', error);
-          },
-        });
-      },
-      error: (error) => {
-        console.error('Error al obtener notas:', error);
-      },
-    });
+    this.readingService
+      .getNotes(undefined, nickname, page, pageSize)
+      .subscribe({
+        next: (response) => {
+          const grouped = this.groupNotesByBook(response.data);
+          const bookIds = grouped.map((group) => group.book_id);
+          this.bookService.getBooksWithCache(bookIds).subscribe({
+            next: (books) => {
+              this.booksWithNotes = grouped.map((group) => {
+                const book = books.find((b) => b.book_id === group.book_id);
+                const imagen = book ? this.getCoverImage(book) : '';
+                return {
+                  ...group,
+                  titulo: book?.book_title || 'Libro sin título',
+                  saga: book?.sagas,
+                  autor: book?.authors || 'Autor desconocido',
+                  imagen,
+                };
+              });
+            },
+            error: (error) => {
+              console.error('Error al obtener libros con caché:', error);
+            },
+          });
+        },
+        error: (error) => {
+          console.error('Error al obtener notas:', error);
+        },
+      });
   }
 
   groupNotesByBook(notes: Note[]): { book_id: number; notas: Note[] }[] {

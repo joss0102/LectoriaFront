@@ -1,42 +1,37 @@
 .carrusel-container {
-    margin: 2rem 0;
     padding: 1.5rem;
     width: 100%;
-
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
     .section-title {
         color: var(--text-color);
         font-size: 2rem;
-        margin-bottom: 1.75rem;
-        text-align: center;
+        text-align: left;
         font-weight: 600;
-        }
+    }
         
-        .carrusel-wrapper {
+    .carrusel-wrapper {
         position: relative;
         display: flex;
         align-items: center;
         width: 100%;
-        }
+    }
         
-        .carrusel-content {
+    .carrusel-content {
         position: relative;
         width: 100%;
         height: 210px;
         overflow: hidden;
         perspective: 1000px;
-        }
+    }
         
-        .carrusel-track {
+    .carrusel-track {
         position: relative;
         width: 100%;
         height: 100%;
 
-        }
+    }
         
-        .carrusel-book {
+    .carrusel-book {
         position: absolute;
         left: 0;
         top: 0;
@@ -56,9 +51,9 @@
         @media (max-width: 600px) {
             width: 80vw; // 80% del ancho de la ventana para mostrar 1 libro
         }
-        }
+    }
         
-        .book-card {
+    .book-card {
         background-color: rgba(255, 255, 255, 0.05);
         border-radius: 0.5rem;
         overflow: hidden;
@@ -74,9 +69,9 @@
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         }
-        }
+    }
         
-        .book-cover {
+    .book-cover {
         position: relative;
         overflow: hidden;
         flex: 0 0 140px;
@@ -108,9 +103,9 @@
             font-weight: bold;
             font-size: 0.85rem;
         }
-        }
+    }
         
-        .book-info {
+    .book-info {
         padding: 1rem 1rem 1rem 1.5rem;
         display: flex;
         flex-direction: column;
@@ -119,23 +114,23 @@
         color: var(--text-color);
         justify-content: space-between;
         width: calc(100% - 140px);
-        }
+    }
         
-        .book-title {
+    .book-title {
         font-size: 1.15rem;
         font-weight: 600;
         margin-bottom: 0.35rem;
     
         overflow: hidden;
-        }
+    }
         
-        .book-author {
+    .book-author {
         font-size: 0.95rem;
         opacity: 0.8;
         margin-bottom: 0.75rem;
-        }
+    }
         
-        .book-dates {
+    .book-dates {
         font-size: 0.9rem;
         
         .date-item {
@@ -149,9 +144,9 @@
             font-size: 0.85rem;
             }
         }
-        }
+    }
         
-        .book-stats {
+    .book-stats {
         margin-top: 0.4rem;
         font-size: 0.9rem;
         opacity: 0.8;
@@ -163,13 +158,13 @@
             margin: 0;
             
             i {
-            color: var(--bs-btn);
-            font-size: 0.85rem;
+                color: var(--bs-btn);
+                font-size: 0.85rem;
             }
         }
-        }
+    }
         
-        .carrusel-control {
+    .carrusel-control {
         background-color: var(--bs-btn);
         color: white;
         border: none;
@@ -203,9 +198,9 @@
         &.next-btn {
             margin-left: 10px;
         }
-        }
+    }
         
-        .carrusel-indicators {
+    .carrusel-indicators {
         display: flex;
         justify-content: center;
         gap: 8px;

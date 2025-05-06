@@ -45,13 +45,13 @@ export class CardsStadisticsComponent implements OnInit {
               color: 'bg-warning',
             },
             {
-              icon: 'bi-person',
+              icon: 'bi-globe',
               label: 'Género favorito',
               value: response.favorite_genre || '0',
               color: 'bg-purple',
             },
             {
-              icon: 'bi-globe',
+              icon: 'bi-person',
               label: 'Autor favorito',
               value: response.favorite_author || '0',
               color: 'bg-info',

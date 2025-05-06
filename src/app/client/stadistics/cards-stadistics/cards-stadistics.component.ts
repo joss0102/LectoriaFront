@@ -41,7 +41,7 @@ export class CardsStadisticsComponent implements OnInit {
             {
               icon: 'bi-journal-text',
               label: 'Páginas leídas',
-              value: response.total_pages_read_sessions,
+              value: response.total_pages_read_completed,
               color: 'bg-warning',
             },
             {

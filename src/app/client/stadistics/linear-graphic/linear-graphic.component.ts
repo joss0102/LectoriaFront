@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -11,6 +11,8 @@ import {
   ApexTheme,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { UserService } from '../../../core/services/call-api/user.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -33,11 +35,57 @@ export type ChartOptions = {
 export class LinearGraphicComponent {
   @ViewChild('chart') chartComponent?: ChartComponent;
 
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    const actualUser = this.authService.currentUserValue;
+    if (actualUser) {
+      this.userService.getUserStats(actualUser.nickname).subscribe({
+        next: (data) => {
+          const avgPagesPerDay = data.avg_pages_per_day;
+          const monthly = this.generateMonthlyFromAvg(
+            avgPagesPerDay,
+            data.total_pages_read_completed
+          );
+
+          this.chartOptions.series = [
+            {
+              name: 'Páginas Leídas',
+              data: monthly,
+              color: '#dc3e3e',
+            },
+          ];
+        },
+        error: (err) => {
+          console.error('Error al cargar las stats del usuario:', err);
+        },
+      });
+    }
+  }
+
+  private generateMonthlyFromAvg(
+    avgPerDay: number,
+    totalPages: number
+  ): number[] {
+    const actualUser = this.authService.currentUserValue;
+    const daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const totalDaysInYear = daysPerMonth.reduce((a, b) => a + b, 0); // Total de días en el año
+    const adjustedAvgPerDay = totalPages / totalDaysInYear; // Calcular el promedio diario necesario
+    // Generar datos mensuales ajustados
+    const monthly = daysPerMonth.map((days) =>
+      Math.round(adjustedAvgPerDay * days)
+    );
+    return monthly;
+  }
+
   public chartOptions: ChartOptions = {
     series: [
       {
-        name: 'Páginas Leidas',
-        data: [250, 250, 315, 251, 429, 623, 633, 391, 148, 700, 123, 600],
+        name: 'Páginas Leídas',
+        data: [],
         color: '#dc3e3e',
       },
     ],
@@ -98,6 +146,4 @@ export class LinearGraphicComponent {
       palette: 'palette1',
     },
   };
-
-  constructor() {}
 }

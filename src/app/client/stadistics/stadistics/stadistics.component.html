@@ -1,8 +1,32 @@
 <div class="parent">
-  <div class="secondGraphic rounded">secondGraphic</div>
-  <div class="thirdGraphic rounded">thirdgraphicc</div>
-  <div class="favBooks rounded">favBooks</div>
-  <div class="div10 rounded">10</div>
-  <div class="iconsDiv rounded">iconos</div>
-  <div class="firstGraphic rounded">first graphic</div>
+  <div class="secondGraphic panel">
+    <h3 class="panel-title">Paginas Mensuales Leidas</h3>
+    <app-linear-graphic></app-linear-graphic>
+  </div>
+
+  <div class="thirdGraphic panel">
+    <h3 class="panel-title">TITULO LIBRE</h3>
+    <div class="panel-content">Panel libre</div>
+  </div>
+
+  <div class="favBooks panel">
+    <h3 class="panel-title">Libros Favoritos</h3>
+    <div class="panel-content">favBooks</div>
+  </div>
+
+  <div class="div10 panel">
+    <h3 class="panel-title">Distribución por Géneros</h3>
+    <div class="panel-content"><app-donut-graphic></app-donut-graphic></div>
+  </div>
+
+  <div class="iconsDiv panel">
+    <h3 class="panel-title">Tus Estadísticas</h3>
+    <div class="panel-content">iconos</div>
+  </div>
+
+  <div class="firstGraphic panel">
+    <div class="panel-content">
+      <app-semi-circle-gauge></app-semi-circle-gauge>
+    </div>
+  </div>
 </div>

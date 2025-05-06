@@ -1,8 +1,8 @@
-import { Component, ViewChild, ElementRef ,Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { OnlinePdfService,GoogleBookItem } from '../../../../../../../core/services/pdf-online/pdf-online.service';
+import { OnlinePdfService, GoogleBookItem } from '../../../../../../../core/services/pdf-online/pdf-online.service';
 
 interface NgxFile extends File {
   preview: string;
@@ -30,9 +30,6 @@ export class OnlineComponent {
     console.log('OnlineComponent inicializado');
   }
   
-  /**
-   * Maneja la selección de archivos de ngx-dropzone
-   */
   onSelect(event: { addedFiles: File[] }): void {
     console.log('Archivos seleccionados mediante dropzone:', event.addedFiles);
     
@@ -57,20 +54,12 @@ export class OnlineComponent {
     }
   }
   
-
-  
-  /**
-   * Maneja la eliminación de archivos de ngx-dropzone
-   */
   onRemove(file: NgxFile): void {
     console.log('Eliminando archivo:', file.name);
     this.files = this.files.filter(f => f !== file);
     this.selectedFile = null;
   }
   
-  /**
-   * Maneja el envío del formulario
-   */
   onSubmit(): void {
     console.log('Botón de búsqueda clickeado');
     
@@ -111,32 +100,20 @@ export class OnlineComponent {
       });
   }
   
-  /**
-   * Muestra detalles de un libro
-   */
   viewBookDetails(book: GoogleBookItem): void {
     this.selectedBook = book;
     console.log('Ver detalles del libro:', book.volumeInfo?.title);
   }
   
-  /**
-   * Vuelve a la lista de resultados
-   */
   backToResults(): void {
     this.selectedBook = null;
   }
   
-  /**
-   * Selecciona un libro y lo emite al componente padre
-   */
   selectBook(book: GoogleBookItem): void {
     console.log('Libro seleccionado:', book.volumeInfo?.title);
     this.bookSelected.emit(book);
   }
   
-  /**
-   * Obtiene el ISBN de un libro
-   */
   getISBN(book: GoogleBookItem): string {
     const identifiers = book.volumeInfo?.industryIdentifiers;
     if (!identifiers) return 'No disponible';

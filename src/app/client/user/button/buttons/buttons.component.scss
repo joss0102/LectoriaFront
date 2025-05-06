@@ -5,10 +5,14 @@
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(187, 187, 187, 0) 50%);
-  
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(187, 187, 187, 0) 50%
+  );
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -17,11 +21,11 @@
 
     z-index: 1;
   }
-  
+
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-    
+
     .icon-container {
       transform: rotate(10deg);
       background-color: var(--btn-hover);
@@ -30,39 +34,36 @@
         transform: scale(1.1);
       }
     }
-    
+
     .card-title {
       transform: translateY(-2px);
     }
   }
-  
+
   &:active {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    
   }
 }
-.bi:hover{
+.bi:hover {
   background-color: var(--bs-btn-hover);
 }
 .icon-container {
   min-width: 50px;
   height: 50px;
   border-radius: 14px;
-  transition: all 0.3s ease; 
+  transition: all 0.3s ease;
   background-color: var(--bs-btn);
 
   i {
     font-size: 22px;
     transition: transform 0.3s ease;
   }
-
 }
 
 /* Estilos para los modales */
 .modal {
   &.show {
-
     backdrop-filter: blur(5px);
     animation: fadeIn 0.3s ease;
   }
@@ -70,7 +71,6 @@
 
 .custom-modal-content {
   border-radius: 20px;
-  max-height: 90vh;
   background-color: var(--background-color);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   animation: modalUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -95,7 +95,7 @@
   background-color: var(--bs-btn);
   transition: all 0.2s ease;
   opacity: 1;
-  
+
   &:hover {
     background-color: var(--bs-btn-hover);
     transform: rotate(90deg);
@@ -104,13 +104,23 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes modalUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Ajustes para media queries */
@@ -119,12 +129,12 @@
     min-width: 40px;
     height: 40px;
     border-radius: 12px;
-    
+
     i {
       font-size: 18px;
     }
   }
-  
+
   .custom-modal-content {
     border-radius: 16px;
   }
@@ -134,16 +144,16 @@
 .tema-dia {
   .custom-card {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    
+
     &:hover {
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
     }
   }
-  
+
   .modal.show {
     background-color: rgba(0, 0, 0, 0.4);
   }
-  
+
   .custom-modal-content {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   }

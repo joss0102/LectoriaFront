@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   ApexChart,
   ApexTitleSubtitle,
@@ -8,6 +8,9 @@ import {
   ApexDataLabels,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { UserService } from '../../../core/services/call-api/user.service';
+import { UserStatsResponse } from '../../../core/models/call-api/user.model';
 
 export type ChartOptions = {
   series: number[];
@@ -26,9 +29,37 @@ export type ChartOptions = {
   templateUrl: './semi-circle-gauge.component.html',
   styleUrls: ['./semi-circle-gauge.component.scss'],
 })
-export class SemiCircleGaugeComponent {
+export class SemiCircleGaugeComponent implements OnInit {
+  constructor(
+    private authService: AuthService,
+    private userStats: UserService
+  ) {}
+
+  ngOnInit(): void {
+    this.bringUserData();
+  }
+
+  bringUserData() {
+    const actualUser = this.authService.currentUserValue;
+
+    if (actualUser && actualUser.nickname) {
+      this.userStats.getUserStats(actualUser.nickname).subscribe({
+        next: (response: UserStatsResponse) => {
+          if (response && response.average_rating !== undefined) {
+            this.chartOptions.series = [response.average_rating * 10];
+          }
+        },
+        error: (error) => {
+          console.error('error con los datos:', error);
+        },
+      });
+    } else {
+      console.warn('No hay usuario logeado');
+    }
+  }
+
   public chartOptions: ChartOptions = {
-    series: [7.3 * 10],
+    series: [0],
     chart: {
       height: 350,
       type: 'radialBar',
@@ -101,6 +132,4 @@ export class SemiCircleGaugeComponent {
       },
     },
   };
-
-  constructor() {}
 }

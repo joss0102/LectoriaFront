@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -11,8 +11,8 @@ import {
   ApexTheme,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { UserService } from '../../../core/services/call-api/user.service';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { ReadingService } from '../../../core/services/call-api/reading.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -32,55 +32,63 @@ export type ChartOptions = {
   templateUrl: './linear-graphic.component.html',
   styleUrls: ['./linear-graphic.component.scss'],
 })
-export class LinearGraphicComponent {
-  @ViewChild('chart') chartComponent?: ChartComponent;
-
+export class LinearGraphicComponent implements OnInit {
   constructor(
-    private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private readingService: ReadingService
   ) {}
 
   ngOnInit(): void {
     const actualUser = this.authService.currentUserValue;
     if (actualUser) {
-      this.userService.getUserStats(actualUser.nickname).subscribe({
-        next: (data) => {
-          const avgPagesPerDay = data.avg_pages_per_day;
-          const monthly = this.generateMonthlyFromAvg(
-            avgPagesPerDay,
-            data.total_pages_read_completed
-          );
-
-          this.chartOptions.series = [
-            {
-              name: 'Páginas Leídas',
-              data: monthly,
-              color: '#dc3e3e',
-            },
-          ];
-        },
-        error: (err) => {
-          console.error('Error al cargar las stats del usuario:', err);
-        },
-      });
+      this.readingService
+        .getReadingProgress(actualUser.nickname, undefined, 1, 1000)
+        .subscribe({
+          next: (progressData) => {
+            console.log(progressData.data);
+            // Obtener los datos a partir del índice 100 en adelante que esta ahi lo de 2025
+            const filteredData = progressData.data.slice(100);
+            const monthlyPagesRead = this.generateMonthlyFromProgress(
+              filteredData,
+              2025 // Filtramos para el año 2025
+            );
+            this.chartOptions.series = [
+              {
+                name: 'Páginas Leídas',
+                data: monthlyPagesRead,
+                color: '#dc3e3e',
+              },
+            ];
+          },
+          error: (err) => {
+            console.error('Error al obtener el progreso de lectura:', err);
+          },
+        });
     }
   }
 
-  private generateMonthlyFromAvg(
-    avgPerDay: number,
-    totalPages: number
+  private generateMonthlyFromProgress(
+    progressData: any[],
+    year: number
   ): number[] {
-    const daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    const totalDaysInYear = daysPerMonth.reduce((a, b) => a + b, 0); // Total de días en el año
-    const adjustedAvgPerDay = totalPages / totalDaysInYear; // Calcular el promedio diario necesario
-    // Generar datos mensuales ajustados
-    const monthly = daysPerMonth.map((days) =>
-      Math.round(adjustedAvgPerDay * days)
-    );
-    return monthly;
-  }
+    const monthlyPages: number[] = new Array(12).fill(0); // Inicializamos un arreglo para los 12 meses
 
-  public chartOptions: ChartOptions = {
+    progressData.forEach((progress) => {
+      const readingDate = new Date(progress.reading_date);
+      const progressYear = readingDate.getFullYear(); // Obtiene el año de la lectura
+      const monthIndex = readingDate.getMonth(); // Obtiene el índice del mes (0 para Enero, 1 para Febrero, etc.)
+      // Solo procesamos las lecturas del año seleccionado (por ejemplo, 2025)
+      if (progressYear === year) {
+        const pagesRead = Number(progress.pages_read_session); // Páginas leídas en esa sesión
+        // Sumamos las páginas leídas a su respectivo mes
+        monthlyPages[monthIndex] += pagesRead;
+      }
+    });
+
+    return monthlyPages;
+  }
+  @ViewChild('chart') chartComponent?: ChartComponent;
+  chartOptions: ChartOptions = {
     series: [
       {
         name: 'Páginas Leídas',

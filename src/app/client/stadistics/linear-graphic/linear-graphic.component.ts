@@ -45,7 +45,6 @@ export class LinearGraphicComponent implements OnInit {
         .getReadingProgress(actualUser.nickname, undefined, 1, 1000)
         .subscribe({
           next: (progressData) => {
-            console.log(progressData.data);
             // Obtener los datos a partir del índice 100 en adelante que esta ahi lo de 2025
             const filteredData = progressData.data.slice(100);
             const monthlyPagesRead = this.generateMonthlyFromProgress(

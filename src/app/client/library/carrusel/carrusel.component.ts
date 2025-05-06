@@ -1,7 +1,23 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Books } from '../../../core/models/books-model';
-import { BooksService } from '../../../core/services/book/books.service';
+import { BookService } from '../../../core/services/call-api/book.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { ReadingService } from '../../../core/services/call-api/reading.service';
+import { forkJoin, of, Subscription } from 'rxjs';
+import { catchError, finalize, map } from 'rxjs/operators';
+import { Book } from '../../../core/models/call-api/book.model';
+
+interface CarouselBook {
+  book_id: number;
+  titulo: string;
+  autor: string;
+  imagen: string;
+  fechaInicio: Date | null;
+  fechaFin: Date | null;
+  paginasTotales: number;
+  paginasLeidas: number;
+  valoracion?: number;
+}
 
 @Component({
   selector: 'app-carrusel',
@@ -10,40 +26,180 @@ import { BooksService } from '../../../core/services/book/books.service';
   templateUrl: './carrusel.component.html',
   styleUrls: ['./carrusel.component.scss'],
 })
-export class CarruselComponent implements OnInit {
-  finishedBooks: Books[] = [];
+export class CarruselComponent implements OnInit, OnDestroy {
+  finishedBooks: CarouselBook[] = [];
   currentIndex = 0;
   itemsToShow = 3;
-  
-  // Control de animación
   isTransitioning = false;
-  
-  // Parámetros de visualización
-  bookWidth = 400; // Ancho base de cada libro
-  bookGap = 20;    // Espacio entre libros
-  visibleOffset = 0; // Offset para posicionar libros visibles
-  
-  // Soporte táctil
+  bookWidth = 400;
+  bookGap = 20;
+  visibleOffset = 0;
   touchStartX = 0;
+  isLoading = true;
+  maxVisibleIndicators = 5;
+  
+  private subscriptions: Subscription[] = [];
 
-  constructor(private booksService: BooksService) {}
+  constructor(
+    private bookService: BookService,
+    private authService: AuthService,
+    private readingService: ReadingService
+  ) {}
 
   ngOnInit(): void {
-    // Obtener libros finalizados
-    this.finishedBooks = this.booksService.getBooksByStatus('finalizado');
-    
-    // Calcular libros a mostrar basado en tamaño de pantalla
+    this.fetchCompletedBooks();
     this.calculateItemsToShow();
+  }
+  
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  getVisibleIndicators(): number[] {
+    if (this.finishedBooks.length <= this.maxVisibleIndicators) {
+      return Array.from({ length: this.finishedBooks.length }, (_, i) => i);
+    }
+
+    const halfVisible = Math.floor(this.maxVisibleIndicators / 2);
+    let start = this.currentIndex - halfVisible;
+    let end = this.currentIndex + halfVisible;
+
+    if (start < 0) {
+      end += Math.abs(start);
+      start = 0;
+    }
+
+    if (end >= this.finishedBooks.length) {
+      start = Math.max(0, start - (end - this.finishedBooks.length + 1));
+      end = this.finishedBooks.length - 1;
+    }
+
+    return Array.from(
+      { length: Math.min(this.maxVisibleIndicators, end - start + 1) },
+      (_, i) => start + i
+    );
+  }
+
+  fetchCompletedBooks(): void {
+    const currentUser = this.authService.currentUserValue;
     
-    // Inicialmente, mostrar el primer libro
-    this.updateSelectedBook();
+    if (!currentUser || !currentUser.nickname) {
+      console.error('No hay usuario autenticado');
+      this.isLoading = false;
+      return;
+    }
+
+    const sub = this.getAllCompletedBooks(currentUser.nickname).subscribe(allBooks => {
+      if (!allBooks || allBooks.length === 0) {
+        console.log('No se encontraron libros completados');
+        this.isLoading = false;
+        return;
+      }
+      
+      const bookIds = allBooks.map(book => book.book_id);
+      
+      const requests = {
+        bookDetails: this.bookService.getBooksWithCache(bookIds).pipe(
+          catchError(error => {
+            console.error('Error al obtener detalles de libros:', error);
+            return of([]);
+          })
+        ),
+        
+        reviews: this.readingService.getBookReviews(undefined, currentUser.nickname).pipe(
+          map(response => response.data || []),
+          catchError(error => {
+            console.error('Error al obtener reseñas:', error);
+            return of([]);
+          })
+        )
+      };
+      
+      forkJoin(requests).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe(results => {
+        const { bookDetails, reviews } = results;
+        
+        const detailsMap = new Map(
+          bookDetails.map((book: Book) => [book.book_id, book])
+        );
+        
+        const reviewsMap = new Map(
+          reviews.map(review => [review.book_id, review])
+        );
+        
+        this.finishedBooks = allBooks.map(userBook => {
+          const bookDetail = detailsMap.get(userBook.book_id);
+          const review = reviewsMap.get(userBook.book_id);
+          
+          const sagaName = bookDetail?.sagas || userBook.sagas || 'default-saga';
+          const dateStart = userBook.date_start ? new Date(userBook.date_start) : null;
+          const dateEnd = userBook.date_ending ? new Date(userBook.date_ending) : null;
+          const pages = bookDetail?.book_pages || userBook.book_pages || 0;
+          const pagesRead = userBook.pages_read || pages;
+          
+          return {
+            book_id: userBook.book_id,
+            titulo: userBook.book_title,
+            autor: bookDetail?.authors || userBook.authors || 'Autor desconocido',
+            imagen: `/libros/${sagaName}/covers/${userBook.book_title}.png`,
+            fechaInicio: dateStart,
+            fechaFin: dateEnd,
+            paginasTotales: pages,
+            paginasLeidas: pagesRead,
+            valoracion: review?.rating
+          };
+        });
+        
+        if (this.finishedBooks.length > 0) {
+          this.updateSelectedBook();
+        }
+      });
+    });
+    
+    this.subscriptions.push(sub);
+  }
+
+  getAllCompletedBooks(nickname: string) {
+    const pageSize = 50;
+    
+    return this.bookService.getUserBooks(nickname, 'completed', 1, pageSize).pipe(
+      map(response => {
+        const allBooks = [...response.data];
+        const totalPages = response.pagination.total_pages;
+        
+        if (totalPages <= 1) {
+          return allBooks;
+        }
+        
+        const remainingRequests = [];
+        for (let page = 2; page <= totalPages; page++) {
+          remainingRequests.push(
+            this.bookService.getUserBooks(nickname, 'completed', page, pageSize)
+          );
+        }
+        
+        if (remainingRequests.length > 0) {
+          forkJoin(remainingRequests).subscribe(responses => {
+            responses.forEach(pageResponse => {
+              allBooks.push(...pageResponse.data);
+            });
+          });
+        }
+        
+        return allBooks;
+      }),
+      catchError(error => {
+        console.error('Error al obtener libros:', error);
+        return of([]);
+      })
+    );
   }
 
   @HostListener('window:resize')
   onResize() {
     this.calculateItemsToShow();
     
-    // Al cambiar el tamaño de la ventana, puede ser necesario ajustar el índice
     if (this.currentIndex >= this.finishedBooks.length) {
       this.currentIndex = this.finishedBooks.length - 1;
     }
@@ -62,65 +218,45 @@ export class CarruselComponent implements OnInit {
       this.bookWidth = 350;
     }
     
-    // Ajustar el espacio entre libros
     this.bookGap = Math.max(20, width * 0.02);
     
-    // Recalcular las posiciones después de cambiar los parámetros
-    setTimeout(() => {
-      // Forzar actualización de la vista
-    }, 0);
+    setTimeout(() => {}, 0);
   }
 
-  /**
-   * Calcula la transformación para cada libro basado en su posición
-   */
   getBookTransform(index: number): string {
-    // Calcular la posición relativa considerando el bucle infinito
     let relativeIndex = index - this.currentIndex;
     
-    // Ajustar para bucle infinito
     if (relativeIndex < -Math.floor(this.itemsToShow/2)) {
       relativeIndex += this.finishedBooks.length;
     } else if (relativeIndex > this.finishedBooks.length - Math.ceil(this.itemsToShow/2)) {
       relativeIndex -= this.finishedBooks.length;
     }
     
-    // Posición calculada para el libro
     let position = relativeIndex * (this.bookWidth + this.bookGap);
     
-    // Calcular el centro de la vista del carrusel
     const carouselContent = document.querySelector('.carrusel-content');
     const carouselCenter = carouselContent?.clientWidth ?? window.innerWidth;
     
-    // Para 1 libro (móvil), centrar el libro activo
     if (this.itemsToShow === 1) {
       position += (carouselCenter / 2) - (this.bookWidth / 2);
     } 
-    // Para 2 libros (tablets), ajustar el centrado para mostrar 2 libros
     else if (this.itemsToShow === 2) {
       if (relativeIndex === 0) {
-        // El libro activo se posiciona ligeramente a la izquierda del centro
         position += (carouselCenter / 2) - (this.bookWidth / 2) - (this.bookGap / 2);
       } else if (relativeIndex === 1) {
-        // El siguiente libro se posiciona ligeramente a la derecha del centro
         position += (carouselCenter / 2) - (this.bookWidth / 2) - (this.bookGap / 2);
       } else {
-        // Los demás libros mantienen su posición relativa
         position += (carouselCenter / 2) - (this.bookWidth / 2);
       }
     } 
-    // Para 3 libros (escritorio), centrar el libro activo
     else {
       position += (carouselCenter / 2) - (this.bookWidth / 2);
     }
     
-    // Aplicar escala según la posición relativa
     let scale = 1;
     if (relativeIndex !== 0) {
-      // Reducir escala para libros no activos
       scale = 0.92;
       
-      // Libros más alejados se hacen aún más pequeños
       if (Math.abs(relativeIndex) > 1) {
         scale = 0.85;
       }
@@ -129,9 +265,6 @@ export class CarruselComponent implements OnInit {
     return `translateX(${position}px) scale(${scale})`;
   }
 
-  /**
-   * Navegar al libro siguiente
-   */
   nextBook() {
     if (this.isTransitioning) return;
     
@@ -141,12 +274,9 @@ export class CarruselComponent implements OnInit {
     
     setTimeout(() => {
       this.isTransitioning = false;
-    }, 500); // Duración de la transición
+    }, 500);
   }
 
-  /**
-   * Navegar al libro anterior
-   */
   prevBook() {
     if (this.isTransitioning) return;
     
@@ -156,12 +286,9 @@ export class CarruselComponent implements OnInit {
     
     setTimeout(() => {
       this.isTransitioning = false;
-    }, 500); // Duración de la transición
+    }, 500);
   }
 
-  /**
-   * Ir directamente a un libro específico
-   */
   goToBook(index: number) {
     if (this.isTransitioning || index === this.currentIndex) return;
     
@@ -171,19 +298,12 @@ export class CarruselComponent implements OnInit {
     
     setTimeout(() => {
       this.isTransitioning = false;
-    }, 500); // Duración de la transición
+    }, 500);
   }
 
-  /**
-   * Actualizar el libro seleccionado en el servicio
-   */
   updateSelectedBook() {
-    if (this.currentIndex >= 0 && this.currentIndex < this.finishedBooks.length) {
-      this.booksService.actualizarBookActual(this.finishedBooks[this.currentIndex]);
-    }
   }
 
-  // Soporte para gestos táctiles
   onTouchStart(event: TouchEvent) {
     this.touchStartX = event.touches[0].clientX;
   }
@@ -194,13 +314,10 @@ export class CarruselComponent implements OnInit {
     const touchEndX = event.changedTouches[0].clientX;
     const diff = this.touchStartX - touchEndX;
     
-    // Si el deslizamiento es significativo (más de 50px)
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        // Deslizar a la izquierda -> siguiente
         this.nextBook();
       } else {
-        // Deslizar a la derecha -> anterior
         this.prevBook();
       }
     }
@@ -210,91 +327,68 @@ export class CarruselComponent implements OnInit {
     if (!date) return 'N/A';
     return new Date(date).toLocaleDateString();
   }
-    /**
-   * Calcula la opacidad para cada libro basado en su posición
-   */
-    getBookOpacity(index: number): number {
-      // Usar el mismo método para calcular el índice relativo que usamos en otras funciones
-      let relativeIndex = this.getRelativeIndex(index);
-      
-      // En modo móvil (1 libro visible)
-      if (this.itemsToShow === 1) {
-        // Solo mostrar el libro activo
-        if (relativeIndex === 0) {
-          return 1;
-        } 
-        // Elementos adjacentes con baja opacidad
-        else if (Math.abs(relativeIndex) === 1) {
-          return 0.3;
-        }
-        // Resto de elementos ocultos
-        else {
-          return 0;
-        }
+
+  getBookOpacity(index: number): number {
+    let relativeIndex = this.getRelativeIndex(index);
+    
+    if (this.itemsToShow === 1) {
+      if (relativeIndex === 0) {
+        return 1;
+      } 
+      else if (Math.abs(relativeIndex) === 1) {
+        return 0.3;
       }
-      
-      // En modo tablet (2 libros visibles)
-      else if (this.itemsToShow === 2) {
-        // Libro activo con opacidad completa
-        if (relativeIndex === 0) {
-          return 1;
-        }
-        // Libro siguiente con alta opacidad
-        else if (relativeIndex === 1) {
-          return 0.9;
-        }
-        // Libro anterior con opacidad media
-        else if (relativeIndex === -1) {
-          return 0.7;
-        }
-        // Libro +2 con baja opacidad
-        else if (relativeIndex === 2) {
-          return 0.3;
-        }
-        // Resto de elementos ocultos
-        else {
-          return 0;
-        }
-      }
-      
-      // En modo escritorio (3 libros visibles)
       else {
-        // Libro activo con opacidad completa
-        if (relativeIndex === 0) {
-          return 1;
-        }
-        // Libros adjacentes (derecha e izquierda) con opacidad media-alta
-        else if (Math.abs(relativeIndex) === 1) {
-          return 0.8;
-        }
-        // Libro a la derecha del adjacente derecho con baja opacidad
-        else if (relativeIndex === 2) {
-          return 0.4;
-        }
-        // Libro a la izquierda del adjacente izquierdo con baja opacidad
-        else if (relativeIndex === -2) {
-          return 0.4;
-        }
-        // Resto de elementos ocultos
-        else {
-          return 0;
-        }
+        return 0;
       }
     }
     
-    /**
-     * Calcula el índice relativo del libro respecto al libro activo
-     */
-    getRelativeIndex(index: number): number {
-      let relativeIndex = index - this.currentIndex;
-      
-      // Ajustar para bucle infinito
-      if (relativeIndex < -Math.floor(this.finishedBooks.length / 2)) {
-        relativeIndex += this.finishedBooks.length;
-      } else if (relativeIndex > Math.floor(this.finishedBooks.length / 2)) {
-        relativeIndex -= this.finishedBooks.length;
+    else if (this.itemsToShow === 2) {
+      if (relativeIndex === 0) {
+        return 1;
       }
-      
-      return relativeIndex;
+      else if (relativeIndex === 1) {
+        return 0.9;
+      }
+      else if (relativeIndex === -1) {
+        return 0.7;
+      }
+      else if (relativeIndex === 2) {
+        return 0.3;
+      }
+      else {
+        return 0;
+      }
     }
+    
+    else {
+      if (relativeIndex === 0) {
+        return 1;
+      }
+      else if (Math.abs(relativeIndex) === 1) {
+        return 0.8;
+      }
+      else if (relativeIndex === 2) {
+        return 0.4;
+      }
+      else if (relativeIndex === -2) {
+        return 0.4;
+      }
+      else {
+        return 0;
+      }
+    }
+  }
+  
+  getRelativeIndex(index: number): number {
+    let relativeIndex = index - this.currentIndex;
+    
+    if (relativeIndex < -Math.floor(this.finishedBooks.length / 2)) {
+      relativeIndex += this.finishedBooks.length;
+    } else if (relativeIndex > Math.floor(this.finishedBooks.length / 2)) {
+      relativeIndex -= this.finishedBooks.length;
+    }
+    
+    return relativeIndex;
+  }
 }

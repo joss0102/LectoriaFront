@@ -9,7 +9,7 @@ import { HomeModel, PaginationResponse } from '../../models/home.model';
   providedIn: 'root'
 })
 export class HomeService {
-  private apiUrl = `${environment.apiUrl}/books`;
+  private apiUrl = `${environment.apiUrl}/books/`;
 
   // Creamos el BehaviorSubject para el libro actual
   private currentBookSubject = new BehaviorSubject<HomeModel | null>(null);

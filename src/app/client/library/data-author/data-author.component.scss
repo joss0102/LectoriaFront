@@ -1,8 +1,25 @@
 .authors {
+
   h2 {
     color: white;
   }
-
+  .only-authors {
+    transition: transform 0.2s ease-in-out;
+    border-radius: 8px;
+    &:hover {
+      transform: translateY(-5px);
+      transform: scale(1.05) ;
+      cursor: pointer;
+    }
+  }
+  img{
+    width: 70px;
+    max-width: 70px;
+    min-width: 70px;
+    height: 70px;
+    max-height: 70px;
+    min-height: 70px;
+  }
   ul {
     list-style: none;
     padding: 0;

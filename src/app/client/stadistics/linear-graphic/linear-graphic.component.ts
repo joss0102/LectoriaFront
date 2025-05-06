@@ -70,7 +70,6 @@ export class LinearGraphicComponent {
     avgPerDay: number,
     totalPages: number
   ): number[] {
-    const actualUser = this.authService.currentUserValue;
     const daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const totalDaysInYear = daysPerMonth.reduce((a, b) => a + b, 0); // Total de días en el año
     const adjustedAvgPerDay = totalPages / totalDaysInYear; // Calcular el promedio diario necesario

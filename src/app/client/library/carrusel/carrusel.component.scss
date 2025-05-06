@@ -28,7 +28,6 @@
         position: relative;
         width: 100%;
         height: 100%;
-
     }
         
     .carrusel-book {
@@ -45,11 +44,11 @@
         }
         
         @media (max-width: 1000px) {
-            width: 40vw; // 40% del ancho de la ventana para mostrar 2 libros
+            width: 40vw;
         }
         
         @media (max-width: 600px) {
-            width: 80vw; // 80% del ancho de la ventana para mostrar 1 libro
+            width: 80vw;
         }
     }
         
@@ -120,7 +119,6 @@
         font-size: 1.15rem;
         font-weight: 600;
         margin-bottom: 0.35rem;
-    
         overflow: hidden;
     }
         
@@ -140,8 +138,8 @@
             margin-bottom: 0.3rem;
             
             i {
-            color: var(--bs-btn);
-            font-size: 0.85rem;
+                color: var(--bs-btn);
+                font-size: 0.85rem;
             }
         }
     }
@@ -199,12 +197,41 @@
             margin-left: 10px;
         }
     }
+    
+    .carrusel-pagination {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1.5rem;
+        
+        .pagination-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            
+            .current-index {
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+            
+            .separator {
+                margin: 0 0.3rem;
+                opacity: 0.6;
+            }
+            
+            .total-count {
+                opacity: 0.7;
+            }
+        }
+    }
         
     .carrusel-indicators {
         display: flex;
         justify-content: center;
         gap: 8px;
-        margin-top: 1rem;
+        margin-top: 0.5rem;
         
         .indicator {
             width: 10px;
@@ -215,14 +242,118 @@
             cursor: pointer;
             
             &.active {
-            background-color: var(--bs-btn);
-            transform: scale(1.2);
+                background-color: var(--bs-btn);
+                transform: scale(1.2);
             }
             
             &:hover {
-            transform: scale(1.2);
-            background-color: var(--btn-hover);
+                transform: scale(1.2);
+                background-color: var(--btn-hover);
             }
+        }
+    }
+    
+    .carrusel-indicators-grouped {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0.5rem;
+        
+        .group-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+            
+            .indicator {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: var(--border-color);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                cursor: pointer;
+                
+                &.active {
+                    background-color: var(--bs-btn);
+                    transform: scale(1.2);
+                }
+                
+                &:hover {
+                    transform: scale(1.2);
+                    background-color: var(--btn-hover);
+                }
+            }
+        }
+        
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            
+            .pagination-btn {
+                background-color: var(--border-color);
+                color: var(--text-color);
+                border: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 0.9rem;
+                
+                &:hover:not(:disabled) {
+                    background-color: var(--bs-btn);
+                    color: white;
+                }
+                
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+    
+    .no-books-message {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-color);
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+        border: 1px solid var(--border-color);
+    }
+    
+    .loading-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem 0;
+        color: var(--text-color);
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--bs-btn);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        p {
+            font-size: 0.95rem;
+            opacity: 0.8;
         }
     }
 }

@@ -1,29 +1,10 @@
-<section
-  class="d-flex flex-column authors align-items-center justify-content-center"
->
+<section class="d-flex flex-column authors align-items-center justify-content-center">
   <h4 class="text-white">Autores más leídos:</h4>
-  <div
-    class="d-flex gap-3 my-1 mx-1 w-50"
-    *ngFor="let item of topAuthors"
-    style="cursor: pointer"
-  >
-    <img
-      [src]="getAuthorImageUrl(item.author)"
-      width="60"
-      height="60"
-      class="rounded-circle"
-      alt="{{ getAuthorFullName(item.author) }}"
-      (click)="showAuthorDetails(item.author)"
-    />
+  <div class="only-authors d-flex gap-3 my-1 mx-1 w-50" *ngFor="let item of topAuthors">
+    <img [src]="getAuthorImageUrl(item.author)"  class="rounded-circle" alt="{{ getAuthorFullName(item.author) }}" (click)="showAuthorDetails(item.author)" />
     <div>
-      <h5 class="text-white" (click)="showAuthorDetails(item.author)">
-        {{ getAuthorFullName(item.author) }}
-      </h5>
-      <p class="text-white">
-        {{ item.count }} libro{{ item.count > 1 ? "s" : "" }} leído{{
-          item.count > 1 ? "s" : ""
-        }}
-      </p>
+      <h5 class="text-white" (click)="showAuthorDetails(item.author)"> {{ getAuthorFullName(item.author) }} </h5>
+      <p class="text-white"> {{ item.count }} libro{{ item.count > 1 ? "s" : "" }} leído{{ item.count > 1 ? "s" : ""}}</p>
     </div>
   </div>
 </section>

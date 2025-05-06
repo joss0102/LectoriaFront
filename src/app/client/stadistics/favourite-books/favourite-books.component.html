@@ -2,102 +2,32 @@
   <table class="table align-middle text-center">
     <thead>
       <tr>
-        <th>Nombre</th>
+        <th>Portada</th>
+        <th>Título</th>
+        <th>Autor</th>
         <th>Páginas</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Finalización</th>
-        <th>Estado</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Nota</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr *ngFor="let book of favBooks">
         <td>
           <img
-            src="/libros/Alma/covers/Mi alma es tuya.png"
+            [src]="getCoverImage(book)"
             alt="Portada"
             class="book-cover me-2"
+            width="60"
           />
-          Trono de cristal
         </td>
-        <td>999</td>
-        <td>22/22/2222</td>
-        <td>22/22/2222</td>
+        <td>{{ book.book_title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.total_pages }}</td>
+        <td>{{ book.date_start | date : "dd/MM/yyyy" }}</td>
+        <td>{{ book.date_ending | date : "dd/MM/yyyy" }}</td>
         <td>
-          <span class="badge bg-success rounded-pill px-3 py-2"
-            >Finalizado</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img
-            src="/libros/Alma/covers/Mi alma es tuya.png"
-            alt="Portada"
-            class="book-cover me-2"
-          />
-          Trono de cristal
-        </td>
-        <td>999</td>
-        <td>22/22/2222</td>
-        <td>22/22/2222</td>
-        <td>
-          <span class="badge bg-success rounded-pill px-3 py-2"
-            >Finalizado</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img
-            src="/libros/Alma/covers/Mi alma es tuya.png"
-            alt="Portada"
-            class="book-cover me-2"
-          />
-          Trono de cristal
-        </td>
-        <td>999</td>
-        <td>22/22/2222</td>
-        <td>22/22/2222</td>
-        <td>
-          <span class="badge bg-success rounded-pill px-3 py-2"
-            >Finalizado</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img
-            src="/libros/Alma/covers/Mi alma es tuya.png"
-            alt="Portada"
-            class="book-cover me-2"
-          />
-          Trono de cristal
-        </td>
-        <td>999</td>
-        <td>22/22/2222</td>
-        <td>22/22/2222</td>
-        <td>
-          <span class="badge bg-success rounded-pill px-3 py-2"
-            >Finalizado</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img
-            src="/libros/Alma/covers/Mi alma es tuya.png"
-            alt="Portada"
-            class="book-cover me-2"
-          />
-          Trono de cristal
-        </td>
-        <td>999</td>
-        <td>22/22/2222</td>
-        <td>22/22/2222</td>
-        <td>
-          <span class="badge bg-success rounded-pill px-3 py-2"
-            >Finalizado</span
-          >
+          <strong>{{ book.rating }}</strong>
         </td>
       </tr>
     </tbody>

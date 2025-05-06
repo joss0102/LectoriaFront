@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LinearGraphicComponent } from '../linear-graphic/linear-graphic.component';
 import { SemiCircleGaugeComponent } from '../semi-circle-gauge/semi-circle-gauge.component';
 import { DonutGraphicComponent } from '../donut-graphic/donut-graphic.component';
+import { CardsStadisticsComponent } from '../cards-stadistics/cards-stadistics.component';
 
 @Component({
   selector: 'app-stadistics',
@@ -10,6 +11,7 @@ import { DonutGraphicComponent } from '../donut-graphic/donut-graphic.component'
     LinearGraphicComponent,
     SemiCircleGaugeComponent,
     DonutGraphicComponent,
+    CardsStadisticsComponent,
   ],
   templateUrl: './stadistics.component.html',
   styleUrl: './stadistics.component.scss',

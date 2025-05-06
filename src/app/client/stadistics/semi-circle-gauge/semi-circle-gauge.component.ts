@@ -65,7 +65,7 @@ export class SemiCircleGaugeComponent {
             fontWeight: 'bold',
             color: 'white',
             formatter: function (val) {
-              return (val / 10).toFixed(2);
+              return (val / 10).toFixed(2) + ' ⭐️';
             },
           },
         },
@@ -75,7 +75,7 @@ export class SemiCircleGaugeComponent {
       lineCap: 'round',
     },
     title: {
-      text: 'Nota media de todos  tus libros ',
+      text: ' ',
       align: 'center',
       margin: 10,
       style: {

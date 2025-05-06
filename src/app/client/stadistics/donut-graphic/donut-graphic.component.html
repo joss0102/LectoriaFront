@@ -1,15 +1,13 @@
-<div class="chart-container">
-  <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [labels]="chartOptions.labels"
-    [colors]="chartOptions.colors"
-    [legend]="chartOptions.legend"
-    [responsive]="chartOptions.responsive"
-    [plotOptions]="chartOptions.plotOptions"
-    [dataLabels]="chartOptions.dataLabels"
-    [title]="chartOptions.title"
-    [tooltip]="chartOptions.tooltip"
-  >
-  </apx-chart>
-</div>
+<apx-chart
+  *ngIf="chartOptions"
+  [series]="chartOptions.series"
+  [chart]="chartOptions.chart"
+  [labels]="chartOptions.labels"
+  [colors]="chartOptions.colors"
+  [stroke]="chartOptions.stroke"
+  [legend]="chartOptions.legend"
+  [plotOptions]="chartOptions.plotOptions"
+  [dataLabels]="chartOptions.dataLabels"
+  [responsive]="chartOptions.responsive"
+  [tooltip]="chartOptions.tooltip"
+></apx-chart>

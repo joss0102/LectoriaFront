@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  margin: 0 auto;
+  ::ng-deep {
+    .apexcharts-series path {
+      stroke-width: 0 !important;
+    }
+
+    .apexcharts-donut-slice {
+      stroke: none !important;
+    }
+
+    .apexcharts-legend-text {
+      color: #ffffff !important;
+    }
+
+    .apexcharts-text tspan {
+      fill: #ffffff !important;
+    }
+  }
+}

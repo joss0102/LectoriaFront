@@ -76,7 +76,7 @@
 .panel-content {
   color: #bdbdbd;
 }
-@media (max-width: 900px) {
+@media (max-width: 1120px) {
   .parent {
     margin: 10px;
     grid-template-columns: 1fr;
@@ -88,12 +88,17 @@
   .secondGraphic,
   .thirdGraphic,
   .favBooks,
-  .div10,
   .iconsDiv,
   .firstGraphic {
     grid-column: span 1;
     grid-row: span 1;
     margin-top: 0px;
     height: 280px;
+  }
+  .div10 {
+    grid-column: span 1;
+    grid-row: span 1;
+    margin-top: 0px;
+    height: 410px;
   }
 }

@@ -14,7 +14,8 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 - [ ] Subir pdf y leerlo
   - [ ] Buscar en api el libro y enseñar los datos
 
-# 🏗️ Apartados de la Página Web 
+# 🏗️ Apartados de la Página Web
+
 > **Actualizar**
 
 - **Componentes generales**
@@ -39,15 +40,17 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
   - **Ajustes**: `Página principal con información general y navegación hacia otras secciones.`
 
 # Dependencias
-- Dependencia de slider 
-> **Advertencia**: Esta libreria esta en desuso actualmente
+
+- Dependencia de slider
+  > **Advertencia**: Esta libreria esta en desuso actualmente
 
 ```bash
 npm install swiper
 ```
 
 - Aunque no deberia dar error, si lo da, probamos con instalar los tipos de swiper
-> **Advertencia**: Esta libreria esta en desuso actualmente
+  > **Advertencia**: Esta libreria esta en desuso actualmente
+
 ```bash
 npm install --save-dev @types/swiper
 ```
@@ -62,6 +65,13 @@ npm install node-vibrant@3
 
 ```bash
 npm install ngx-dropzone
+```
+
+- Libreria de ng-apexcharts y apexcharts. Esta libreria nos sirve para todos los graficos de estadisticas.
+
+```bash
+npm install apexcharts ng-apexcharts
+
 ```
 
 # Trabajo en equipo (subir y actualizar código)

@@ -51,7 +51,7 @@
         <img [src]="getAuthorImageUrl(author)" 
               [alt]="author.name" 
               class="rounded-circle w-100 h-100 object-fit-cover author-img"
-              (error)="handleImageError($event)">
+              onerror="this.src='/libros/default.png'">
       </div>
       <div class="author-info text-center p-3">
         <h3 class="author-name fw-semibold mb-2 text-theme-text">
@@ -101,7 +101,7 @@
           <img [src]="getAuthorBannerUrl(selectedAuthor)" 
                 [alt]="'Banner de ' + getAuthorFullName(selectedAuthor)" 
                 class="w-100 object-fit-cover banner-img"
-                (error)="handleImageError($event)">
+                onerror="this.src='/libros/default.png'">
           <div class="banner-gradient position-absolute inset-0"></div>
         </div>
         
@@ -110,8 +110,7 @@
           <div class="author-avatar-large rounded-circle overflow-hidden">
             <img [src]="getAuthorImageUrl(selectedAuthor)" 
                   [alt]="selectedAuthor.name" 
-      
-                  onerror="this.src='/assets/images/default-author.jpg'">
+                  onerror="this.src='/libros/default.png'">
           </div>
           <div class="author-details ms-3 ms-md-4">
             <h2 class="author-title fw-bold mb-1 text-white text-shadow bg-transparent">
@@ -141,7 +140,7 @@
               <img [src]="getBookCoverUrl(book)" 
                     [alt]="book.book_title" 
                     class="w-100 h-100 object-fit-cover book-img"
-                    (error)="handleImageError($event)">
+                    onerror="this.src='/libros/default.png'">
               <div class="book-status position-absolute top-10 end-10 rounded-pill fw-semibold shadow-sm" 
                     [ngClass]="getStatusClass(book.reading_status)">
                 {{ getStatusText(book.reading_status) }}

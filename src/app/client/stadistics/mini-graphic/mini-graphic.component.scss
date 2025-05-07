@@ -1,0 +1,65 @@
+.stats-container {
+  max-width: 500px;
+}
+
+.stat-card {
+  transition: all 0.3s ease;
+  height: 115px;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  transform: rotate(30deg);
+  z-index: 1;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pages-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.days-card {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.stat-title {
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 0.25rem !important;
+}
+
+.stat-icon {
+  opacity: 0.8;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.05);
+  opacity: 1;
+}

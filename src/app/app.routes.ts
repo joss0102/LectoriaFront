@@ -12,7 +12,7 @@ import { UserComponent } from './client/user/user/user.component';
 import { SearchComponent } from './client/features/search/search.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { AuthorsComponent } from './admin/authors/authors.component';
-import { BooksComponent } from './admin/books/books.component';
+import { BooksComponent } from './admin/book/books/books.component';
 import { UsersComponent } from './admin/users/users.component';
 import { LayoutComponentAdmin } from './admin/layout/layout.component';
 

@@ -1,0 +1,35 @@
+<div class="table-container">
+  <table class="table align-middle text-center">
+    <thead>
+      <tr>
+        <th>Portada</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Páginas</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Nota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of favBooks">
+        <td>
+          <img
+            [src]="getCoverImage(book)"
+            alt="Portada"
+            class="book-cover me-2"
+            width="60"
+          />
+        </td>
+        <td>{{ book.book_title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.total_pages }}</td>
+        <td>{{ book.date_start | date : "dd/MM/yyyy" }}</td>
+        <td>{{ book.date_ending | date : "dd/MM/yyyy" }}</td>
+        <td>
+          <strong>{{ book.rating }}</strong>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

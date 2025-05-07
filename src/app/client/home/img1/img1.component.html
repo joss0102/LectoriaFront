@@ -2,5 +2,5 @@
     <img [src]="backgroundImageUrl" alt="" class="blur-bg"
          [ngClass]="{'animate-fade': animationActive}">
     <img [src]="backgroundImageUrl" alt="Imagen de fondo de la saga" class="img"
-         [ngClass]="{'animate-fade': animationActive}">
+         [ngClass]="{'animate-fade': animationActive}" (error)="onImageError($event)">
   </section>

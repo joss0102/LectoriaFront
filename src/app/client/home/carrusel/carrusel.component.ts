@@ -60,7 +60,7 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
         authors: 'Autor de prueba',
         genres: 'Género de prueba',
         sagas: 'Saga de prueba',
-        imagen: 'assets/images/placeholder.jpg' // Imagen de placeholder
+        imagen: '/libros/default.png'
       },
       // Puedes añadir más libros de prueba si lo deseas
     ];
@@ -382,7 +382,9 @@ export class CarruselComponent implements OnInit, OnDestroy, AfterViewInit {
     //return `libros/${saga}/covers/${titulo}.png`;
     return `libros/${book.sagas}/covers/${book.book_title}.png`;
   }
-
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = '/libros/default.png';
+  }
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
   }

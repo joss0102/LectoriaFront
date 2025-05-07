@@ -74,6 +74,9 @@ export class Img1Component implements OnInit, OnDestroy {
       });
   }
 
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = '/libros/default.png';
+  }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

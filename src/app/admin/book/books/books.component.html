@@ -14,8 +14,8 @@
             type="text" 
             [(ngModel)]="searchQuery" 
             (keyup.enter)="searchGlobalBooks()"
-            placeholder="Buscar por título, autor o saga..." 
-            class="search-input form-control rounded-pill border-0 py-2 px-4 shadow-sm bg-component"
+            placeholder="Buscar por título o autor..." 
+            class="search-input form-control rounded-pill border-0 py-2 px-5 shadow-sm bg-component"
           >
           <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn btn-icon border-0 bg-transparent position-absolute">×</button>
           <div class="search-icon position-absolute">🔍</div>
@@ -118,8 +118,7 @@
                 <i class="bi bi-three-dots"></i>
               </button>
               <ul class="dropdown-menu bg-component shadow" [attr.aria-labelledby]="'bookAction-'+book.book_id">
-                <li><button class="dropdown-item" (click)="editBook(book)">Editar</button></li>
-                <li><button class="dropdown-item" (click)="viewBookDetails(book)">Ver detalles</button></li>
+                <li><button class="dropdown-item" (click)="viewBookDetails(book)">Ver o editar</button></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><button class="dropdown-item text-danger" (click)="deleteBook(book.book_id)">Eliminar</button></li>
               </ul>
@@ -331,3 +330,6 @@
     </div>
   </div>
 </div>
+
+<!-- Componente de detalles del libro -->
+<app-details-book></app-details-book>

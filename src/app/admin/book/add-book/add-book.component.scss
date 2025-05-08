@@ -1,0 +1,145 @@
+$transition-default: all 0.3s ease;
+$border-radius-btn: 0.75rem;
+$box-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+.add-book-sidebar-wrapper {
+  height: 100%;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.progress-container {
+  padding: 0 20px;
+  margin-bottom: 25px;
+  
+  .progress-step {
+    position: relative;
+    width: 100px;
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      height: 2px;
+      background-color: var(--border-color);
+      width: 100%;
+      top: 15px;
+      left: 50%;
+      z-index: 1;
+      transition: background-color 0.3s ease;
+    }
+    
+    &:not(:last-child).active::after {
+      background-color: var(--bs-btn);
+    }
+    
+    .step-number {
+      width: 30px;
+      height: 30px;
+      background-color: var(--main-bg);
+      color: var(--text-color);
+      border: 2px solid var(--border-color);
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+      transition: $transition-default;
+      
+      &.active {
+        background-color: var(--bs-btn);
+        border-color: var(--bs-btn);
+        color: white;
+      }
+      
+      &.current {
+        box-shadow: 0 0 0 3px rgba(var(--bs-btn-rgb), 0.3);
+        transform: scale(1.1);
+      }
+    }
+    
+    .step-label {
+      font-size: 0.8rem;
+      color: var(--border-color);
+      transition: $transition-default;
+      
+      &.active {
+        color: var(--text-color);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.step-content {
+  padding: 0 20px;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  .form-section-title {
+    position: relative;
+    padding-left: 12px;
+    color: var(--text-color);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background-color: var(--bs-btn);
+      border-radius: 0 2px 2px 0;
+    }
+  }
+}
+
+.form-control, .form-select {
+  background-color: var(--main-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+  transition: $transition-default;
+  padding: 0.5rem 1rem;
+  border-radius: $border-radius-btn;
+  
+  &:focus {
+    border-color: var(--bs-btn);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-btn-rgb), 0.25);
+    background-color: var(--main-bg);
+  }
+  
+  &::placeholder {
+    color: var(--border-color);
+    opacity: 0.8;
+  }
+}
+
+textarea.form-control {
+  resize: vertical;
+}
+
+.form-label {
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-text {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.input-group {
+  .input-group-text {
+    background-color: var(--background-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+  }
+}
+
+.btn-link {
+  color: var(--bs-btn);
+  font-size: 0.85rem;
+  text-decoration: none;
+  
+  &:hover {
+    color: var(--bs-btn-hover);
+    text-decoration: underline;
+  }
+}

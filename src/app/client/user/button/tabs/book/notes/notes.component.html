@@ -34,15 +34,8 @@
         <div
           class="book-cover position-relative rounded-3 shadow overflow-hidden mb-4"
         >
-          <img
-            [src]="book.imagen"
-            [alt]="'Portada de ' + book.titulo"
-            class="w-100 h-100 object-fit-cover"
-          />
-          <div
-            class="notes-count position-absolute bottom-10 end-10 badge bg-dark-80 text-white"
-            *ngIf="book.notas && book.notas.length > 0"
-          >
+          <img [src]="book.imagen" [alt]="'Portada de ' + book.titulo" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'"/>
+          <div class="notes-count position-absolute bottom-10 end-10 badge bg-dark-80 text-white" *ngIf="book.notas && book.notas.length > 0">
             {{ book.notas.length }}
             {{ book.notas.length === 1 ? "nota" : "notas" }}
           </div>
@@ -93,11 +86,7 @@
 
     <div class="detail-header d-flex gap-4 mb-5">
       <div class="book-cover-detail rounded-3 shadow overflow-hidden">
-        <img
-          [src]="selectedBook.imagen"
-          [alt]="'Portada de ' + selectedBook.titulo"
-          class="w-100 h-100 object-fit-cover"
-        />
+        <img [src]="selectedBook.imagen" [alt]="'Portada de ' + selectedBook.titulo" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'"/>
       </div>
       <div class="book-info-detail d-flex flex-column justify-content-center">
         <h2 class="detail-title fw-bold mb-2 text-theme-text">

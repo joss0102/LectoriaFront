@@ -73,7 +73,9 @@ export class Img2Component implements OnInit, OnDestroy {
         console.error('Error al extraer el color primario:', error);
       });
   }
-
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = '/libros/default.png';
+  }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

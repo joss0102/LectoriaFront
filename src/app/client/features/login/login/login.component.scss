@@ -8,9 +8,47 @@
   height: 610px;
   border-radius: 12px;
   padding: 20px 30px 120px;
-  background: #3a3a3a;
+  background: var(--component-bg);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  
+  &.active {
+    .login-section {
+      bottom: -10%;
+      border-radius: 210px;
+      box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+      background-color: var(--component-bg);
+      
+      .sigup {
+        opacity: 1;
+      }
+      
+      div.login {
+        color: var(--text-color);
+      }
+    }
+    
+    .signup-section {
+      .sigup {
+        opacity: 0.6;
+      }
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  @media screen and (max-width: 668px) {
+    width: 300px;
+  }
+  
+  @media screen and (max-width: 438px) {
+    width: 240px;
+  }
 }
 
 .login-section {
@@ -20,61 +58,102 @@
   transform: translateX(-50%);
   width: calc(100% + 180px);
   padding: 20px 140px;
-  background: #fff;
   border-radius: 230px;
   height: 100%;
   transition: all 0.6s ease;
+  box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
+  &.sigup {
+    color: var(--text-color);
+    opacity: 0.6;
+  }
+  
+  .sigup {
+    font-size: 30px;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .separator p {
+    color: var(--text-color);
+  }
+  
+  input {
+    border: 1px solid var(--border-color);
+  }
+  
+  .btn {
+    background: var(--bs-btn);
+    color: var(--light-night);
+    border: none;
+    
+    &:hover {
+      background: var(--bs-btn-hover);
+    }
+  }
+  
+  .social-buttons button i {
+    font-size: 25px;
+  }
 }
 
-.login-section .sigup,
-.signup-section .sigup {
-  font-size: 30px;
-  text-align: center;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
+.signup-section {
+  .sigup {
+    font-size: 30px;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  form a {
+    color: var(--text-color);
+  }
+  
+  .social-buttons button i {
+    font-size: 25px;
+  }
 }
+
 .login {
   font-size: 30px;
   text-align: center;
-  color: #000000;
+  color: var(--text-color);
   font-weight: 600;
   cursor: pointer;
-}
-
-.login-section.sigup {
-  color: #333;
-  opacity: 0.6;
-}
-.login {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: w;
 }
+
 .social-buttons {
   margin-top: 40px;
   display: flex;
   align-items: center;
   gap: 15px;
-}
-
-.social-buttons button {
-  width: 100%;
-  padding: 10px;
-  background: #f1683a;
-  border: none;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.login-section .social-buttons button i,
-.signup-section .social-buttons button i {
-  font-size: 25px;
+  
+  @media screen and (max-width: 438px) {
+    width: 60%;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background: var(--bs-btn);
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background: var(--bs-btn-hover);
+    }
+  }
 }
 
 .separator {
@@ -82,113 +161,63 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  color: white;
+  color: var(--text-color);
+  
+  .line {
+    width: 100%;
+    height: 1px;
+    background: var(--border-color);
+  }
+  
+  p {
+    color: var(--text-color);
+    margin: 0;
+  }
 }
+
+form {
+  input {
+    outline: none;
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+    color: var(--dark-night);
+    font-weight: 400;
+    border-radius: 8px;
+    background: var(--light-night);
+  }
+  
+  a {
+    color: var(--text-color);
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .btn {
+    margin-top: 15px;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: var(--bs-btn);
+    color: var(--light-night);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background: var(--bs-btn-hover);
+    }
+  }
+}
+
 p {
-  color: white;
-}
-.separator .line {
-  width: 100%;
-  height: 1px;
-  background: #707070;
-}
-body.modo-noche .separator .line {
-  background-color: #ccc;
-}
-.separator p {
-  color: #fff;
+  color: var(--text-color);
 }
 
-.login-section .separator p {
-  color: #ffffff;
-}
-
-.container form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-form input {
-  outline: none;
-  border: none;
-  padding: 10px 15px;
-  color: #333;
-  font-weight: 400;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.login-section input {
-  border: 1px solid #aaa;
-}
-
-form a {
-  color: #f8f8f8;
-}
-
-.signup-section form a {
-  color: #fff;
-}
-
-form .btn {
-  margin-top: 15px;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  background: #f1683a;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.login-section .btn {
-  background: #f1683a;
-  color: #fff;
-  border: none;
-}
-.container.active div.login-section div.login {
-  color: white;
-}
-.container.active .login-section {
-  bottom: -12%;
-  border-radius: 210px;
-  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
-  background-color: #3a3a3a;
-}
-
-.container.active .login-section .sigup {
-  opacity: 1;
-}
-
-.container.active .signup-section .sigup {
-  opacity: 0.6;
-}
-body:not(.modo-noche) .container,
-body:not(.modo-noche) .container.active .login-section {
-  background: #d9d9d9;
-}
-
-body:not(.modo-noche) div,
-body:not(.modo-noche) .container.active div.login-section div.login,
-body:not(.modo-noche) .signup-section .sigup,
-body:not(.modo-noche) .signup-section form a,
-body:not(.modo-noche) .separator p,
-body:not(.modo-noche) form a,
-body:not(.modo-noche) .separator,
-body:not(.modo-noche) .separator .line {
-  color: #0b0b0b;
-}
-
-@media screen and (max-width: 668px) {
-  .container {
-    width: 300px;
-  }
-}
-@media screen and (max-width: 438px) {
-  .container {
-    width: 240px;
-  }
-  .social-buttons {
-    width: 60%;
-  }
+.error-message {
+  color: var(--bs-danger);
+  font-size: 0.8rem;
+  margin-top: -15px;
 }

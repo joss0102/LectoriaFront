@@ -16,7 +16,7 @@
               (touchend)="onTouchEnd($event)">
           <div class="book-card">
             <div class="book-cover">
-              <img [src]="book.imagen || 'assets/images/default-cover.png'" [alt]="book.titulo" class="book-image">
+              <img [src]="book.imagen || 'assets/images/default-cover.png'" [alt]="book.titulo" class="book-image" onerror="this.src='/libros/default.png'">
               <div class="book-rating" *ngIf="book.valoracion">
                 <span>{{book.valoracion}}</span>
               </div>

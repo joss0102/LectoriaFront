@@ -48,7 +48,7 @@
          *ngFor="let book of filteredBooks" 
          (click)="openBookDetails(book)">
       <div class="book-cover position-relative">
-        <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover">
+        <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
         <div class="book-status position-absolute top-10 end-10 rounded-pill fw-semibold shadow-sm" 
              [ngClass]="getStatusClass(book.reading_status)">
           {{ getStatusText(book.reading_status) }}
@@ -145,7 +145,7 @@
       
       <div class="modal-header gradient-header d-flex gap-4 p-4 rounded-top-4">
         <div class="book-cover-detail rounded-3 shadow overflow-hidden">
-          <img [src]="getBookImageUrl(selectedBook)" [alt]="selectedBook.book_title" class="w-100 h-100 object-fit-cover">
+          <img [src]="getBookImageUrl(selectedBook)" [alt]="selectedBook.book_title" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
         </div>
         <div class="book-details flex-grow-1">
           <h2 class="book-title fw-bold mb-2 text-theme-text">{{ selectedBook.book_title || 'Título desconocido' }}</h2>

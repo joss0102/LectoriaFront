@@ -32,6 +32,7 @@
             [src]="getCoverImage(book)"
             [alt]="'Portada de ' + book.titulo"
             class="w-100 h-100 object-fit-cover"
+            onerror="this.src='/libros/default.png'"
           />
           <div
             class="phrases-count position-absolute bottom-10 end-10 badge bg-dark-80 text-white"
@@ -91,6 +92,7 @@
           [src]="getCoverImage(selectedBook)"
           [alt]="'Portada de ' + selectedBook.titulo"
           class="w-100 h-100 object-fit-cover"
+          onerror="this.src='/libros/default.png'"
         />
       </div>
       <div class="book-info-detail d-flex flex-column justify-content-center">

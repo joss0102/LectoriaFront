@@ -29,7 +29,7 @@
          *ngFor="let book of displayedBooks" 
          (click)="openDeleteModal(book)">
       <div class="book-cover position-relative overflow-hidden">
-        <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover">
+        <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
         <div class="book-status badge status-badge position-absolute top-10 end-10 shadow-sm" 
              [ngClass]="getStatusClass(book.reading_status)">
           {{ getStatusText(book.reading_status) }}
@@ -99,7 +99,7 @@
         <div class="book-details d-flex align-items-center rounded-3 p-4 mb-4 bg-component">
           <div class="book-cover-delete rounded shadow overflow-hidden" style="width:120px;height:180px;">
             <img [src]="getBookImageUrl(selectedBookToDelete)" [alt]="selectedBookToDelete.book_title" 
-                 class="w-100 h-100 object-fit-cover">
+                 class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
           </div>
           <div class="book-info-delete flex-grow-1 text-start ms-4">
             <h3 class="book-title fs-5 mb-2 text-theme-text">{{ selectedBookToDelete.book_title }}</h3>

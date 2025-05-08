@@ -67,10 +67,11 @@ npm install node-vibrant@3
 npm install ngx-dropzone
 ```
 
-- Libreria de ng-apexcharts y apexcharts. Esta libreria nos sirve para todos los graficos de estadisticas.
+- Libreria de ng-apexcharts y apexcharts. Esta libreria nos sirve para todos los graficos de estadisticas. 
+  > **Advertencia**: Forzamos su instalacion, procederemos a actualizar angular a la version 19 proximamente
 
 ```bash
-npm install apexcharts ng-apexcharts
+npm install apexcharts ng-apexcharts --legacy-peer-deps
 
 ```
 

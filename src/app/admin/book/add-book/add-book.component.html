@@ -1,0 +1,173 @@
+<div class="add-book-sidebar-wrapper">
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+      <!-- Progress indicator -->
+      <div class="progress-container d-flex justify-content-between mb-4">
+        <div *ngFor="let step of [1, 2, 3]" class="progress-step d-flex flex-column align-items-center">
+          <div class="step-number d-flex align-items-center justify-content-center rounded-circle"
+                [ngClass]="{'active': currentStep >= step, 'current': currentStep === step}">
+            {{ step }}
+          </div>
+          <span class="step-label mt-2 text-center" [ngClass]="{'active': currentStep >= step}">
+            {{ step === 1 ? 'Información básica' : 
+                step === 2 ? 'Autor' : 'Géneros' }}
+          </span>
+        </div>
+      </div>
+  
+      <!-- Paso 1: Información básica -->
+      <div *ngIf="currentStep === 1" formGroupName="basicInfo" class="step-content">
+        <h4 class="form-section-title mb-4">Información del libro</h4>
+        
+        <div class="mb-3">
+          <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="title" formControlName="title" placeholder="Título del libro">
+          <div class="form-text text-danger" 
+                *ngIf="bookForm.get('basicInfo.title')?.invalid && bookForm.get('basicInfo.title')?.touched">
+            El título es obligatorio
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="pages" class="form-label">Número de páginas <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" id="pages" formControlName="pages" min="1">
+          <div class="form-text text-danger" 
+                *ngIf="bookForm.get('basicInfo.pages')?.invalid && bookForm.get('basicInfo.pages')?.touched">
+            El número de páginas es obligatorio y debe ser mayor que 0
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="synopsis" class="form-label">Sinopsis</label>
+          <textarea class="form-control" id="synopsis" rows="4" formControlName="synopsis"></textarea>
+        </div>
+        
+        <div class="mb-3">
+          <label for="saga_id" class="form-label">Saga</label>
+          
+          <div *ngIf="isLoadingSagas" class="loading-indicator mb-2">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Cargando sagas...</span>
+            </div>
+            <span class="ms-2 text-theme">Cargando sagas...</span>
+          </div>
+          
+          <select *ngIf="!isLoadingSagas" class="form-select" id="saga_id" formControlName="saga_id">
+            <option value="">Sin saga</option>
+            <option *ngFor="let saga of sagas" [value]="saga.id">{{ saga.name }}</option>
+            <option value="custom">Añadir nueva saga</option>
+          </select>
+          
+          <div *ngIf="showCustomSaga" class="mt-2">
+            <input type="text" class="form-control" 
+                   placeholder="Nombre de la nueva saga" 
+                   formControlName="custom_saga">
+          </div>
+        </div>
+      </div>
+  
+      <!-- Paso 2: Autor -->
+      <div *ngIf="currentStep === 2" formGroupName="authorInfo" class="step-content">
+        <h4 class="form-section-title mb-4">Información del autor</h4>
+        
+        <div class="mb-3">
+          <label for="author_search" class="form-label">Buscar autor</label>
+          <div class="input-group mb-2">
+            <input type="text" class="form-control" id="author_search"
+                   placeholder="Escriba para buscar autor..." 
+                   formControlName="authorSearch">
+            <div class="input-group-text" *ngIf="isLoadingAuthors">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Buscando...</span>
+              </div>
+            </div>
+          </div>
+          
+          <select class="form-select" formControlName="author_id">
+            <option value="">Seleccionar autor</option>
+            <option *ngFor="let author of authors" [value]="author.id">
+              {{ author.name }} {{ author.last_name1 || '' }} {{ author.last_name2 || '' }}
+            </option>
+            <option value="new">Añadir nuevo autor</option>
+          </select>
+        </div>
+        
+        <div *ngIf="showNewAuthorForm">
+          <div class="mb-3">
+            <label for="author_name" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="author_name" formControlName="author_name">
+            <div class="form-text text-danger" 
+                 *ngIf="bookForm.get('authorInfo.author_name')?.invalid && bookForm.get('authorInfo.author_name')?.touched">
+              El nombre del autor es obligatorio
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="author_last_name1" class="form-label">Primer apellido</label>
+            <input type="text" class="form-control" id="author_last_name1" formControlName="author_last_name1">
+          </div>
+          
+          <div class="mb-3">
+            <label for="author_last_name2" class="form-label">Segundo apellido</label>
+            <input type="text" class="form-control" id="author_last_name2" formControlName="author_last_name2">
+          </div>
+        </div>
+      </div>
+  
+      <!-- Paso 3: Géneros -->
+      <div *ngIf="currentStep === 3" formGroupName="genreInfo" class="step-content">
+        <h4 class="form-section-title mb-4">Géneros (máximo 5)</h4>
+        
+        <div *ngIf="isLoadingGenres" class="loading-indicator mb-3">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Cargando géneros...</span>
+          </div>
+          <span class="ms-2 text-theme">Cargando géneros...</span>
+        </div>
+        
+        <div *ngFor="let _ of [1, 2, 3, 4, 5]; let i = index" class="mb-3">
+          <div class="d-flex align-items-center mb-2">
+            <label [for]="'genre' + (i+1)" class="form-label mb-0">Género {{ i+1 }}</label>
+            <button type="button" class="btn btn-link ms-auto" 
+                    (click)="toggleCustomGenre(i)">
+              {{ showCustomGenre[i] ? 'Seleccionar de la lista' : 'Añadir género personalizado' }}
+            </button>
+          </div>
+          
+          <ng-container *ngIf="!showCustomGenre[i]">
+            <select class="form-select" [id]="'genre' + (i+1)" 
+                    [formControlName]="'genre' + (i+1)">
+              <option value="">Seleccionar género</option>
+              <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+            </select>
+          </ng-container>
+          
+          <ng-container *ngIf="showCustomGenre[i]">
+            <input type="text" class="form-control" 
+                   [formControlName]="'custom_genre' + (i+1)" 
+                   [placeholder]="'Género personalizado ' + (i+1)">
+          </ng-container>
+        </div>
+      </div>
+  
+      <!-- Botones de navegación -->
+      <div class="form-navigation d-flex justify-content-between mt-4">
+        <button *ngIf="currentStep > 1" type="button" class="btn btn-secondary"
+                (click)="previousStep()">
+          <i class="bi bi-arrow-left me-2"></i>Anterior
+        </button>
+        <div *ngIf="currentStep === 1"></div>
+        
+        <div>
+          <button *ngIf="currentStep < totalSteps" type="button" class="btn btn-accent"
+                  (click)="nextStep()">
+            Siguiente<i class="bi bi-arrow-right ms-2"></i>
+          </button>
+          <button *ngIf="currentStep === totalSteps" type="submit" class="btn btn-accent"
+                  [disabled]="isSubmitting || !bookForm.valid">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Guardar libro
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>

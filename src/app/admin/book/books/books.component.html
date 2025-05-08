@@ -1,0 +1,335 @@
+<div class="books-admin-container p-3 p-md-4">
+  <div class="header-section mb-4">
+    <h1 class="main-title position-relative d-inline-block mb-3 fw-bold text-theme-text">Administración de Libros</h1>
+    <p class="main-description text-theme fs-6 mb-4 mw-600">Gestiona todos los libros de la plataforma desde un único panel.</p>
+  </div>
+  
+  <!-- Controles superiores -->
+  <div class="controls-container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="search-filters-container">
+      <!-- Buscador -->
+      <div class="search-container mb-2">
+        <div class="search-box position-relative">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            (keyup.enter)="searchGlobalBooks()"
+            placeholder="Buscar por título o autor..." 
+            class="search-input form-control rounded-pill border-0 py-2 px-5 shadow-sm bg-component"
+          >
+          <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn btn-icon border-0 bg-transparent position-absolute">×</button>
+          <div class="search-icon position-absolute">🔍</div>
+        </div>
+      </div>
+      
+      <!-- Filtros activos -->
+      <div class="active-filters d-flex flex-wrap gap-2 mb-3" *ngIf="activeFilters.length > 0">
+        <div class="filter-badge d-flex align-items-center gap-2 rounded-pill px-3 py-1" *ngFor="let filter of activeFilters">
+          <span class="filter-text">{{ filter.label }}</span>
+          <button class="filter-remove border-0 rounded-circle p-0 d-flex align-items-center justify-content-center" 
+                  (click)="removeFilter(filter.id)">×</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Botones de acción -->
+    <div class="action-buttons d-flex gap-2">
+      <div class="dropdown">
+        <button class="btn bg-component text-theme-text rounded-pill py-2 px-3 d-flex align-items-center gap-2 shadow-sm" 
+                type="button" 
+                id="actionDropdown" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false">
+          <i class="bi bi-gear-fill"></i>
+          <span>Acciones</span>
+        </button>
+        <ul class="dropdown-menu bg-component shadow" [attr.aria-labelledby]="'actionDropdown'">
+          <li><button class="dropdown-item" (click)="addNewBook()">Añadir libro</button></li>
+          <li><button class="dropdown-item" (click)="deleteSelectedBooks()" [disabled]="selectedBooks.length === 0">Eliminar seleccionados</button></li>
+          <li><button class="dropdown-item" (click)="exportBooks()">Exportar datos</button></li>
+        </ul>
+      </div>
+      
+      <button class="btn bg-component text-theme-text rounded-pill py-2 px-3 d-flex align-items-center gap-2 shadow-sm" 
+              (click)="openFiltersSidebar()">
+        <i class="bi bi-funnel-fill"></i>
+        <span>Filtros</span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mensaje de carga -->
+  <div class="loading-message text-center py-5" *ngIf="isLoading">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 text-theme">Cargando libros...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div class="error-message bg-component rounded-4 p-4 text-center" *ngIf="error && !isLoading">
+    <div class="alert-icon fs-1 mb-3 text-danger">⚠️</div>
+    <h2 class="fs-4 mb-3 text-theme-text">Ocurrió un error</h2>
+    <p class="text-theme mb-3">{{ error }}</p>
+    <button class="btn bg-theme text-theme-text px-4 py-2 rounded-pill" (click)="loadBooks()">
+      Intentar de nuevo
+    </button>
+  </div>
+  
+  <!-- Tabla de libros -->
+  <div class="libros-table-container" *ngIf="!isLoading && books.length > 0">
+    <table class="libros-table">
+      <thead>
+        <tr>
+          <th class="ps-4 py-3" style="width: 50px;">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                      (change)="toggleSelectAll($event)" 
+                      [checked]="isAllSelected()" 
+                      id="selectAllCheckbox">
+              <label class="form-check-label" for="selectAllCheckbox"></label>
+            </div>
+          </th>
+          <th class="py-3" style="width: 50px;"></th>
+          <th class="py-3">Título</th>
+          <th class="py-3">Páginas</th>
+          <th class="py-3">Fecha añadido</th>
+          <th class="py-3 pe-4">Usuarios</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of displayedBooks" [class.selected-row]="isSelected(book.book_id)">
+          <td class="ps-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                      [checked]="isSelected(book.book_id)" 
+                      (change)="toggleBookSelection(book.book_id)"
+                      id="book-{{book.book_id}}">
+              <label class="form-check-label" for="book-{{book.book_id}}"></label>
+            </div>
+          </td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-sm bg-transparent border-0 p-1 text-theme-text" 
+                      type="button" 
+                      id="bookAction-{{book.book_id}}" 
+                      data-bs-toggle="dropdown" 
+                      aria-expanded="false">
+                <i class="bi bi-three-dots"></i>
+              </button>
+              <ul class="dropdown-menu bg-component shadow" [attr.aria-labelledby]="'bookAction-'+book.book_id">
+                <li><button class="dropdown-item" (click)="viewBookDetails(book)">Ver o editar</button></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item text-danger" (click)="deleteBook(book.book_id)">Eliminar</button></li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="book-cover-mini me-3">
+                <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="rounded-2 shadow-sm" (error)="onImageError($event)">
+              </div>
+              <div>
+                <h6 class="mb-0 fw-semibold text-theme-text">{{ book.book_title }}</h6>
+                <small class="text-theme">{{ book.authors }}</small>
+              </div>
+            </div>
+          </td>
+          <td class="text-theme">{{ book.book_pages }}</td>
+          <td class="text-theme">{{ formatDate(book.date_added) }}</td>
+          <td class="pe-4">
+            <span class="badge px-3 py-2 rounded-pill fs-7">
+              {{ book.user_count || 0 }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Mensaje sin libros -->
+  <div class="no-books empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="books.length === 0 && !isLoading && !error">
+    <div class="empty-icon fs-1 mb-3 text-theme">📚</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No hay libros en la base de datos</h2>
+    <p class="text-theme lh-base mb-3">¡Comienza a añadir libros para crear el catálogo!</p>
+    <button class="btn bg-btn text-white px-4 py-2 rounded-pill" (click)="addNewBook()">
+      <i class="bi bi-plus-circle me-2"></i>Añadir nuevo libro
+    </button>
+  </div>
+  
+  <!-- Mensaje sin resultados de búsqueda -->
+  <div class="no-search-results empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="books.length > 0 && displayedBooks.length === 0 && !isLoading">
+    <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
+    <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
+      <button class="reset-search" (click)="clearSearch()">ver todos los libros</button>
+    </p>
+  </div>
+  
+  <!-- Paginación -->
+  <div class="pagination-container d-flex justify-content-between align-items-center mt-4" *ngIf="totalPages > 1 && !isLoading">
+    <div class="showing-info text-theme fs-7">
+      Mostrando {{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, totalItems) }} de {{ totalItems }} libros
+    </div>
+    
+    <nav aria-label="Navegación de páginas">
+      <ul class="modern-pagination d-flex align-items-center gap-2">
+        <li class="page-nav" [class.disabled]="currentPage === 1">
+          <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                  (click)="changePage(currentPage - 1)" 
+                  [disabled]="currentPage === 1"
+                  aria-label="Anterior">
+            <i class="page-arrow">&laquo;</i>
+          </button>
+        </li>
+        
+        <li class="page-number" [class.active]="currentPage === 1">
+          <button class="btn btn-pagination rounded-pill" (click)="changePage(1)">1</button>
+        </li>
+        
+        <li class="page-ellipsis" *ngIf="currentPage > 3">
+          <span class="ellipsis">...</span>
+        </li>
+        
+        <ng-container *ngFor="let page of getPageNumbers()">
+          <li class="page-number" *ngIf="page > 1 && page < totalPages" 
+              [class.active]="currentPage === page">
+            <button class="btn btn-pagination rounded-pill" (click)="changePage(page)">{{ page }}</button>
+          </li>
+        </ng-container>
+        
+        <li class="page-ellipsis" *ngIf="currentPage < totalPages - 2">
+          <span class="ellipsis">...</span>
+        </li>
+        
+        <li class="page-number" *ngIf="totalPages > 1" [class.active]="currentPage === totalPages">
+          <button class="btn btn-pagination rounded-pill" (click)="changePage(totalPages)">{{ totalPages }}</button>
+        </li>
+        
+        <li class="page-nav" [class.disabled]="currentPage === totalPages">
+          <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                  (click)="changePage(currentPage + 1)" 
+                  [disabled]="currentPage === totalPages"
+                  aria-label="Siguiente">
+            <i class="page-arrow">&raquo;</i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="page-size-selector d-flex align-items-center gap-2">
+      <span class="text-theme fs-7">Mostrar:</span>
+      <select class="form-select form-select-sm" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+        <option [value]="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Filtros Sidebar -->
+<div class="backdrop" [class.show]="isFiltersSidebarOpen" (click)="closeFiltersSidebar()"></div>
+<div class="filters-sidebar-modal" [class.show]="isFiltersSidebarOpen">
+  <div class="filters-sidebar-content">
+    <div class="filters-sidebar-header gradient-header d-flex justify-content-between align-items-center">
+      <h5 class="modal-title mb-0">Filtrar libros</h5>
+      <button type="button" class="close-sidebar-btn" (click)="closeFiltersSidebar()">×</button>
+    </div>
+    
+    <div class="filters-sidebar-body">
+      <!-- Filtros por género -->
+      <div class="filter-section mb-4">
+        <h6 class="filter-section-title mb-3">Género</h6>
+        <select class="form-select mb-2" 
+                (change)="onGenreSelect($event)">
+          <option value="">Seleccionar género</option>
+          <option *ngFor="let genre of availableGenres" [value]="genre.value">{{ genre.label }}</option>
+        </select>
+        
+        <div class="selected-genres mt-3" *ngIf="selectedGenres.length > 0">
+          <div class="d-flex flex-wrap gap-2">
+            <div class="filter-badge d-flex align-items-center gap-2 rounded-pill px-3 py-1" 
+                 *ngFor="let genre of selectedGenres">
+              <span class="filter-text">{{ genre.label }}</span>
+              <button class="filter-remove rounded-circle p-0 d-flex align-items-center justify-content-center" 
+                      (click)="removeSelectedGenre(genre.value)">×</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Filtros por páginas -->
+      <div class="filter-section mb-4">
+        <h6 class="filter-section-title mb-3">Número de páginas</h6>
+        <div class="row align-items-center">
+          <div class="col-5">
+            <input type="number" class="form-control"
+                    placeholder="Mínimo" [(ngModel)]="filterPagesMin">
+          </div>
+          <div class="col-2 text-center text-theme">a</div>
+          <div class="col-5">
+            <input type="number" class="form-control"
+                    placeholder="Máximo" [(ngModel)]="filterPagesMax">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Filtros por fecha -->
+      <div class="filter-section">
+        <h6 class="filter-section-title mb-3">Ordenar por fecha</h6>
+        <div class="d-flex flex-column gap-2">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dateSort"
+                    id="dateNone" [(ngModel)]="filterDateSort" value="">
+            <label class="form-check-label" for="dateNone">
+              Sin ordenar
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dateSort"
+                    id="dateNewest" [(ngModel)]="filterDateSort" value="newest">
+            <label class="form-check-label" for="dateNewest">
+              Más recientes primero
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dateSort"
+                    id="dateOldest" [(ngModel)]="filterDateSort" value="oldest">
+            <label class="form-check-label" for="dateOldest">
+              Más antiguos primero
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="filters-sidebar-footer d-flex justify-content-between">
+      <button type="button" class="btn bg-component text-theme-text rounded-pill px-4" 
+              (click)="resetFilters()">Limpiar</button>
+      <button type="button" class="btn bg-btn text-white rounded-pill px-4" 
+              (click)="applyFilters()">Aplicar filtros</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Book Sidebar -->
+<div class="backdrop" [class.show]="isAddBookSidebarOpen" (click)="closeAddBookSidebar()"></div>
+<div class="add-book-sidebar-modal" [class.show]="isAddBookSidebarOpen">
+  <div class="add-book-sidebar-content">
+    <div class="add-book-sidebar-header gradient-header d-flex justify-content-between align-items-center">
+      <h5 class="modal-title mb-0">Añadir Nuevo Libro</h5>
+      <button type="button" class="close-sidebar-btn" (click)="closeAddBookSidebar()">×</button>
+    </div>
+    
+    <div class="add-book-sidebar-body">
+      <app-add-book *ngIf="isAddBookSidebarOpen" (bookAdded)="onBookAdded()"></app-add-book>
+    </div>
+  </div>
+</div>
+
+<!-- Componente de detalles del libro -->
+<app-details-book></app-details-book>

@@ -20,7 +20,7 @@
                 <div class="book-cover-container d-flex flex-column align-items-center border-end p-4">
                     <div class="book-cover position-relative overflow-hidden rounded-3 mb-4 shadow">
                         <img *ngIf="currentBook" class="w-100 h-100 object-fit-cover" [src]="'libros/' + currentBook.saga + '/covers/' + currentBook.titulo + '.png'" [alt]="currentBook.titulo"
-                                onerror="this.src='/assets/images/default-cover.png'">
+                                onerror="this.src='/libros/default.png'">
                         <div class="status-badge position-absolute top-0 end-0 px-3 py-1 small text-uppercase fw-semibold" [ngClass]="getEstadoClass(currentBook.estado)">
                             {{ getEstadoLabel(currentBook.estado) }}
                         </div>

@@ -17,7 +17,7 @@
         <div class="podium-item second-place transition-y" *ngIf="topLibros.length >= 2" (click)="openBookDetails(topLibros[1])">
           <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
             <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
-              <img [src]="getBookImageUrl(topLibros[1])" [alt]="topLibros[1].book_title" class="w-100 h-100 object-fit-cover img-hover">
+              <img [src]="getBookImageUrl(topLibros[1])" [alt]="topLibros[1].book_title" class="w-100 h-100 object-fit-cover img-hover" onerror="this.src='/libros/default.png'">
             </div>
             <div class="book-info">
               <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[1].book_title }}</h3>
@@ -37,7 +37,7 @@
           <div class="book-card gradient-card rounded-4 p-3 shadow scale-110 position-relative">
             <div class="crown-icon position-absolute end-n10 top-n10 fs-2 rotate-30">👑</div>
             <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
-              <img [src]="getBookImageUrl(topLibros[0])" [alt]="topLibros[0].book_title" class="w-100 h-100 object-fit-cover img-hover">
+              <img [src]="getBookImageUrl(topLibros[0])" [alt]="topLibros[0].book_title" class="w-100 h-100 object-fit-cover img-hover" onerror="this.src='/libros/default.png'">
             </div>
             <div class="book-info">
               <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[0].book_title }}</h3>
@@ -56,7 +56,7 @@
         <div class="podium-item third-place transition-y z-1" *ngIf="topLibros.length >= 3" (click)="openBookDetails(topLibros[2])">
           <div class="book-card gradient-card rounded-4 p-3 shadow w-100">
             <div class="book-cover rounded-3 shadow overflow-hidden mx-auto mb-3">
-              <img [src]="getBookImageUrl(topLibros[2])" [alt]="topLibros[2].book_title" class="w-100 h-100 object-fit-cover img-hover">
+              <img [src]="getBookImageUrl(topLibros[2])" [alt]="topLibros[2].book_title" class="w-100 h-100 object-fit-cover img-hover" onerror="this.src='/libros/default.png'">
             </div>
             <div class="book-info">
               <h3 class="text-nowrap overflow-hidden text-truncate fw-semibold fs-6 mb-2 text-theme-text">{{ topLibros[2].book_title }}</h3>
@@ -81,11 +81,6 @@
         <div class="saga-item gradient-card rounded-3 shadow p-4 d-flex flex-column align-items-center transition-y" 
              *ngFor="let saga of sagas"
              (click)="openSagaDetails(saga)">
-             <!--
-          <div class="saga-cover rounded-3 shadow overflow-hidden mb-4">
-            <img [src]="getSagaImageUrl(saga)" [alt]="saga.name" class="w-100 h-100 object-fit-cover img-hover">
-          </div>
-          -->
           <div class="saga-info text-center w-100">
             <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ saga.name }}</h3>
             <p class="author fs-7 text-theme mb-2">{{ saga.author }}</p>
@@ -113,7 +108,7 @@
              *ngFor="let libro of librosValorados"
              (click)="openBookDetails(libro)">
           <div class="book-cover rounded-3 shadow overflow-hidden mb-4">
-            <img [src]="getBookImageUrl(libro)" [alt]="libro.book_title" class="w-100 h-100 object-fit-cover img-hover">
+            <img [src]="getBookImageUrl(libro)" [alt]="libro.book_title" class="w-100 h-100 object-fit-cover img-hover" onerror="this.src='/libros/default.png'">
           </div>
           <div class="book-info text-center w-100">
             <h3 class="fs-6 fw-semibold mb-1 text-theme-text">{{ libro.book_title }}</h3>
@@ -150,7 +145,7 @@
         
         <div class="d-flex gap-4 mb-4">
           <div class="book-cover-detail rounded-3 shadow overflow-hidden" style="width:150px;height:225px;">
-            <img [src]="getBookImageUrl(selectedBook)" [alt]="selectedBook.book_title" class="w-100 h-100 object-fit-cover">
+            <img [src]="getBookImageUrl(selectedBook)" [alt]="selectedBook.book_title" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
           </div>
           <div class="book-info-detail flex-grow-1">
             <h2 class="book-title fs-4 mb-2 text-theme-text">{{ selectedBook.book_title }}</h2>
@@ -190,11 +185,6 @@
                 (click)="closeSagaModal()">×</button>
         
         <div class="saga-header d-flex align-items-center mb-4">
-          <!-- 
-          <div class="saga-cover-detail rounded-3 shadow overflow-hidden me-4" style="width:120px;height:180px;">
-            <img [src]="getSagaImageUrl(selectedSaga)" [alt]="selectedSaga.name" class="w-100 h-100 object-fit-cover">
-          </div>
-          -->
           <div class="saga-info-detail">
             <h2 class="saga-title fs-3 mb-2 text-theme-text">{{ selectedSaga.name }}</h2>
             <p class="saga-author fs-5 mb-3 text-theme">{{ selectedSaga.author }}</p>
@@ -218,7 +208,7 @@
           <div class="saga-book-item bg-component p-3 rounded-3 shadow-sm mb-3 d-flex" 
                *ngFor="let book of selectedSaga.books">
             <div class="saga-book-cover rounded-2 shadow overflow-hidden me-3" style="width:80px;height:120px;">
-              <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover">
+              <img [src]="getBookImageUrl(book)" [alt]="book.book_title" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
             </div>
             <div class="saga-book-info flex-grow-1 d-flex flex-column justify-content-between">
               <div>

@@ -75,7 +75,7 @@ export class SemiCircleGaugeComponent implements OnInit {
           background: 'transparent',
         },
         track: {
-          background: '#f2f2f2',
+          background: '#d5a983',
           strokeWidth: '97%',
           margin: 5,
           dropShadow: {

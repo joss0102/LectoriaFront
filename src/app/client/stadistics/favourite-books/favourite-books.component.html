@@ -1,36 +1,46 @@
-<div class="table-container">
-  <table class="table align-middle text-center">
-    <thead>
-      <tr>
-        <th>Portada</th>
-        <th>Título</th>
-        <th>Autor</th>
-        <th>Páginas</th>
-        <th>Inicio</th>
-        <th>Fin</th>
-        <th>Nota</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let book of favBooks">
-        <td>
-          <img
-            [src]="getCoverImage(book)"
-            alt="Portada"
-            class="book-cover me-2"
-            width="60"
-            onerror="this.src='/libros/default.png'"
-          />
-        </td>
-        <td>{{ book.book_title }}</td>
-        <td>{{ book.author }}</td>
-        <td>{{ book.total_pages }}</td>
-        <td>{{ book.date_start | date : "dd/MM/yyyy" }}</td>
-        <td>{{ book.date_ending | date : "dd/MM/yyyy" }}</td>
-        <td>
-          <strong>{{ book.rating }}</strong>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="favourite-books-container">
+  <div class="table-wrapper">
+    <div *ngIf="favBooks.length > 0; else noBooks" class="responsive-table">
+      <table class="books-table">
+        <thead>
+          <tr>
+            <th>Portada</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Páginas</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of favBooks" class="book-row">
+            <td class="cover-cell">
+              <div class="cover-container">
+                <img [src]="getCoverImage(book)" alt="{{ book.book_title }}" class="book-cover" onerror="this.src='/libros/default.png'">
+              </div>
+            </td>
+            <td class="title-cell">{{ book.book_title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.total_pages }}</td>
+            <td>{{ book.date_start | date : "dd/MM/yyyy" }}</td>
+            <td>{{ book.date_ending | date : "dd/MM/yyyy" }}</td>
+            <td class="rating-cell">
+              <div class="rating-badge">
+                {{ book.rating }}
+                <i class="bi bi-star-fill rating-star"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <ng-template #noBooks>
+      <div class="no-books-message">
+        <i class="bi bi-book"></i>
+        <p>No has calificado ningún libro todavía</p>
+      </div>
+    </ng-template>
+  </div>
 </div>

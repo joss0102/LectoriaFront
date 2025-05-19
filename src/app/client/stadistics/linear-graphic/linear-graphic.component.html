@@ -1,13 +1,38 @@
 <div class="chart-container">
+  <div class="year-selector">
+    <button class="year-btn previous" (click)="changeYear(-1)" [disabled]="isLoading">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <span class="current-year">{{ selectedYear }}</span>
+    <button class="year-btn next" (click)="changeYear(1)" [disabled]="isLoading || selectedYear >= currentYear">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Cargando datos de lectura...</p>
+  </div>
+  
   <apx-chart
+    *ngIf="!isLoading"
     #chart
-    [series]="chartOptions.series!"
-    [chart]="chartOptions.chart!"
-    [xaxis]="chartOptions.xaxis!"
-    [dataLabels]="chartOptions.dataLabels!"
-    [grid]="chartOptions.grid!"
-    [stroke]="chartOptions.stroke!"
-    [title]="chartOptions.title!"
-    [theme]="chartOptions.theme!"
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [dataLabels]="chartOptions.dataLabels"
+    [grid]="chartOptions.grid"
+    [stroke]="chartOptions.stroke"
+    [title]="chartOptions.title"
+    [theme]="chartOptions.theme"
+    [tooltip]="chartOptions.tooltip"
+    [yaxis]="chartOptions.yaxis"
+    [fill]="chartOptions.fill"
+    [markers]="chartOptions.markers"
   ></apx-chart>
+  
+  <div *ngIf="!isLoading && noData" class="no-data-message">
+    <i class="bi bi-bar-chart"></i>
+    <p>No hay datos de lectura para {{ selectedYear }}</p>
+  </div>
 </div>

@@ -32,12 +32,16 @@ export class FavouriteBooksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.bringData();
+    this.loadFavouriteBooks();
   }
 
-  bringData(): void {
+  /**
+   * Carga los libros favoritos del usuario basado en sus calificaciones
+   */
+  loadFavouriteBooks(): void {
     const actualUser = this.authService.currentUserValue;
     if (!actualUser?.nickname) return;
+    
     this.bookService
       .getUserBooks(actualUser.nickname, 'completed', 1, 100)
       .subscribe({
@@ -45,7 +49,6 @@ export class FavouriteBooksComponent implements OnInit {
           const bookIds = userBooks.data.map((ub: any) => ub.book_id);
 
           this.bookService.getBooksWithCache(bookIds).subscribe({
-            // relacionamos y metemos mas detalles
             next: (bookDetails) => {
               const baseBooks = userBooks.data.map((userBook: any) => {
                 const fullBook = bookDetails.find(
@@ -57,8 +60,8 @@ export class FavouriteBooksComponent implements OnInit {
                   total_pages: userBook.total_pages,
                   date_start: userBook.date_start,
                   date_ending: userBook.date_ending,
-                  saga: fullBook?.sagas || 'saga-predeterminada',
-                  author: fullBook?.authors || '',
+                  saga: fullBook?.sagas || 'default',
+                  author: fullBook?.authors || 'Desconocido',
                 };
               });
 
@@ -75,15 +78,17 @@ export class FavouriteBooksComponent implements OnInit {
                         );
                         return {
                           ...book,
-                          rating: review?.rating,
+                          rating: review?.rating || 0,
                         };
                       })
-                      .sort((a, b) => (b.rating || 0) - (a.rating || 0)) // Ordenar por notas descendente ( mayor a menor )
-                      .slice(0, 10); // Limitar a los 10 primeros con más rating
+                      .filter(book => book.rating > 0)
+                      .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+
+                      .slice(0, 2);
                   },
                   error: (err) => {
                     console.error('Error al obtener reseñas:', err);
-                    this.favBooks = baseBooks.slice(0, 10); // fallback sin reseñas
+                    this.favBooks = baseBooks.slice(0, 10);
                   },
                 });
             },
@@ -98,8 +103,11 @@ export class FavouriteBooksComponent implements OnInit {
       });
   }
 
+  /**
+   * Genera la ruta de la imagen de portada del libro
+   */
   getCoverImage(book: FavouriteBook): string {
-    const saga = book.saga || 'default-saga';
+    const saga = book.saga || 'default';
     const titulo = book.book_title || 'default-title';
     return `/libros/${saga}/covers/${titulo}.png`;
   }

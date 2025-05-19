@@ -1,0 +1,60 @@
+<div class="chat-modal-overlay" [class.open]="isOpen" (click)="onClose()">
+  <div class="chat-container rounded-4 shadow-lg" (click)="preventClose($event)">
+    <div class="chat-header p-3 rounded-top-4 d-flex justify-content-between align-items-center">
+      <h2 class="chat-title fs-5 fw-bold mb-0">Lectoria Chat</h2>
+      <button class="close-chat-btn d-flex align-items-center justify-content-center rounded-circle border-0" 
+              (click)="onClose()">×</button>
+    </div>
+    
+    <!-- Mensaje de carga -->
+    <div class="chat-loading text-center py-5" *ngIf="isLoading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-3">Cargando información...</p>
+    </div>
+    
+    <!-- Mensaje de error -->
+    <div class="chat-error rounded p-4 m-3 text-center" *ngIf="error && !isLoading">
+      <div class="alert-icon fs-1 mb-3">⚠️</div>
+      <h2 class="fs-4 mb-3">Ocurrió un error</h2>
+      <p class="mb-3">{{ error }}</p>
+      <button class="btn retry-btn px-4 py-2 rounded-pill" (click)="loadChatData()">
+        Intentar de nuevo
+      </button>
+    </div>
+    
+    <!-- Chat básico implementado directamente -->
+    <div *ngIf="!isLoading && !error" class="chat-basic-container">
+      <div class="messages-container" #messagesContainer>
+        <div *ngFor="let message of messages" 
+              [class]="'message-item ' + message.sender + '-message'">
+          <div class="message-content">
+            {{ message.text }}
+          </div>
+          <div class="message-timestamp" *ngIf="message.sender !== 'system'">
+            {{ formatTimestamp(message.timestamp) }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="input-container">
+        <input type="text" class="chat-input" 
+                placeholder="Pregunta sobre tus libros..." 
+                [(ngModel)]="currentMessage" 
+                (keyup.enter)="sendMessage()">
+        <button class="send-btn" (click)="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante para abrir el chat -->
+<button class="chat-floating-button rounded-circle shadow d-flex align-items-center justify-content-center" 
+        [class.active]="isOpen"
+        (click)="isOpen ? onClose() : onOpen()">
+  <i class="fas fa-comments"></i>
+  <img src="/logos/logo-negro.png" alt="Lectoria Chat" style="width: 60px;">
+</button>

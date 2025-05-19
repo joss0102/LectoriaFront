@@ -6,4 +6,7 @@
       <router-outlet></router-outlet>
     </div>
   </div>
+  
+  <!-- Componente de chat -->
+  <app-chat [isOpen]="isChatOpen" (openChange)="isChatOpen = $event"></app-chat>
 </section>

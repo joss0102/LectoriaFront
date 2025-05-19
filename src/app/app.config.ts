@@ -4,14 +4,16 @@ import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@an
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor.service';
+import { httpDebugInterceptor } from './core/interceptors/http-debug.interceptor';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor]),
-      withInterceptorsFromDi() // Añadido para soportar interceptores proporcionados mediante DI
+      withInterceptors([authInterceptor, httpDebugInterceptor]),
+      withInterceptorsFromDi()
     )
-  ],
+  ]
 };

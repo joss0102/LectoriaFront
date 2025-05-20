@@ -6,14 +6,6 @@ Para mejorar la experiencia, el sistema ofrece estadísticas de lecturas, propor
 
 El objetivo principal de esta aplicación es brindar a los usuarios una herramienta centralizada donde puedan organizar y analizar su actividad lectura de manera eficiente y visualmente atractiva.
 
-### Funcionalidades
-
-- [x] Creacion carpetas
-- [x] Creacion componentes base
-- [x] Modo de colores (default noche)
-- [ ] Subir pdf y leerlo
-  - [ ] Buscar en api el libro y enseñar los datos
-
 # 🏗️ Apartados de la Página Web
 
 > **Actualizar**
@@ -67,48 +59,9 @@ npm install node-vibrant@3
 npm install ngx-dropzone
 ```
 
-- Libreria de ng-apexcharts y apexcharts. Esta libreria nos sirve para todos los graficos de estadisticas. 
-  > **Advertencia**: Forzamos su instalacion, procederemos a actualizar angular a la version 19 proximamente
+- Libreria de ng-apexcharts y apexcharts. Esta libreria nos sirve para todos los graficos de estadisticas.
 
 ```bash
-npm install apexcharts ng-apexcharts --legacy-peer-deps
+npm install apexcharts ng-apexcharts
 
-```
-
-# Trabajo en equipo (subir y actualizar código)
-
-- Pasos para mergear, orden:
-
-```git
-1️⃣ RamaDavid / RamaJose → 2️⃣ mergeDavid-Jose → 3️⃣ main
-```
-
-- 1️⃣ Subir los cambios de tu rama RamaDavid / ramaJose ,comitear y pushear a tu rama. ( no hace falta utilizar comandos , se puede utilizar la UI de VSCODE )
-
-```git
-git add .
-git commit -m "Descripción del cambio"
-git push origin RamaDavid/Jose
-```
-
-- 2️⃣ Crear un Pull Request para fusionar RamaDavid / RamaJose en mergeDavid-Jose:
-
-  - New Pull Request en Pull Request de GitHub
-  - En el desplegable "base", selecciona la rama mergeDavid-Jose (la rama donde se va a hacer la fusión).
-  - En el desplegable "compare", selecciona la rama RamaDavid o RamaJose.
-  - GitHub mostrará los cambios que se van a fusionar. Verifica que los cambios son correctos.
-  - Si todo está correcto, haz clic en "Create Pull Request".
-  - Resolver conflictos (si los hay) y eliminar <<<<<<< HEAD apartir de ====== son la rama tuya eliminar las marcas de conflictos y quedarnos con el codigo que queramos.
-  - Una vez que se resuelvan los conflictos , puedes hacer clic en el botón "Merge pull request".
-
-- 3️⃣ Fusionar mergeDavid-Jose a main
-
-  - New PR de main <---- mergeDavid-Jose
-  - Repetir los mismos pasos y aprobar el PR y mergear.
-
-- Para actualizar la rama main a tu rama:
-
-```git
-git fetch origin
-git merge origin/main
 ```

@@ -1,138 +1,258 @@
-<!-- images.component.html -->
 <div class="images-container bg-theme p-3 p-md-4">
-  <!-- Selector de tipo de imágenes -->
-  <div class="view-selector d-flex justify-content-center gap-3 mb-5">
-    <button 
-      [class.active]="vistaActiva === 'libros'" 
-      (click)="cambiarVista('libros')"
-      class="selector-btn fw-semibold rounded-pill shadow-sm">
-      Portadas de Libros
-    </button>
-    <button 
-      [class.active]="vistaActiva === 'sagas'" 
-      (click)="cambiarVista('sagas')"
-      class="selector-btn fw-semibold rounded-pill shadow-sm">
-      Fondos de Sagas
-    </button>
-    <button 
-      [class.active]="vistaActiva === 'autores'" 
-      (click)="cambiarVista('autores')"
-      class="selector-btn fw-semibold rounded-pill shadow-sm">
-      Fotos de Autores
-    </button>
-    <button 
-      [class.active]="vistaActiva === 'banners'" 
-      (click)="cambiarVista('banners')"
-      class="selector-btn fw-semibold rounded-pill shadow-sm">
-      Banners de Autores
+  <!-- Indicador de carga -->
+  <div *ngIf="loading" class="text-center p-5">
+    <div class="spinner-border text-theme" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 text-theme">Cargando imágenes...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <h6 class="alert-heading">Error al cargar las imágenes</h6>
+    <p class="mb-0">{{ error }}</p>
+    <button type="button" class="btn btn-outline-danger mt-2" (click)="recargarDatos()">
+      Intentar de nuevo
     </button>
   </div>
 
-  <!-- Contenedor principal de imágenes -->
-  <div class="images-content">
-    <!-- Vista de portadas de libros -->
-    <div class="books-images" *ngIf="vistaActiva === 'libros'">
-      <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Portadas de Libros</h2>
-      <p class="section-description text-theme mb-4">Aquí encontrarás todas las portadas de tus libros. Puedes editarlas haciendo clic en el botón de editar.</p>
-      
-      <div class="images-grid">
-        <div class="image-card gradient-card rounded-3 p-4 d-flex flex-column align-items-center shadow card-hover" 
-             *ngFor="let libro of libros">
-          <div class="image-container position-relative overflow-hidden rounded-3 shadow">
-            <img [src]="libro.imagen" [alt]="'Portada de ' + libro.titulo" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
-            <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-              <button class="edit-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale">
-                <i class="edit-icon fs-5">✎</i>
-                Editar
-              </button>
+  <!-- Contenido principal -->
+  <div *ngIf="!loading && !error">
+    <!-- Selector de tipo de imágenes -->
+    <div class="view-selector d-flex justify-content-center gap-3 mb-5">
+      <button 
+        [class.active]="vistaActiva === 'libros'" 
+        (click)="cambiarVista('libros')"
+        class="selector-btn fw-semibold rounded-pill shadow-sm">
+        Portadas de Libros ({{ libros.length }})
+      </button>
+      <button 
+        [class.active]="vistaActiva === 'sagas'" 
+        (click)="cambiarVista('sagas')"
+        class="selector-btn fw-semibold rounded-pill shadow-sm">
+        Fondos de Sagas ({{ sagas.length }})
+      </button>
+      <button 
+        [class.active]="vistaActiva === 'autores'" 
+        (click)="cambiarVista('autores')"
+        class="selector-btn fw-semibold rounded-pill shadow-sm">
+        Fotos de Autores ({{ autores.length }})
+      </button>
+      <button 
+        [class.active]="vistaActiva === 'banners'" 
+        (click)="cambiarVista('banners')"
+        class="selector-btn fw-semibold rounded-pill shadow-sm">
+        Banners de Autores ({{ autores.length }})
+      </button>
+    </div>
+
+    <!-- Contenedor principal de imágenes -->
+    <div class="images-content">
+      <!-- Vista de portadas de libros -->
+      <div class="books-images" *ngIf="vistaActiva === 'libros'">
+        <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Portadas de Libros</h2>
+        <p class="section-description text-theme mb-4">
+          Aquí encontrarás todas las portadas de tus libros ({{ libros.length }} libros). 
+          Puedes editarlas haciendo clic en el botón de editar.
+        </p>
+        
+        <!-- Mensaje si no hay libros -->
+        <div *ngIf="libros.length === 0" class="text-center p-5">
+          <p class="text-muted">No tienes libros en tu colección aún.</p>
+        </div>
+        
+        <div class="images-grid" *ngIf="currentLibros.length > 0">
+          <div class="image-card gradient-card rounded-3 p-4 d-flex flex-column align-items-center shadow card-hover" 
+               *ngFor="let libro of currentLibros">
+            <div class="image-container position-relative overflow-hidden rounded-3 shadow">
+              <img 
+                [src]="getBookImageUrl(libro)" 
+                [alt]="'Portada de ' + libro.book_title" 
+                class="w-100 h-100 object-fit-cover"
+                (error)="onImageError($event)">
+              <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
+                <button 
+                  class="edit-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale"
+                  (click)="editarImagen('libro', libro.book_id.toString())">
+                  <i class="edit-icon fs-5">✎</i>
+                  Editar
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="image-info p-3 w-100 text-center">
-            <h3 class="image-title fw-semibold text-truncate mb-1 text-theme-text">{{ libro.titulo }}</h3>
-            <p class="image-meta fs-7 text-theme mb-0">{{ libro.autor }}</p>
+            <div class="image-info p-3 w-100 text-center">
+              <h3 class="image-title fw-semibold text-truncate mb-1 text-theme-text">{{ libro.book_title }}</h3>
+              <p class="image-meta fs-7 text-theme mb-0">{{ libro.authors || 'Autor desconocido' }}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Vista de fondos de sagas -->
-    <div class="sagas-images" *ngIf="vistaActiva === 'sagas'">
-      <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Fondos de Sagas</h2>
-      <p class="section-description text-theme mb-4">Explora los fondos disponibles para cada saga. Cada saga tiene dos variantes de fondo.</p>
+      <!-- Vista de fondos de sagas -->
+      <div class="sagas-images" *ngIf="vistaActiva === 'sagas'">
+        <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Fondos de Sagas</h2>
+        <p class="section-description text-theme mb-4">
+          Explora los fondos disponibles para cada saga ({{ sagas.length }} sagas). 
+          Cada saga tiene dos variantes de fondo.
+        </p>
+        
+        <!-- Mensaje si no hay sagas -->
+        <div *ngIf="sagas.length === 0" class="text-center p-5">
+          <p class="text-muted">No tienes libros de sagas en tu colección aún.</p>
+        </div>
+        
+        <div class="sagas-container d-flex flex-column gap-5" *ngIf="currentSagas.length > 0">
+          <div class="saga-section gradient-card rounded-4 p-4 shadow" *ngFor="let saga of currentSagas">
+            <h3 class="saga-title border-start border-4 ps-3 fw-semibold mb-4">{{ saga.nombre }}</h3>
+            <div class="saga-images">
+              <div class="saga-image-container" *ngFor="let fondo of saga.fondos; let i = index">
+                <div class="image-container position-relative overflow-hidden rounded-3 shadow mb-2">
+                  <img 
+                    [src]="getSagaFondoUrl(saga.nombre, i + 1)" 
+                    [alt]="'Fondo ' + (i+1) + ' de ' + saga.nombre" 
+                    class="w-100 h-100 object-fit-cover"
+                    (error)="onImageError($event)">
+                  <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
+                    <button 
+                      class="edit-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
+                      (click)="editarImagen('saga', saga.nombre + '-fondo' + (i+1))">
+                      <i class="edit-icon fs-5">✎</i>
+                      Editar
+                    </button>
+                  </div>
+                </div>
+                <p class="image-label fs-7 text-theme text-center mb-0">Fondo {{ i+1 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       
-      <div class="sagas-container d-flex flex-column gap-5">
-        <div class="saga-section gradient-card rounded-4 p-4 shadow" *ngFor="let saga of sagas">
-          <h3 class="saga-title border-start border-4  ps-3 fw-semibold mb-4">{{ saga.nombre }}</h3>
-          <div class="saga-images">
-            <div class="saga-image-container" *ngFor="let fondo of saga.fondos; let i = index">
-              <div class="image-container position-relative overflow-hidden rounded-3 shadow mb-2">
-                <img [src]="fondo" [alt]="'Fondo ' + (i+1) + ' de ' + saga.nombre" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
+      <!-- Vista de fotos de autores -->
+      <div class="authors-images" *ngIf="vistaActiva === 'autores'">
+        <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Fotos de Autores</h2>
+        <p class="section-description text-theme mb-4">
+          Aquí encontrarás todas las fotos de tus autores favoritos ({{ autores.length }} autores). 
+          Puedes editarlas haciendo clic en el botón de editar.
+        </p>
+        
+        <!-- Mensaje si no hay autores -->
+        <div *ngIf="autores.length === 0" class="text-center p-5">
+          <p class="text-muted">No tienes autores en tu colección aún.</p>
+        </div>
+        
+        <div class="images-grid" *ngIf="currentAutores.length > 0">
+          <div class="image-card gradient-card rounded-3 p-4 d-flex flex-column align-items-center shadow card-hover" 
+               *ngFor="let autor of currentAutores">
+            <div class="image-container author-image position-relative overflow-hidden rounded-circle shadow">
+              <img 
+                [src]="getAuthorImageUrl(autor)" 
+                [alt]="'Foto de ' + autor.nombre" 
+                class="w-100 h-100 object-fit-cover"
+                (error)="onImageError($event)">
+              <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
+                <button 
+                  class="edit-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale"
+                  (click)="editarImagen('autor', autor.nombre)">
+                  <i class="edit-icon fs-5">✎</i>
+                  Editar
+                </button>
+              </div>
+            </div>
+            <div class="image-info p-3 w-100 text-center">
+              <h3 class="image-title fw-semibold text-truncate mb-1 text-theme-text">{{ autor.nombre }}</h3>
+              <p class="image-meta fs-7 text-theme mb-0">
+                {{ autor.libros.length }} {{ autor.libros.length === 1 ? 'libro' : 'libros' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de banners de autores -->
+      <div class="banners-images" *ngIf="vistaActiva === 'banners'">
+        <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Banners de Autores</h2>
+        <p class="section-description text-theme mb-4">
+          Aquí encontrarás el banner único de cada autor de tu biblioteca ({{ autores.length }} autores). 
+          Cada autor tiene su propio banner personalizado.
+        </p>
+        
+        <!-- Mensaje si no hay autores -->
+        <div *ngIf="autores.length === 0" class="text-center p-5">
+          <p class="text-muted">No tienes autores en tu colección aún.</p>
+        </div>
+        
+        <div class="banners-container d-flex flex-column gap-5" *ngIf="currentAutores.length > 0">
+          <div class="author-section gradient-card rounded-4 p-4 shadow" *ngFor="let autor of currentAutores">
+            <h3 class="author-title border-start border-4 ps-3 fw-semibold mb-4">{{ autor.nombre }}</h3>
+            
+            <div class="banner-image-single text-center">
+              <div class="image-container banner-container position-relative overflow-hidden rounded-3 shadow mb-2 mx-auto">
+                <img 
+                  [src]="getAuthorBannerUrl(autor)" 
+                  [alt]="'Banner de ' + autor.nombre" 
+                  class="w-100 h-100 object-fit-cover"
+                  (error)="onImageError($event)">
                 <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-                  <button class="edit-btn  text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
-                          (click)="editarImagen('saga', saga.nombre + '-fondo' + (i+1))">
+                  <button 
+                    class="edit-btn text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
+                    (click)="editarImagen('banner', autor.nombre + '-banner')">
                     <i class="edit-icon fs-5">✎</i>
                     Editar
                   </button>
                 </div>
               </div>
-              <p class="image-label fs-7 text-theme text-center mb-0">Fondo {{ i+1 }}</p>
+              <p class="image-label fs-7 text-theme text-center mb-0">Banner del autor</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Vista de fotos de autores -->
-    <div class="authors-images" *ngIf="vistaActiva === 'autores'">
-      <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Fotos de Autores</h2>
-      <p class="section-description text-theme mb-4">Aquí encontrarás todas las fotos de tus autores favoritos. Puedes editarlas haciendo clic en el botón de editar.</p>
       
-      <div class="images-grid">
-        <div class="image-card gradient-card rounded-3 p-4 d-flex flex-column align-items-center shadow card-hover" 
-             *ngFor="let autor of autores">
-          <div class="image-container author-image position-relative overflow-hidden rounded-circle shadow">
-            <img [src]="'/autores/' +autor.nombre + '/autor/'+autor.nombre+'.jpg'" [alt]="'Foto de ' + autor.nombre" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
-            <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-              <button class="edit-btn  text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale"
-                     (click)="editarImagen('autor', autor.nombre)">
-                <i class="edit-icon fs-5">✎</i>
-                Editar
+      <!-- Paginación -->
+      <div class="pagination-container d-flex justify-content-center mt-5" *ngIf="totalPages > 1 && !loading">
+        <nav aria-label="Navegación de páginas">
+          <ul class="modern-pagination d-flex align-items-center gap-2">
+            <li class="page-nav" [class.disabled]="currentPage === 1">
+              <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                      (click)="changePage(currentPage - 1)" 
+                      [disabled]="currentPage === 1"
+                      aria-label="Anterior">
+                <i class="page-arrow">&laquo;</i>
               </button>
-            </div>
-          </div>
-          <div class="image-info p-3 w-100 text-center">
-            <h3 class="image-title fw-semibold text-truncate mb-1 text-theme-text">{{ autor.nombre }}</h3>
-            <p class="image-meta fs-7 text-theme mb-0">{{ autor.libros.length }} {{ autor.libros.length === 1 ? 'libro' : 'libros' }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Vista de banners de autores -->
-    <div class="banners-images" *ngIf="vistaActiva === 'banners'">
-      <h2 class="section-title position-relative d-inline-block pb-2 mb-2 text-theme-text">Banners de Autores</h2>
-      <p class="section-description text-theme mb-4">Explora los banners disponibles para cada autor. Cada autor tiene hasta dos variantes de banner.</p>
-      
-      <div class="banners-container d-flex flex-column gap-5">
-        <div class="author-section gradient-card rounded-4 p-4 shadow" *ngFor="let autor of autores">
-          <h3 class="author-title border-start border-4  ps-3 fw-semibold mb-4">{{ autor.nombre }}</h3>
-          
-          <div class="banner-images">
-            <div class="banner-image-container" *ngFor="let banner of autor.banners; let i = index">
-              <div class="image-container banner-container position-relative overflow-hidden rounded-3 shadow mb-2">
-                <img [src]="banner" [alt]="'Banner ' + (i+1) + ' de ' + autor.nombre+'.jpg'" class="w-100 h-100 object-fit-cover" onerror="this.src='/libros/default.png'">
-                <div class="image-overlay position-absolute inset-0 d-flex align-items-center justify-content-center bg-dark-50">
-                  <button class="edit-btn  text-white border-0 rounded-pill d-flex align-items-center gap-2 fw-semibold px-4 py-2 btn-scale" 
-                          (click)="editarImagen('banner', autor.nombre + '-banner' + (i+1))">
-                    <i class="edit-icon fs-5">✎</i>
-                    Editar
-                  </button>
-                </div>
-              </div>
-              <p class="image-label fs-7 text-theme text-center mb-0">Banner {{ i+1 }}</p>
-            </div>
-          </div>
-        </div>
+            </li>
+            
+            <li class="page-number" [class.active]="currentPage === 1">
+              <button class="btn btn-pagination rounded-pill" (click)="changePage(1)">1</button>
+            </li>
+            
+            <li class="page-ellipsis" *ngIf="currentPage > 3">
+              <span class="ellipsis">...</span>
+            </li>
+            
+            <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+              <li class="page-number" *ngIf="i+1 > 1 && i+1 < totalPages && (i+1 >= currentPage-1 && i+1 <= currentPage+1)" 
+                  [class.active]="currentPage === i + 1">
+                <button class="btn btn-pagination rounded-pill" (click)="changePage(i + 1)">{{ i + 1 }}</button>
+              </li>
+            </ng-container>
+            
+            <li class="page-ellipsis" *ngIf="currentPage < totalPages - 2">
+              <span class="ellipsis">...</span>
+            </li>
+            
+            <li class="page-number" *ngIf="totalPages > 1" [class.active]="currentPage === totalPages">
+              <button class="btn btn-pagination rounded-pill" (click)="changePage(totalPages)">{{ totalPages }}</button>
+            </li>
+            
+            <li class="page-nav" [class.disabled]="currentPage === totalPages">
+              <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                      (click)="changePage(currentPage + 1)" 
+                      [disabled]="currentPage === totalPages"
+                      aria-label="Siguiente">
+                <i class="page-arrow">&raquo;</i>
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>

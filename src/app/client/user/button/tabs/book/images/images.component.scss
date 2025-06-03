@@ -1,13 +1,9 @@
-// images.component.scss
-
-// Variables y utilidades
 :root {
   --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-// Utilidades personalizadas
 .bg-theme { background-color: var(--background-color); }
 .bg-component { background-color: var(--component-bg); }
 .text-theme { color: var(--border-color); }
@@ -19,7 +15,6 @@
 .fs-7 { font-size: 0.9rem; }
 .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
 
-// Selector de vista
 .selector-btn {
   padding: 0.75rem 1.5rem;
   background-color: var(--component-bg);
@@ -44,7 +39,6 @@
   }
 }
 
-// Estilos para títulos de sección
 .section-title {
   font-size: 2rem;
   
@@ -59,7 +53,6 @@
   }
 }
 
-// Efectos para tarjetas
 .card-hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   
@@ -73,7 +66,6 @@
   }
 }
 
-// Botón con efecto de escala
 .btn-scale {
   transition: background-color 0.3s ease, transform 0.2s ease;
   
@@ -83,7 +75,6 @@
   }
 }
 
-// Contenedores de imágenes
 .image-container {
   width: 180px;
   height: 270px;
@@ -94,7 +85,6 @@
   }
 }
 
-// Estilos específicos para diferentes tipos de imágenes
 .saga-image-container .image-container {
   height: 220px;
   width: 350px;
@@ -112,14 +102,19 @@
   border-radius: 8px;
 }
 
-// Overlay con opacidad
+.banner-image-single {
+  .banner-container {
+    max-width: 400px;
+    width: 100%;
+  }
+}
+
 .image-overlay {
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: inherit;
 }
 
-// Grid de imágenes
 .images-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -132,7 +127,6 @@
   gap: 2rem;
 }
 
-// Ajuste para la sección de autores
 .author-title, .saga-title {
   font-size: 1.4rem;
   color: var(--text-color);
@@ -140,7 +134,70 @@
 .edit-btn{
   background-color: var(--bs-btn);
 }
-// Media queries para responsividad
+
+.modern-pagination {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  .page-nav, .page-number {
+    margin: 0 2px;
+    
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    &.active .btn-pagination {
+      background-color: var(--bs-btn);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+  }
+  
+  .btn-pagination {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background-color: var(--component-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    
+    &:hover:not([disabled]) {
+      background-color: var(--bs-btn-hover);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+  
+  .page-arrow {
+    font-style: normal;
+    font-weight: bold;
+  }
+  
+  .page-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--border-color);
+    padding: 0 5px;
+    
+    .ellipsis {
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .view-selector {
     flex-direction: row !important;
@@ -200,7 +257,6 @@
   }
 }
 
-// Hover explícito - solo para dispositivos que lo soportan
 @media (hover: hover) {
   .image-container:hover {
     img {

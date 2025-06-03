@@ -10,9 +10,14 @@
         [routerLink]="isMobile ? '/user' : null"
         [class.clickable]="isMobile"
       >
-        <i class="bi bi-person-circle"></i>
-        <p class="fs-5 mb-0 fw-bold">Nombre</p>
-        <p class="fs-6 mb-0">Apellido</p>
+        <img 
+          [src]="getUserProfileImageUrl()" 
+          [alt]="'Foto de perfil'"
+          class="rounded-circle border border-2 border-light mb-1"
+          style="width: 60px; height: 60px; object-fit: cover;"
+          (error)="onProfileImageError($event)">
+        <p class="fs-6 mb-0 fw-bold" *ngIf="currentUser">{{ currentUser.nickname }}</p>
+        <p class="fs-7 mb-0" *ngIf="currentUser && !onlyIcon">{{ currentUser.nickName }}</p>
       </div>
         
       <!-- Enlaces principales que aparecen en modo responsive -->

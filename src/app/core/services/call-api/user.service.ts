@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, tap } from 'rxjs/operators';
 
 import { 
   User, 
@@ -9,7 +9,9 @@ import {
   UserStatsResponse,
   UserRequest,
   UserUpdateRequest,
-  PasswordChangeRequest
+  PasswordChangeRequest,
+  UserProfileForm,
+  PasswordChangeForm
 } from '../../models/call-api/user.model';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../../environments/environment';
@@ -56,6 +58,18 @@ export class UserService {
   }
 
   /**
+   * Obtiene el perfil del usuario actual logueado
+   */
+  getCurrentUserProfile(): Observable<User> {
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser || !currentUser.nickname) {
+      return throwError(() => new Error('No hay usuario logueado'));
+    }
+    
+    return this.getUserByNickname(currentUser.nickname);
+  }
+
+  /**
    * Obtiene estadísticas de lectura de un usuario
    */
   getUserStats(nickname: string): Observable<UserStatsResponse> {
@@ -82,10 +96,40 @@ export class UserService {
   updateUser(nickname: string, userData: UserUpdateRequest): Observable<any> {
     const headers = this.authService.getAuthHeaders();
     
+    console.log('UserService.updateUser called with:');
+    console.log('- nickname:', nickname);
+    console.log('- userData:', userData);
+    console.log('- headers:', headers.keys());
+    
     return this.http.put<any>(`${this.apiUrl}/${nickname}`, userData, { headers })
       .pipe(
-        catchError(this.handleError)
+        tap(response => {
+          console.log('UserService.updateUser success:', response);
+        }),
+        catchError(error => {
+          console.error('UserService.updateUser error:', error);
+          return this.handleError(error);
+        })
       );
+  }
+
+  /**
+   * Actualiza el perfil del usuario actual
+   */
+  updateCurrentUserProfile(profileData: UserProfileForm): Observable<any> {
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser || !currentUser.nickname) {
+      return throwError(() => new Error('No hay usuario logueado'));
+    }
+
+    const updateData: UserUpdateRequest = {
+      name: profileData.name,
+      last_name1: profileData.last_name1,
+      last_name2: profileData.last_name2,
+      birthdate: profileData.birthdate
+    };
+
+    return this.updateUser(currentUser.nickname, updateData);
   }
 
   /**
@@ -98,6 +142,23 @@ export class UserService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  /**
+   * Cambia la contraseña del usuario actual
+   */
+  changeCurrentUserPassword(passwordData: PasswordChangeForm): Observable<any> {
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser || !currentUser.nickname) {
+      return throwError(() => new Error('No hay usuario logueado'));
+    }
+
+    const changeData: PasswordChangeRequest = {
+      current_password: passwordData.current_password,
+      new_password: passwordData.new_password
+    };
+
+    return this.changePassword(currentUser.nickname, changeData);
   }
 
   /**
@@ -139,15 +200,35 @@ export class UserService {
   }
 
   /**
+   * Formatea la fecha para mostrar en el frontend
+   */
+  formatDate(dateString: string | undefined): string {
+    if (!dateString) return '';
+    return dateString.split('T')[0]; // Obtiene solo la parte de la fecha YYYY-MM-DD
+  }
+
+  /**
+   * Formatea el nombre completo del usuario
+   */
+  getFullName(user: User): string {
+    let fullName = user.name || '';
+    if (user.last_name1) {
+      fullName += ` ${user.last_name1}`;
+    }
+    if (user.last_name2) {
+      fullName += ` ${user.last_name2}`;
+    }
+    return fullName.trim();
+  }
+
+  /**
    * Manejo de errores
    */
   private handleError(error: any) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-      // Error del cliente
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Error del servidor
       errorMessage = error.error?.error || error.error?.message || 'Error del servidor';
     }
     console.error('UserService error:', error);

@@ -33,6 +33,7 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
   showMainLinks: boolean = false;
   isHomePage: boolean = false;
   isLoginPage: boolean = false;
+  currentUser: any = null;
   
   private iconSubscription: Subscription;
   private menuVisibleSubscription: Subscription;
@@ -51,22 +52,17 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     private authService: AuthService,
     private searchService: SearchService
   ) {
-    // Detectar si es dispositivo móvil al inicio
     this.checkIsMobile();
     
-    // Suscripción para el estado de iconos (expandido/colapsado)
     this.iconSubscription = this.verticalService.onlyIcon$.subscribe((value) => {
       this.onlyIcon = value;
       
-      // Actualizar la posición del buscador
       setTimeout(() => this.updateSearchMenuPosition(), 0);
     });
     
-    // Suscripción para la visibilidad del menú en responsive
     this.menuVisibleSubscription = this.verticalService.menuVisible$.subscribe((value) => {
       this.menuVisible = value;
       
-      // Añadir/quitar clase para prevenir scroll del body en móvil
       if (this.isMobile) {
         if (value) {
           this.renderer.addClass(document.body, 'mobile-menu-open');
@@ -75,31 +71,25 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
         }
       }
       
-      // Si cerramos el menú, cerramos también el buscador
       if (!value) {
         this.searchMenuVisible = false;
       }
       
-      // Actualizar la posición del buscador
       setTimeout(() => this.updateSearchMenuPosition(), 0);
     });
     
-    // Suscripción al servicio de tema
     this.themeSubscription = this.themeService.modoNoche$.subscribe((value) => {
       this.modoNoche = value;
     });
     
-    // Suscripción para saber si mostrar los enlaces principales en el nav vertical
     this.linksSubscription = this.verticalService.linksInHorizontalNav$.subscribe((inHorizontal) => {
       this.showMainLinks = !inHorizontal;
     });
     
-    // Suscripción para saber si estamos en modo responsive
     this.responsiveSubscription = this.verticalService.isResponsive$.subscribe((isResponsive) => {
       this.isMobile = isResponsive;
     });
 
-    // Suscripción para detectar cambios en la ruta y verificar si estamos en la página de inicio o login
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -107,7 +97,6 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
         const newIsHomePage = url === '/';
         const newIsLoginPage = url === '/login';
         
-        // Si estamos entrando a la página de inicio, ocultamos el menú
         if (newIsHomePage && !this.isHomePage) {
           this.verticalService.setMenuVisible(false);
         }
@@ -115,29 +104,29 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
         this.isHomePage = newIsHomePage;
         this.isLoginPage = newIsLoginPage;
         
-        // Actualizar el estado en el servicio
         this.verticalService.setIsHomePage(this.isHomePage);
       });
       
-    // Verificar la ruta actual al iniciar el componente
     this.isHomePage = this.router.url === '/';
     this.isLoginPage = this.router.url === '/login';
     
-    // Si estamos en la página de inicio, aseguramos que el menú esté oculto inicialmente
     if (this.isHomePage) {
       this.verticalService.setMenuVisible(false);
     }
     this.verticalService.setIsHomePage(this.isHomePage);
     
-    // Cargar búsquedas recientes
     this.loadRecentSearches();
+    
+    this.currentUser = this.authService.currentUserValue;
+    
+    this.authService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
   }
   
   ngAfterViewInit() {
-    // Actualizar posición inicial del buscador
     this.updateSearchMenuPosition();
     
-    // Configurar búsqueda reactiva
     if (this.searchInput && this.searchInput.nativeElement) {
       const searchInput = this.searchInput.nativeElement;
       
@@ -174,7 +163,6 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     }
   }
   
-  // Escuchar cambios de tamaño de ventana
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.checkIsMobile();
@@ -187,22 +175,18 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     this.isMobile = window.innerWidth <= 1300;
     
     if (!this.isMobile && wasMobile) {
-      // Si pasamos de móvil a desktop, eliminar la clase mobile-menu-open
       this.renderer.removeClass(document.body, 'mobile-menu-open');
     }
   }
   
-  // Actualizar la posición del menú de búsqueda basado en el estado del nav
   private updateSearchMenuPosition() {
     if (!this.searchMenuWrapper) return;
     
     const searchElement = this.searchMenuWrapper.nativeElement;
     
     if (this.isMobile) {
-      // En móvil, el buscador siempre tiene left: 0 cuando es visible
       this.renderer.setStyle(searchElement, 'left', '0');
     } else {
-      // En desktop, la posición depende del estado del menú
       const navWidth = this.onlyIcon ? 75 : 220;
       this.renderer.setStyle(searchElement, 'left', `${navWidth}px`);
     }
@@ -217,12 +201,10 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
       this.verticalService.setMenuVisible(true);
     }
     
-    // Cargar búsquedas recientes al abrir el buscador
     if (this.searchMenuVisible) {
       this.loadRecentSearches();
     }
     
-    // Actualizar la posición del buscador después de cambiar la visibilidad
     setTimeout(() => this.updateSearchMenuPosition(), 0);
   }
   
@@ -266,7 +248,6 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error al cerrar sesión:', error);
-        // Incluso si hay un error, intentamos navegar al login
         this.router.navigate(['/login']);
       }
     });
@@ -277,7 +258,24 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     return !this.isLoginPage;
   }
   
-  // Limpiar suscripciones al destruir el componente
+  /**
+   * Obtiene la URL de la imagen de perfil del usuario
+   */
+  getUserProfileImageUrl(): string {
+    if (!this.currentUser || !this.currentUser.nickname) {
+      return '/usuarios/default.png';
+    }
+    return `/usuarios/${this.currentUser.nickname}.png`;
+  }
+
+  /**
+   * Maneja errores de carga de imagen de perfil
+   */
+  onProfileImageError(event: any): void {
+    event.target.src = '/usuarios/default.png';
+  }
+
+  
   ngOnDestroy() {
     this.iconSubscription?.unsubscribe();
     this.menuVisibleSubscription?.unsubscribe();
@@ -287,7 +285,6 @@ export class NavVerticalComponent implements AfterViewInit, OnDestroy {
     this.routerSubscription?.unsubscribe();
     this.searchSubscription?.unsubscribe();
     
-    // Limpiar clases en el body
     this.renderer.removeClass(document.body, 'mobile-menu-open');
   }
 }

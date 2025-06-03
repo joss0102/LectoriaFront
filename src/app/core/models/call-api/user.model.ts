@@ -85,3 +85,16 @@ export interface PasswordChangeRequest {
     current_password?: string;
     new_password: string;
 }
+
+export interface UserProfileForm {
+    name: string;
+    last_name1: string;
+    last_name2: string;
+    birthdate: string;
+}
+
+export interface PasswordChangeForm {
+    current_password: string;
+    new_password: string;
+    confirm_password: string;
+}

@@ -1,215 +1,342 @@
-<section class="settings-section">
-    <!-- Perfil -->
-    <div class="profile-card personal-info" (click)="openProfileModal()">
-      <div class="icon-container">
-        <i class="bi bi-person-circle"></i>
-      </div>
-      <div class="content">
-        <p class="title">Información Personal</p>
-        <p class="description">Actualiza tu nombre y apellidos</p>
-      </div>
+<div class="settings-container">
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
-  
-    <!-- Foto de perfil -->
-    <div class="profile-card profile-pic" (click)="openProfilePicModal()">
-      <div class="icon-container">
-        <i class="bi bi-camera-fill"></i>
-      </div>
-      <div class="content">
-        <p class="title">Foto de Perfil</p>
-        <p class="description">Cambia tu imagen de perfil</p>
-      </div>
-    </div>
-  
-    <!-- Contraseña -->
-    <div class="profile-card password" (click)="openPasswordModal()">
-      <div class="icon-container">
-        <i class="bi bi-key-fill"></i>
-      </div>
-      <div class="content">
-        <p class="title">Contraseña</p>
-        <p class="description">Modifica tu contraseña de acceso</p>
-      </div>
-    </div>
-  
-    <!-- Perfil Completo -->
-    <div class="profile-card complete-profile" (click)="openUserDetailsModal()">
-      <div class="icon-container">
-        <i class="bi bi-person-vcard-fill"></i>
-      </div>
-      <div class="content">
-        <p class="title">Perfil Completo</p>
-        <p class="description">Visualiza y edita todos tus datos</p>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Modal Información Personal -->
-  <div class="modal fade" [class.show]="showProfileModal" [style.display]="showProfileModal ? 'block' : 'none'" 
-       tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true" 
-       *ngIf="showProfileModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="profileModalLabel">Información Personal</h2>
-          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
-        </div>
-        <div class="modal-body">
-          <form (ngSubmit)="updatePersonalInfo()" #personalInfoForm="ngForm">
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombre" [(ngModel)]="currentUser.nombre" name="nombre" required>
-            </div>
-            <div class="mb-3">
-              <label for="primerApellido" class="form-label">Primer Apellido</label>
-              <input type="text" class="form-control" id="primerApellido" [(ngModel)]="currentUser.primerApellido" name="primerApellido" required>
-            </div>
-            <div class="mb-3">
-              <label for="segundoApellido" class="form-label">Segundo Apellido</label>
-              <input type="text" class="form-control" id="segundoApellido" [(ngModel)]="currentUser.segundoApellido" name="segundoApellido">
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
-              <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    <p class="mt-2">Cargando perfil...</p>
   </div>
-  
-  <!-- Modal Foto de Perfil -->
-  <div class="modal fade" [class.show]="showProfilePicModal" [style.display]="showProfilePicModal ? 'block' : 'none'" 
-       tabindex="-1" aria-labelledby="profilePicModalLabel" aria-hidden="true" 
-       *ngIf="showProfilePicModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="profilePicModalLabel">Foto de Perfil</h2>
-          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="text-center mb-3">
-            <img [src]="currentUser.imagenPerfil || 'assets/img/default-profile.png'" alt="Foto de perfil" class="img-thumbnail profile-preview">
-          </div>
-          <form (ngSubmit)="updateProfilePic()" #profilePicForm="ngForm">
-            <div class="mb-3">
-              <label for="profilePic" class="form-label">Selecciona una nueva imagen</label>
-              <input type="file" class="form-control" id="profilePic" (change)="onFileSelected($event)" accept="image/*">
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
-              <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal Contraseña -->
-  <div class="modal fade" [class.show]="showPasswordModal" [style.display]="showPasswordModal ? 'block' : 'none'" 
-       tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true" 
-       *ngIf="showPasswordModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="passwordModalLabel">Cambiar Contraseña</h2>
-          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
-        </div>
-        <div class="modal-body">
-          <form (ngSubmit)="updatePassword()" #passwordForm="ngForm">
-            <div class="mb-3">
-              <label for="currentPassword" class="form-label">Contraseña Actual</label>
-              <input type="password" class="form-control" id="currentPassword" [(ngModel)]="passwordData.current" name="currentPassword" required>
-            </div>
-            <div class="mb-3">
-              <label for="newPassword" class="form-label">Nueva Contraseña</label>
-              <input type="password" class="form-control" id="newPassword" [(ngModel)]="passwordData.new" name="newPassword" required>
-            </div>
-            <div class="mb-3">
-              <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-              <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="passwordData.confirm" name="confirmPassword" required>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
-              <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal Usuario Completo -->
-  <div class="modal fade" [class.show]="showUserDetailsModal" [style.display]="showUserDetailsModal ? 'block' : 'none'" 
-       tabindex="-1" aria-labelledby="userDetailsModalLabel" aria-hidden="true" 
-       *ngIf="showUserDetailsModal" (click)="$event.target === $event.currentTarget && closeAllModals()">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="userDetailsModalLabel">Perfil Completo</h2>
-          <button type="button" class="btn-close" (click)="closeAllModals()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
 
-            <div class="col-md-4 text-center">
-              <img [src]="currentUser.imagenPerfil || 'assets/img/default-profile.png'" alt="Foto de perfil" class="img-thumbnail profile-large mb-3">
-              <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  Cambiar Usuario
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                  <li *ngFor="let user of users">
-                    <a class="dropdown-item" href="javascript:void(0)" (click)="selectUser(user.id)">
-                      {{ user.nombre }} {{ user.primerApellido }}
-                    </a>
-                  </li>
-                </ul>
+  <div *ngIf="!isLoading && user" class="profile-section">
+    <div class="profile-header">
+    <div class="user-avatar">
+      <img 
+        [src]="getUserProfileImageUrl()" 
+        [alt]="getFullName() + ' - Foto de perfil'"
+        class="rounded-circle border border-3 border-light"
+        style="width: 130px; height: 130px; object-fit: cover;"
+        (error)="onProfileImageError($event)">
+    </div>
+      <div class="user-info">
+        <h1 class="user-name">{{ getFullName() }}</h1>
+        <p class="user-nickname">{{ user.nickName }}</p>
+        <p class="user-role">
+          <i class="bi bi-shield-check"></i>
+          {{ user.role_name }}
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle me-2"></i>
+      {{ successMessage }}
+      <button type="button" class="btn-close" (click)="clearMessages()"></button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="clearMessages()"></button>
+    </div>
+
+    <div class="profile-card">
+      <div class="card-header">
+        <h3>
+          <i class="bi bi-person-vcard"></i>
+          Información Personal
+        </h3>
+        <div class="header-actions" *ngIf="!isEditing">
+          <button type="button" class="btn btn-outline-primary" (click)="enableEditing()">
+            <i class="bi bi-pencil me-1"></i>
+            Editar
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div *ngIf="!isEditing" class="user-data-display">
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-person"></i>
+              Nombre
+            </div>
+            <div class="data-value" [class.empty]="!user.name">
+              {{ user.name || 'No especificado' }}
+            </div>
+          </div>
+          
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-person"></i>
+              Primer Apellido
+            </div>
+            <div class="data-value" [class.empty]="!user.last_name1">
+              {{ user.last_name1 || 'No especificado' }}
+            </div>
+          </div>
+          
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-person"></i>
+              Segundo Apellido
+            </div>
+            <div class="data-value" [class.empty]="!user.last_name2">
+              {{ user.last_name2 || 'No especificado' }}
+            </div>
+          </div>
+          
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-calendar-event"></i>
+              Fecha de Nacimiento
+            </div>
+            <div class="data-value" [class.empty]="!user.birthdate">
+              {{ getFormattedBirthdate() }}
+            </div>
+          </div>
+          
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-at"></i>
+              Nombre de Usuario
+            </div>
+            <div class="data-value readonly">
+              {{ user.nickName }}
+            </div>
+          </div>
+          
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-calendar-plus"></i>
+              Fecha de Registro
+            </div>
+            <div class="data-value readonly">
+              {{ getFormattedUnionDate() }}
+            </div>
+          </div>
+        </div>
+
+        <form *ngIf="isEditing" #profileFormRef="ngForm" (ngSubmit)="saveProfile(profileFormRef)" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name" class="form-label">
+                <i class="bi bi-person"></i>
+                Nombre *
+              </label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="name" 
+                [(ngModel)]="profileForm.name" 
+                name="name" 
+                required
+                maxlength="100"
+                placeholder="Ingresa tu nombre"
+                #nameInput="ngModel">
+              <div *ngIf="nameInput.invalid && nameInput.touched" class="invalid-feedback">
+                El nombre es obligatorio
               </div>
             </div>
-            
-            <div class="col-md-8">
-              <form (ngSubmit)="updateUserDetails()" #userDetailsForm="ngForm">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="fullNombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="fullNombre" [(ngModel)]="currentUser.nombre" name="fullNombre" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="fullPrimerApellido" class="form-label">Primer Apellido</label>
-                    <input type="text" class="form-control" id="fullPrimerApellido" [(ngModel)]="currentUser.primerApellido" name="fullPrimerApellido" required>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="fullSegundoApellido" class="form-label">Segundo Apellido</label>
-                    <input type="text" class="form-control" id="fullSegundoApellido" [(ngModel)]="currentUser.segundoApellido" name="fullSegundoApellido">
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="fullNickname" class="form-label">Nickname</label>
-                    <input type="text" class="form-control" id="fullNickname" [(ngModel)]="currentUser.nickname" name="fullNickname" required>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="fullFechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" id="fullFechaNacimiento" [(ngModel)]="currentUser.fechaNacimiento" name="fullFechaNacimiento" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="fullRol" class="form-label">Rol</label>
-                    <input type="text" class="form-control" id="fullRol" [(ngModel)]="currentUser.rol" name="fullRol" readonly>
-                  </div>
-                </div>
-                <div class="d-flex justify-content-end">
-                  <button type="button" class="btn btn-secondary me-2" (click)="closeAllModals()">Cancelar</button>
-                  <button type="submit" class="btn btn-primary custom-btn">Guardar</button>
-                </div>
-              </form>
+
+            <div class="col-md-6 mb-3">
+              <label for="lastName1" class="form-label">
+                <i class="bi bi-person"></i>
+                Primer Apellido
+              </label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="lastName1" 
+                [(ngModel)]="profileForm.last_name1" 
+                name="lastName1" 
+                maxlength="100"
+                placeholder="Ingresa tu primer apellido">
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="lastName2" class="form-label">
+                <i class="bi bi-person"></i>
+                Segundo Apellido
+              </label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="lastName2" 
+                [(ngModel)]="profileForm.last_name2" 
+                name="lastName2" 
+                maxlength="100"
+                placeholder="Ingresa tu segundo apellido">
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="birthdate" class="form-label">
+                <i class="bi bi-calendar-event"></i>
+                Fecha de Nacimiento
+              </label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="birthdate" 
+                [(ngModel)]="profileForm.birthdate" 
+                name="birthdate">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="cancelEditing()" [disabled]="isLoading">
+              <i class="bi bi-x-circle me-1"></i>
+              Cancelar
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-primary" 
+              (click)="onSaveButtonClick(profileFormRef)" 
+              [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <i *ngIf="!isLoading" class="bi bi-check-circle me-1"></i>
+              {{ isLoading ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="card-header">
+        <h3>
+          <i class="bi bi-key"></i>
+          Seguridad
+        </h3>
+        <div class="header-actions">
+          <button 
+            type="button" 
+            class="btn btn-outline-primary" 
+            (click)="togglePasswordSection()">
+            <i class="bi bi-key me-1"></i>
+            {{ showPasswordSection ? 'Cancelar' : 'Cambiar Contraseña' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body" *ngIf="showPasswordSection">
+        <form #passwordFormRef="ngForm" novalidate>
+          <div class="row">
+            <div class="col-12 mb-3">
+              <label for="currentPassword" class="form-label">
+                <i class="bi bi-lock"></i>
+                Contraseña Actual *
+              </label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="currentPassword" 
+                [(ngModel)]="passwordForm.current_password" 
+                name="currentPassword" 
+                required
+                autocomplete="current-password"
+                placeholder="Ingresa tu contraseña actual"
+                #currentPasswordInput="ngModel">
+              <div *ngIf="currentPasswordInput.invalid && currentPasswordInput.touched" class="invalid-feedback">
+                La contraseña actual es obligatoria
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="newPassword" class="form-label">
+                <i class="bi bi-lock-fill"></i>
+                Nueva Contraseña *
+              </label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="newPassword" 
+                [(ngModel)]="passwordForm.new_password" 
+                name="newPassword" 
+                required
+                minlength="6"
+                autocomplete="new-password"
+                placeholder="Ingresa la nueva contraseña"
+                #newPasswordInput="ngModel">
+              <small class="form-text">Mínimo 6 caracteres</small>
+              <div *ngIf="newPasswordInput.invalid && newPasswordInput.touched" class="invalid-feedback">
+                <span *ngIf="newPasswordInput.errors?.['required']">La nueva contraseña es obligatoria</span>
+                <span *ngIf="newPasswordInput.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="confirmPassword" class="form-label">
+                <i class="bi bi-lock-fill"></i>
+                Confirmar Contraseña *
+              </label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="confirmPassword" 
+                [(ngModel)]="passwordForm.confirm_password" 
+                name="confirmPassword" 
+                required
+                autocomplete="new-password"
+                placeholder="Confirma la nueva contraseña"
+                #confirmPasswordInput="ngModel"
+                [class.is-invalid]="passwordForm.new_password && passwordForm.confirm_password && passwordForm.new_password !== passwordForm.confirm_password">
+              <div class="invalid-feedback" *ngIf="passwordForm.new_password && passwordForm.confirm_password && passwordForm.new_password !== passwordForm.confirm_password">
+                Las contraseñas no coinciden
+              </div>
+              <div *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched && !passwordForm.confirm_password" class="invalid-feedback">
+                Debes confirmar la nueva contraseña
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+
+            <button 
+              type="button" 
+              class="btn btn-primary" 
+              (click)="onChangePasswordClick(passwordFormRef)"
+              [disabled]="isChangingPassword">
+              <span *ngIf="isChangingPassword" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <i *ngIf="!isChangingPassword" class="bi bi-check-circle me-1"></i>
+              {{ isChangingPassword ? 'Cambiando...' : 'Cambiar Contraseña' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card-body" *ngIf="!showPasswordSection">
+        <div class="user-data-display">
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-info-circle"></i>
+              Seguridad de la cuenta
+            </div>
+            <div class="data-value">
+              Mantén tu cuenta segura cambiando la contraseña regularmente
+            </div>
+          </div>
+          <div class="data-row">
+            <div class="data-label">
+              <i class="bi bi-clock"></i>
+              Último cambio
+            </div>
+            <div class="data-value">
+              {{ getFormattedUnionDate() }}
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div *ngIf="!isLoading && !user" class="error-state">
+    <div class="error-content">
+      <i class="bi bi-exclamation-triangle" style="font-size: 3rem;"></i>
+      <h3>No se pudo cargar el perfil</h3>
+      <p>Ocurrió un error al cargar la información del usuario.</p>
+      <button type="button" class="btn btn-primary" (click)="loadUserProfile()">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Reintentar
+      </button>
+    </div>
+  </div>
+</div>

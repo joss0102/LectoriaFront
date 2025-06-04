@@ -1,0 +1,84 @@
+<div class="add-author-sidebar-wrapper">
+  <form [formGroup]="authorForm" (ngSubmit)="onSubmit()">
+    
+    <div class="step-content">
+      <h4 class="form-section-title mb-4">Información del autor</h4>
+      
+      <div class="author-preview mb-4" *ngIf="getAuthorFullName()">
+        <div class="preview-card p-3 rounded-3 bg-component">
+          <div class="d-flex align-items-center">
+            <div class="author-avatar me-3">
+              <div class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-person-fill"></i>
+              </div>
+            </div>
+            <div>
+              <h6 class="mb-0 text-theme-text">{{ getAuthorFullName() }}</h6>
+              <small class="text-theme">Vista previa del autor</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="name" formControlName="name" 
+               placeholder="Nombre del autor">
+        <div class="form-text text-danger" 
+              *ngIf="authorForm.get('name')?.invalid && authorForm.get('name')?.touched">
+          <span *ngIf="authorForm.get('name')?.errors?.['required']">El nombre es obligatorio</span>
+          <span *ngIf="authorForm.get('name')?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="last_name1" class="form-label">Primer apellido</label>
+        <input type="text" class="form-control" id="last_name1" formControlName="last_name1" 
+               placeholder="Primer apellido">
+      </div>
+      
+      <div class="mb-3">
+        <label for="last_name2" class="form-label">Segundo apellido</label>
+        <input type="text" class="form-control" id="last_name2" formControlName="last_name2" 
+               placeholder="Segundo apellido">
+      </div>
+      
+      <div class="mb-3">
+        <label for="description" class="form-label">Descripción</label>
+        <textarea class="form-control" id="description" rows="4" formControlName="description"
+                  placeholder="Descripción del autor (biografía, obras destacadas, etc.)"></textarea>
+        <div class="form-text">
+          <span class="text-theme">{{ authorForm.get('description')?.value?.length || 0 }}/1000 caracteres</span>
+        </div>
+        <div class="form-text text-danger" 
+              *ngIf="authorForm.get('description')?.invalid && authorForm.get('description')?.touched">
+          <span *ngIf="authorForm.get('description')?.errors?.['maxlength']">La descripción no puede tener más de 1000 caracteres</span>
+        </div>
+      </div>
+      
+      <div class="info-section p-3 rounded-3 bg-component mb-4">
+        <h6 class="mb-2 text-theme-text">
+          <i class="bi bi-info-circle me-2"></i>Información adicional
+        </h6>
+        <ul class="mb-0 text-theme">
+          <li>Los campos marcados con <span class="text-danger">*</span> son obligatorios</li>
+          <li>La descripción puede incluir biografía, obras destacadas, premios, etc.</li>
+          <li>Los apellidos son opcionales pero recomendados para mejor identificación</li>
+          <li>Una vez creado el autor, podrás asociarle libros desde la gestión de libros</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="form-navigation d-flex justify-content-between mt-4">
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
+        <i class="bi bi-arrow-clockwise me-2"></i>Limpiar formulario
+      </button>
+      
+      <button type="submit" class="btn btn-accent" [disabled]="isSubmitting || !authorForm.valid">
+        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        <i *ngIf="!isSubmitting" class="bi bi-person-plus me-2"></i>
+        {{ isSubmitting ? 'Guardando...' : 'Guardar autor' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,288 @@
+<div class="authors-admin-container p-3 p-md-4">
+  <div class="header-section mb-4">
+    <h1 class="main-title position-relative d-inline-block mb-3 fw-bold text-theme-text">Administración de Autores</h1>
+    <p class="main-description text-theme fs-6 mb-4 mw-600">Gestiona todos los autores de la plataforma desde un único panel.</p>
+  </div>
+  
+  <div class="controls-container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="search-filters-container">
+      <div class="search-container mb-2">
+        <div class="search-box position-relative">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            (keyup.enter)="searchGlobalAuthors()"
+            placeholder="Buscar por nombre o descripción..." 
+            class="search-input form-control rounded-pill border-0 py-2 px-5 shadow-sm bg-component"
+          >
+          <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn btn-icon border-0 bg-transparent position-absolute">×</button>
+          <div class="search-icon position-absolute">🔍</div>
+        </div>
+      </div>
+      
+      <div class="active-filters d-flex flex-wrap gap-2 mb-3" *ngIf="activeFilters.length > 0">
+        <div class="filter-badge d-flex align-items-center gap-2 rounded-pill px-3 py-1" *ngFor="let filter of activeFilters">
+          <span class="filter-text">{{ filter.label }}</span>
+          <button class="filter-remove border-0 rounded-circle p-0 d-flex align-items-center justify-content-center" 
+                  (click)="removeFilter(filter.id)">×</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="action-buttons d-flex gap-2">
+      <div class="dropdown">
+        <button class="btn bg-component text-theme-text rounded-pill py-2 px-3 d-flex align-items-center gap-2 shadow-sm" 
+                type="button" 
+                id="actionDropdown" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false">
+          <i class="bi bi-gear-fill"></i>
+          <span>Acciones</span>
+        </button>
+        <ul class="dropdown-menu bg-component shadow" [attr.aria-labelledby]="'actionDropdown'">
+          <li><button class="dropdown-item" (click)="addNewAuthor()">Añadir autor</button></li>
+          <li><button class="dropdown-item" (click)="deleteSelectedAuthors()" [disabled]="selectedAuthors.length === 0">Eliminar seleccionados</button></li>
+          <li><button class="dropdown-item" (click)="exportAuthors()">Exportar datos</button></li>
+        </ul>
+      </div>
+      
+      <button class="btn bg-component text-theme-text rounded-pill py-2 px-3 d-flex align-items-center gap-2 shadow-sm" 
+              (click)="openFiltersSidebar()">
+        <i class="bi bi-funnel-fill"></i>
+        <span>Filtros</span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="loading-message text-center py-5" *ngIf="isLoading">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 text-theme">Cargando autores...</p>
+  </div>
+
+  <div class="error-message bg-component rounded-4 p-4 text-center" *ngIf="error && !isLoading">
+    <div class="alert-icon fs-1 mb-3 text-danger">⚠️</div>
+    <h2 class="fs-4 mb-3 text-theme-text">Ocurrió un error</h2>
+    <p class="text-theme mb-3">{{ error }}</p>
+    <button class="btn bg-theme text-theme-text px-4 py-2 rounded-pill" (click)="loadInitialData()">
+      Intentar de nuevo
+    </button>
+  </div>
+  
+  <div class="autores-table-container" *ngIf="!isLoading && authors.length > 0">
+    <table class="autores-table">
+      <thead>
+        <tr>
+          <th class="ps-4 py-3" style="width: 50px;">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                      (change)="toggleSelectAll($event)" 
+                      [checked]="isAllSelected()" 
+                      id="selectAllCheckbox">
+              <label class="form-check-label" for="selectAllCheckbox"></label>
+            </div>
+          </th>
+          <th class="py-3" style="width: 50px;"></th>
+          <th class="py-3" style="width: 50px;"></th>
+          <th class="py-3">Nombre</th>
+          <th class="py-3">Libros escritos</th>
+          <th class="py-3">En bibliotecas</th>
+          <th class="py-3 pe-4">Usuarios</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let author of displayedAuthors" [class.selected-row]="isSelected(author.id)">
+          <td class="ps-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                      [checked]="isSelected(author.id)" 
+                      (change)="toggleAuthorSelection(author.id)"
+                      id="author-{{author.id}}">
+              <label class="form-check-label" for="author-{{author.id}}"></label>
+            </div>
+          </td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-sm bg-transparent border-0 p-1 text-theme-text" 
+                      type="button" 
+                      id="authorAction-{{author.id}}" 
+                      data-bs-toggle="dropdown" 
+                      aria-expanded="false">
+                <i class="bi bi-three-dots"></i>
+              </button>
+              <ul class="dropdown-menu bg-component shadow" [attr.aria-labelledby]="'authorAction-'+author.id">
+                <li><button class="dropdown-item" (click)="viewAuthorDetails(author)">Ver o editar</button></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item text-danger" (click)="deleteAuthor(author.id)">Eliminar</button></li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="author-cover-mini">
+              <img [src]="getAuthorImageUrl(author)" [alt]="getAuthorFullName(author)" 
+                    class="rounded-2 shadow-sm" (error)="onImageError($event)">
+            </div>
+          </td>
+          <td>
+            <div>
+              <h6 class="mb-0 fw-semibold text-theme-text">{{ getAuthorFullName(author) }}</h6>
+              <small class="text-theme" *ngIf="author.description">{{ author.description | slice:0:80 }}{{ author.description && author.description.length > 80 ? '...' : '' }}</small>
+            </div>
+          </td>
+          <td class="text-theme">{{ author.total_books || 0 }}</td>
+          <td class="text-theme">{{ author.books_in_libraries || 0 }}</td>
+          <td class="pe-4">
+            <span class="badge px-3 py-2 rounded-pill fs-7">
+              {{ author.user_count || 0 }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="no-authors empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="authors.length === 0 && !isLoading && !error">
+    <div class="empty-icon fs-1 mb-3 text-theme">👤</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No hay autores en la base de datos</h2>
+    <p class="text-theme lh-base mb-3">¡Comienza a añadir autores para crear el catálogo!</p>
+    <button class="btn bg-btn text-white px-4 py-2 rounded-pill" (click)="addNewAuthor()">
+      <i class="bi bi-plus-circle me-2"></i>Añadir nuevo autor
+    </button>
+  </div>
+  
+  <div class="no-search-results empty-message text-center bg-component rounded-4 py-5 px-4 mx-auto shadow" 
+       *ngIf="authors.length > 0 && displayedAuthors.length === 0 && !isLoading">
+    <div class="empty-icon fs-1 mb-3 text-theme">🔍</div>
+    <h2 class="fs-4 mb-3 text-theme-text">No se encontraron resultados</h2>
+    <p class="text-theme lh-base mb-0">Intenta con otra búsqueda o 
+      <button class="reset-search" (click)="clearSearch()">ver todos los autores</button>
+    </p>
+  </div>
+  
+  <div class="pagination-container d-flex justify-content-between align-items-center mt-4" *ngIf="totalPages > 1 && !isLoading">
+    <div class="showing-info text-theme fs-7">
+      Mostrando {{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, totalItems) }} de {{ totalItems }} autores
+    </div>
+    
+    <nav aria-label="Navegación de páginas">
+      <ul class="modern-pagination d-flex align-items-center gap-2">
+        <li class="page-nav" [class.disabled]="currentPage === 1">
+          <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                  (click)="changePage(currentPage - 1)" 
+                  [disabled]="currentPage === 1"
+                  aria-label="Anterior">
+            <i class="page-arrow">&laquo;</i>
+          </button>
+        </li>
+        
+        <li class="page-number" [class.active]="currentPage === 1">
+          <button class="btn btn-pagination rounded-pill" (click)="changePage(1)">1</button>
+        </li>
+        
+        <li class="page-ellipsis" *ngIf="currentPage > 3">
+          <span class="ellipsis">...</span>
+        </li>
+        
+        <ng-container *ngFor="let page of getPageNumbers()">
+          <li class="page-number" *ngIf="page > 1 && page < totalPages" 
+              [class.active]="currentPage === page">
+            <button class="btn btn-pagination rounded-pill" (click)="changePage(page)">{{ page }}</button>
+          </li>
+        </ng-container>
+        
+        <li class="page-ellipsis" *ngIf="currentPage < totalPages - 2">
+          <span class="ellipsis">...</span>
+        </li>
+        
+        <li class="page-number" *ngIf="totalPages > 1" [class.active]="currentPage === totalPages">
+          <button class="btn btn-pagination rounded-pill" (click)="changePage(totalPages)">{{ totalPages }}</button>
+        </li>
+        
+        <li class="page-nav" [class.disabled]="currentPage === totalPages">
+          <button class="btn btn-pagination rounded-circle d-flex align-items-center justify-content-center" 
+                  (click)="changePage(currentPage + 1)" 
+                  [disabled]="currentPage === totalPages"
+                  aria-label="Siguiente">
+            <i class="page-arrow">&raquo;</i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="page-size-selector d-flex align-items-center gap-2">
+      <span class="text-theme fs-7">Mostrar:</span>
+      <select class="form-select form-select-sm" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+        <option [value]="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" [class.show]="isFiltersSidebarOpen" (click)="closeFiltersSidebar()"></div>
+<div class="filters-sidebar-modal" [class.show]="isFiltersSidebarOpen">
+  <div class="filters-sidebar-content">
+    <div class="filters-sidebar-header gradient-header d-flex justify-content-between align-items-center">
+      <h5 class="modal-title mb-0">Filtrar autores</h5>
+      <button type="button" class="close-sidebar-btn" (click)="closeFiltersSidebar()">×</button>
+    </div>
+    
+    <div class="filters-sidebar-body">
+      <div class="filter-section mb-4">
+        <h6 class="filter-section-title mb-3">Libros escritos</h6>
+        <div class="row align-items-center">
+          <div class="col-5">
+            <input type="number" class="form-control"
+                    placeholder="Mínimo" [(ngModel)]="filterBooksWrittenMin">
+          </div>
+          <div class="col-2 text-center text-theme">a</div>
+          <div class="col-5">
+            <input type="number" class="form-control"
+                    placeholder="Máximo" [(ngModel)]="filterBooksWrittenMax">
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-section">
+        <h6 class="filter-section-title mb-3">Número de usuarios</h6>
+        <div class="row align-items-center">
+          <div class="col-5">
+            <input type="number" class="form-control"
+                    placeholder="Mínimo" [(ngModel)]="filterUsersMin">
+          </div>
+          <div class="col-2 text-center text-theme">a</div>
+          <div class="col-5">
+            <input type="number" class="form-control"
+                    placeholder="Máximo" [(ngModel)]="filterUsersMax">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="filters-sidebar-footer d-flex justify-content-between">
+      <button type="button" class="btn bg-component text-theme-text rounded-pill px-4" 
+              (click)="resetFilters()">Limpiar</button>
+      <button type="button" class="btn bg-btn text-white rounded-pill px-4" 
+              (click)="applyFilters()">Aplicar filtros</button>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" [class.show]="isAddAuthorSidebarOpen" (click)="closeAddAuthorSidebar()"></div>
+<div class="add-author-sidebar-modal" [class.show]="isAddAuthorSidebarOpen">
+  <div class="add-author-sidebar-content">
+    <div class="add-author-sidebar-header gradient-header d-flex justify-content-between align-items-center">
+      <h5 class="modal-title mb-0">Añadir Nuevo Autor</h5>
+      <button type="button" class="close-sidebar-btn" (click)="closeAddAuthorSidebar()">×</button>
+    </div>
+    
+    <div class="add-author-sidebar-body">
+      <app-add-author *ngIf="isAddAuthorSidebarOpen" (authorAdded)="onAuthorAdded()"></app-add-author>
+    </div>
+  </div>
+</div>
+<app-details-author></app-details-author>

@@ -1,0 +1,251 @@
+<div class="author-details-backdrop" [class.show]="isModalOpen" (click)="closeModal()"></div>
+<div class="author-details-modal" [class.show]="isModalOpen">
+    <div class="author-details-content">
+        <div class="author-details-header d-flex justify-content-between align-items-center">
+            <h4 class="modal-title mb-0 text-theme-text">{{ editMode ? 'Editar' : 'Detalles del' }} autor</h4>
+            <div class="header-actions d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm rounded-pill px-3" 
+                        [class.bg-component]="editMode" 
+                        [class.bg-btn]="!editMode" 
+                        [class.text-theme-text]="editMode" 
+                        [class.text-white]="!editMode" 
+                        (click)="toggleEditMode()">
+                <i class="bi" [ngClass]="{'bi-pencil-fill': !editMode, 'bi-x-lg': editMode}"></i>
+                <span class="ms-1">{{ editMode ? 'Cancelar' : 'Editar' }}</span>
+                </button>
+                <button type="button" *ngIf="editMode" 
+                        class="btn btn-sm bg-btn text-white rounded-pill px-3"
+                        [disabled]="isSaving || authorForm.invalid"
+                        (click)="saveChanges()">
+                <i class="bi" [ngClass]="{'bi-save': !isSaving, 'bi-hourglass-split': isSaving}"></i>
+                <span class="ms-1">{{ isSaving ? 'Guardando...' : 'Guardar' }}</span>
+                </button>
+                <button type="button" class="close-modal-btn" (click)="closeModal()">×</button>
+            </div>
+        </div>
+        
+        <div class="loading-message text-center py-5" *ngIf="isLoading">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-theme">Cargando detalles...</p>
+        </div>
+
+        <div class="error-message bg-component rounded-4 p-4 text-center" *ngIf="error && !isLoading">
+            <div class="alert-icon fs-1 mb-3 text-danger">⚠️</div>
+            <h2 class="fs-4 mb-3 text-theme-text">Ocurrió un error</h2>
+            <p class="text-theme mb-3">{{ error }}</p>
+            <button class="btn bg-theme text-theme-text px-4 py-2 rounded-pill" (click)="closeModal()">
+                Cerrar
+            </button>
+        </div>
+        
+        <div class="author-details-body" *ngIf="!isLoading && !error && selectedAuthor">
+            <form [formGroup]="authorForm">
+                <div class="author-info mb-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="author-image me-4">
+                            <img [src]="getAuthorImageUrl(selectedAuthor)" [alt]="getAuthorFullName(selectedAuthor)" 
+                                    class="rounded-3 shadow-sm" (error)="onImageError($event)">
+                            <div class="upload-button mt-2 text-center" *ngIf="editMode">
+                                <button type="button" class="btn btn-sm bg-component text-theme-text w-100">
+                                    <i class="bi bi-upload me-1"></i>Cambiar imagen
+                                </button>
+                            </div>
+                        </div>
+                        <div class="author-main-info w-100">
+                            <div class="mb-3">
+                                <label *ngIf="editMode" for="name" class="form-label text-theme-text">Nombre</label>
+                                <h2 *ngIf="!editMode" class="author-name fw-bold mb-1 text-theme-text">{{ getAuthorFullName(selectedAuthor) }}</h2>
+                                <input *ngIf="editMode" type="text" 
+                                        id="name"
+                                        formControlName="name"
+                                        class="form-control"
+                                        [class.is-invalid]="authorForm.get('name')?.invalid && authorForm.get('name')?.touched">
+                                <div *ngIf="editMode && authorForm.get('name')?.invalid && authorForm.get('name')?.touched" class="invalid-feedback">
+                                    <span *ngIf="authorForm.get('name')?.errors?.['required']">El nombre es obligatorio</span>
+                                    <span *ngIf="authorForm.get('name')?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label *ngIf="editMode" for="last_name1" class="form-label text-theme-text">Primer apellido</label>
+                                    <div *ngIf="!editMode && selectedAuthor.last_name1" class="author-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Primer apellido:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ selectedAuthor.last_name1 }}</span>
+                                    </div>
+                                    <input *ngIf="editMode" type="text" 
+                                            id="last_name1"
+                                            formControlName="last_name1"
+                                            class="form-control">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label *ngIf="editMode" for="last_name2" class="form-label text-theme-text">Segundo apellido</label>
+                                    <div *ngIf="!editMode && selectedAuthor.last_name2" class="author-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Segundo apellido:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ selectedAuthor.last_name2 }}</span>
+                                    </div>
+                                    <input *ngIf="editMode" type="text" 
+                                            id="last_name2"
+                                            formControlName="last_name2"
+                                            class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div class="author-stats mb-3" *ngIf="!editMode">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getAuthorStats().totalBooks }}</div>
+                                            <div class="stat-label text-theme">Libros escritos</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getAuthorStats().totalBooksInLibraries }}</div>
+                                            <div class="stat-label text-theme">En bibliotecas</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getAuthorStats().totalUsers }}</div>
+                                            <div class="stat-label text-theme">Usuarios</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="author-description mb-4">
+                        <label *ngIf="editMode" for="description" class="form-label text-theme-text">Descripción</label>
+                        <h6 *ngIf="!editMode" class="section-title mb-2">Biografía</h6>
+                        <p *ngIf="!editMode" class="text-theme">{{ selectedAuthor.description || 'Sin descripción disponible' }}</p>
+                        <textarea *ngIf="editMode" 
+                                    id="description"
+                                    formControlName="description"
+                                    class="form-control"
+                                    rows="4"></textarea>
+                        <div *ngIf="editMode" class="form-text">
+                            <span class="text-theme">{{ authorForm.get('description')?.value?.length || 0 }}/1000 caracteres</span>
+                        </div>
+                        <div *ngIf="editMode && authorForm.get('description')?.invalid && authorForm.get('description')?.touched" class="invalid-feedback d-block">
+                            <span *ngIf="authorForm.get('description')?.errors?.['maxlength']">La descripción no puede tener más de 1000 caracteres</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+                
+            <div class="author-books mb-4" *ngIf="authorBooks.length > 0">
+                <h6 class="section-title mb-3">Libros del autor</h6>
+                <div class="books-grid">
+                    <div class="book-card p-2 rounded-3 bg-component" *ngFor="let book of authorBooks">
+                        <div class="d-flex align-items-center">
+                            <div class="book-cover-mini me-3">
+                                <img [src]="getBookImageFromFullBook(book)" [alt]="book.book_title" 
+                                        class="rounded-2" (error)="onImageError($event)">
+                            </div>
+                            <div class="book-info">
+                                <h6 class="book-title mb-0 text-theme-text">{{ book.book_title }}</h6>
+                                <small class="text-theme">{{ book.book_pages }} páginas</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="author-users">
+                <h6 class="section-title mb-3">Usuarios con libros de este autor</h6>
+                
+                <div class="empty-message text-center bg-component rounded-4 py-4 px-3 mb-3" *ngIf="authorUsers.length === 0">
+                    <div class="empty-icon fs-4 mb-2 text-theme">👤</div>
+                    <p class="text-theme">No hay usuarios que tengan libros de este autor</p>
+                </div>
+                
+                <div class="users-list" *ngIf="authorUsers.length > 0">
+                    <div class="user-item" 
+                            *ngFor="let userAuthor of authorUsers; let i = index"
+                            [class.active]="selectedUserIndex === i">
+                        
+                        <div class="user-header d-flex align-items-center p-3" (click)="selectUser(i)">
+                            <div class="user-avatar me-3">
+                                <img [src]="getUserImageUrl(userAuthor.user.nickName)" [alt]="userAuthor.user.name" 
+                                    class="rounded-circle" (error)="onImageError($event)">
+                            </div>
+                            <div class="user-info">
+                                <h6 class="user-name text-theme-text mb-0">{{ userAuthor.user.name }} {{ userAuthor.user.last_name1 || '' }}</h6>
+                                <p class="user-nickname text-theme mb-0">{{ userAuthor.user.nickName }}</p>
+                            </div>
+                            <div class="user-books-count ms-auto me-2">
+                                <span class="books-badge px-3 py-1 rounded-pill">
+                                    {{ userAuthor.authorBooks.length }} {{ userAuthor.authorBooks.length === 1 ? 'libro' : 'libros' }}
+                                </span>
+                            </div>
+                            <div class="indicator">
+                                <i class="bi" [ngClass]="{'bi-chevron-down': selectedUserIndex !== i, 'bi-chevron-up': selectedUserIndex === i}"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="user-books-details p-3" *ngIf="selectedUserIndex === i">
+                            <h6 class="subsection-title mb-3">Libros del autor en su biblioteca</h6>
+                            
+                            <div class="user-books-list">
+                                <div class="user-book-item mb-3 p-3 rounded-3 bg-main" 
+                                     *ngFor="let userBook of userAuthor.authorBooks">
+                                    <div class="d-flex align-items-start">
+                                        <div class="book-cover-mini me-3">
+                                            <img [src]="getBookImageUrl(userBook)" [alt]="userBook.book_title" 
+                                                 class="rounded-2" (error)="onImageError($event)">
+                                        </div>
+                                        <div class="book-details flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div>
+                                                    <h6 class="book-title mb-1 text-theme-text">{{ userBook.book_title }}</h6>
+                                                    <small class="text-theme">{{ userBook.book_pages }} páginas</small>
+                                                </div>
+                                                <span class="status-badge" 
+                                                      [ngClass]="{
+                                                        'status-reading': userBook.reading_status === 'reading',
+                                                        'status-completed': userBook.reading_status === 'completed',
+                                                        'status-dropped': userBook.reading_status === 'dropped',
+                                                        'status-onhold': userBook.reading_status === 'on_hold',
+                                                        'status-plan': userBook.reading_status === 'plan_to_read'
+                                                      }">
+                                                    {{ getReadingStatus(userBook.reading_status || '') }}
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="reading-progress mb-2" *ngIf="userBook.progress_percentage !== undefined">
+                                                <div class="progress">
+                                                    <div class="progress-bar" 
+                                                         [style.width.%]="userBook.progress_percentage || 0">
+                                                        {{ userBook.progress_percentage || 0 }}%
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between text-theme fs-7 mt-1">
+                                                    <span>{{ userBook.pages_read || 0 }} páginas leídas</span>
+                                                    <span>Añadido: {{ formatDate(userBook.date_added) }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="book-dates d-flex flex-wrap gap-2" *ngIf="userBook.date_start || userBook.date_ending">
+                                                <small class="date-badge px-2 py-1 rounded bg-component text-theme" *ngIf="userBook.date_start">
+                                                    <i class="bi bi-play-fill me-1"></i>Inicio: {{ formatDate(userBook.date_start) }}
+                                                </small>
+                                                <small class="date-badge px-2 py-1 rounded bg-component text-theme" *ngIf="userBook.date_ending">
+                                                    <i class="bi bi-check-circle-fill me-1"></i>Fin: {{ formatDate(userBook.date_ending) }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

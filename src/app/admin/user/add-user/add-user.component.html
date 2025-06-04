@@ -1,0 +1,146 @@
+<div class="add-user-sidebar-wrapper">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        
+        <div class="step-content">
+        <h4 class="form-section-title mb-4">Información del usuario</h4>
+        
+        <div class="user-preview mb-4" *ngIf="getUserFullName() || userForm.get('nickname')?.value">
+            <div class="preview-card p-3 rounded-3 bg-component">
+            <div class="d-flex align-items-center">
+                <div class="user-avatar me-3">
+                <div class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                </div>
+                <div>
+                <h6 class="mb-0 text-theme-text">{{ getUserFullName() || 'Nuevo usuario' }}</h6>
+                <small class="text-theme d-flex align-items-center">
+                    <span *ngIf="userForm.get('nickname')?.value">{{ userForm.get('nickname')?.value }}</span>
+                    <span *ngIf="calculateAge()" class="ms-2">• {{ calculateAge() }}</span>
+                </small>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        <div class="form-section mb-4">
+            <h6 class="section-subtitle mb-3">Datos personales</h6>
+            
+            <div class="mb-3">
+            <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="name" formControlName="name" 
+                    placeholder="Nombre del usuario">
+            <div class="form-text text-danger" 
+                    *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+                {{ getFieldError('name') }}
+            </div>
+            </div>
+            
+            <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="last_name1" class="form-label">Primer apellido</label>
+                <input type="text" class="form-control" id="last_name1" formControlName="last_name1" 
+                    placeholder="Primer apellido">
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label for="last_name2" class="form-label">Segundo apellido</label>
+                <input type="text" class="form-control" id="last_name2" formControlName="last_name2" 
+                    placeholder="Segundo apellido">
+            </div>
+            </div>
+            
+            <div class="mb-3">
+            <label for="birthdate" class="form-label">Fecha de nacimiento <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="birthdate" formControlName="birthdate" 
+                    [max]="today">
+            <div class="form-text" *ngIf="calculateAge()">
+                <span class="text-theme">Edad: {{ calculateAge() }}</span>
+            </div>
+            <div class="form-text text-danger" 
+                    *ngIf="userForm.get('birthdate')?.invalid && userForm.get('birthdate')?.touched">
+                {{ getFieldError('birthdate') }}
+            </div>
+            </div>
+        </div>
+        
+        <div class="form-section mb-4">
+            <h6 class="section-subtitle mb-3">Datos de la cuenta</h6>
+            
+            <div class="mb-3">
+            <label for="nickname" class="form-label">Nickname <span class="text-danger">*</span></label>
+            <div class="input-group">
+                <span class="input-group-text"></span>
+                <input type="text" class="form-control" id="nickname" formControlName="nickname" 
+                    placeholder="nickname_usuario">
+                <button type="button" class="btn btn-outline-secondary" (click)="generateNicknameSuggestion()">
+                <i class="bi bi-magic"></i>
+                </button>
+            </div>
+            <div class="form-text">Solo letras, números y guiones bajos. Será único en la plataforma.</div>
+            <div class="form-text text-danger" 
+                    *ngIf="userForm.get('nickname')?.invalid && userForm.get('nickname')?.touched">
+                {{ getFieldError('nickname') }}
+            </div>
+            </div>
+            
+            <div class="mb-3">
+            <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" id="password" formControlName="password" 
+                    placeholder="Contraseña para el usuario">
+            <div class="form-text">Mínimo 4 caracteres. El usuario podrá cambiarla más tarde.</div>
+            <div class="form-text text-danger" 
+                    *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+                {{ getFieldError('password') }}
+            </div>
+            </div>
+            
+            <div class="mb-3">
+            <label for="role_name" class="form-label">Rol <span class="text-danger">*</span></label>
+            <select class="form-select" id="role_name" formControlName="role_name">
+                <option value="client">Cliente</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <div class="form-text">
+                <small class="text-theme">
+                <strong>Cliente:</strong> Puede gestionar su biblioteca personal<br>
+                <strong>Administrador:</strong> Acceso completo a la gestión de la plataforma
+                </small>
+            </div>
+            </div>
+            
+            <div class="mb-3">
+            <label for="union_date" class="form-label">Fecha de registro <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="union_date" formControlName="union_date" 
+                    [max]="today">
+            <div class="form-text">Fecha en que se registra el usuario en la plataforma.</div>
+            </div>
+        </div>
+        
+        <div class="info-section p-3 rounded-3 bg-component mb-4">
+            <h6 class="mb-2 text-theme-text">
+            <i class="bi bi-info-circle me-2"></i>Información importante
+            </h6>
+            <ul class="mb-0 text-theme">
+            <li>Los campos marcados con <span class="text-danger">*</span> son obligatorios</li>
+            <li>El nickname debe ser único en toda la plataforma</li>
+            <li>La edad mínima para registrarse es de 13 años</li>
+            <li>Los administradores tienen acceso completo al panel de gestión</li>
+            <li>La contraseña inicial puede ser cambiada por el usuario posteriormente</li>
+            </ul>
+        </div>
+        </div>
+
+        <div class="form-navigation d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">
+            <i class="bi bi-arrow-clockwise me-2"></i>Limpiar formulario
+        </button>
+        
+        <button type="submit" class="btn btn-accent" [disabled]="isSubmitting || !userForm.valid">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!isSubmitting" class="bi bi-person-plus me-2"></i>
+            {{ isSubmitting ? 'Creando usuario...' : 'Crear usuario' }}
+        </button>
+        </div>
+    </form>
+</div>

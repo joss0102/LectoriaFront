@@ -238,7 +238,7 @@ export class DetailsAuthorComponent implements OnInit, OnDestroy {
         );
         
         const userObservables = this.users.map(user => 
-          this.bookService.getUserBooks(user.nickName).pipe(
+          this.bookService.getUserBooks(user.nickName, undefined, 1, 1000).pipe(
             map(response => {
               const authorBooksForUser = response.data.filter(userBook => 
                 this.authorBooks.some(authorBook => authorBook.book_id === userBook.book_id)

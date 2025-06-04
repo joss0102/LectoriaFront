@@ -1,0 +1,518 @@
+<div class="user-details-backdrop" [class.show]="isModalOpen" (click)="closeModal()"></div>
+<div class="user-details-modal" [class.show]="isModalOpen">
+    <div class="user-details-content">
+        <div class="user-details-header d-flex justify-content-between align-items-center">
+            <h4 class="modal-title mb-0 text-theme-text">{{ editMode ? 'Editar' : 'Detalles del' }} usuario</h4>
+            <div class="header-actions d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm rounded-pill px-3" 
+                        [class.bg-component]="editMode" 
+                        [class.bg-btn]="!editMode" 
+                        [class.text-theme-text]="editMode" 
+                        [class.text-white]="!editMode" 
+                        (click)="toggleEditMode()">
+                <i class="bi" [ngClass]="{'bi-pencil-fill': !editMode, 'bi-x-lg': editMode}"></i>
+                <span class="ms-1">{{ editMode ? 'Cancelar' : 'Editar' }}</span>
+                </button>
+                <button type="button" *ngIf="editMode" 
+                        class="btn btn-sm bg-btn text-white rounded-pill px-3"
+                        [disabled]="isSaving || userForm.invalid"
+                        (click)="saveChanges()">
+                <i class="bi" [ngClass]="{'bi-save': !isSaving, 'bi-hourglass-split': isSaving}"></i>
+                <span class="ms-1">{{ isSaving ? 'Guardando...' : 'Guardar' }}</span>
+                </button>
+                <button type="button" class="close-modal-btn" (click)="closeModal()">×</button>
+            </div>
+        </div>
+        
+        <div class="loading-message text-center py-5" *ngIf="isLoading">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-theme">Cargando detalles...</p>
+        </div>
+
+        <div class="error-message bg-component rounded-4 p-4 text-center" *ngIf="error && !isLoading">
+            <div class="alert-icon fs-1 mb-3 text-danger">⚠️</div>
+            <h2 class="fs-4 mb-3 text-theme-text">Ocurrió un error</h2>
+            <p class="text-theme mb-3">{{ error }}</p>
+            <button class="btn bg-theme text-theme-text px-4 py-2 rounded-pill" (click)="closeModal()">
+                Cerrar
+            </button>
+        </div>
+        
+        <div class="user-details-body" *ngIf="!isLoading && !error && selectedUser">
+            <form [formGroup]="userForm">
+                <div class="user-info mb-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="user-avatar me-4">
+                            <img [src]="getUserImageUrl(selectedUser)" [alt]="getUserFullName(selectedUser)" 
+                                    class="rounded-3 shadow-sm" (error)="onImageError($event)">
+                            <div class="upload-button mt-2 text-center" *ngIf="editMode">
+                                <button type="button" class="btn btn-sm bg-component text-theme-text w-100">
+                                    <i class="bi bi-upload me-1"></i>Cambiar imagen
+                                </button>
+                            </div>
+                        </div>
+                        <div class="user-main-info w-100">
+                            <div class="mb-3">
+                                <label *ngIf="editMode" for="name" class="form-label text-theme-text">Nombre</label>
+                                <h2 *ngIf="!editMode" class="user-name fw-bold mb-1 text-theme-text">{{ getUserFullName(selectedUser) }}</h2>
+                                <input *ngIf="editMode" type="text" 
+                                        id="name"
+                                        formControlName="name"
+                                        class="form-control"
+                                        [class.is-invalid]="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+                                <div *ngIf="editMode && userForm.get('name')?.invalid && userForm.get('name')?.touched" class="invalid-feedback">
+                                    <span *ngIf="userForm.get('name')?.errors?.['required']">El nombre es obligatorio</span>
+                                    <span *ngIf="userForm.get('name')?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label *ngIf="editMode" for="last_name1" class="form-label text-theme-text">Primer apellido</label>
+                                    <div *ngIf="!editMode && selectedUser.last_name1" class="user-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Primer apellido:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ selectedUser.last_name1 }}</span>
+                                    </div>
+                                    <input *ngIf="editMode" type="text" 
+                                            id="last_name1"
+                                            formControlName="last_name1"
+                                            class="form-control">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label *ngIf="editMode" for="last_name2" class="form-label text-theme-text">Segundo apellido</label>
+                                    <div *ngIf="!editMode && selectedUser.last_name2" class="user-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Segundo apellido:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ selectedUser.last_name2 }}</span>
+                                    </div>
+                                    <input *ngIf="editMode" type="text" 
+                                            id="last_name2"
+                                            formControlName="last_name2"
+                                            class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="user-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Nickname:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ selectedUser.nickName }}</span>
+                                    </div>
+                                    <small class="text-theme" *ngIf="editMode">El nickname no se puede modificar una vez creado</small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label *ngIf="editMode" for="birthdate" class="form-label text-theme-text">Fecha de nacimiento</label>
+                                    <div *ngIf="!editMode && selectedUser.birthdate" class="user-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Edad:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ calculateAge(selectedUser.birthdate) }}</span>
+                                    </div>
+                                    <input *ngIf="editMode" type="date" 
+                                            id="birthdate"
+                                            formControlName="birthdate"
+                                            class="form-control"
+                                            [max]="today">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label *ngIf="editMode" for="role_name" class="form-label text-theme-text">Rol</label>
+                                    <div *ngIf="!editMode" class="user-meta-item d-flex align-items-center">
+                                        <span class="meta-label">Rol:</span>
+                                        <span class="role-badge px-2 py-1 rounded-pill ms-1" 
+                                              [ngClass]="{'role-admin': selectedUser.role_name === 'admin', 'role-client': selectedUser.role_name === 'client'}">
+                                            {{ selectedUser.role_name === 'admin' ? 'Admin' : 'Cliente' }}
+                                        </span>
+                                    </div>
+                                    <select *ngIf="editMode" 
+                                            id="role_name"
+                                            formControlName="role_name"
+                                            class="form-select">
+                                        <option value="client">Cliente</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="user-meta-item d-flex align-items-center" *ngIf="selectedUser.union_date">
+                                        <span class="meta-label">Registrado:</span>
+                                        <span class="meta-value text-theme-text ms-1">{{ formatDate(selectedUser.union_date) }}</span>
+                                    </div>
+                                    <small class="text-theme" *ngIf="editMode && selectedUser.union_date">La fecha de registro no se puede modificar</small>
+                                </div>
+                            </div>
+                            
+                            <div class="user-stats mb-3" *ngIf="!editMode">
+                                <h6 class="section-title mb-3">Estadísticas de lectura</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getUserStats().totalBooks }}</div>
+                                            <div class="stat-label text-theme">Total libros</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getUserStats().readingBooks }}</div>
+                                            <div class="stat-label text-theme">Leyendo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getUserStats().completedBooks }}</div>
+                                            <div class="stat-label text-theme">Completados</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card p-3 rounded-3 bg-component text-center">
+                                            <div class="stat-number text-theme-text fw-bold">{{ getUserStats().uniqueAuthors }}</div>
+                                            <div class="stat-label text-theme">Autores únicos</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+                
+            <div class="user-books mb-4">
+                <h6 class="section-title mb-3">Biblioteca del usuario</h6>
+                
+                <div class="empty-message text-center bg-component rounded-4 py-4 px-3 mb-3" *ngIf="userBooks.length === 0">
+                    <div class="empty-icon fs-4 mb-2 text-theme">📚</div>
+                    <p class="text-theme">Este usuario no tiene libros registrados</p>
+                </div>
+
+                <div class="books-tabs mb-3" *ngIf="userBooks.length > 0">
+                    <div class="nav nav-tabs" role="tablist">
+                        <button class="nav-link" 
+                                [class.active]="selectedStatusFilter === 'all'"
+                                (click)="filterBooksByStatus('all')" 
+                                type="button">
+                            Todos ({{ userBooks.length }})
+                        </button>
+                        <button class="nav-link" 
+                                [class.active]="selectedStatusFilter === 'reading'"
+                                (click)="filterBooksByStatus('reading')" 
+                                type="button"
+                                *ngIf="getBooksByStatus('reading').length > 0">
+                            Leyendo ({{ getBooksByStatus('reading').length }})
+                        </button>
+                        <button class="nav-link" 
+                                [class.active]="selectedStatusFilter === 'completed'"
+                                (click)="filterBooksByStatus('completed')" 
+                                type="button"
+                                *ngIf="getBooksByStatus('completed').length > 0">
+                            Completados ({{ getBooksByStatus('completed').length }})
+                        </button>
+                        <button class="nav-link" 
+                                [class.active]="selectedStatusFilter === 'dropped'"
+                                (click)="filterBooksByStatus('dropped')" 
+                                type="button"
+                                *ngIf="getBooksByStatus('dropped').length > 0">
+                            Abandonados ({{ getBooksByStatus('dropped').length }})
+                        </button>
+                        <button class="nav-link" 
+                                [class.active]="selectedStatusFilter === 'on_hold'"
+                                (click)="filterBooksByStatus('on_hold')" 
+                                type="button"
+                                *ngIf="getBooksByStatus('on_hold').length > 0">
+                            En pausa ({{ getBooksByStatus('on_hold').length }})
+                        </button>
+                        <button class="nav-link" 
+                                [class.active]="selectedStatusFilter === 'plan_to_read'"
+                                (click)="filterBooksByStatus('plan_to_read')" 
+                                type="button"
+                                *ngIf="getBooksByStatus('plan_to_read').length > 0">
+                            Por leer ({{ getBooksByStatus('plan_to_read').length }})
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="books-grid" *ngIf="filteredBooks.length > 0">
+                    <div class="book-item" 
+                            *ngFor="let bookDetail of filteredBooks; let i = index"
+                            [class.active]="selectedBookIndex === i">
+                        
+                        <div class="book-header d-flex align-items-center p-3" (click)="selectBook(i)">
+                            <div class="book-cover-mini me-3">
+                                <img [src]="getBookImageUrl(bookDetail.userBook)" [alt]="bookDetail.userBook.book_title" 
+                                    class="rounded-2" (error)="onImageError($event)">
+                            </div>
+                            <div class="book-info">
+                                <h6 class="book-title text-theme-text mb-0">{{ bookDetail.userBook.book_title }}</h6>
+                                <p class="book-author text-theme mb-0">{{ bookDetail.book?.authors || 'Autor desconocido' }}</p>
+                                <small class="text-theme">{{ bookDetail.book?.book_pages || 0 }} páginas</small>
+                            </div>
+                            <div class="book-status ms-auto me-2">
+                                <span class="status-badge" 
+                                      [ngClass]="{
+                                        'status-reading': bookDetail.userBook.reading_status === 'reading',
+                                        'status-completed': bookDetail.userBook.reading_status === 'completed',
+                                        'status-dropped': bookDetail.userBook.reading_status === 'dropped',
+                                        'status-onhold': bookDetail.userBook.reading_status === 'on_hold',
+                                        'status-plan': bookDetail.userBook.reading_status === 'plan_to_read'
+                                      }">
+                                    {{ getReadingStatus(bookDetail.userBook.reading_status || '') }}
+                                </span>
+                            </div>
+                            <div class="indicator">
+                                <i class="bi" [ngClass]="{'bi-chevron-down': selectedBookIndex !== i, 'bi-chevron-up': selectedBookIndex === i}"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="book-details p-3" *ngIf="selectedBookIndex === i">
+                            <div class="book-actions mb-3 d-flex justify-content-end" *ngIf="editMode && !bookDetail.editMode">
+                                <button class="btn btn-sm bg-btn text-white rounded-pill px-3" 
+                                        (click)="toggleBookEditMode(bookDetail)">
+                                    <i class="bi bi-pencil-fill me-1"></i>Editar datos
+                                </button>
+                            </div>
+                            
+                            <div *ngIf="bookDetail.editMode" class="book-edit-actions mb-3 d-flex justify-content-between">
+                                <button class="btn btn-sm bg-component text-theme-text rounded-pill px-3" 
+                                        (click)="toggleBookEditMode(bookDetail)">
+                                    <i class="bi bi-x-lg me-1"></i>Cancelar
+                                </button>
+                                <button class="btn btn-sm bg-btn text-white rounded-pill px-3" 
+                                        [disabled]="bookDetail.isSaving || !bookDetail.bookForm?.valid"
+                                        (click)="saveBookChanges(bookDetail)">
+                                    <i class="bi" [ngClass]="{'bi-save': !bookDetail.isSaving, 'bi-hourglass-split': bookDetail.isSaving}"></i>
+                                    <span class="ms-1">{{ bookDetail.isSaving ? 'Guardando...' : 'Guardar cambios' }}</span>
+                                </button>
+                            </div>
+                            
+                            <form *ngIf="bookDetail.bookForm" [formGroup]="bookDetail.bookForm!">
+                                <div class="mb-4">
+                                    <div class="mb-3">
+                                        <label *ngIf="bookDetail.editMode" for="reading_status" class="form-label text-theme-text">Estado de lectura</label>
+                                        <select *ngIf="bookDetail.editMode" 
+                                                id="reading_status" 
+                                                formControlName="reading_status" 
+                                                class="form-select">
+                                            <option *ngFor="let status of readingStatuses" [value]="status.value">{{ status.label }}</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="reading-dates mb-3">
+                                        <div class="row g-2">
+                                            <div class="col-md-4">
+                                                <label *ngIf="bookDetail.editMode" for="date_added" class="form-label text-theme-text">Fecha añadido</label>
+                                                <div *ngIf="!bookDetail.editMode" class="date-item p-2 rounded-3 bg-component">
+                                                    <div class="date-label text-theme">Fecha añadido</div>
+                                                    <div class="date-value text-theme-text">
+                                                    {{ formatDate(bookDetail.userBook.date_added) }}
+                                                    </div>
+                                                </div>
+                                                <input *ngIf="bookDetail.editMode" 
+                                                        type="date" 
+                                                        id="date_added" 
+                                                        formControlName="date_added" 
+                                                        class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label *ngIf="bookDetail.editMode" for="date_start" class="form-label text-theme-text">Fecha inicio</label>
+                                                <div *ngIf="!bookDetail.editMode" class="date-item p-2 rounded-3 bg-component">
+                                                    <div class="date-label text-theme">Fecha inicio</div>
+                                                    <div class="date-value text-theme-text">
+                                                    {{ formatDate(bookDetail.userBook.date_start) }}
+                                                    </div>
+                                                </div>
+                                                <input *ngIf="bookDetail.editMode" 
+                                                        type="date" 
+                                                        id="date_start" 
+                                                        formControlName="date_start" 
+                                                        class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label *ngIf="bookDetail.editMode" for="date_ending" class="form-label text-theme-text">Fecha fin</label>
+                                                <div *ngIf="!bookDetail.editMode" class="date-item p-2 rounded-3 bg-component">
+                                                    <div class="date-label text-theme">Fecha fin</div>
+                                                    <div class="date-value text-theme-text">
+                                                    {{ formatDate(bookDetail.userBook.date_ending) }}
+                                                    </div>
+                                                </div>
+                                                <input *ngIf="bookDetail.editMode" 
+                                                        type="date" 
+                                                        id="date_ending" 
+                                                        formControlName="date_ending" 
+                                                        class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="reading-progress mb-3" *ngIf="bookDetail.userBook.progress_percentage !== undefined">
+                                        <h6 class="subsection-title mb-2">Progreso de lectura</h6>
+                                        <div class="progress-bar-container mb-2">
+                                            <div class="progress">
+                                                <div class="progress-bar" 
+                                                    [style.width.%]="bookDetail.userBook.progress_percentage || 0">
+                                                {{ bookDetail.userBook.progress_percentage || 0 }}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between text-theme fs-7">
+                                            <span>{{ bookDetail.userBook.pages_read || 0 }} páginas leídas</span>
+                                            <span>{{ bookDetail.book?.book_pages || 0 }} páginas totales</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="book-review mb-3" *ngIf="bookDetail.review" formGroupName="review">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <h6 class="subsection-title mb-0">Reseña</h6>
+                                    </div>
+                                    
+                                    <div *ngIf="!bookDetail.editMode" class="review-content p-3 rounded-3 bg-component">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div class="rating">
+                                                <span class="rating-value text-theme-text fw-bold">{{ bookDetail.review.rating }}/10</span>
+                                                <div class="rating-stars">
+                                                    <i class="bi bi-star-fill" *ngFor="let star of [].constructor(Math.floor(bookDetail.review.rating/2))"></i>
+                                                    <i class="bi bi-star-half" *ngIf="bookDetail.review.rating/2 % 1 >= 0.5"></i>
+                                                    <i class="bi bi-star" *ngFor="let star of [].constructor(5 - Math.ceil(bookDetail.review.rating/2))"></i>
+                                                </div>
+                                            </div>
+                                            <div class="review-date text-theme fs-7">
+                                                {{ formatDate(bookDetail.review.review_date) }}
+                                            </div>
+                                        </div>
+                                        <p class="review-text text-theme mb-0">{{ bookDetail.review.review_text }}</p>
+                                    </div>
+                                    
+                                    <div *ngIf="bookDetail.editMode" class="p-3 rounded-3 bg-component">
+                                        <div class="mb-3">
+                                            <label for="rating" class="form-label text-theme-text">Calificación</label>
+                                            <div class="d-flex align-items-center">
+                                            <input type="number" id="rating" formControlName="rating" class="form-control me-2" min="0" max="10" step="0.1">
+                                            <span class="text-theme-text">/10</span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-0">
+                                            <label for="review_text" class="form-label text-theme-text">Texto de la reseña</label>
+                                            <textarea id="review_text" formControlName="review_text" class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="book-phrases mb-3" *ngIf="bookDetail.phrases">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="subsection-title mb-0">Frases destacadas</h6>
+                                        <button *ngIf="bookDetail.editMode && !bookDetail.phrasesEditMode" 
+                                                class="btn btn-sm bg-component text-theme-text rounded-pill px-2"
+                                                (click)="togglePhrasesEditMode(bookDetail)">
+                                            <i class="bi bi-pencil-fill"></i>
+                                            <span class="ms-1">Editar</span>
+                                        </button>
+                                        <button *ngIf="bookDetail.editMode && bookDetail.phrasesEditMode" 
+                                                class="btn btn-sm bg-component text-theme-text rounded-pill px-2"
+                                                (click)="togglePhrasesEditMode(bookDetail)">
+                                            <i class="bi bi-x-lg"></i>
+                                            <span class="ms-1">Cancelar</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div *ngIf="!bookDetail.phrasesEditMode">
+                                        <div class="phrases-list">
+                                            <div class="phrase-item p-3 rounded-3 bg-component mb-2" 
+                                                *ngFor="let phrase of bookDetail.phrases">
+                                                <p class="phrase-text text-theme-text mb-1">"{{ phrase.text }}"</p>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="bookDetail.phrases?.length === 0" class="text-center text-theme py-2">
+                                            No hay frases destacadas
+                                        </div>
+                                    </div>
+                                    
+                                    <div *ngIf="bookDetail.phrasesEditMode">
+                                        <div formArrayName="phrases">
+                                            <div *ngFor="let phraseGroup of getPhrases(bookDetail.bookForm!).controls; let i = index" 
+                                                    [formGroupName]="i" 
+                                                    class="phrase-edit-item mb-2 p-3 rounded-3 bg-component">
+                                                <div class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <textarea formControlName="text" class="form-control" rows="2"></textarea>
+                                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                                            <button class="btn btn-sm btn-danger" (click)="removePhrase(bookDetail, i)">
+                                                            <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-end mt-2">
+                                            <button class="btn btn-sm bg-btn text-white rounded-pill" (click)="addPhrase(bookDetail)">
+                                            <i class="bi bi-plus"></i> Añadir frase
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="book-notes mb-3" *ngIf="bookDetail.notes">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="subsection-title mb-0">Notas</h6>
+                                        <button *ngIf="bookDetail.editMode && !bookDetail.notesEditMode" 
+                                                class="btn btn-sm bg-component text-theme-text rounded-pill px-2"
+                                                (click)="toggleNotesEditMode(bookDetail)">
+                                            <i class="bi bi-pencil-fill"></i>
+                                            <span class="ms-1">Editar</span>
+                                        </button>
+                                        <button *ngIf="bookDetail.editMode && bookDetail.notesEditMode" 
+                                                class="btn btn-sm bg-component text-theme-text rounded-pill px-2"
+                                                (click)="toggleNotesEditMode(bookDetail)">
+                                            <i class="bi bi-x-lg"></i>
+                                            <span class="ms-1">Cancelar</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div *ngIf="!bookDetail.notesEditMode">
+                                        <div class="notes-list">
+                                            <div class="note-item p-3 rounded-3 bg-component mb-2" 
+                                                *ngFor="let note of bookDetail.notes">
+                                                <p class="note-text text-theme mb-1">{{ note.text }}</p>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="bookDetail.notes?.length === 0" class="text-center text-theme py-2">
+                                            No hay notas
+                                        </div>
+                                    </div>
+                                    
+                                    <div *ngIf="bookDetail.notesEditMode">
+                                        <div formArrayName="notes">
+                                            <div *ngFor="let noteGroup of getNotes(bookDetail.bookForm!).controls; let i = index" 
+                                                [formGroupName]="i" 
+                                                class="note-edit-item mb-2 p-3 rounded-3 bg-component">
+                                            <div class="d-flex">
+                                                <div class="flex-grow-1">
+                                                <textarea formControlName="text" class="form-control" rows="2"></textarea>
+                                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                                    <button class="btn btn-sm btn-danger" (click)="removeNote(bookDetail, i)">
+                                                    <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-end mt-2">
+                                            <button class="btn btn-sm bg-btn text-white rounded-pill" (click)="addNote(bookDetail)">
+                                            <i class="bi bi-plus"></i> Añadir nota
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

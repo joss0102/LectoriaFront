@@ -13,7 +13,7 @@ import { SearchComponent } from './client/features/search/search.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { AuthorsComponent } from './admin/author/authors/authors.component';
 import { BooksComponent } from './admin/book/books/books.component';
-import { UsersComponent } from './admin/users/users.component';
+import { UsersComponent } from './admin/user/users/users.component';
 import { LayoutComponentAdmin } from './admin/layout/layout.component';
 
 // Importar los guards
@@ -37,7 +37,6 @@ export const routes: Routes = [
     ],
   },
 
-  // Sección /app con layout propio y protección para admins
   {
     path: 'app',
     component: LayoutComponentAdmin,

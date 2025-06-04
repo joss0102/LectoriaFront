@@ -403,7 +403,7 @@ export class DetailsBookComponent implements OnInit, OnDestroy {
           this.users = users;
           
           const userObservables = users.map(user => 
-            this.bookService.getUserBooks(user.nickName)
+            this.bookService.getUserBooks(user.nickName, undefined, 1, 1000)
               .pipe(
                 map(response => {
                   const userBook = response.data.find(ub => ub.book_id === bookId);

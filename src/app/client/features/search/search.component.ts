@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { SearchService,DetailedSearchResult } from '../../../core/services/SearchService/search.service';
+import { catchError, map, Observable, of, Subscription } from 'rxjs';
+import {
+  SearchService,
+  DetailedSearchResult,
+} from '../../../core/services/SearchService/search.service';
 
 import { BookService } from '../../../core/services/call-api/book.service';
 import { AuthorService } from '../../../core/services/call-api/author.service';
@@ -36,10 +39,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   authorBooks: any[] = [];
   loading: boolean = true;
   error: string | null = null;
-  
+
   private searchSubscription: Subscription | null = null;
   private routerSubscription: Subscription | null = null;
-  
+
   constructor(
     private searchService: SearchService,
     private bookService: BookService,
@@ -47,81 +50,81 @@ export class SearchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router
   ) {}
-  
+
   ngOnInit() {
     // Escuchar cambios de navegación para resetear el estado cuando se sale del componente
-    this.routerSubscription = this.router.events.subscribe(event => {
+    this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart && !event.url.includes('/search')) {
         // Si estamos navegando fuera de la página de búsqueda
         this.searchService.resetSelectedItem();
       }
     });
-    
+
     // Verificar si hay parámetros en la URL para cargar directamente
-    this.route.queryParams.subscribe(params => {
-      
+    this.route.queryParams.subscribe((params) => {
       const id = params['id'];
       const type = params['type'];
-      
+
       if (id && (type === 'book' || type === 'author')) {
         // Siempre seleccionar explícitamente el ítem, incluso si venimos de otra página
         this.searchService.selectItemById(parseInt(id), type);
       }
     });
-    
+
     this.searchSubscription = this.searchService.selectedItem$.subscribe(
-      item => {
+      (item) => {
         this.selectedItem = item;
         this.loading = false;
-        
+
         if (item) {
           this.router.navigate([], {
             relativeTo: this.route,
             queryParams: { id: item.id, type: item.type },
-            queryParamsHandling: 'merge'
+            queryParamsHandling: 'merge',
           });
-          
+
           if (item.type === 'author') {
             this.loadAuthorBooks(item.id);
           }
         }
       },
-      error => {
+      (error) => {
         console.error('Error al cargar el ítem seleccionado:', error);
-        this.error = 'No se pudo cargar la información. Por favor, inténtalo de nuevo.';
+        this.error =
+          'No se pudo cargar la información. Por favor, inténtalo de nuevo.';
         this.loading = false;
       }
     );
   }
-  
+
   /**
    * Carga los libros de un autor
    */
   loadAuthorBooks(authorId: number) {
     this.authorService.getAuthorBooks(authorId).subscribe(
-      response => {
+      (response) => {
         this.authorBooks = response.data;
       },
-      error => {
+      (error) => {
         console.error('Error al cargar los libros del autor:', error);
       }
     );
   }
-  
+
   /**
    * Verifica si un ítem es un libro
    */
   isBook(item: any): boolean {
     return item && 'book_id' in item;
   }
-  
+
   /**
    * Verifica si un ítem es un autor
    */
   isAuthor(item: any): boolean {
     return item && 'id' in item && !('book_id' in item);
   }
-  
+
   /**
    * Verifica si un libro está en la biblioteca del usuario
    */
@@ -129,7 +132,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     const result = this.selectedItem?.inUserLibrary || false;
     return result;
   }
-  
+
   /**
    * Obtiene el libro seleccionado
    */
@@ -137,14 +140,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     const book = this.selectedItem?.data as UserBook;
     return book;
   }
-  
+
   /**
    * Obtiene el autor seleccionado
    */
   getAuthor(): Author {
     return this.selectedItem?.data as Author;
   }
-  
+
   /**
    * Obtiene la URL de la imagen del libro seleccionado
    */
@@ -156,30 +159,30 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
     return '/assets/images/book-placeholder.jpg';
   }
-  
+
   /**
    * Obtiene la URL de la imagen del autor seleccionado
    */
   getAuthorImageUrl(): string {
     const author = this.getAuthor();
-    return author ? this.searchService.getAuthorImageUrl(author) : '/assets/images/author-placeholder.jpg';
+    return author
+      ? this.searchService.getAuthorImageUrl(author)
+      : '/assets/images/author-placeholder.jpg';
   }
-  
+
   /**
    * Obtiene la URL de la portada para un libro de la lista de libros de un autor
    */
-  getBookCoverUrl(book: any): string {
-    const bookObj: Book = {
-      book_id: book.id,
-      book_title: book.title,
-      book_pages: book.pages,
-      synopsis: book.synopsis,
-      sagas: ''
-    };
-    
-    return this.searchService.getBookImageUrl(bookObj);
+  getBookCoverUrl(bookId: number): Observable<string> {
+    return this.bookService.getBookByIdWithCache(bookId).pipe(
+      map((book: any) => this.searchService.getBookImageUrl(book)),
+      catchError((error) => {
+        console.error('Error al obtener el libro:', error);
+        return of('libros/default.png');
+      })
+    );
   }
-  
+
   /**
    * Obtiene el estado de lectura para mostrar la clase correcta
    */
@@ -190,7 +193,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (status === 'finished') return 'badge bg-primary';
     return 'badge bg-secondary';
   }
-  
+
   /**
    * Obtiene el texto del estado de lectura
    */
@@ -203,31 +206,31 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (status === 'on_hold') return 'Pausado';
     return 'Estado desconocido';
   }
-  
+
   /**
    * Navega a la página de detalles de un libro desde la lista de libros de un autor
    */
   goToBookDetails(bookId: number) {
     this.searchService.selectItemById(bookId, 'book');
   }
-  
+
   /**
    * Vuelve a la página anterior
    */
   goBack() {
     window.history.back();
   }
-  
+
   ngOnDestroy() {
     // Limpiar suscripciones
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
-    
+
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
-    
+
     // Asegurarse de limpiar el estado al salir del componente
     this.searchService.resetSelectedItem();
   }

@@ -32,7 +32,11 @@
       <!-- Columna de la imagen -->
       <div class="col-md-3 image-column">
         <div class="book-image-container">
-          <img [src]="getBookImageUrl()" alt="Portada del libro" class="book-image">
+          <img
+            [src]="getBookImageUrl()"
+            alt="Portada del libro"
+            class="book-image"
+          />
         </div>
       </div>
 
@@ -40,7 +44,9 @@
       <div class="col-md-9 info-column">
         <div class="book-header">
           <h2 class="book-title">{{ getBook().book_title }}</h2>
-          <div class="book-authors" *ngIf="getBook().authors">{{ getBook().authors }}</div>
+          <div class="book-authors" *ngIf="getBook().authors">
+            {{ getBook().authors }}
+          </div>
         </div>
 
         <!-- Información del libro en la biblioteca del usuario -->
@@ -52,37 +58,51 @@
           </div>
 
           <!-- Progreso de lectura -->
-          <div *ngIf="getBook().pages_read !== undefined" class="reading-progress mt-3">
+          <div
+            *ngIf="getBook().pages_read !== undefined"
+            class="reading-progress mt-3"
+          >
             <div class="d-flex justify-content-between align-items-center">
               <span>Progreso de lectura:</span>
               <span>{{ getBook().progress_percentage || 0 }}%</span>
             </div>
-            <div class="progress" style="height: 10px;">
-              <div class="progress-bar bg-success" 
-                  [style.width]="(getBook().progress_percentage || 0) + '%'"
-                  role="progressbar" 
-                  [attr.aria-valuenow]="getBook().progress_percentage || 0" 
-                  aria-valuemin="0" 
-                  aria-valuemax="100"></div>
+            <div class="progress" style="height: 10px">
+              <div
+                class="progress-bar bg-success"
+                [style.width]="(getBook().progress_percentage || 0) + '%'"
+                role="progressbar"
+                [attr.aria-valuenow]="getBook().progress_percentage || 0"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
             </div>
-            <small>{{ getBook().pages_read || 0 }} de {{ getBook().book_pages }} páginas</small>
+            <small
+              >{{ getBook().pages_read || 0 }} de
+              {{ getBook().book_pages }} páginas</small
+            >
           </div>
 
           <!-- Fechas -->
           <div class="dates mt-3">
             <div *ngIf="getBook().date_added" class="date-added">
-              <strong>Fecha de adición:</strong> {{ getBook().date_added | date:'dd/MM/yyyy' }}
+              <strong>Fecha de adición:</strong>
+              {{ getBook().date_added | date : "dd/MM/yyyy" }}
             </div>
             <div *ngIf="getBook().date_start" class="date-start">
-              <strong>Fecha de inicio:</strong> {{ getBook().date_start | date:'dd/MM/yyyy' }}
+              <strong>Fecha de inicio:</strong>
+              {{ getBook().date_start | date : "dd/MM/yyyy" }}
             </div>
             <div *ngIf="getBook().date_ending" class="date-ending">
-              <strong>Fecha de finalización:</strong> {{ getBook().date_ending | date:'dd/MM/yyyy' }}
+              <strong>Fecha de finalización:</strong>
+              {{ getBook().date_ending | date : "dd/MM/yyyy" }}
             </div>
           </div>
 
           <!-- Descripción personalizada -->
-          <div *ngIf="getBook().custom_description" class="custom-description mt-3">
+          <div
+            *ngIf="getBook().custom_description"
+            class="custom-description mt-3"
+          >
             <h4>Mi descripción</h4>
             <p>{{ getBook().custom_description }}</p>
           </div>
@@ -134,12 +154,19 @@
   </div>
 
   <!-- DETALLE DE AUTOR -->
-  <div *ngIf="selectedItem && selectedItem.type === 'author'" class="author-detail">
+  <div
+    *ngIf="selectedItem && selectedItem.type === 'author'"
+    class="author-detail"
+  >
     <div class="row">
       <!-- Columna de la imagen -->
       <div class="col-md-3 image-column">
         <div class="author-image-container">
-          <img [src]="getAuthorImageUrl()" alt="Imagen del autor" class="author-image rounded-circle">
+          <img
+            [src]="getAuthorImageUrl()"
+            alt="Imagen del autor"
+            class="author-image rounded-circle"
+          />
         </div>
       </div>
 
@@ -147,9 +174,9 @@
       <div class="col-md-9 info-column">
         <div class="author-header">
           <h2 class="author-name">
-            {{ getAuthor().name }} 
-            {{ getAuthor().last_name1 ? getAuthor().last_name1 : '' }} 
-            {{ getAuthor().last_name2 ? getAuthor().last_name2 : '' }}
+            {{ getAuthor().name }}
+            {{ getAuthor().last_name1 ? getAuthor().last_name1 : "" }}
+            {{ getAuthor().last_name2 ? getAuthor().last_name2 : "" }}
           </h2>
         </div>
 
@@ -163,10 +190,16 @@
           <h4>Libros del autor</h4>
           <div *ngIf="authorBooks && authorBooks.length > 0; else noBooks">
             <div class="row">
-              <div *ngFor="let book of authorBooks" class="col-md-4 col-sm-6 mb-3">
+              <div
+                *ngFor="let book of authorBooks"
+                class="col-md-4 col-sm-6 mb-3"
+              >
                 <div class="book-card" (click)="goToBookDetails(book.id)">
                   <div class="book-thumbnail">
-                    <img [src]="getBookCoverUrl(book)" alt="Portada de {{ book.title }}">
+                    <img
+                      [src]="getBookCoverUrl(book.id) | async"
+                      alt="Portada de {{ book.title }}"
+                    />
                   </div>
                   <div class="book-info">
                     <h5 class="book-title">{{ book.title }}</h5>

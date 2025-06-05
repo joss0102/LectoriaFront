@@ -236,10 +236,7 @@ import {ApexChart, ApexDataLabels, ApexStroke, ApexXAxis, ApexYAxis, ApexTooltip
     }
   }
 
-  setViewMode(mode: 'combined' | 'new' | 'active') {
-    this.viewMode = mode;
-    this.updateChart();
-  }
+
 
   getTotalNewUsers(): number {
     return this.data.reduce((sum, item) => sum + item.newUsers, 0);

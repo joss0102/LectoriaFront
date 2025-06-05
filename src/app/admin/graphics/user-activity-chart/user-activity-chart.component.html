@@ -1,38 +1,7 @@
 <div class="user-activity-container">
   <div class="chart-controls mb-3" *ngIf="!isLoading && data.length > 0">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-      <div class="view-controls">
-        <label class="form-label text-theme-text mb-1">Vista:</label>
-        <div class="btn-group btn-group-sm" role="group">
-          <button 
-            type="button" 
-            class="btn"
-            [class.bg-btn]="viewMode === 'combined'"
-            [class.bg-component]="viewMode !== 'combined'"
-            (click)="setViewMode('combined')">
-            <i class="bi bi-layers me-1"></i>
-            Combinada
-          </button>
-          <button 
-            type="button" 
-            class="btn"
-            [class.bg-btn]="viewMode === 'new'"
-            [class.bg-component]="viewMode !== 'new'"
-            (click)="setViewMode('new')">
-            <i class="bi bi-person-plus me-1"></i>
-            Nuevos
-          </button>
-          <button 
-            type="button" 
-            class="btn"
-            [class.bg-btn]="viewMode === 'active'"
-            [class.bg-component]="viewMode !== 'active'"
-            (click)="setViewMode('active')">
-            <i class="bi bi-people me-1"></i>
-            Activos
-          </button>
-        </div>
-      </div>
+
 
       <div class="quick-stats">
         <div class="d-flex gap-3">

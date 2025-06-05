@@ -1,0 +1,119 @@
+<div class="user-activity-container">
+  <div class="chart-controls mb-3" *ngIf="!isLoading && data.length > 0">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="view-controls">
+        <label class="form-label text-theme-text mb-1">Vista:</label>
+        <div class="btn-group btn-group-sm" role="group">
+          <button 
+            type="button" 
+            class="btn"
+            [class.bg-btn]="viewMode === 'combined'"
+            [class.bg-component]="viewMode !== 'combined'"
+            (click)="setViewMode('combined')">
+            <i class="bi bi-layers me-1"></i>
+            Combinada
+          </button>
+          <button 
+            type="button" 
+            class="btn"
+            [class.bg-btn]="viewMode === 'new'"
+            [class.bg-component]="viewMode !== 'new'"
+            (click)="setViewMode('new')">
+            <i class="bi bi-person-plus me-1"></i>
+            Nuevos
+          </button>
+          <button 
+            type="button" 
+            class="btn"
+            [class.bg-btn]="viewMode === 'active'"
+            [class.bg-component]="viewMode !== 'active'"
+            (click)="setViewMode('active')">
+            <i class="bi bi-people me-1"></i>
+            Activos
+          </button>
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="d-flex gap-3">
+          <div class="stat-badge new-users">
+            <span class="stat-number">{{ getTotalNewUsers() }}</span>
+            <span class="stat-text">Nuevos</span>
+          </div>
+          <div class="stat-badge active-users">
+            <span class="stat-number">{{ getAverageActiveUsers() }}</span>
+            <span class="stat-text">Prom. Activos</span>
+          </div>
+          <div class="stat-badge growth-rate" [class.positive]="getGrowthRate() > 0" [class.negative]="getGrowthRate() < 0">
+            <span class="stat-number">{{ getGrowthRate() }}%</span>
+            <span class="stat-text">Crecimiento</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-loading" *ngIf="isLoading">
+    <div class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="loading-text text-theme mt-2">Cargando actividad de usuarios...</p>
+    </div>
+  </div>
+
+  <div class="chart-wrapper" *ngIf="!isLoading && data.length > 0">
+    <apx-chart
+      #chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [stroke]="chartOptions.stroke"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [tooltip]="chartOptions.tooltip"
+      [fill]="chartOptions.fill"
+      [markers]="chartOptions.markers"
+      [grid]="chartOptions.grid"
+      [legend]="chartOptions.legend"
+      [colors]="chartOptions.colors">
+    </apx-chart>
+  </div>
+
+  <div class="insights-panel mt-3" *ngIf="!isLoading && data.length > 0">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="insight-card">
+          <div class="insight-icon">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+          <div class="insight-content">
+            <div class="insight-title text-theme-text">Mes Pico</div>
+            <div class="insight-value text-theme">{{ getPeakMonth() }}</div>
+            <div class="insight-description text-theme">Mayor actividad registrada</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="insight-card">
+          <div class="insight-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="insight-content">
+            <div class="insight-title text-theme-text">Retención</div>
+            <div class="insight-value text-theme">
+              {{ getTotalNewUsers() > 0 ? ((getAverageActiveUsers() / getTotalNewUsers()) * 100).toFixed(1) : 0 }}%
+            </div>
+            <div class="insight-description text-theme">Usuarios que se mantienen activos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state text-center" *ngIf="!isLoading && data.length === 0">
+    <i class="bi bi-people display-4 text-theme mb-3"></i>
+    <h5 class="text-theme-text">No hay datos de actividad</h5>
+    <p class="text-theme">No se encontraron datos de actividad de usuarios para mostrar.</p>
+  </div>
+</div>

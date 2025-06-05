@@ -1,0 +1,109 @@
+<div class="stats-grid">
+  <div class="stat-card bg-component" [class.loading]="isLoading">
+    <div class="stat-icon bg-primary">
+      <i class="bi bi-book"></i>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number text-theme-text" *ngIf="!isLoading">
+        {{ formatNumber(stats.totalBooks) }}
+      </div>
+      <div class="stat-skeleton" *ngIf="isLoading"></div>
+      <div class="stat-label text-theme">Total de Libros</div>
+      <div class="stat-trend positive" *ngIf="!isLoading">
+        <i class="bi bi-arrow-up"></i>
+        <span>+12% este mes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card bg-component" [class.loading]="isLoading">
+    <div class="stat-icon bg-success">
+      <i class="bi bi-people"></i>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number text-theme-text" *ngIf="!isLoading">
+        {{ formatNumber(stats.activeUsers) }}
+      </div>
+      <div class="stat-skeleton" *ngIf="isLoading"></div>
+      <div class="stat-label text-theme">Usuarios Activos</div>
+      <div class="stat-trend positive" *ngIf="!isLoading">
+        <i class="bi bi-arrow-up"></i>
+        <span>+8% esta semana</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card bg-component" [class.loading]="isLoading">
+    <div class="stat-icon bg-warning">
+      <i class="bi bi-person-badge"></i>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number text-theme-text" *ngIf="!isLoading">
+        {{ formatNumber(stats.totalAuthors) }}
+      </div>
+      <div class="stat-skeleton" *ngIf="isLoading"></div>
+      <div class="stat-label text-theme">Autores Registrados</div>
+      <div class="stat-trend positive" *ngIf="!isLoading">
+        <i class="bi bi-arrow-up"></i>
+        <span>+5% este mes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card bg-component" [class.loading]="isLoading">
+    <div class="stat-icon bg-info">
+      <i class="bi bi-star-fill"></i>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number text-theme-text" *ngIf="!isLoading">
+        {{ stats.averageRating.toFixed(1) }}
+        <span class="stat-unit">★</span>
+      </div>
+      <div class="stat-skeleton" *ngIf="isLoading"></div>
+      <div class="stat-label text-theme">Valoración Promedio</div>
+      <div class="stat-trend positive" *ngIf="!isLoading">
+        <i class="bi bi-arrow-up"></i>
+        <span>+0.2 puntos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card bg-component" [class.loading]="isLoading">
+    <div class="stat-icon bg-secondary">
+      <i class="bi bi-file-text"></i>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number text-theme-text" *ngIf="!isLoading">
+        {{ formatLargeNumber(stats.totalPages) }}
+      </div>
+      <div class="stat-skeleton" *ngIf="isLoading"></div>
+      <div class="stat-label text-theme">Páginas Totales</div>
+      <div class="stat-trend neutral" *ngIf="!isLoading">
+        <i class="bi bi-dash"></i>
+        <span>Sin cambios</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card bg-component" [class.loading]="isLoading">
+    <div class="stat-icon bg-btn">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+    <div class="stat-content">
+      <div class="stat-number text-theme-text" *ngIf="!isLoading">
+        {{ formatNumber(stats.completedBooks) }}
+      </div>
+      <div class="stat-skeleton" *ngIf="isLoading"></div>
+      <div class="stat-label text-theme">Libros Completados</div>
+      <div class="stat-trend positive" *ngIf="!isLoading">
+        <i class="bi bi-arrow-up"></i>
+        <span>+15% este mes</span>
+      </div>
+      <div class="completion-rate" *ngIf="!isLoading">
+        <small class="text-theme">
+          {{ stats.totalBooks > 0 ? ((stats.completedBooks / stats.totalBooks) * 100).toFixed(1) : 0 }}% de finalización
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

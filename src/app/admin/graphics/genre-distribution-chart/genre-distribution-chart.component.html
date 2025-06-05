@@ -1,0 +1,48 @@
+<div class="genre-chart-container">
+  <div class="chart-loading" *ngIf="isLoading">
+    <div class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="loading-text text-theme mt-2">Cargando distribución de géneros...</p>
+    </div>
+  </div>
+
+  <div class="chart-wrapper" *ngIf="!isLoading && data.length > 0">
+    <apx-chart
+      #chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [plotOptions]="chartOptions.plotOptions"
+      [responsive]="chartOptions.responsive"
+      [tooltip]="chartOptions.tooltip"
+      [legend]="chartOptions.legend"
+      [labels]="chartOptions.labels"
+      [fill]="chartOptions.fill"
+      [colors]="chartOptions.colors">
+    </apx-chart>
+    
+    <div class="genre-stats mt-3">
+      <div class="row g-2">
+        <div 
+          *ngFor="let genre of topGenres; trackBy: trackByGenre" 
+          class="col-6">
+          <div class="genre-item">
+            <div class="genre-color" [style.background-color]="getGenreColor(genre.name)"></div>
+            <div class="genre-info">
+              <div class="genre-name text-theme-text">{{ genre.name }}</div>
+              <div class="genre-percentage text-theme">{{ genre.percentage }}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state text-center" *ngIf="!isLoading && data.length === 0">
+    <i class="bi bi-pie-chart display-4 text-theme mb-3"></i>
+    <h5 class="text-theme-text">No hay datos disponibles</h5>
+    <p class="text-theme">No se encontraron géneros para mostrar en el gráfico.</p>
+  </div>
+</div>

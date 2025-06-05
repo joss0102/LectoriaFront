@@ -1,0 +1,153 @@
+<div class="trends-chart-container">
+  <div class="chart-controls mb-3" *ngIf="!isLoading && data.length > 0">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="year-selector">
+        <div class="d-flex align-items-center gap-2">
+          <label class="form-label mb-0 text-theme">Año:</label>
+          <div class="btn-group" role="group">
+            <button 
+              type="button" 
+              class="btn btn-sm bg-component text-theme"
+              [disabled]="!canGoToPreviousYear()"
+              (click)="goToPreviousYear()"
+              title="Año anterior">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            
+            <div class="dropdown">
+              <button 
+                class="btn btn-sm bg-btn text-white dropdown-toggle" 
+                type="button" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false">
+                {{ selectedYear }}
+              </button>
+              <ul class="dropdown-menu">
+                <li *ngFor="let year of availableYears">
+                  <a 
+                    class="dropdown-item" 
+                    href="javascript:void(0)"
+                    [class.active]="year === selectedYear"
+                    (click)="changeYear(year)">
+                    {{ year }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            
+            <button 
+              type="button" 
+              class="btn btn-sm bg-component text-theme"
+              [disabled]="!canGoToNextYear()"
+              (click)="goToNextYear()"
+              title="Año siguiente">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-actions">
+        <div class="btn-group btn-group-sm" role="group">
+          <button 
+            type="button" 
+            class="btn"
+            [class.bg-btn]="selectedMetric === 'pages'"
+            [class.bg-component]="selectedMetric !== 'pages'"
+            (click)="switchMetric('pages')">
+            Páginas
+          </button>
+          <button 
+            type="button" 
+            class="btn"
+            [class.bg-btn]="selectedMetric === 'books'"
+            [class.bg-component]="selectedMetric !== 'books'"
+            (click)="switchMetric('books')">
+            Libros
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-metrics">
+      <div class="row g-3">
+        <div class="col-auto">
+          <div class="metric-item">
+            <div class="metric-value text-theme-text">{{ getTotalPages().toLocaleString() }}</div>
+            <div class="metric-label text-theme">Total Páginas {{ selectedYear }}</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="metric-item">
+            <div class="metric-value text-theme-text">{{ getTotalBooks() }}</div>
+            <div class="metric-label text-theme">Total Libros {{ selectedYear }}</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="metric-item">
+            <div class="metric-value text-theme-text">{{ getAveragePages().toLocaleString() }}</div>
+            <div class="metric-label text-theme">Promedio Páginas/Mes</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="metric-item">
+            <div class="metric-value text-theme-text">{{ getAverageBooks() }}</div>
+            <div class="metric-label text-theme">Promedio Libros/Mes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="year-summary mt-2" *ngIf="availableYears.length > 1">
+      <small class="text-theme">
+        <i class="bi bi-info-circle me-1"></i>
+        Mostrando datos de {{ selectedYear }} • 
+        {{ availableYears.length }} años disponibles
+      </small>
+    </div>
+  </div>
+
+  <div class="chart-loading" *ngIf="isLoading">
+    <div class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="loading-text text-theme mt-2">Cargando tendencias de lectura...</p>
+    </div>
+  </div>
+
+  <div class="chart-wrapper" *ngIf="!isLoading && data.length > 0">
+    <apx-chart
+      #chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [stroke]="chartOptions.stroke"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [tooltip]="chartOptions.tooltip"
+      [fill]="chartOptions.fill"
+      [markers]="chartOptions.markers"
+      [grid]="chartOptions.grid"
+      [colors]="chartOptions.colors">
+    </apx-chart>
+  </div>
+
+  <div class="empty-state text-center" *ngIf="!isLoading && data.length === 0">
+    <i class="bi bi-graph-up display-4 text-theme mb-3"></i>
+    <h5 class="text-theme-text">No hay datos de tendencias</h5>
+    <p class="text-theme">No se encontraron datos de lectura para mostrar las tendencias.</p>
+  </div>
+
+  <div class="empty-year-state text-center" *ngIf="!isLoading && data.length > 0 && hasNoDataForSelectedYear()">
+    <i class="bi bi-calendar-x display-4 text-theme mb-3"></i>
+    <h5 class="text-theme-text">No hay datos para {{ selectedYear }}</h5>
+    <p class="text-theme">No se encontraron registros de lectura para el año seleccionado.</p>
+    <button 
+      class="btn bg-btn text-white btn-sm mt-2" 
+      *ngIf="availableYears.length > 1"
+      (click)="changeYear(availableYears[0])">
+      Ver {{ availableYears[0] }}
+    </button>
+  </div>
+</div>

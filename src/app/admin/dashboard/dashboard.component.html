@@ -1,1 +1,300 @@
-<p>dashboard works!</p>
+<div class="dashboard-header bg-gradient">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="dashboard-title text-theme-text mb-1">
+          <i class="bi bi-speedometer2 me-2"></i>
+          Dashboard Administrativo
+        </h1>
+        <p class="dashboard-subtitle text-theme mb-0">
+          Panel de control y análisis de datos
+        </p>
+      </div>
+      <div class="col-lg-6">
+        <div class="dashboard-actions d-flex align-items-center justify-content-lg-end">
+          <div class="me-3">
+            <button
+              class="btn btn-sm"
+              [class.bg-btn]="(filters.refreshInterval || 0) > 0"
+              [class.bg-component]="(filters.refreshInterval || 0) === 0"
+              (click)="toggleAutoRefresh()"
+              title="Auto-actualización">
+              <i class="bi bi-arrow-clockwise me-1"></i>
+              <span class="d-none d-md-inline text-theme-text">
+                {{ (filters.refreshInterval || 0) > 0 ? 'Auto ON' : 'Auto OFF' }}
+              </span>
+            </button>
+          </div>
+          
+          <div class="me-3">
+            <button 
+              class="btn btn-sm bg-component text-theme-text"
+              (click)="showFilters = !showFilters"
+              title="Filtros">
+              <i class="bi bi-funnel me-1"></i>
+              <span class="d-none d-md-inline">Filtros</span>
+            </button>
+          </div>
+          
+          <div class="dropdown">
+            <button
+              class="btn btn-sm bg-component dropdown-toggle text-theme-text"
+              type="button"
+              data-bs-toggle="dropdown"
+              title="Exportar datos">
+              <i class="bi bi-download me-1"></i>
+              <span class="d-none d-md-inline">Exportar</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" (click)="exportData('json')">
+                  <i class="bi bi-file-earmark-code me-2"></i>
+                  Exportar JSON
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="exportData('csv')">
+                  <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+                  Exportar CSV
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="ms-3">
+            <button
+              class="btn btn-sm bg-btn"
+              (click)="refreshData()"
+              [disabled]="isLoading"
+              title="Actualizar datos">
+              <i class="bi bi-arrow-clockwise" [class.spin]="isLoading"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-2" *ngIf="!isLoading">
+      <div class="col-12">
+        <small class="text-theme">
+          <i class="bi bi-clock me-1"></i>
+          Última actualización: {{ lastUpdated | date:'dd/MM/yyyy HH:mm:ss' }}
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="filters-panel bg-component" [class.show]="showFilters" *ngIf="showFilters">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-3">
+        <label class="form-label text-theme-text">Fecha inicio:</label>
+        <input
+          type="date"
+          class="form-control form-control-sm"
+          [(ngModel)]="filters.dateRange.start"
+          (change)="applyFilters()">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-theme-text">Fecha fin:</label>
+        <input
+          type="date"
+          class="form-control form-control-sm"
+          [(ngModel)]="filters.dateRange.end"
+          (change)="applyFilters()">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label text-theme-text">Presets rápidos:</label>
+        <div class="d-flex flex-wrap gap-1">
+          <button
+            *ngFor="let preset of datePresets"
+            class="btn btn-sm bg-theme"
+            (click)="applyDatePreset(preset.days)">
+            {{ preset.label }}
+          </button>
+        </div>
+      </div>
+      <div class="col-md-2 text-end">
+        <button class="btn btn-sm bg-component" (click)="resetFilters()">
+          <i class="bi bi-arrow-counterclockwise me-1"></i>
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="loading-skeleton">
+          <div class="d-flex justify-content-center align-items-center py-5">
+            <div class="spinner-border text-primary me-3" role="status"></div>
+            <span class="text-theme-text">Cargando datos del dashboard...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="error-state bg-component" *ngIf="error && !isLoading">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div>
+            <strong>Error:</strong> {{ error }}
+            <button class="btn btn-sm btn-outline-danger ms-3" (click)="refreshData()">
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-content" *ngIf="!isLoading && !error">
+  <div class="container-fluid">
+    <div class="row mb-4">
+      <div class="col-12">
+        <app-stats-cards
+          [stats]="dashboardData.stats"
+          [isLoading]="isLoading">
+        </app-stats-cards>
+      </div>
+    </div>
+    
+    <div class="row mb-4">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="chart-card bg-component">
+          <div class="chart-header">
+            <h5 class="chart-title text-theme-text mb-0">
+              <i class="bi bi-pie-chart me-2"></i>
+              Distribución de Géneros
+            </h5>
+            <small class="text-theme">Popularidad por género</small>
+          </div>
+          <div class="chart-body">
+            <app-genre-distribution-chart
+              [data]="dashboardData.genreDistribution"
+              [isLoading]="isLoading">
+            </app-genre-distribution-chart>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-8 col-md-6 mb-4">
+        <div class="chart-card bg-component">
+          <div class="chart-header">
+            <h5 class="chart-title text-theme-text mb-0">
+              <i class="bi bi-graph-up me-2"></i>
+              Tendencias de Lectura
+            </h5>
+            <small class="text-theme">Páginas leídas por mes</small>
+          </div>
+          <div class="chart-body">
+            <app-reading-trends-chart
+              [data]="dashboardData.readingTrends"
+              [isLoading]="isLoading">
+            </app-reading-trends-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-4">
+      <div class="col-lg-6 mb-4">
+        <div class="chart-card bg-component">
+          <div class="chart-header">
+            <h5 class="chart-title text-theme-text mb-0">
+              <i class="bi bi-trophy me-2"></i>
+              Libros Más Populares
+            </h5>
+            <small class="text-theme">Top 10 por número de lectores</small>
+          </div>
+          <div class="chart-body">
+            <app-top-books-chart
+              [data]="dashboardData.topBooks"
+              [isLoading]="isLoading">
+            </app-top-books-chart>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-6 mb-4">
+        <div class="chart-card bg-component">
+          <div class="chart-header">
+            <h5 class="chart-title text-theme-text mb-0">
+              <i class="bi bi-people me-2"></i>
+              Actividad de Usuarios
+            </h5>
+            <small class="text-theme">Usuarios nuevos y activos</small>
+          </div>
+          <div class="chart-body">
+            <app-user-activity-chart
+              [data]="dashboardData.userActivity"
+              [isLoading]="isLoading">
+            </app-user-activity-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-12">
+        <div class="activity-card bg-component">
+          <div class="activity-header">
+            <h5 class="activity-title text-theme-text mb-0">
+              <i class="bi bi-clock-history me-2"></i>
+              Actividad Reciente
+            </h5>
+            <small class="text-theme">Últimas acciones en el sistema</small>
+          </div>
+          <div class="activity-body">
+            <div class="activity-timeline">
+              <div
+                *ngFor="let activity of dashboardData.recentActivity; trackBy: trackByActivity"
+                class="activity-item">
+                <div class="activity-icon">
+                  <i class="bi bi-{{ getActivityIcon(activity.type) }}"></i>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-description text-theme-text">
+                    {{ activity.description }}
+                  </div>
+                  <div class="activity-meta">
+                    <span class="activity-time text-theme">
+                      {{ getTimeAgo(activity.timestamp) }}
+                    </span>
+                    <span *ngIf="activity.user" class="activity-user text-theme ms-2">
+                      por {{ activity.user }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="empty-activity text-center py-4" *ngIf="dashboardData.recentActivity.length === 0">
+              <i class="bi bi-inbox text-theme display-4 mb-2"></i>
+              <p class="text-theme mb-0">No hay actividad reciente</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fab-container d-md-none">
+  <button
+    class="fab bg-btn"
+    (click)="showFilters = !showFilters"
+    title="Filtros">
+    <i class="bi bi-funnel"></i>
+  </button>
+</div>

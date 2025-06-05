@@ -1,0 +1,324 @@
+.user-activity-container {
+  height: 100%;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-controls {
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  padding-bottom: 1rem;
+
+  .view-controls {
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .btn-group {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      overflow: hidden;
+
+      .btn {
+        border: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+        
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  .quick-stats {
+    .d-flex {
+      align-items: center;
+    }
+  }
+}
+
+.stat-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  min-width: 60px;
+  transition: all 0.3s ease;
+
+  &.new-users {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: rgb(16, 185, 129);
+  }
+
+  &.active-users {
+    background-color: rgba(var(--bs-btn-rgb), 0.15);
+    color: var(--bs-btn);
+  }
+
+  &.growth-rate {
+    background-color: rgba(156, 163, 175, 0.15);
+    color: rgb(156, 163, 175);
+
+    &.positive {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: rgb(16, 185, 129);
+    }
+
+    &.negative {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: rgb(239, 68, 68);
+    }
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.stat-number {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-text {
+  font-size: 0.7rem;
+  opacity: 0.9;
+  margin-top: 0.125rem;
+}
+
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 320px;
+}
+
+.loading-spinner {
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.chart-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.insights-panel {
+  border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
+  padding-top: 1rem;
+}
+
+.insight-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: rgba(var(--border-color-rgb), 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+
+  &:hover {
+    background-color: rgba(var(--bs-btn-rgb), 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.insight-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  background: linear-gradient(135deg, var(--bs-btn), rgba(var(--bs-btn-rgb), 0.7));
+  color: white;
+  margin-right: 0.75rem;
+  box-shadow: 0 4px 12px rgba(var(--bs-btn-rgb), 0.3);
+}
+
+.insight-content {
+  flex: 1;
+}
+
+.insight-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.125rem;
+}
+
+.insight-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.125rem;
+}
+
+.insight-description {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 320px;
+  padding: 2rem;
+
+  i {
+    opacity: 0.5;
+  }
+
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.7;
+  }
+}
+
+:host ::ng-deep {
+  .apexcharts-toolbar {
+    background-color: transparent !important;
+    
+    svg {
+      fill: var(--text-color) !important;
+    }
+  }
+
+  .apexcharts-menu {
+    background-color: var(--component-bg) !important;
+    border: 1px solid rgba(var(--border-color-rgb), 0.2) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+
+    .apexcharts-menu-item {
+      color: var(--text-color) !important;
+      
+      &:hover {
+        background-color: rgba(var(--bs-btn-rgb), 0.1) !important;
+      }
+    }
+  }
+
+  .apexcharts-legend {
+    .apexcharts-legend-text {
+      color: var(--text-color) !important;
+    }
+  }
+
+  .apexcharts-tooltip {
+    background-color: var(--component-bg) !important;
+    border: 1px solid rgba(var(--border-color-rgb), 0.2) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+
+    .apexcharts-tooltip-title {
+      background-color: var(--background-color) !important;
+      color: var(--text-color) !important;
+      border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2) !important;
+    }
+
+    .apexcharts-tooltip-text-y-label,
+    .apexcharts-tooltip-text-y-value {
+      color: var(--text-color) !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-controls {
+    .d-flex {
+      flex-direction: column;
+      align-items: stretch !important;
+      gap: 1rem;
+    }
+
+    .view-controls {
+      width: 100%;
+
+      .btn-group {
+        width: 100%;
+
+        .btn {
+          flex: 1;
+        }
+      }
+    }
+
+    .quick-stats {
+      width: 100%;
+
+      .d-flex {
+        justify-content: space-around;
+      }
+    }
+  }
+
+  .stat-badge {
+    padding: 0.375rem 0.5rem;
+    min-width: 50px;
+  }
+
+  .stat-number {
+    font-size: 0.9rem;
+  }
+
+  .stat-text {
+    font-size: 0.65rem;
+  }
+
+  .insight-card {
+    padding: 0.75rem;
+  }
+
+  .insight-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  .insight-title {
+    font-size: 0.8rem;
+  }
+
+  .insight-value {
+    font-size: 1rem;
+  }
+
+  .insight-description {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .insights-panel .row {
+    --bs-gutter-x: 0.5rem;
+  }
+
+  .insight-card {
+    padding: 0.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .insight-icon {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}

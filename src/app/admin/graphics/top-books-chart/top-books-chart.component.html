@@ -1,24 +1,28 @@
 <div class="top-books-container">
   <div class="chart-controls mb-3" *ngIf="!isLoading && data.length > 0">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div
+      class="d-flex justify-content-between align-items-center flex-wrap gap-2"
+    >
       <div class="sort-controls text-theme-text">
         <label class="form-label text-theme-text mb-1">Ordenar por:</label>
         <div class="btn-group btn-group-sm text-theme-text" role="group">
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn text-theme-text"
             [class.bg-btn]="sortBy === 'readers'"
             [class.bg-component]="sortBy !== 'readers'"
-            (click)="setSortBy('readers')">
+            (click)="setSortBy('readers')"
+          >
             <i class="bi bi-people me-1"></i>
             Lectores
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn"
             [class.bg-btn]="sortBy === 'rating'"
             [class.bg-component]="sortBy !== 'rating'"
-            (click)="setSortBy('rating')">
+            (click)="setSortBy('rating')"
+          >
             <i class="bi bi-star-fill me-1"></i>
             Valoración
           </button>
@@ -27,10 +31,11 @@
 
       <div class="limit-controls">
         <label class="form-label mb-1 bg-component">Mostrar:</label>
-        <select 
-          class="form-select form-select-sm bg-component" 
+        <select
+          class="form-select form-select-sm bg-secondary"
           [value]="displayLimit"
-          (change)="onDisplayLimitChange($event)">
+          (change)="onDisplayLimitChange($event)"
+        >
           <option value="5">Top 5</option>
           <option value="10">Top 10</option>
           <option value="15">Top 15</option>
@@ -43,19 +48,29 @@
       <div class="row g-2">
         <div class="col-4">
           <div class="stat-item">
-            <div class="stat-value text-theme-text">{{ getTotalReaders() }}</div>
+            <div class="stat-value text-theme-text">
+              {{ getTotalReaders() }}
+            </div>
             <div class="stat-label text-theme">Total Lectores</div>
           </div>
         </div>
         <div class="col-4">
           <div class="stat-item">
-            <div class="stat-value text-theme-text">{{ getAverageRating().toFixed(1) }}★</div>
+            <div class="stat-value text-theme-text">
+              {{ getAverageRating().toFixed(1) }}★
+            </div>
             <div class="stat-label text-theme">Valoración Media</div>
           </div>
         </div>
         <div class="col-4" *ngIf="getTopBook() as topBook">
           <div class="stat-item">
-            <div class="stat-value text-theme-text">{{ topBook.title.length > 15 ? topBook.title.substring(0, 15) + '...' : topBook.title }}</div>
+            <div class="stat-value text-theme-text">
+              {{
+                topBook.title.length > 15
+                  ? topBook.title.substring(0, 15) + "..."
+                  : topBook.title
+              }}
+            </div>
             <div class="stat-label text-theme">Más Popular</div>
           </div>
         </div>
@@ -68,7 +83,9 @@
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
-      <p class="loading-text text-theme mt-2">Cargando libros más populares...</p>
+      <p class="loading-text text-theme mt-2">
+        Cargando libros más populares...
+      </p>
     </div>
   </div>
 
@@ -84,24 +101,34 @@
       [tooltip]="chartOptions.tooltip"
       [fill]="chartOptions.fill"
       [grid]="chartOptions.grid"
-      [colors]="chartOptions.colors">
+      [colors]="chartOptions.colors"
+    >
     </apx-chart>
   </div>
 
   <div class="books-list mt-3" *ngIf="!isLoading && data.length > 0">
     <div class="row g-2">
-      <div 
-        *ngFor="let book of getSortedData().slice(0, 5); let i = index; trackBy: trackByBook" 
-        class="col-12">
+      <div
+        *ngFor="
+          let book of getSortedData().slice(0, 5);
+          let i = index;
+          trackBy: trackByBook
+        "
+        class="col-12"
+      >
         <div class="book-item" [class.top-book]="i === 0">
           <div class="book-rank">
             <span class="rank-number">#{{ i + 1 }}</span>
             <div class="rank-medal" *ngIf="i < 3">
-              <i class="bi" 
+              <i
+                class="bi"
                 [class.bi-trophy-fill]="i === 0"
                 [class.bi-award-fill]="i === 1"
                 [class.bi-award]="i === 2"
-                [style.color]="i === 0 ? '#ffd700' : i === 1 ? '#c0c0c0' : '#cd7f32'">
+                [style.color]="
+                  i === 0 ? '#ffd700' : i === 1 ? '#c0c0c0' : '#cd7f32'
+                "
+              >
               </i>
             </div>
           </div>
@@ -127,6 +154,8 @@
   <div class="empty-state text-center" *ngIf="!isLoading && data.length === 0">
     <i class="bi bi-trophy display-4 text-theme mb-3"></i>
     <h5 class="text-theme-text">No hay datos de libros</h5>
-    <p class="text-theme">No se encontraron libros para mostrar en el ranking.</p>
+    <p class="text-theme">
+      No se encontraron libros para mostrar en el ranking.
+    </p>
   </div>
 </div>

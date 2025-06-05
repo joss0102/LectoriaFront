@@ -11,37 +11,27 @@
         </p>
       </div>
       <div class="col-lg-6">
-        <div class="dashboard-actions d-flex align-items-center justify-content-lg-end">
+        <div
+          class="dashboard-actions d-flex align-items-center justify-content-lg-end"
+        >
           <div class="me-3">
             <button
-              class="btn btn-sm"
-              [class.bg-btn]="(filters.refreshInterval || 0) > 0"
-              [class.bg-component]="(filters.refreshInterval || 0) === 0"
-              (click)="toggleAutoRefresh()"
-              title="Auto-actualización">
-              <i class="bi bi-arrow-clockwise me-1"></i>
-              <span class="d-none d-md-inline text-theme-text">
-                {{ (filters.refreshInterval || 0) > 0 ? 'Auto ON' : 'Auto OFF' }}
-              </span>
-            </button>
-          </div>
-          
-          <div class="me-3">
-            <button 
               class="btn btn-sm bg-component text-theme-text"
               (click)="showFilters = !showFilters"
-              title="Filtros">
+              title="Filtros"
+            >
               <i class="bi bi-funnel me-1"></i>
               <span class="d-none d-md-inline">Filtros</span>
             </button>
           </div>
-          
+
           <div class="dropdown">
             <button
               class="btn btn-sm bg-component dropdown-toggle text-theme-text"
               type="button"
               data-bs-toggle="dropdown"
-              title="Exportar datos">
+              title="Exportar datos"
+            >
               <i class="bi bi-download me-1"></i>
               <span class="d-none d-md-inline">Exportar</span>
             </button>
@@ -60,32 +50,37 @@
               </li>
             </ul>
           </div>
-          
+
           <div class="ms-3">
             <button
               class="btn btn-sm bg-btn"
               (click)="refreshData()"
               [disabled]="isLoading"
-              title="Actualizar datos">
+              title="Actualizar datos"
+            >
               <i class="bi bi-arrow-clockwise" [class.spin]="isLoading"></i>
             </button>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="row mt-2" *ngIf="!isLoading">
       <div class="col-12">
         <small class="text-theme">
           <i class="bi bi-clock me-1"></i>
-          Última actualización: {{ lastUpdated | date:'dd/MM/yyyy HH:mm:ss' }}
+          Última actualización: {{ lastUpdated | date : "dd/MM/yyyy HH:mm:ss" }}
         </small>
       </div>
     </div>
   </div>
 </div>
 
-<div class="filters-panel bg-component" [class.show]="showFilters" *ngIf="showFilters">
+<div
+  class="filters-panel bg-component"
+  [class.show]="showFilters"
+  *ngIf="showFilters"
+>
   <div class="container-fluid">
     <div class="row align-items-center">
       <div class="col-md-3">
@@ -94,7 +89,8 @@
           type="date"
           class="form-control form-control-sm"
           [(ngModel)]="filters.dateRange.start"
-          (change)="applyFilters()">
+          (change)="applyFilters()"
+        />
       </div>
       <div class="col-md-3">
         <label class="form-label text-theme-text">Fecha fin:</label>
@@ -102,7 +98,8 @@
           type="date"
           class="form-control form-control-sm"
           [(ngModel)]="filters.dateRange.end"
-          (change)="applyFilters()">
+          (change)="applyFilters()"
+        />
       </div>
       <div class="col-md-4">
         <label class="form-label text-theme-text">Presets rápidos:</label>
@@ -110,7 +107,8 @@
           <button
             *ngFor="let preset of datePresets"
             class="btn btn-sm bg-theme"
-            (click)="applyDatePreset(preset.days)">
+            (click)="applyDatePreset(preset.days)"
+          >
             {{ preset.label }}
           </button>
         </div>
@@ -148,7 +146,10 @@
           <i class="bi bi-exclamation-triangle-fill me-2"></i>
           <div>
             <strong>Error:</strong> {{ error }}
-            <button class="btn btn-sm btn-outline-danger ms-3" (click)="refreshData()">
+            <button
+              class="btn btn-sm btn-outline-danger ms-3"
+              (click)="refreshData()"
+            >
               Reintentar
             </button>
           </div>
@@ -162,13 +163,11 @@
   <div class="container-fluid">
     <div class="row mb-4">
       <div class="col-12">
-        <app-stats-cards
-          [stats]="dashboardData.stats"
-          [isLoading]="isLoading">
+        <app-stats-cards [stats]="dashboardData.stats" [isLoading]="isLoading">
         </app-stats-cards>
       </div>
     </div>
-    
+
     <div class="row mb-4">
       <div class="col-lg-4 col-md-6 mb-4">
         <div class="chart-card bg-component">
@@ -182,12 +181,13 @@
           <div class="chart-body">
             <app-genre-distribution-chart
               [data]="dashboardData.genreDistribution"
-              [isLoading]="isLoading">
+              [isLoading]="isLoading"
+            >
             </app-genre-distribution-chart>
           </div>
         </div>
       </div>
-      
+
       <div class="col-lg-8 col-md-6 mb-4">
         <div class="chart-card bg-component">
           <div class="chart-header">
@@ -200,13 +200,14 @@
           <div class="chart-body">
             <app-reading-trends-chart
               [data]="dashboardData.readingTrends"
-              [isLoading]="isLoading">
+              [isLoading]="isLoading"
+            >
             </app-reading-trends-chart>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="row mb-4">
       <div class="col-lg-6 mb-4">
         <div class="chart-card bg-component">
@@ -220,12 +221,13 @@
           <div class="chart-body">
             <app-top-books-chart
               [data]="dashboardData.topBooks"
-              [isLoading]="isLoading">
+              [isLoading]="isLoading"
+            >
             </app-top-books-chart>
           </div>
         </div>
       </div>
-      
+
       <div class="col-lg-6 mb-4">
         <div class="chart-card bg-component">
           <div class="chart-header">
@@ -238,13 +240,14 @@
           <div class="chart-body">
             <app-user-activity-chart
               [data]="dashboardData.userActivity"
-              [isLoading]="isLoading">
+              [isLoading]="isLoading"
+            >
             </app-user-activity-chart>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col-12">
         <div class="activity-card bg-component">
@@ -258,8 +261,12 @@
           <div class="activity-body">
             <div class="activity-timeline">
               <div
-                *ngFor="let activity of dashboardData.recentActivity; trackBy: trackByActivity"
-                class="activity-item">
+                *ngFor="
+                  let activity of dashboardData.recentActivity;
+                  trackBy: trackByActivity
+                "
+                class="activity-item"
+              >
                 <div class="activity-icon">
                   <i class="bi bi-{{ getActivityIcon(activity.type) }}"></i>
                 </div>
@@ -271,15 +278,21 @@
                     <span class="activity-time text-theme">
                       {{ getTimeAgo(activity.timestamp) }}
                     </span>
-                    <span *ngIf="activity.user" class="activity-user text-theme ms-2">
+                    <span
+                      *ngIf="activity.user"
+                      class="activity-user text-theme ms-2"
+                    >
                       por {{ activity.user }}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div class="empty-activity text-center py-4" *ngIf="dashboardData.recentActivity.length === 0">
+
+            <div
+              class="empty-activity text-center py-4"
+              *ngIf="dashboardData.recentActivity.length === 0"
+            >
               <i class="bi bi-inbox text-theme display-4 mb-2"></i>
               <p class="text-theme mb-0">No hay actividad reciente</p>
             </div>
@@ -294,7 +307,8 @@
   <button
     class="fab bg-btn"
     (click)="showFilters = !showFilters"
-    title="Filtros">
+    title="Filtros"
+  >
     <i class="bi bi-funnel"></i>
   </button>
 </div>

@@ -33,20 +33,6 @@ El objetivo principal de esta aplicación es brindar a los usuarios una herramie
 
 # Dependencias
 
-- Dependencia de slider
-  > **Advertencia**: Esta libreria esta en desuso actualmente
-
-```bash
-npm install swiper
-```
-
-- Aunque no deberia dar error, si lo da, probamos con instalar los tipos de swiper
-  > **Advertencia**: Esta libreria esta en desuso actualmente
-
-```bash
-npm install --save-dev @types/swiper
-```
-
 - Libreria de node-vibrant. Esta libreria nos sirve para sacar colores predominantes de una imagen (Utilizada en /home)
 
 ```bash

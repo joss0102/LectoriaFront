@@ -295,6 +295,6 @@ export class BookService {
       errorMessage = error.error?.error || error.error?.message || 'Error del servidor';
     }
     console.error('BookService error:', error);
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => error);
   }
 }

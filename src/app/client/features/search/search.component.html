@@ -12,12 +12,6 @@
     <p>Cargando información...</p>
   </div>
 
-  <!-- Mensaje de error -->
-  <div *ngIf="error" class="error-container">
-    <div class="alert alert-danger">
-      {{ error }}
-    </div>
-  </div>
 
   <!-- Si no hay nada seleccionado y no está cargando -->
   <div *ngIf="!selectedItem && !loading && !error" class="empty-state">
@@ -147,7 +141,33 @@
 
         <!-- Si no está en la biblioteca del usuario -->
         <div *ngIf="!isInUserLibrary()" class="add-to-library mt-4">
-          <button class="btn btn-primary">Añadir a mi biblioteca</button>
+          <!-- Mostrar botón solo si el usuario está logueado -->
+          <div *ngIf="isUserLoggedIn(); else loginPrompt">
+            <button 
+              class="btn btn-primary" 
+              (click)="addToLibrary()"
+              [disabled]="isAddingToLibrary"
+            >
+              <span *ngIf="isAddingToLibrary" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ isAddingToLibrary ? 'Añadiendo...' : 'Añadir a mi biblioteca' }}
+            </button>
+          </div>
+          
+          <!-- Mensaje para usuarios no logueados -->
+          <ng-template #loginPrompt>
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <span>Inicia sesión para añadir este libro a tu biblioteca</span>
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div *ngIf="isInUserLibrary()" class="library-success mt-4">
+          <div class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>
+            <span>Este libro está en tu biblioteca</span>
+          </div>
         </div>
       </div>
     </div>

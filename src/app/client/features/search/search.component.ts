@@ -9,23 +9,13 @@ import {
 
 import { BookService } from '../../../core/services/call-api/book.service';
 import { AuthorService } from '../../../core/services/call-api/author.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 
-import { Book } from '../../../core/models/call-api/book.model';
+import { Book, UserBook, BookRequest } from '../../../core/models/call-api/book.model';
 import { Author } from '../../../core/models/call-api/author.model';
 
-// Interfaz extendida para manejar propiedades adicionales
-interface UserBook extends Book {
-  reading_status?: string;
-  pages_read?: number;
-  progress_percentage?: number;
-  date_added?: string;
-  date_start?: string;
-  date_ending?: string;
-  custom_description?: string;
-  notes?: string;
-  phrases?: string;
-}
+// Importar la interfaz UserBook del modelo
 
 @Component({
   selector: 'app-search',
@@ -39,6 +29,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   authorBooks: any[] = [];
   loading: boolean = true;
   error: string | null = null;
+  isAddingToLibrary: boolean = false;
 
   private searchSubscription: Subscription | null = null;
   private routerSubscription: Subscription | null = null;
@@ -47,6 +38,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private bookService: BookService,
     private authorService: AuthorService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -219,6 +211,149 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   goBack() {
     window.history.back();
+  }
+
+/**
+ * Añade el libro actual a la biblioteca del usuario
+ */
+addToLibrary() {
+  // Verificar que hay un usuario logueado
+  const currentUser = this.authService.currentUserValue;
+  if (!currentUser) {
+    this.error = 'Debes iniciar sesión para añadir libros a tu biblioteca';
+    return;
+  }
+
+  // Verificar que hay un libro seleccionado
+  if (!this.selectedItem || this.selectedItem.type !== 'book') {
+    this.error = 'No hay un libro seleccionado';
+    return;
+  }
+
+  // Verificar que el libro no está ya en la biblioteca
+  if (this.isInUserLibrary()) {
+    this.error = 'Este libro ya está en tu biblioteca';
+    return;
+  }
+
+  this.isAddingToLibrary = true;
+  this.error = null;
+
+  const book = this.getBook();
+  const userNickname = currentUser.nickname;
+
+
+  // Usar addBook para crear la relación inicial entre usuario y libro
+  const bookRequest: import('../../../core/models/call-api/book.model').BookRequest = {
+    title: book.book_title,
+    pages: book.book_pages,
+    synopsis: book.synopsis || '',
+    author_name: this.extractAuthorName(book.authors || ''),
+    author_last_name1: this.extractAuthorLastName1(book.authors || ''),
+    author_last_name2: this.extractAuthorLastName2(book.authors || ''),
+    genre1: this.extractGenre(book.genres || '', 0),
+    genre2: this.extractGenre(book.genres || '', 1),
+    genre3: this.extractGenre(book.genres || '', 2),
+    genre4: this.extractGenre(book.genres || '', 3),
+    genre5: this.extractGenre(book.genres || '', 4),
+    saga_name: book.sagas || '',
+    user_nickname: userNickname,
+    status: 'plan_to_read',
+    date_added: new Date().toISOString().split('T')[0],
+    custom_description: '',
+    review: '',
+    phrases: '',
+    notes: ''
+  };
+
+
+  // Usar el método addBook del BookService
+  this.bookService.addBook(bookRequest)
+    .subscribe({
+      next: (response) => {
+        
+        // Limpiar la caché del servicio de libros
+        this.bookService.clearCache();
+        
+        // Redirigir al usuario a su biblioteca
+        this.router.navigate(['/library']);
+      },
+      error: (httpError) => {
+
+        
+        // Si el error es 409 (conflicto) significa que el libro ya está en la biblioteca
+        // En este caso también redirigimos a la biblioteca
+        if (httpError.status === 409) {
+          this.router.navigate(['/library']);
+          return;
+        }
+        
+        // Si el error es 500 (Internal Server Error) pero el libro se añadió correctamente
+        // (esto puede pasar en algunos casos donde la operación es exitosa pero hay un error en la respuesta)
+        if (httpError.status === 500) {
+          // En este caso, redirigir a la biblioteca para que el usuario vea si el libro se añadió
+          this.router.navigate(['/library']);
+          return;
+        }
+        
+        let errorMessage = 'Error al añadir el libro a la biblioteca.';
+        
+        if (httpError.status === 404) {
+          errorMessage = 'No se encontró el usuario especificado.';
+        } else if (httpError.status === 401) {
+          errorMessage = 'No tienes permisos para realizar esta acción.';
+        } else if (httpError.status === 400) {
+          errorMessage = 'Datos inválidos. Verifica la información del libro.';
+        } else if (httpError.error && httpError.error.error) {
+          errorMessage = httpError.error.error;
+        } else if (httpError.message) {
+          errorMessage = httpError.message;
+        }
+        
+        this.error = errorMessage;
+        this.isAddingToLibrary = false;
+      }
+    });
+}
+
+  /**
+   * Extrae el nombre del autor de una cadena de autores
+   */
+  private extractAuthorName(authors: string): string {
+    const parts = authors.split(' ').filter(part => part.trim() !== '');
+    return parts[0] || '';
+  }
+
+  /**
+   * Extrae el primer apellido del autor
+   */
+  private extractAuthorLastName1(authors: string): string {
+    const parts = authors.split(' ').filter(part => part.trim() !== '');
+    return parts[1] || '';
+  }
+
+  /**
+   * Extrae el segundo apellido del autor
+   */
+  private extractAuthorLastName2(authors: string): string {
+    const parts = authors.split(' ').filter(part => part.trim() !== '');
+    return parts.slice(2).join(' ') || '';
+  }
+
+  /**
+   * Extrae un género específico por índice
+   */
+  private extractGenre(genres: string, index: number): string {
+    if (!genres) return '';
+    const genreList = genres.split(',').map(g => g.trim()).filter(g => g !== '');
+    return genreList[index] || '';
+  }
+
+  /**
+   * Verifica si el usuario está logueado
+   */
+  isUserLoggedIn(): boolean {
+    return !!this.authService.currentUserValue;
   }
 
   ngOnDestroy() {
